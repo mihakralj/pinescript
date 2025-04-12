@@ -1,0 +1,56 @@
+// The MIT License (MIT)
+// © mihakralj
+
+//@version=6
+indicator("Custom SMA", "SMA", overlay=true)
+
+// A Simple Moving Average implementation that provides values from the first bar, unlike ta.sma which
+// requires bar count > period. Essential for long periods (200+ bars) where ta.sma shows no early values
+
+//@function Calculates SMA using circular buffer for efficiency
+//@param source Series to calculate SMA from
+//@param period Lookback period
+//@returns SMA value, calculates from first bar using available data
+sma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0") // Input validation
+    var float[] buffer = array.new_float(period, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    // Retrieve the oldest value from the buffer
+    float oldest = array.get(buffer, head)
+    // If the oldest value is valid, subtract it from the sum and decrement count
+    if not na(oldest)
+        sum -= oldest
+        valid_count -= 1
+    // If the current source value is valid, add it to the sum and increment count
+    if not na(source)
+        sum += source
+        valid_count += 1
+    // Store the current source value in the buffer at the head position
+    array.set(buffer, head, source)
+    // Move the head pointer to the next position in the circular buffer
+    head := (head + 1) % period
+    // Calculate the SMA: sum divided by the count of valid data points
+    valid_count > 0 ? sum / valid_count : na // Return average or na if no valid data
+
+
+
+
+
+// Inputs
+var string G_SMA = "SMA Settings"
+i_period = input.int(5000, "Period", minval=1, tooltip="The lookback period for the SMA calculation", group=G_SMA)
+i_source = input.source(close, "Source", tooltip="The data series to calculate the SMA on", group=G_SMA)
+
+// Calculations
+legacySma = ta.sma(i_source, i_period)  // Built-in SMA for comparison
+customSma = sma(i_source, i_period)      // Custom SMA implementation
+
+// Plots
+plot(legacySma, "Built-in SMA", color.new(color.blue, 0), 5)
+plot(customSma, "Custom SMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, customSma), "Price Crosses SMA", "Price crossed SMA on {{ticker}}")
