@@ -1,0 +1,49 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Double Weighted Moving Average", "DWMA", overlay=true)
+
+//@function Optimized DWMA calculation that matches ta.wma(ta.wma())
+//@param source Series to calculate DWMA from
+//@param period Lookback period for both smoothing passes
+//@returns DWMA value, calculates from first bar using available data
+dwma(series float src, simple int p) =>
+    if p <= 0
+        runtime.error("Period must be greater than 0")
+    float sum1 = 0.0, float weightSum1 = 0.0
+    for i = 0 to p - 1
+        if not na(src[i])
+            sum1 += src[i] * (p - i)
+            weightSum1 += p - i
+    float currentWma = weightSum1 > 0 ? sum1 / weightSum1 : na
+    var float[] wmaHistory = array.new_float(p, na)
+    var int wmaIndex = 0
+    array.set(wmaHistory, wmaIndex, currentWma)
+    wmaIndex := (wmaIndex + 1) % p
+    float sum2 = 0.0, float weightSum2 = 0.0
+    for i = 0 to p - 1
+        // Access elements from newest to oldest using circular buffer
+        int idx = (wmaIndex - 1 - i + p) % p
+        float wmaVal = array.get(wmaHistory, idx)
+        if not na(wmaVal)
+            sum2 += wmaVal * (p - i)
+            weightSum2 += p - i
+    weightSum2 > 0 ? sum2 / weightSum2 : na
+
+
+
+
+// Inputs with reasonable max limit for optimization
+i_period = input.int(5000, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculate custom DWMA and reference DWMA using ta.wma()
+dwma = dwma(i_source, i_period)
+dwma_reference = ta.wma(ta.wma(i_source, i_period), i_period)
+
+// Plots
+plot(dwma_reference, "Reference DWMA", color.new(color.blue, 0), 4)
+plot(dwma, "Custom DWMA", color.new(color.yellow, 0), 2)
+
+// Alert condition
+alertcondition(ta.cross(i_source, dwma), "Price Crosses DWMA", "Price crossed DWMA on {{ticker}}")
