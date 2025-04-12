@@ -1,0 +1,40 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Double Exponential Moving Average", "DEMA", overlay=true)
+
+//@function Calculates DEMA using double exponential smoothing with compensator
+//@param source Series to calculate DEMA from
+//@param alpha smoothing factor
+//@returns DEMA value from first bar with proper compensation
+dema(series float source, simple float alpha) =>
+    if alpha <= 0
+        runtime.error("Alpha must be greater than 0")
+    var simple float EPSILON = 1e-10        // constant - smallest relevant value
+    var float raw_ema1 = 0.0
+    var float raw_ema2 = 0.0
+    var float e = 1.0  // compensation factor
+    e := (1 - alpha) * e
+    float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
+    raw_ema1 := alpha * (source - raw_ema1) + raw_ema1
+    raw_ema2 := alpha * (raw_ema1 * compensation - raw_ema2) + raw_ema2
+    compensation * (2 * raw_ema1 - raw_ema2)
+
+
+
+
+// Inputs
+i_period = input.int(5000, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculations
+alpha = 2.0/(float(i_period)+1.0)  // calculate alpha from period
+dema = dema(i_source, alpha)
+legacyDema = 2 * ta.ema(i_source, i_period) - ta.ema(ta.ema(i_source, i_period), i_period)
+
+// Plots
+plot(legacyDema, "Built-in DEMA", color.new(color.blue, 0), 4)
+plot(dema, "Custom DEMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, dema), "Price Crosses DEMA", "Price crossed DEMA on {{ticker}}")
