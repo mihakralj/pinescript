@@ -1,8 +1,8 @@
 # Weighted Moving Average (WMA)
 
-## Overview
-
 The Weighted Moving Average (WMA) is a technical indicator that assigns different weights to price data within the calculation window, with greater emphasis on more recent data. WMA applies a linear weighting scheme to data in FIR window, decreasing linearly as the data gets older.
+
+[Pine Script Implementation of WMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/wma.pine)
 
 ## Mathematical Foundation
 

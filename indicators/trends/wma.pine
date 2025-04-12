@@ -3,7 +3,8 @@
 //@version=6
 indicator("Weighted Moving Average", "WMA", overlay=true)
 
-//@function Calculates WMA using linear weighting where recent values have higher weight
+//@function Calculates WMA using weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/wma.md
 //@param source Series to calculate WMA from
 //@param period Lookback period - FIR window size
 //@returns WMA value, calculates from first bar using available data

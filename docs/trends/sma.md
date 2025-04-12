@@ -1,8 +1,8 @@
 # Simple Moving Average (SMA)
 
-## Overview
-
 The Simple Moving Average (SMA) is a fundamental technical indicator that calculates the average of a selected range of prices over a specified number of periods. As a core building block in technical analysis, the SMA provides a smoothed representation of price movement by filtering out short-term fluctuations. It assigns equal weight to all price points within the calculation window, making it straightforward to understand but less responsive to recent price changes compared to weighted averages.
+
+[Pine Script Implementation of SMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/sma.pine)
 
 ## Mathematical Foundation
 

@@ -1,8 +1,8 @@
 # Double Exponential Moving Average (DEMA)
 
-## Overview
-
 The Double Exponential Moving Average (DEMA) is a technical indicator designed to reduce the lag inherent in traditional moving averages in exchange for the risk of overshooting. Created by Patrick Mulloy, DEMA applies the EMA calculation twice in a way that minimizes lag while maintaining smoothness. It's particularly useful in trending markets where traditional moving averages might be too slow to react to price changes.
+
+[Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/dema.pine)
 
 ## Mathematical Foundation
 

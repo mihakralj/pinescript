@@ -1,8 +1,8 @@
 # Exponential Moving Average (EMA)
 
-## Overview
-
 The Exponential Moving Average (EMA) is a widely used technical indicator that applies more weight to recent prices. Unlike the Simple Moving Average (SMA), which assigns equal weights to all prices within the lookback period, the EMA gives greater importance to more recent data points, making it more responsive to new information.
+
+[Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/ema.pine)
 
 ## Mathematical Foundation
 

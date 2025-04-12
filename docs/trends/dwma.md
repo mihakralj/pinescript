@@ -1,8 +1,8 @@
 # Double Weighted Moving Average (DWMA)
 
-## Overview
-
 The Double Weighted Moving Average (DWMA) is a FIR echnical indicator that applies the Weighted Moving Average (WMA) calculation twice to the price data. This double-smoothing process creates a more stable trend indicator with reduced noise, while still maintaining sensitivity to price changes due to the weighted nature of the calculations.
+
+[Pine Script Implementation of DWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/dwma.pine)
 
 ## Mathematical Foundation
 

@@ -4,6 +4,7 @@
 indicator("Double Exponential Moving Average", "DEMA", overlay=true)
 
 //@function Calculates DEMA using double exponential smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/dema.md
 //@param source Series to calculate DEMA from
 //@param alpha smoothing factor
 //@returns DEMA value from first bar with proper compensation
