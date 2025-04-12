@@ -1,0 +1,42 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Zero-Lag Triple Exponential Moving Average", "ZLTEMA", overlay=true)
+
+//@function Calculates ZLTEMA using zero-lag price and triple exponential smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/zltema.md
+//@param source Series to calculate ZLTEMA from
+//@param alpha Smoothing factor (typically 2/(period+1))
+//@returns ZLTEMA value with zero-lag effect applied
+zltema(series float source, simple float alpha) =>
+    if alpha <= 0
+        runtime.error("Alpha must be greater than 0")
+    var float EPSILON = 1e-10
+    var float raw_ema1 = 0.0
+    var float raw_ema2 = 0.0
+    var float raw_ema3 = 0.0
+    var float e = 1.0
+    int lag = math.round(math.min((1 / alpha) - 0.5, bar_index / 2))
+    float zlema_input = 2 * source - source[lag]
+    raw_ema1 := alpha * (zlema_input - raw_ema1) + raw_ema1
+    e := (1 - alpha) * e
+    float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
+    float ema1_compensated = raw_ema1 * compensation
+    raw_ema2 := alpha * (ema1_compensated - raw_ema2) + raw_ema2
+    float ema2_compensated = raw_ema2 * compensation
+    raw_ema3 := alpha * (ema2_compensated - raw_ema3) + raw_ema3
+    compensation * (2 * raw_ema1 - 2 * raw_ema2 + raw_ema3)
+
+// Inputs
+i_period = input.int(2000, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculations
+alpha = 2.0/(float(i_period)+1.0)  // Calculate alpha from period
+zltema = zltema(i_source, alpha)   // Call function with correct parameters
+
+// Plots
+plot(zltema, "ZLTEMA", color.new(color.yellow, 0), 2)
+
+// Alert condition for price crossing ZLTEMA
+alertcondition(ta.cross(i_source, zltema), "Price Crosses ZLTEMA", "Price crossed ZLTEMA on {{ticker}}")
