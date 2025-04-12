@@ -1,0 +1,37 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Zero-Lag Exponential Moving Average", "ZLEMA", overlay=true)
+
+//@function Calculates ZLEMA using zero-lag price and exponential smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/zlema.md
+//@param source Series to calculate ZLEMA from
+//@param alpha Smoothing factor (typically 2/(period+1))
+//@returns ZLEMA value with zero-lag effect applied
+zlema(series float source, simple float alpha) =>
+    if alpha <= 0
+        runtime.error("Alpha must be greater than 0")
+    var float EPSILON = 1e-10
+    var float raw_zlema = 0.0
+    int lag = math.round(math.min((1 / alpha) - 0.5, bar_index / 2))
+    var float e = 1.0
+    raw_zlema := alpha * (2 * source - source[lag] - raw_zlema) + raw_zlema
+    e := (1 - alpha) * e
+    e > EPSILON ? raw_zlema / (1.0 - e) : raw_zlema
+
+
+
+
+// Inputs
+i_period = input.int(2000, "Period", minval=1, tooltip="Default period is 20, adjust as needed")
+i_source = input.source(close, "Source")
+
+// Calculation
+alpha = 2.0/(float(i_period)+1.0)  // Calculate alpha from period
+zlema = zlema(i_source, alpha)     // Call function with correct parameters
+
+// Plot
+plot(zlema, "ZLEMA", color.new(color.yellow, 0), 2)
+
+// Alert condition for price crossing ZLEMA
+alertcondition(ta.cross(i_source, zlema), "Price Crosses ZLEMA", "Price crossed ZLEMA on {{ticker}}")
