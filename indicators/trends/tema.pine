@@ -23,17 +23,18 @@ tema(series float source, simple float alpha) =>
     raw_ema3 := alpha * (raw_ema2 * compensation - raw_ema3) + raw_ema3
     compensation * (3 * raw_ema1 - 3 * raw_ema2 + raw_ema3)
 
+
+
+
 // Inputs
 i_period = input.int(3000, "Period", minval=1)
 i_source = input.source(close, "Source")
 
-// Calculations
+// Calculation
 alpha = 2.0/(float(i_period)+1.0)  // calculate alpha from period
 tema = tema(i_source, alpha)
-legacyTema = 3 * ta.ema(i_source, i_period) - 3 * ta.ema(ta.ema(i_source, i_period), i_period) + ta.ema(ta.ema(ta.ema(i_source, i_period), i_period), i_period)
 
-// Plots
-plot(legacyTema, "Built-in TEMA", color.new(color.blue, 0), 4)
+// Plot
 plot(tema, "Custom TEMA", color.new(color.yellow, 0), 2)
 
 // Alert

@@ -22,16 +22,15 @@ wma(series float source, simple int period) =>
 
 
 
+
 // Inputs
 i_period = input.int(5000, "Period", minval=1)
 i_source = input.source(close, "Source")
 
-// Calculations
-legacyWma = ta.wma(i_source, i_period)  // Built-in WMA for comparison
+// Calculation
 wma = wma(i_source, i_period)
 
-// Plots
-plot(legacyWma, "Built-in WMA", color.new(color.blue, 0), 4)
+// Plot
 plot(wma, "Custom WMA", color.new(color.yellow, 0), 2)
 
 // Alert

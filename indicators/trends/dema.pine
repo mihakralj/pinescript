@@ -28,13 +28,11 @@ dema(series float source, simple float alpha) =>
 i_period = input.int(5000, "Period", minval=1)
 i_source = input.source(close, "Source")
 
-// Calculations
+// Calculation
 alpha = 2.0/(float(i_period)+1.0)  // calculate alpha from period
 dema = dema(i_source, alpha)
-legacyDema = 2 * ta.ema(i_source, i_period) - ta.ema(ta.ema(i_source, i_period), i_period)
 
-// Plots
-plot(legacyDema, "Built-in DEMA", color.new(color.blue, 0), 4)
+// Plot
 plot(dema, "Custom DEMA", color.new(color.yellow, 0), 2)
 
 // Alert

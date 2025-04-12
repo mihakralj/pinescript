@@ -29,12 +29,10 @@ sma(series float source, simple int period) =>
 i_period = input.int(5000, "Period", minval=1)
 i_source = input.source(close, "Source")
 
-// Calculations
-legacySma = ta.sma(i_source, i_period)  // Built-in SMA for comparison
+// Calculation
 sma = sma(i_source, i_period)
 
-// Plots
-plot(legacySma, "Built-in SMA", color.new(color.blue, 0), 4)
+// Plot
 plot(sma, "Custom SMA", color.new(color.yellow, 0), 2)
 
 // Alert
