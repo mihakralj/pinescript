@@ -1,61 +1,36 @@
+// The MIT License (MIT)
+// © mihakralj
 //@version=6
-indicator("Custom EMA", "EMA", overlay=true)
+indicator("Exponential Moving Average", "EMA", overlay=true)
 
-// An Exponential Moving Average implementation that provides values from the first bar, with proper
-// alpha calculation from period (alpha = 2/(period+1)). Unlike ta.ema which may show NA values
-// initially, this implementation starts calculating from the very first bar. This implementation
-// is not using Simple moving average for early values which generates an unsmooth kink on the transition
-// from SMA to EMA, but uses a compensator value instead.
-//
-// Note on alpha calculation:
-// The smoothing factor (alpha) is calculated as 2/(period+1), which can result in very precise
-// floating point values. For example:
-// - period=9  → alpha = 0.2000000000
-// - period=10 → alpha = 0.1818181818
-// - period=20 → alpha = 0.0952380952
-// Using float for alpha calculation provides maximum precision for the smoothing factor.
-// Calculating alpha from period can be done in the parameter casting
-//
-// Note on e compensator used:
-// Instead of using SMA() for early values when count < period, this algorithm uses
-// a compensator for early values that mathematically corrects the EMA initialization bias.
-// By tracking how much influence the implicit zero pre-history has on our calculation
-// and dividing by (1-compensation), we get accurate EMA values from the very first bar.
-// The compensation factor naturally decays as more data is processed, smoothly
-// transitioning to the standard EMA calculation without any discontinuities.
-//
 //@function Calculates EMA using exponential smoothing with compensator for early values
 //@param source Series to calculate EMA from
-//@param period Lookback period, used to calculate alpha as 2/(period+1)
+//@param alpha smoothing factor, used to calculate alpha as 2/(period+1)
 //@returns EMA value from first bar with proper compensation
 ema(series float source, simple float alpha) =>
-    // State variables
-    var float raw_ema = 0.0          // The uncorrected EMA value
-    var float compensation = 1.0     // The compensator
-    var float epsilon = 1e-10        // maximum precision
-    // Update the raw EMA using standard formula
-    raw_ema := alpha * source + (1 - alpha) * raw_ema
-    // Update the compensation factor
-    compensation := (1 - alpha) * compensation
-    // Calculate corrected EMA with inline compensation
-    compensation > epsilon ? raw_ema / (1.0 - compensation) : raw_ema
-
+    if alpha <= 0
+        runtime.error("Alpha must be greater than 0")
+    var float EPSILON = 1e-10        // constant - smalest relevant value
+    var float raw_ema = 0.0
+    var float e = 1.0
+    raw_ema := alpha * (source - raw_ema) + raw_ema
+    e := (1 - alpha) * e
+    e > EPSILON ? raw_ema / (1.0 - e) : raw_ema
 
 
 
 
 // Inputs
-var string G_EMA = "EMA Settings"
-i_period = input.int(5000, "Period", minval=1, group=G_EMA)
-i_source = input.source(close, "Source", group=G_EMA)
+i_period = input.int(5000, "Period", minval=1)
+i_source = input.source(close, "Source")
 
 // Calculations
-legacyEma = ta.ema(i_source, i_period)  // Built-in EMA for comparison
-customEma = ema(i_source, 2.0/(float(i_period)+1.0))  // Custom EMA implementation, calculation of alpha from period
+legacyEma = ta.ema(i_source, i_period)
+ema = ema(i_source, 2.0/(float(i_period)+1.0))  // calculate alpha from period
 
 // Plots
 plot(legacyEma, "Built-in EMA", color.new(color.blue, 0), 4)
-plot(customEma, "Custom EMA", color.new(color.yellow, 0), 2)
+plot(ema, "Custom EMA", color.new(color.yellow, 0), 2)
 
 // Alert
-alertcondition(ta.cross(i_source, customEma), "Price Crosses EMA", "Price crossed EMA on {{ticker}}")
+alertcondition(ta.cross(i_source, ema), "Price Crosses EMA", "Price crossed EMA on {{ticker}}")
