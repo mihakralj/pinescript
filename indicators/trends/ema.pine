@@ -26,8 +26,9 @@ i_period = input.int(5000, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculations
+alpha = 2.0/(float(i_period)+1.0)  // calculate alpha from period
 legacyEma = ta.ema(i_source, i_period)
-ema = ema(i_source, 2.0/(float(i_period)+1.0))  // calculate alpha from period
+ema = ema(i_source, alpha)  // calculate alpha from period
 
 // Plots
 plot(legacyEma, "Built-in EMA", color.new(color.blue, 0), 4)
