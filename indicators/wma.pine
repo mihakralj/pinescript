@@ -1,0 +1,37 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Weighted Moving Average", "WMA", overlay=true)
+
+//@function Calculates WMA using linear weighting where recent values have higher weight
+//@param source Series to calculate WMA from
+//@param period Lookback period - FIR window size
+//@returns WMA value, calculates from first bar using available data
+wma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    float sum = 0.0
+    float weight = period * (period + 1) * 0.5
+    for i = 0 to period - 1
+        float w = period - i
+        price = source[i]
+        sum := not na(price) ? sum + price * w : sum
+        weight := na(price) ? weight - w : weight
+    weight > 0 ? sum / weight : na
+
+
+
+// Inputs
+i_period = input.int(5000, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculations
+legacyWma = ta.wma(i_source, i_period)  // Built-in WMA for comparison
+wma = wma(i_source, i_period)
+
+// Plots
+plot(legacyWma, "Built-in WMA", color.new(color.blue, 0), 4)
+plot(wma, "Custom WMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, wma), "Price Crosses WMA", "Price crossed WMA on {{ticker}}")
