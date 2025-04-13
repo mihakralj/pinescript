@@ -33,20 +33,35 @@ Each WMA component uses linear weighting where:
 
 ## FIR Filter Characteristics
 
-The HMA is a composite Finite Impulse Response (FIR) filter with specific properties:
+The HMA is a composite Finite Impulse Response (FIR) filter that processes data through multiple stages. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Fixed Window**: Each WMA component operates on a finite number of inputs
-2. **Multi-Scale Processing**: Combines WMAs of different periods (n/2, n, √n)
-3. **Zero Weight Outside Window**: No influence from data beyond each WMA window
-4. **Complex Phase Response**: Maintains partial linearity despite multi-stage calculation
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of HMA include:
+1. **Roll-off Rate**: Approximately -24dB per octave roll-off
+2. **Frequency Response**:
+   - Enhanced high-frequency pass-through from period-halving
+   - Improved noise reduction in stopband
+3. **Phase Response**: Non-linear due to multi-stage processing
+4. **Gain**: Variable across frequencies due to 2× amplification
 
-As a multi-stage FIR filter, HMA provides:
-- Enhanced high-frequency response through period-halving
-- Improved noise reduction via final √n smoothing
-- Superior lag reduction through 2× difference amplification
-- Approximately -24dB per octave roll-off
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Multi-scale processing through different periods
+   - Zero response outside component windows
+   - Complex interaction between WMA stages
+
+2. **Step Response**:
+   - Faster rise time than traditional MAs
+   - Potential overshoot due to lag reduction
+   - Quick settling to new levels
+
+3. **Latency Properties**:
+   - Reduced lag through period-halving
+   - Variable delay across frequencies
+   - Enhanced momentum through 2× amplification
 
 ## Initialization Properties
 

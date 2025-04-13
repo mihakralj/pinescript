@@ -40,24 +40,37 @@ This form shows RMA as a specific case of exponential smoothing where α = 1/per
 
 ## IIR Filter Characteristics
 
-RMA is an Infinite Impulse Response (IIR) filter with specific properties:
+RMA is an Infinite Impulse Response (IIR) filter that processes data through recursive calculation with Wilder's specific smoothing. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Infinite Memory**: Each output depends on all previous inputs extending to infinity
-2. **Recursive Nature**: Each value depends on the previous calculated value
-3. **Slower Decay**: Uses smaller α than EMA, leading to more emphasis on historical values
-4. **No Fixed Window**: Unlike FIR filters, there is no fixed calculation window
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of RMA include:
+1. **Roll-off Rate**: Approximately -3dB per octave, gentler than EMA
+2. **Frequency Response**:
+   - Enhanced noise reduction compared to EMA
+   - Smoother attenuation curve
+3. **Phase Response**: Non-linear due to recursive calculation
+4. **Gain**: More conservative than EMA due to smaller α:
+   - RMA(14): α = 0.0714
+   - EMA(14): α = 0.1333 (for comparison)
 
-As a smoothed IIR filter, RMA provides:
-- Slower response to signal changes than EMA (α = 1/period vs 2/(period+1))
-- Approximately -3dB per octave roll-off in frequency domain
-- Non-linear phase response due to recursive calculation
-- Greater noise reduction than EMA at the cost of increased lag
+### Response Properties (Time Domain)
 
-For example, comparing smoothing factors:
-- RMA(14): α = 0.0714
-- EMA(14): α = 0.1333
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Infinite memory extent
+   - Slower exponential decay than EMA
+   - Greater emphasis on historical values
+
+2. **Step Response**:
+   - More gradual transition than EMA
+   - Minimal overshoot characteristics
+   - Longer settling time than EMA
+
+3. **Smoothing Properties**:
+   - Enhanced noise reduction
+   - Increased lag compared to EMA
+   - Consistent smoothing behavior
 
 ## Initialization Methods
 

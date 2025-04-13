@@ -36,25 +36,33 @@ Where 'period' is the chosen lookback period for the EMA.
 
 ## IIR Filter Characteristics
 
-The EMA is an Infinite Impulse Response (IIR) filter with specific properties:
+The EMA is an Infinite Impulse Response (IIR) filter that processes data through recursive calculation. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Infinite Memory**: Each output depends on all previous inputs extending to infinity
-2. **Recursive Nature**: Each value depends on the previous calculated value
-3. **Weighted History**: Past values have exponentially decreasing influence
-4. **No Fixed Window**: Unlike FIR filters, there is no fixed calculation window
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of EMA include:
+1. **Roll-off Rate**: Approximately -6dB per octave in frequency domain
+2. **Frequency Response**: Smooth attenuation of high frequencies
+3. **Phase Response**: Non-linear due to recursive calculation
+4. **Gain**: Decreasing with frequency, with no fixed cutoff
 
-As an exponential-weighted IIR filter, EMA provides:
-- Faster response to signal changes than FIR filters of similar smoothing
-- Approximately -6dB per octave roll-off in frequency domain
-- Non-linear phase response due to recursive calculation
-- Increasing phase lag at higher frequencies
+### Response Properties (Time Domain)
 
-A converged EMA requires approximately:
-- EMA(5): 13 initialization points to reach 95% accuracy
-- EMA(20): 55 points to reach 95% accuracy
-- EMA(50): 138 points to reach 95% accuracy
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Infinite memory extent
+   - Exponentially decreasing weights
+   - No fixed calculation window
+
+2. **Step Response**:
+   - Smooth transition to new levels
+   - No overshoot in standard configuration
+   - Gradual settling to final value
+
+3. **Convergence Properties**:
+   - EMA(5): 13 bars for 95% accuracy
+   - EMA(20): 55 bars for 95% accuracy
+   - EMA(50): 138 bars for 95% accuracy
 
 ## Initialization Methods
 

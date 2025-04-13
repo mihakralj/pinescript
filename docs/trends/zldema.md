@@ -47,10 +47,37 @@ Like ZLEMA and DEMA, ZLDEMA uses a smoothing factor α where:
 
 ## IIR Filter Characteristics
 
-ZLDEMA implements a complex IIR filter structure:
-- Combines two zero-lag compensated IIR filters
-- Each stage reduces lag independently
-- Final combination further reduces lag while maintaining smoothness
+ZLDEMA is a hybrid Infinite Impulse Response (IIR) filter that combines two ZLEMA stages with DEMA-style synthesis. Its behavior can be analyzed in both frequency and time domains:
+
+### Transfer Properties (Frequency Domain)
+
+The frequency domain characteristics of ZLDEMA include:
+1. **Roll-off Rate**: Complex cascade of modified ZLEMA responses
+2. **Frequency Response**:
+   - Enhanced pass-through from both ZLEMA stages
+   - Reduced high-frequency noise through balanced weighting
+3. **Phase Response**: Doubly-compensated non-linear response
+4. **Gain**: Optimized through 1.5/0.5 ratio:
+   - Balanced amplitude response across frequencies
+   - Controlled transition band behavior
+
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Dual predictive compensation
+   - Modified exponential decay sequence
+   - Complex interaction between stages
+
+2. **Step Response**:
+   - Rapid yet controlled transitions
+   - Reduced overshooting through 1.5/0.5 ratio
+   - Balanced settling behavior
+
+3. **Latency Properties**:
+   - Dual-stage lag minimization
+   - Enhanced trend detection capability
+   - Optimized convergence characteristics
 
 ## Error Compensation
 

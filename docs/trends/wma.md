@@ -39,20 +39,35 @@ For example, for a 5-period WMA, the sum of weights is 5(5+1)/2 = 15.
 
 ## FIR Filter Characteristics
 
-The WMA is a Finite Impulse Response (FIR) filter with specific properties:
+The WMA is a Finite Impulse Response (FIR) filter that processes data through linear weighting. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Fixed Window**: Output depends only on a finite number of past inputs (exactly p values)
-2. **Linear Weighting**: Values within the window have progressively increasing weights
-3. **Zero Weight Outside Window**: No influence from data beyond the calculation window
-4. **Linear Phase**: Maintains constant time delay due to symmetric calculation
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of WMA include:
+1. **Roll-off Rate**: -20dB per octave (steeper than SMA)
+2. **Frequency Response**:
+   - Smoother attenuation than SMA
+   - Reduced stopband ripple
+3. **Phase Response**: Perfect linear phase in passband
+4. **Gain**: Decreasing with frequency, more aggressive than SMA
 
-As a linearly-weighted FIR filter, WMA provides:
-- Better high-frequency attenuation than SMA (-20dB per octave)
-- Smoother frequency response with less ripple
-- Perfect linear phase response in passband
-- Fixed phase delay proportional to window size
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Fixed window length (exactly p values)
+   - Linear weight distribution
+   - Zero response outside window
+
+2. **Step Response**:
+   - Smooth transition to new levels
+   - Less overshoot than EMA
+   - Progressive weight influence
+
+3. **Delay Properties**:
+   - Fixed phase delay proportional to window size
+   - Constant group delay across frequencies
+   - Predictable signal preservation
 
 ## Initialization Properties
 

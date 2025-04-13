@@ -33,20 +33,33 @@ This approach requires only 3 arithmetic operations (addition, subtraction, divi
 
 ## FIR Filter Characteristics
 
-The SMA is a Finite Impulse Response (FIR) filter with specific properties:
+The SMA is a Finite Impulse Response (FIR) filter that processes data through a fixed-size window. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Fixed Window**: Output depends only on a finite number of past inputs (exactly p values)
-2. **Equal Weights**: All signals within the window have equal influence (1/p)
-3. **Zero Weight Outside Window**: No influence from data beyond the calculation window
-4. **Linear Phase**: Maintains constant time delay across all frequencies
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of SMA include:
+1. **Roll-off Rate**: Low-pass filtering with -13dB per octave roll-off
+2. **Frequency Response**: Contains significant stopband ripple
+3. **Phase Response**: Perfect linear phase in passband
+4. **Gain**: Sinc function shape in frequency domain
 
-As a rectangular-weighted FIR filter, SMA provides:
-- Low-pass filtering with -13dB per octave roll-off
-- Significant stopband ripple in frequency response
-- Perfect linear phase response in passband
-- Fixed phase delay of exactly (p-1)/2 periods
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Fixed window length (exactly p values)
+   - Uniform weights (1/p) within window
+   - Zero response outside window
+
+2. **Step Response**:
+   - Linear ramp over p periods
+   - No overshoot or undershoot
+   - Symmetric around midpoint
+
+3. **Delay Properties**:
+   - Fixed phase delay of (p-1)/2 periods
+   - Constant group delay across frequencies
+   - Perfect preservation of signal shape
 
 ## Initialization Properties
 

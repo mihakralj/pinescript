@@ -52,11 +52,38 @@ Like ZLEMA and TEMA, ZLTEMA uses a smoothing factor α where:
 
 ## IIR Filter Characteristics
 
-ZLTEMA implements a sophisticated IIR filter structure:
-- Combines three zero-lag compensated IIR filters
-- Each stage reduces lag independently
-- Final combination balances lag reduction with smoothing
-- Triple-pass design enhances noise filtering
+ZLTEMA is a hybrid Infinite Impulse Response (IIR) filter that combines three ZLEMA stages with modified TEMA-style synthesis. Its behavior can be analyzed in both frequency and time domains:
+
+### Transfer Properties (Frequency Domain)
+
+The frequency domain characteristics of ZLTEMA include:
+1. **Roll-off Rate**: Complex triple cascade of modified ZLEMA responses
+2. **Frequency Response**:
+   - Superior noise attenuation from triple filtering
+   - Enhanced pass-through from multiple lag compensation
+3. **Phase Response**: Triply-compensated non-linear response
+4. **Gain**: Optimized through 2/2/1 ratio:
+   - Balanced amplitude response across frequencies
+   - Superior stopband attenuation
+   - Enhanced transition band control
+
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Triple predictive compensation
+   - Complex cascade interactions
+   - Sophisticated decay sequence
+
+2. **Step Response**:
+   - Extremely rapid transitions
+   - Controlled triple-stage overshooting
+   - Optimized settling characteristics
+
+3. **Latency Properties**:
+   - Triple-stage lag minimization
+   - Superior trend detection capability
+   - Enhanced convergence behavior
 
 ## Error Compensation
 

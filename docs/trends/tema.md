@@ -43,20 +43,37 @@ The same α is used for all three EMA calculations to maintain consistency in th
 
 ## IIR Filter Characteristics
 
-TEMA is an Infinite Impulse Response (IIR) filter with specific properties:
+TEMA is a composite Infinite Impulse Response (IIR) filter that processes data through three EMAs with enhanced lag reduction. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Triple Cascade**: Uses three cascaded EMAs for enhanced smoothing
-2. **Infinite Memory**: Each stage depends on all previous inputs
-3. **Weighted Combination**: Employs 3/3/1 weighting between stages
-4. **Complex Response**: Multiple stages create sophisticated filter behavior
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of TEMA include:
+1. **Roll-off Rate**: Approximately -18dB per octave due to triple cascade
+2. **Frequency Response**:
+   - Exceptional high-frequency attenuation
+   - Complex interaction between three EMA stages
+3. **Phase Response**: Sophisticated non-linear response from triple IIR
+4. **Gain**: Highly variable across frequencies due to 3/3/1 weighting:
+   - Enhanced pass-through in transition band
+   - Superior stopband attenuation
 
-As a triple-cascaded IIR filter, TEMA provides:
-- Exceptional high-frequency attenuation (-18dB per octave)
-- Complex but predictable phase response
-- Reduced lag through strategic weighting of stages
-- Superior noise reduction compared to single EMA or DEMA
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Triple infinite memory extent
+   - Complex cascade interactions
+   - Strategic stage weighting
+
+2. **Step Response**:
+   - Extremely fast rise time
+   - Controlled overshoot behavior
+   - Quick settling despite complexity
+
+3. **Latency Properties**:
+   - Minimal lag through triple compensation
+   - Non-uniform delay across frequencies
+   - Earlier trend detection capability
 
 ## Initialization and Compensation
 

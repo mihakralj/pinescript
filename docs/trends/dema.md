@@ -39,11 +39,37 @@ The same α is used for both EMA calculations to maintain consistency in the smo
 
 ## IIR Filter Characteristics
 
-DEMA employs two cascaded IIR filters (EMAs) but combines them in a way that reduces the lag typically associated with cascaded filters:
+DEMA is a composite Infinite Impulse Response (IIR) filter that processes data through two EMAs with lag reduction. Its behavior can be analyzed in both frequency and time domains:
 
-- The first EMA introduces standard IIR characteristics
-- The second EMA, when combined with the doubling of the first EMA, creates a unique filter response that reduces lag but gains overshooting
-- The overall effect provides better responsiveness than a single EMA while maintaining smoothness
+### Transfer Properties (Frequency Domain)
+
+The frequency domain characteristics of DEMA include:
+1. **Roll-off Rate**: Steeper than single EMA due to cascaded filtering
+2. **Frequency Response**:
+   - Enhanced high-frequency pass-through from lag reduction
+   - Complex interaction between cascaded EMAs
+3. **Phase Response**: Non-linear due to dual IIR stages
+4. **Gain**: Variable across frequencies due to 2× amplification:
+   - Boosted response in transition band
+   - Enhanced attenuation in stopband
+
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Infinite memory extent from both EMAs
+   - Complex interaction between cascaded stages
+   - Enhanced response to recent changes
+
+2. **Step Response**:
+   - Faster rise time than single EMA
+   - Potential overshoot from lag reduction
+   - Quicker settling to new levels
+
+3. **Latency Properties**:
+   - Reduced lag through 2× compensation
+   - Variable delay across frequencies
+   - More responsive to trend changes
 
 ## Initialization and Compensation
 

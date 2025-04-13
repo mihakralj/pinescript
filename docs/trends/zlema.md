@@ -38,10 +38,37 @@ Like EMA, ZLEMA uses a smoothing factor α where:
 
 ## IIR Filter Characteristics
 
-ZLEMA implements a unique IIR filter structure:
-- Uses predictive lag compensation instead of multiple filter passes
-- Maintains single-pole IIR characteristics while reducing lag
-- Dynamic lag calculation adapts filter response to available data
+ZLEMA is a modified Infinite Impulse Response (IIR) filter that employs predictive lag compensation. Its behavior can be analyzed in both frequency and time domains:
+
+### Transfer Properties (Frequency Domain)
+
+The frequency domain characteristics of ZLEMA include:
+1. **Roll-off Rate**: Similar to EMA but with modified high-frequency response
+2. **Frequency Response**:
+   - Enhanced pass-through of trend components
+   - Dynamic modification of stopband characteristics
+3. **Phase Response**: Compensated non-linear response
+4. **Gain**: Adaptive across frequencies:
+   - Boosted response in trend frequencies
+   - Modified attenuation in noise band
+
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Predictive signal estimation
+   - Modified exponential decay
+   - Dynamic lag adaptation
+
+2. **Step Response**:
+   - Near-immediate reaction to changes
+   - Controlled overshoot through prediction
+   - Adaptive settling behavior
+
+3. **Latency Properties**:
+   - Minimal effective lag through compensation
+   - Dynamic adjustment to data availability
+   - Predictive trend anticipation
 
 ## Initialization and Error Handling
 

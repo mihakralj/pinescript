@@ -37,20 +37,35 @@ This relationship demonstrates why TRIMA provides better smoothing than a single
 
 ## FIR Filter Characteristics
 
-TRIMA is a Finite Impulse Response (FIR) filter with specific properties:
+TRIMA is a Finite Impulse Response (FIR) filter that processes data through triangular weighting. Its behavior can be analyzed in both frequency and time domains:
 
-1. **Symmetric Response**: Equal weights on both sides of the center point
-2. **Fixed Window**: Output depends only on a finite number of past inputs
-3. **Zero Weight Outside Window**: No influence from data beyond the window
-4. **Linear Phase**: Maintains waveform shape due to symmetrical weighting
+### Transfer Properties (Frequency Domain)
 
-### Transfer Function Properties
+The frequency domain characteristics of TRIMA include:
+1. **Roll-off Rate**: Approximately -18dB per octave roll-off
+2. **Frequency Response**:
+   - Enhanced noise reduction compared to SMA/WMA
+   - Smoother attenuation curve due to triangular weighting
+3. **Phase Response**: Perfect linear phase due to symmetry
+4. **Gain**: Progressive attenuation with steeper curve than SMA
 
-As a triangular-weighted FIR filter, TRIMA provides:
-- Better high-frequency noise reduction than SMA or WMA
-- Smoother frequency response than linear weighting
-- Less phase distortion due to symmetric weights
-- Approximately -18dB per octave roll-off
+### Response Properties (Time Domain)
+
+The time domain characteristics demonstrate:
+1. **Impulse Response**:
+   - Symmetric triangular weight distribution
+   - Peak weight at center of window
+   - Zero response outside window
+
+2. **Step Response**:
+   - Smooth transition due to double smoothing
+   - No overshoot or undershoot
+   - Gradual settling to new levels
+
+3. **Delay Properties**:
+   - Fixed group delay at window center
+   - Perfect waveform preservation
+   - Increased lag due to double smoothing
 
 ## Initialization Properties
 
