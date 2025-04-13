@@ -1,0 +1,39 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Triangular Moving Average", "TRIMA", overlay=true)
+
+//@function Calculates TRIMA using triangular weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/trima.md
+//@param source Series to calculate TRIMA from
+//@param period Lookback period - FIR window size
+//@returns TRIMA value, calculates from first bar using available data
+trima(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    float sum = 0.0
+    float weight = 0.0
+    mid = math.floor(period/2)
+    for i = 0 to period - 1
+        price = source[i]
+        if not na(price)
+            w = math.min(i, period - 1 - i) + 1
+            sum += price * w
+            weight += w
+    weight > 0 ? sum / weight : na
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(10, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculation
+trima = trima(i_source, i_period)
+
+// Plot
+plot(trima, "TRIMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, trima), "Price Crosses TRIMA", "Price crossed TRIMA on {{ticker}}")

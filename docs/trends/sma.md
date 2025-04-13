@@ -1,6 +1,6 @@
 # Simple Moving Average (SMA)
 
-The Simple Moving Average (SMA) is a fundamental technical indicator that calculates the average of a selected range of prices over a specified number of periods. As a core building block in technical analysis, the SMA provides a smoothed representation of price movement by filtering out short-term fluctuations. It assigns equal weight to all price points within the calculation window, making it straightforward to understand but less responsive to recent price changes compared to weighted averages.
+The Simple Moving Average (SMA) is a fundamental technical indicator that calculates the average of a selected range of signals over a specified number of periods. As a core building block in technical analysis, the SMA provides a smoothed representation of signal movement by filtering out short-term fluctuations. It assigns equal weight to all data points within the calculation window, making it straightforward to understand but less responsive to recent signal changes compared to weighted averages.
 
 [Pine Script Implementation of SMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/sma.pine)
 
@@ -8,12 +8,12 @@ The Simple Moving Average (SMA) is a fundamental technical indicator that calcul
 
 ### Basic Formula
 
-The SMA is calculated by summing the prices for a specific number of periods and then dividing by the number of periods:
+The SMA is calculated by summing the signals for a specific number of periods and then dividing by the number of periods:
 
 SMA = (P₁ + P₂ + ... + Pₙ) / n
 
 Where:
-- P₁, P₂, ..., Pₙ are price values in the lookback window
+- P₁, P₂, ..., Pₙ are signal values in the lookback window
 - n is the number of periods (window size)
 
 ### Optimized Recursive Formula
@@ -25,29 +25,28 @@ SMA₍ₙ₎ = SMA₍ₙ₋₁₎ + (Pₙ - Pₙ₋ₚ) / p
 Where:
 - SMA₍ₙ₎ is the current SMA value
 - SMA₍ₙ₋₁₎ is the previous SMA value
-- Pₙ is the current price
-- Pₙ₋ₚ is the price p periods ago
+- Pₙ is the current signal
+- Pₙ₋ₚ is the signal p periods ago
 - p is the period
 
 This approach requires only 3 arithmetic operations (addition, subtraction, division) regardless of window size, compared to p additions and 1 division in the naive implementation.
 
-## FIR Filter Nature
+## FIR Filter Characteristics
 
-The SMA is a Finite Impulse Response (FIR) filter, a fundamental concept from signal processing theory. Understanding this property helps explain the behavior and limitations of the SMA:
+The SMA is a Finite Impulse Response (FIR) filter with specific properties:
 
-### Key FIR Characteristics
-
-1. **Fixed Window**: The SMA output depends only on a finite number of past inputs (exactly p values).
-2. **Zero Weight Outside Window**: Values outside the window have zero influence on the current SMA.
-3. **Impulse Response**: If a single impulse (spike) enters the system, its effect on the output lasts exactly p periods and then completely disappears.
+1. **Fixed Window**: Output depends only on a finite number of past inputs (exactly p values)
+2. **Equal Weights**: All signals within the window have equal influence (1/p)
+3. **Zero Weight Outside Window**: No influence from data beyond the calculation window
+4. **Linear Phase**: Maintains constant time delay across all frequencies
 
 ### Transfer Function Properties
 
-As a filter, the SMA has specific frequency domain characteristics:
-- Acts as a low-pass filter, attenuating high-frequency components (noise)
-- Has poor stop-band attenuation (only 13dB per octave)
-- Exhibits significant ripple in the frequency response
-- Introduces a phase delay of exactly (p-1)/2 periods
+As a rectangular-weighted FIR filter, SMA provides:
+- Low-pass filtering with -13dB per octave roll-off
+- Significant stopband ripple in frequency response
+- Perfect linear phase response in passband
+- Fixed phase delay of exactly (p-1)/2 periods
 
 ## Initialization Properties
 
@@ -87,7 +86,7 @@ Common window sizes and their typical applications:
 ### Advantages
 
 - **Simplicity**: Easy to understand, calculate, and implement
-- **Predictability**: Each price has precisely known influence on the average
+- **Predictability**: Each signal has precisely known influence on the average
 - **Equal Weighting**: No bias toward recent or old data
 - **No Initialization Bias**: Produces valid outputs as soon as window is filled
 - **Deterministic Lag**: Precisely (p-1)/2 bars of lag for symmetrical smoothing
@@ -95,8 +94,8 @@ Common window sizes and their typical applications:
 
 ### Disadvantages
 
-- **Lag**: Significant lag in responding to price changes
-- **Equal Weighting**: Recent prices affect the average equally as older prices
-- **Sudden Changes**: When a price leaves the window, it can cause abrupt changes in the SMA
-- **Binary Cutoff**: Sharp cutoff between prices that have influence (1/p) and those with no influence (0)
+- **Lag**: Significant lag in responding to signal changes
+- **Equal Weighting**: Recent signals affect the average equally as older signals
+- **Sudden Changes**: When a signal leaves the window, it can cause abrupt changes in the SMA
+- **Binary Cutoff**: Sharp cutoff between signals that have influence (1/p) and those with no influence (0)
 - **Poor Frequency Selectivity**: Relatively poor separation between signal and noise components

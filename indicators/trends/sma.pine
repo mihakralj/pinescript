@@ -23,7 +23,7 @@ sma(series float source, simple int period) =>
     valid_count > 0 ? sum / valid_count : na
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(5000, "Period", minval=1)

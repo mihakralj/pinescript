@@ -1,6 +1,6 @@
 # Zero-Lag Exponential Moving Average (ZLEMA)
 
-The Zero-Lag Exponential Moving Average (ZLEMA) indicator is designed to reduce the inherent lag of traditional exponential moving averages by applying a dynamic compensator. Created by John Ehlers, ZLEMA uses a unique lag compensation mechanism that predicts price movement to minimize delay in trend detection.
+The Zero-Lag Exponential Moving Average (ZLEMA) indicator is designed to reduce the inherent lag of traditional exponential moving averages by applying a dynamic compensator. Created by John Ehlers, ZLEMA uses a unique lag compensation mechanism that predicts signal movement to minimize delay in trend detection.
 
 [Pine Script Implementation of ZLEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/zlema.pine)
 
@@ -13,8 +13,8 @@ ZLEMA is calculated using the following formula:
 ZLEMA = α(2P_t - P_{t-lag}) + (1-α)ZLEMA_{t-1}
 
 Where:
-- P_t is the current price
-- P_{t-lag} is the lagged price
+- P_t is the current signal
+- P_{t-lag} is the lagged signal
 - α is the smoothing factor
 - lag is dynamically calculated based on α
 
@@ -63,7 +63,7 @@ ZLEMA implements a unique IIR filter structure:
 - **Direct Customization:** α parameter allows precise sensitivity tuning
 - **Dynamic Adjustment:** Automatically adapts to available historical data
 - **Single-Pass Efficiency:** Achieves lag reduction without multiple filter passes
-- **Predictive Mechanism:** Uses future price estimation for better responsiveness
+- **Predictive Mechanism:** Uses future signal estimation for better responsiveness
 
 ### Disadvantages
 

@@ -21,7 +21,7 @@ wma(series float source, simple int period) =>
     weight > 0 ? sum / weight : na
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(5000, "Period", minval=1)

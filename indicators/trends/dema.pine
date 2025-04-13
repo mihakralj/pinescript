@@ -22,7 +22,7 @@ dema(series float source, simple float alpha) =>
     compensation * (2 * raw_ema1 - raw_ema2)
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(5000, "Period", minval=1)

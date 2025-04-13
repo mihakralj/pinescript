@@ -1,6 +1,6 @@
 # Triple Exponential Moving Average (TEMA)
 
-The Triple Exponential Moving Average (TEMA) is a technical indicator that extends the concept of DEMA by applying exponential moving average calculations three times. Developed by Patrick Mulloy, TEMA further reduces the lag in price action while maintaining smoothness. It's particularly effective in identifying trend changes earlier than traditional moving averages or even DEMA.
+The Triple Exponential Moving Average (TEMA) is a technical indicator that extends the concept of DEMA by applying exponential moving average calculations three times. Developed by Patrick Mulloy, TEMA further reduces the lag in signal action while maintaining smoothness. It's particularly effective in identifying trend changes earlier than traditional moving averages or even DEMA.
 
 [Pine Script Implementation of TEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/tema.pine)
 
@@ -13,7 +13,7 @@ TEMA is calculated using the following formula:
 TEMA = 3 × EMA(source) - 3 × EMA(EMA(source)) + EMA(EMA(EMA(source)))
 
 Where:
-- EMA(source) is the first exponential moving average of the source price
+- EMA(source) is the first exponential moving average of the source signal
 - EMA(EMA(source)) is the second exponential moving average
 - EMA(EMA(EMA(source))) is the third exponential moving average
 
@@ -43,12 +43,20 @@ The same α is used for all three EMA calculations to maintain consistency in th
 
 ## IIR Filter Characteristics
 
-TEMA employs three cascaded IIR filters (EMAs) combined in a way that significantly reduces lag:
+TEMA is an Infinite Impulse Response (IIR) filter with specific properties:
 
-- The first EMA provides basic smoothing
-- The second EMA adds depth to the smoothing process
-- The third EMA, when combined with the weighted first and second EMAs, creates a sophisticated filter response
-- The overall effect provides exceptional responsiveness while maintaining reasonable smoothness
+1. **Triple Cascade**: Uses three cascaded EMAs for enhanced smoothing
+2. **Infinite Memory**: Each stage depends on all previous inputs
+3. **Weighted Combination**: Employs 3/3/1 weighting between stages
+4. **Complex Response**: Multiple stages create sophisticated filter behavior
+
+### Transfer Function Properties
+
+As a triple-cascaded IIR filter, TEMA provides:
+- Exceptional high-frequency attenuation (-18dB per octave)
+- Complex but predictable phase response
+- Reduced lag through strategic weighting of stages
+- Superior noise reduction compared to single EMA or DEMA
 
 ## Initialization and Compensation
 
@@ -72,7 +80,7 @@ As with other IIR moving averages, TEMA can be fine-tuned using α directly inst
 
 ### Advantages
 
-- **Minimal Lag**: Responds more quickly to price changes than both EMA and DEMA
+- **Minimal Lag**: Responds more quickly to signal changes than both EMA and DEMA
 - **Superior Trend Detection**: Earlier identification of trend changes
 - **No Warm-up Required**: With compensation, provides accurate values from first bar
 - **Smooth Output**: Despite increased responsiveness, maintains reasonable smoothness

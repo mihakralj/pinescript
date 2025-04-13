@@ -1,6 +1,6 @@
 # Zero-Lag Double Exponential Moving Average (ZLDEMA)
 
-The Zero-Lag Double Exponential Moving Average (ZLDEMA) combines the lag reduction techniques of ZLEMA with the enhanced smoothing of DEMA. This hybrid approach creates a moving average that is both responsive to price changes and resistant to market noise, while minimizing the lag typically associated with multiple moving average passes.
+The Zero-Lag Double Exponential Moving Average (ZLDEMA) combines the lag reduction techniques of ZLEMA with the enhanced smoothing of DEMA. This hybrid approach creates a moving average that is both responsive to signal changes and resistant to market noise, while minimizing the lag typically associated with multiple moving average passes.
 
 [Pine Script Implementation of ZLDEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/zldema.pine)
 
@@ -23,7 +23,7 @@ Where:
    $ lag = \min(\lfloor\frac{1}{\alpha} - 0.5\rfloor, \lfloor\frac{bar\_index}{2}\rfloor) $
 
 2. **First ZLEMA Stage:**
-   - Zero-lag price: $ P_{zero\_lag} = 2P_t - P_{t-lag} $
+   - Zero-lag signal: $ P_{zero\_lag} = 2P_t - P_{t-lag} $
    - First ZLEMA: $ ZLEMA_1 = \alpha(P_{zero\_lag} - ZLEMA_1) + ZLEMA_1 $
 
 3. **Second ZLEMA Stage:**

@@ -1,6 +1,6 @@
 # Hull Moving Average (HMA)
 
-The Hull Moving Average (HMA) is a technical indicator developed by Alan Hull to provide significantly reduced lag compared to traditional moving averages while maintaining smoothness in the resulting trend line. It uses weighted moving averages in a unique configuration that emphasizes recent price action and helps eliminate lag.
+The Hull Moving Average (HMA) is a technical indicator developed by Alan Hull to provide significantly reduced lag compared to traditional moving averages while maintaining smoothness in the resulting trend line. It uses weighted moving averages in a unique configuration that emphasizes recent signal action and helps eliminate lag.
 
 [Pine Script Implementation of HMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/hma.pine)
 
@@ -10,9 +10,9 @@ The Hull Moving Average (HMA) is a technical indicator developed by Alan Hull to
 
 The HMA is calculated using the four steps:
 
-1. Calculate WMA with period n/2: WMA₁ = WMA(price, n/2)
+1. Calculate WMA with period n/2: WMA₁ = WMA(signal, n/2)
 
-2. Calculate WMA with period n: WMA₂ = WMA(price, n)
+2. Calculate WMA with period n: WMA₂ = WMA(signal, n)
 
 3. Calculate the difference: diff = 2 × WMA₁ - WMA₂
 
@@ -21,24 +21,32 @@ The HMA is calculated using the four steps:
 Where:
 - n is the period of the HMA
 - WMA is the Weighted Moving Average
-- price is the input price series
+- signal is the input signal series
 - √n is the square root of n (rounded down)
 
 ### Weighted Moving Average Components
 
 Each WMA component uses linear weighting where:
-- Most recent price has highest weight
-- Weights decrease linearly for older prices
+- Most recent signal has highest weight
+- Weights decrease linearly for older signals
 - Sum of weights denominator = n(n+1)/2
 
-## Filter Characteristics
+## FIR Filter Characteristics
 
-The HMA combines multiple FIR filters (WMAs) in a unique configuration:
+The HMA is a composite Finite Impulse Response (FIR) filter with specific properties:
 
-- Uses shorter period WMA (n/2) to capture rapid changes
-- Uses full period WMA (n) for baseline trend
-- Square root period in final WMA balances smoothing and responsiveness
-- Difference amplification (2×) helps reduce lag
+1. **Fixed Window**: Each WMA component operates on a finite number of inputs
+2. **Multi-Scale Processing**: Combines WMAs of different periods (n/2, n, √n)
+3. **Zero Weight Outside Window**: No influence from data beyond each WMA window
+4. **Complex Phase Response**: Maintains partial linearity despite multi-stage calculation
+
+### Transfer Function Properties
+
+As a multi-stage FIR filter, HMA provides:
+- Enhanced high-frequency response through period-halving
+- Improved noise reduction via final √n smoothing
+- Superior lag reduction through 2× difference amplification
+- Approximately -24dB per octave roll-off
 
 ## Initialization Properties
 
@@ -67,6 +75,6 @@ The HMA combines multiple FIR filters (WMAs) in a unique configuration:
 
 - **Potential Whipsaws**: Higher responsiveness can lead to false signals in choppy markets
 - **Non-Traditional Periods**: Square numbers as optimal periods may not align with traditional analysis periods
-- **Overshooting Tendency**: The aggressive lag reduction can cause significant overshooting during sharp price reversals
-- **Amplitude Distortion**: The 2× multiplier in the formula can exaggerate price movements
-- **Gap Sensitivity**: More prone to creating gaps in the moving average line during price gaps or market closures
+- **Overshooting Tendency**: The aggressive lag reduction can cause significant overshooting during sharp signal reversals
+- **Amplitude Distortion**: The 2× multiplier in the formula can exaggerate signal movements
+- **Gap Sensitivity**: More prone to creating gaps in the moving average line during signal gaps or market closures

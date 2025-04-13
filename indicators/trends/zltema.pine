@@ -27,6 +27,9 @@ zltema(series float source, simple float alpha) =>
     raw_ema3 := alpha * (ema2_compensated - raw_ema3) + raw_ema3
     compensation * (2 * raw_ema1 - 2 * raw_ema2 + raw_ema3)
 
+
+// ---------- Main loop ----------
+
 // Inputs
 i_period = input.int(2000, "Period", minval=1)
 i_source = input.source(close, "Source")

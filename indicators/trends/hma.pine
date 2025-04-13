@@ -40,7 +40,7 @@ hma(series float source, simple int period) =>
     weight_sqrt > 0 ? sum_sqrt / weight_sqrt : na
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(10, "Period", minval=1)

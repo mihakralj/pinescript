@@ -1,6 +1,6 @@
 # Exponential Moving Average (EMA)
 
-The Exponential Moving Average (EMA) is a widely used technical indicator that applies more weight to recent prices. Unlike the Simple Moving Average (SMA), which assigns equal weights to all prices within the lookback period, the EMA gives greater importance to more recent data points, making it more responsive to new information.
+The Exponential Moving Average (EMA) is a widely used technical indicator that applies more weight to recent signals. Unlike the Simple Moving Average (SMA), which assigns equal weights to all signals within the lookback period, the EMA gives greater importance to more recent data points, making it more responsive to new information.
 
 [Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/ema.pine)
 
@@ -8,13 +8,13 @@ The Exponential Moving Average (EMA) is a widely used technical indicator that a
 
 ### Basic Formula
 
-The EMA calculation utilizes a smoothing factor (α), which determines how much weight is given to the most recent price. The standard formula is:
+The EMA calculation utilizes a smoothing factor (α), which determines how much weight is given to the most recent signal. The standard formula is:
 
 EMA₍ₙ₎ = (Price₍ₙ₎ × α) + (EMA₍ₙ₋₁₎ × (1 - α))
 
 Where:
 - EMA₍ₙ₎ is the current EMA value
-- Price₍ₙ₎ is the current price
+- Price₍ₙ₎ is the current signal
 - EMA₍ₙ₋₁₎ is the previous EMA value
 - α is the smoothing factor
 
@@ -34,15 +34,27 @@ The smoothing factor α is typically calculated as:
 
 Where 'period' is the chosen lookback period for the EMA.
 
-## IIR Filter Nature
+## IIR Filter Characteristics
 
-The EMA is an Infinite Impulse Response (IIR) filter, meaning its current value theoretically depends on all past inputs extending to infinity. A converged EMA requires approximately:
+The EMA is an Infinite Impulse Response (IIR) filter with specific properties:
 
-- EMA(5): 13 initialization points to reach 95% accuracy of true IIR
-- EMA(20): 55 points to reach 95% accuracy of true IIR
-- EMA(50): 138 points to reach 95% accuracy of true IIR
+1. **Infinite Memory**: Each output depends on all previous inputs extending to infinity
+2. **Recursive Nature**: Each value depends on the previous calculated value
+3. **Weighted History**: Past values have exponentially decreasing influence
+4. **No Fixed Window**: Unlike FIR filters, there is no fixed calculation window
 
-Initialization compensation methods addresses this warm-up issues with IIR nature of EMA.
+### Transfer Function Properties
+
+As an exponential-weighted IIR filter, EMA provides:
+- Faster response to signal changes than FIR filters of similar smoothing
+- Approximately -6dB per octave roll-off in frequency domain
+- Non-linear phase response due to recursive calculation
+- Increasing phase lag at higher frequencies
+
+A converged EMA requires approximately:
+- EMA(5): 13 initialization points to reach 95% accuracy
+- EMA(20): 55 points to reach 95% accuracy
+- EMA(50): 138 points to reach 95% accuracy
 
 ## Initialization Methods
 
@@ -54,7 +66,7 @@ Assumes all previous values before first value were zero. This leads to signific
 
 ### 2. First-Value Initialization (EMA₍₀₎ = Price₍₀₎)
 
-Assumes all previous values before first value were equal to the first price. This creates an overestimation bias, especially when the first value isn't a true representative of the prior trend. Will need equally long warm-up period to converge to true IIR line.
+Assumes all previous values before first value were equal to the first signal. This creates an overestimation bias, especially when the first value isn't a true representative of the prior trend. Will need equally long warm-up period to converge to true IIR line.
 
 ### 3. SMA Initialization
 
@@ -114,7 +126,7 @@ For fine-tuned strategies with IIR filters, use α directly instead of deriving 
 
 ### Disadvantages
 
-- **Lag**: While more responsive than SMA, EMA still lags behind price action, especially with larger periods
+- **Lag**: While more responsive than SMA, EMA still lags behind signal action, especially with larger periods
 - **Parameter Sensitivity**: Small changes in α can lead to significant differences in signals and performance
 - **False Signals**: In ranging or choppy markets, increased sensitivity can generate more false signals than SMA
 - **Overfitting Risk**: The flexibility of α parameter can lead to overfitting during strategy optimization

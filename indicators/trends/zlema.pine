@@ -20,7 +20,7 @@ zlema(series float source, simple float alpha) =>
     e > EPSILON ? raw_zlema / (1.0 - e) : raw_zlema
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(2000, "Period", minval=1, tooltip="Default period is 20, adjust as needed")

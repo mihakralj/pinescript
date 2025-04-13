@@ -32,7 +32,7 @@ dwma(series float src, simple int p) =>
     weightSum2 > 0 ? sum2 / weightSum2 : na
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(5000, "Period", minval=1)

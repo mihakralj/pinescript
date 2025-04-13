@@ -1,6 +1,6 @@
 # Double Exponential Moving Average (DEMA)
 
-The Double Exponential Moving Average (DEMA) is a technical indicator designed to reduce the lag inherent in traditional moving averages in exchange for the risk of overshooting. Created by Patrick Mulloy, DEMA applies the EMA calculation twice in a way that minimizes lag while maintaining smoothness. It's particularly useful in trending markets where traditional moving averages might be too slow to react to price changes.
+The Double Exponential Moving Average (DEMA) is a technical indicator designed to reduce the lag inherent in traditional moving averages in exchange for the risk of overshooting. Created by Patrick Mulloy, DEMA applies the EMA calculation twice in a way that minimizes lag while maintaining smoothness. It's particularly useful in trending markets where traditional moving averages might be too slow to react to signal changes.
 
 [Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/dema.pine)
 
@@ -13,7 +13,7 @@ DEMA is calculated using the following formula:
 DEMA = 2 × EMA(source) - EMA(EMA(source))
 
 Where:
-- EMA(source) is the first exponential moving average of the source price
+- EMA(source) is the first exponential moving average of the source signal
 - EMA(EMA(source)) is the exponential moving average applied to the result of the first EMA
 
 ### Detailed Breakdown
@@ -66,7 +66,7 @@ As with EMA, DEMA can be fine-tuned using α directly instead of period:
 
 ### Advantages
 
-- **Reduced Lag**: Responds more quickly to price changes than standard EMA
+- **Reduced Lag**: Responds more quickly to signal changes than standard EMA
 - **Better Trend Tracking**: More effective at following trends while maintaining smoothness
 - **No Warm-up Required**: With compensation, provides accurate values from first bar
 - **Smooth Output**: Despite increased responsiveness, maintains smoother output than similar lag-reduction techniques

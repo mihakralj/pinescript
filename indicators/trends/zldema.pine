@@ -26,7 +26,7 @@ zldema(series float source, simple float alpha) =>
     compensation * ((1.5 * raw_ema1) - (0.5 * raw_ema2))
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(2000, "Period", minval=1)

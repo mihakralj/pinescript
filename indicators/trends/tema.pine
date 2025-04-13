@@ -24,7 +24,7 @@ tema(series float source, simple float alpha) =>
     compensation * (3 * raw_ema1 - 3 * raw_ema2 + raw_ema3)
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(3000, "Period", minval=1)
