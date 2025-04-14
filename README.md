@@ -1,5 +1,7 @@
 # PineScript Technical Indicators Library
 
+![Pine Script v6.0](https://img.shields.io/badge/Pine%20Script-v6.0-blue?style=flat&logo=tradingview&logoColor=white)
+
 *A begrudgingly assembled pile of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI. Written in PineScript — because apparently, suffering builds character.*
 
 ## Welcome, young chart wizards
@@ -31,23 +33,25 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 
 | Indicator | Description | Implementation | Documentation |
 |-----------|-------------|----------------|----------------|
-| **SMA** | Simple MA (the "Hello World" of indicators) | [sma.pine](indicators/trends/sma.pine) | [Docs](docs/trends/sma.md) |
+| **SMA** | Simple MA - the indicator equivalent of using a calculator to add 2+2 | [sma.pine](indicators/trends/sma.pine) | [Docs](docs/trends/sma.md) |
 | **EMA** | Exponential MA – for those who like recursion and regret | [ema.pine](indicators/trends/ema.pine) | [Docs](docs/trends/ema.md) |
-| **DEMA** | Double Exponential MA – because once wasn't enough | [dema.pine](indicators/trends/dema.pine) | [Docs](docs/trends/dema.md) |
-| **TEMA** | Triple Exponential MA – we clearly have a problem | [tema.pine](indicators/trends/tema.pine) | [Docs](docs/trends/tema.md) |
-| **WMA** | Weighted MA – because your candles aren't all equally special | [wma.pine](indicators/trends/wma.pine) | [Docs](docs/trends/wma.md) |
-| **DWMA** | Double Weighted MA – getting ridiculous yet? | [dwma.pine](indicators/trends/dwma.pine) | [Docs](docs/trends/dwma.md) |
-| **HMA** | Hull MA – deceptively smooth, suspiciously fast, full of FIR dark magic | [hma.pine](indicators/trends/hma.pine) | [Docs](docs/trends/hma.md) |
-| **HEMA** | Hull Exponential MA – when HMA and EMA have a mathematically gifted IIR child | [hema.pine](indicators/trends/hema.pine) | [Docs](docs/trends/hema.md) |
-| **JMA** | Jurik MA – a near-mythical beast forged in the fires of DSP hell | [jma.pine](indicators/trends/jma.pine) | [Docs](docs/trends/jma.md) |
-| **RMA** | Wilder's MA – the special child that RSI likes | [rma.pine](indicators/trends/rma.pine) | [Docs](docs/trends/rma.md) |
-| **TRIMA** | Triangular MA – because your average should be shaped like a Dorito | [trima.pine](indicators/trends/trima.pine) | [Docs](docs/trends/trima.md) |
-| **PWMA** | Pascal Weighted MA – for when your weights should form a perfect bell curve | [pwma.pine](indicators/trends/pwma.pine) | [Docs](docs/trends/pwma.md) |
-| **EPMA** | Endpoint MA – if you like linear regression but wish it did less | [epma.pine](indicators/trends/epma.pine) | [Docs](docs/trends/epma.md) |
-| **REMA** | Regularized Exponential MA – when your EMA needs anger management | [rema.pine](indicators/trends/rema.pine) | [Docs](docs/trends/rema.md) |
+| **DEMA** | Double Exponential MA – for when you want your signal to arrive before your brain does | [dema.pine](indicators/trends/dema.pine) | [Docs](docs/trends/dema.md) |
+| **TEMA** | Triple Exponential MA – three times the complexity, twice the whipsaw, same disappointment | [tema.pine](indicators/trends/tema.pine) | [Docs](docs/trends/tema.md) |
+| **WMA** | Weighted MA – treating recent candles like the favorite children they are | [wma.pine](indicators/trends/wma.pine) | [Docs](docs/trends/wma.md) |
+| **DWMA** | Double Weighted MA – twice the math for roughly the same result, because reasons | [dwma.pine](indicators/trends/dwma.pine) | [Docs](docs/trends/dwma.md) |
 | **ZLEMA** | Zero Lag Exponential MA – a unicorn | [zlema.pine](indicators/trends/zlema.pine) | [Docs](docs/trends/zlema.md) |
-| **ZLDEMA** | Zero Lag Double Exponential MA – unicorn with wings | [zldema.pine](indicators/trends/zldema.pine) | [Docs](docs/trends/zldema.md) |
-| **ZLTEMA** | Triple Zero Lag Exponential MA – unicorn with wings, a sword, and a caffeine addiction | [zltema.pine](indicators/trends/zltema.pine) | [Docs](docs/trends/zltema.md) |
+| **ZLDEMA** | Zero Lag Double Exponential MA – a unicorn with wings | [zldema.pine](indicators/trends/zldema.pine) | [Docs](docs/trends/zldema.md) |
+| **ZLTEMA** | Triple Zero Lag Exponential MA – a unicorn with wings, a sword, and a caffeine addiction | [zltema.pine](indicators/trends/zltema.pine) | [Docs](docs/trends/zltema.md) |
+| **RMA** | Wilder's MA – moves so slowly it makes government bureaucracy look efficient | [rma.pine](indicators/trends/rma.pine) | [Docs](docs/trends/rma.md) |
+| **HMA** | Hull MA – the sports car of moving averages: flashy, fast, and prone to crashes | [hma.pine](indicators/trends/hma.pine) | [Docs](docs/trends/hma.md) |
+| **HEMA** | Hull Exponential MA – when HMA and EMA have a mathematically gifted IIR child | [hema.pine](indicators/trends/hema.pine) | [Docs](docs/trends/hema.md) |
+| **JMA** | Jurik MA – an algorithm so complex even its creator probably questions why the hell | [jma.pine](indicators/trends/jma.pine) | [Docs](docs/trends/jma.md) |
+| **EPMA** | Endpoint MA – linear regression's lazy cousin who showed up just for the trend line | [epma.pine](indicators/trends/epma.pine) | [Docs](docs/trends/epma.md) |
+| **SINEMA** | Sine-weighted MA – an indicator that rides waves of data like a mathematical surfer | [sinema.pine](indicators/trends/sinema.pine) | [Docs](docs/trends/sinema.md) |
+| **TRIMA** | Triangular MA –  because nothing says "I understand math" like averaging an average | [trima.pine](indicators/trends/trima.pine) | [Docs](docs/trends/trima.md) |
+| **PWMA** | Pascal Weighted MA – using 17th century math to lose money with 21st century efficiency | [pwma.pine](indicators/trends/pwma.pine) | [Docs](docs/trends/pwma.md) |
+| **REMA** | Regularized Exponential MA –  an EMA that went to therapy and learned to stop overreacting | [rema.pine](indicators/trends/rema.pine) | [Docs](docs/trends/rema.md) |
+
 
 ## Indicator Classification
 
@@ -55,6 +59,7 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 |-----------|------|-----|------------|----------|--------------|------------|
 | **RMA** | IIR | High | High | Low | Very Low | Low |
 | **TRIMA** | FIR | High | Very High | Low | None | Medium |
+| **SINEMA** | FIR | Medium | High | Medium | Low | Medium |
 | **SMA** | FIR | High | High | Low | None | Low |
 | **EPMA** | FIR | Medium | Low | Medium | Low | High |
 | **WMA** | FIR | Medium | Medium | Medium | None | Medium |
@@ -70,6 +75,7 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **ZLDEMA** | IIR | Very Low | Very Low | Very High | Medium-High | Medium |
 | **ZLTEMA** | IIR | Extremely Low | Very Low | Extremely High | High | High |
 | **JMA** | IIR | Extremely Low | High | Very High | Low | Very High |
+
 
 ## Indicator Characteristics (aka: Why Your Backtest Lies)
 
