@@ -11,13 +11,14 @@ indicator("Triangular Moving Average", "TRIMA", overlay=true)
 trima(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
     float sum = 0.0
     float weight = 0.0
-    mid = math.floor(period/2)
-    for i = 0 to period - 1
+    mid = math.floor(p/2)
+    for i = 0 to p - 1
         price = source[i]
         if not na(price)
-            w = math.min(i, period - 1 - i) + 1
+            w = math.min(i, p - 1 - i) + 1
             sum += price * w
             weight += w
     weight > 0 ? sum / weight : na

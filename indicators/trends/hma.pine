@@ -11,24 +11,28 @@ indicator("Hull Moving Average", "HMA", overlay=true)
 hma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    int sqrt_period = math.round(math.sqrt(period))
-    float sum_half = 0.0, sum_full = 0.0, sum_sqrt = 0.0
-    float weight_half = (period/2) * (period/2 + 1) * 0.5
-    float weight_full = period * (period + 1) * 0.5
-    float weight_sqrt = sqrt_period * (sqrt_period + 1) * 0.5
-    for i = 0 to period - 1
+    int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
+    int half_period = math.max(1, math.round(p / 2))
+    int sqrt_period = math.max(1, math.round(math.sqrt(p)))
+    float sum_half = 0.0
+    float sum_full = 0.0
+    float sum_sqrt = 0.0
+    float weight_half = math.max(0.1, half_period * (half_period + 1) * 0.5)
+    float weight_full = math.max(0.1, p * (p + 1) * 0.5)
+    float weight_sqrt = math.max(0.1, sqrt_period * (sqrt_period + 1) * 0.5)
+    for i = 0 to p - 1
         price = source[i]
-        float w_half = i < period/2 ? period/2 - i : 0.0
-        float w_full = period - i
+        float w_half = i < half_period ? half_period - i : 0.0
+        float w_full = p - i
         if not na(price)
             sum_half += price * w_half
             sum_full += price * w_full
         else
             if w_half > 0
-                weight_half -= w_half
-            weight_full -= w_full
-    float wma_half = weight_half > 0 ? sum_half / weight_half : na
-    float wma_full = weight_full > 0 ? sum_full / weight_full : na
+                weight_half -= math.max(0.1, w_half)
+            weight_full -= math.max(0.1, w_full)
+    float wma_half = sum_half / weight_half
+    float wma_full = sum_full / weight_full
     float diff = 2.0 * wma_half - wma_full
     for i = 0 to sqrt_period - 1
         float d = diff[i]
@@ -36,8 +40,8 @@ hma(series float source, simple int period) =>
         if not na(d)
             sum_sqrt += d * w_sqrt
         else
-            weight_sqrt -= w_sqrt
-    weight_sqrt > 0 ? sum_sqrt / weight_sqrt : na
+            weight_sqrt -= math.max(0.1, w_sqrt)
+    sum_sqrt / weight_sqrt
 
 
 // ---------- Main loop ----------

@@ -55,7 +55,7 @@ jma(series float source, simple int period, simple int phase = 0, simple float p
 // ---------- Main loop ----------
 
 // Inputs
-i_period = input.int(14, "Period", minval=1, tooltip="Number of bars used in the calculation")
+i_period = input.int(10, "Period", minval=1, tooltip="Number of bars used in the calculation")
 i_phase = input.int(0, "Phase", tooltip="Phase shift (-100 to 100). Negative values reduce lag but may cause overshoot", minval=-100, maxval=100, step=10)
 i_power = input.float(0.45, "Power", tooltip="Smoothing factor (0.1-1.0). Lower values create smoother curves", minval=0.1, maxval=1.0, step=0.01)
 i_source = input.source(close, "Source")

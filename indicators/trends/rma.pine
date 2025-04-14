@@ -3,12 +3,11 @@
 //@version=6
 indicator("Wilder's Moving Average", "RMA", overlay=true)
 
-//@function Calculates Welles Wilder's Moving Average (RMA/SMMA)
+//@function Calculates Welles Wilder's Relative Moving Average (RMA/SMMA)
 //@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/rma.md
 //@param source Series to calculate RMA from
 //@param period Smoothing period
 //@returns RMA value from first bar with proper compensation for early values
-//@note This is equivalent to Pine's built-in ta.rma() function
 rma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
@@ -24,7 +23,7 @@ rma(series float source, simple int period) =>
 // ---------- Main loop ----------
 
 // Inputs
-i_period = input.int(50, "Period", minval=1)
+i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation

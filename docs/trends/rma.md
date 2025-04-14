@@ -1,6 +1,6 @@
 # Wilder's Moving Average (RMA/SMMA)
 
-The Relative Moving Average (RMA), also known as Smoothed Moving Average (SMMA), was developed by J. Welles Wilder Jr. and introduced in his 1978 book "New Concepts in Technical Trading Systems". Wilder created this moving average specifically for calculating his revolutionary technical indicators, most notably the Relative Strength Index (RSI).
+The wildeR (Relative) Moving Average (RMA), also known as Smoothed Moving Average (SMMA), was developed by J. Welles Wilder Jr. and introduced in his 1978 book "New Concepts in Technical Trading Systems". Wilder created this moving average specifically for calculating his revolutionary technical indicators, most notably the Relative Strength Index (RSI).
 
 [Pine Script Implementation of RMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/rma.pine)
 

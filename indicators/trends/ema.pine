@@ -19,10 +19,10 @@ ema(series float source, simple float alpha) =>
     e > EPSILON ? raw_ema / (1.0 - e) : raw_ema
 
 
-
+// ---------- Main loop ----------
 
 // Inputs
-i_period = input.int(5000, "Period", minval=1)
+i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
