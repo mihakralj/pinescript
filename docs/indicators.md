@@ -10,10 +10,10 @@
 | TRIMA | Triangular Moving Average | ✅ | Double-smoothed SMA with triangular weight distribution |
 | QEMA | Quick Exponential Moving Average | ❌ | Simplified EMA calculation |
 | EPMA | Endpoint Moving Average | ✅ | Basic average emphasizing recent endpoints |
-| SINEMA | Sine-weighted Moving Average | ❌ | Uses sine function for weight distribution |
+| SINEMA | Sine-weighted Moving Average | ✅ | Uses sine function for weight distribution |
 | HWMA | Hann Weighted Moving Average | ❌ | Uses Hann window function for weighting |
 | FWMA | Forward Weighted Moving Average | ❌ | Forward-looking weighted calculation |
-| PWMA | Parabolic Weighted Moving Average | ❌ | Uses parabolic function for weight distribution |
+| PWMA | Pascal Weighted Moving Average | ✅ | A moving average that uses Pascal's triangle coefficients as weights |
 | MMA | Modified Moving Average | ❌ | Modified version of EMA with different weighting |
 | **Medium Complexity** |||
 | DEMA | Double Exponential Moving Average | ✅ | Reduced lag double EMA |
@@ -23,7 +23,7 @@
 | HEMA | Hull Exponential Moving Average | ✅ | Hull-based smoothing using EMA instead of WMA |
 | ZLEMA | Zero-Lag Exponential Moving Average | ✅ | EMA with minimal lag |
 | DSMA | Dynamic Simple Moving Average | ❌ | Adapts period based on volatility |
-| REMA | Regularized Exponential Moving Average | ❌ | Optimized EMA using regularization |
+| REMA | Regularized Exponential Moving Average | ✅ | Optimized EMA using regularization |
 | LTMA | Linear Time Moving Average | ❌ | Uses linear regression over time |
 | GMA | Gaussian Moving Average | ❌ | Based on normal distribution |
 | MGDI | McGinley Dynamic Indicator | ❌ | Price momentum based dynamic average |
