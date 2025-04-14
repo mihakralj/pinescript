@@ -6,8 +6,6 @@ The Sine-weighted Moving Average (SINEMA) is a finite impulse response moving av
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 SINEMA is calculated as a weighted sum using sine wave weights:
 
 SINEMA(t) = Σ(P(i) * w(i)) / Σw(i)

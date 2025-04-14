@@ -6,8 +6,6 @@ The Weighted Moving Average (WMA) is a technical indicator that assigns differen
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The WMA calculation applies a linearly decreasing weight to each data point:
 
 WMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)

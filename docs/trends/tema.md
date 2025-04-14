@@ -6,10 +6,6 @@ The Triple Exponential Moving Average (TEMA) is a technical indicator that exten
 
 ## Mathematical Foundation
 
-### Basic Formula
-
-TEMA is calculated using the following formula:
-
 TEMA = 3 × EMA(source) - 3 × EMA(EMA(source)) + EMA(EMA(EMA(source)))
 
 Where:

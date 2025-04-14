@@ -6,8 +6,6 @@ The Zero-Lag Double Exponential Moving Average (ZLDEMA) combines the lag reducti
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 ZLDEMA is calculated by applying the ZLEMA technique twice and combining the results using the DEMA formula:
 
 ZLDEMA = 1.5 × ZLEMA₁(source) - 0.5 × ZLEMA₂(ZLEMA₁(source))

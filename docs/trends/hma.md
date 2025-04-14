@@ -6,8 +6,6 @@ The Hull Moving Average (HMA) is a technical indicator developed by Alan Hull to
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The HMA is calculated using the four steps:
 
 1. Calculate WMA with period n/2: WMA₁ = WMA(signal, n/2)

@@ -6,8 +6,6 @@ The Zero-Lag Triple Exponential Moving Average (ZLTEMA) combines ZLEMA's lag red
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 ZLTEMA is calculated by applying the ZLEMA technique three times and combining the results using a modified TEMA formula:
 
 ZLTEMA = 2 × ZLEMA₁(source) - 2 × ZLEMA₂(ZLEMA₁(source)) + ZLEMA₃(ZLEMA₂(ZLEMA₁(source)))

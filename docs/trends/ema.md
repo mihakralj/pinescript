@@ -6,8 +6,6 @@ The Exponential Moving Average (EMA) is a widely used technical indicator that a
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The EMA calculation utilizes a smoothing factor (α), which determines how much weight is given to the most recent signal. The standard formula is:
 
 EMA₍ₙ₎ = (Price₍ₙ₎ × α) + (EMA₍ₙ₋₁₎ × (1 - α))

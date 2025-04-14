@@ -1,0 +1,44 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Holt-Winters Moving Average", "HWMA", overlay=true)
+
+//@function Calculates HWMA using triple exponential smoothing with level, velocity, and acceleration components
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/hwma.md
+//@param source Series to calculate HWMA from
+//@param alpha Level smoothing factor
+//@param beta Velocity smoothing factor
+//@param gamma Acceleration smoothing factor
+//@returns HWMA value from first bar with proper compensation
+hwma(series float source, float alpha, float beta, float gamma) =>
+    // Initialize variables
+    var float F = source
+    var float V = 0.0
+    var float A = 0.0
+    if barstate.isfirst
+        F := source
+    else
+        F := alpha * source + (1 - alpha) * (F[1] + V[1] + 0.5 * A[1])
+        V := beta * (F - F[1]) + (1 - beta) * (V[1] + A[1])
+        A := gamma * (V - V[1]) + (1 - gamma) * A[1]
+    F + V + 0.5 * A
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(10, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Smoothing factors from inputs
+float alpha = 2.0/(float(i_period) + 1.0)
+float beta  = 1.0/float(i_period)
+float gamma = 1.0/float(i_period)
+
+// Calculation
+hwma = hwma(i_source, alpha, beta, gamma)
+
+// Plot
+plot(hwma, "Custom HWMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, hwma), "Price Crosses HWMA", "Price crossed HWMA on {{ticker}}")

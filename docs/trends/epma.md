@@ -6,8 +6,6 @@ The Endpoint Moving Average (EPMA) is a modified version of the Exponential Movi
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The EPMA calculation enhances the standard EMA formula by applying increased weight to the most recent value:
 
 EPMA₍ₙ₎ = (endpoint_factor × Price₍ₙ₎) + (history_factor × EPMA₍ₙ₋₁₎)

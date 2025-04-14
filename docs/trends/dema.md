@@ -6,10 +6,6 @@ The Double Exponential Moving Average (DEMA) is a technical indicator designed t
 
 ## Mathematical Foundation
 
-### Basic Formula
-
-DEMA is calculated using the following formula:
-
 DEMA = 2 × EMA(source) - EMA(EMA(source))
 
 Where:

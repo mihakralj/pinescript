@@ -6,8 +6,6 @@ The Triangular Moving Average (TRIMA) is a technical indicator that applies a tr
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The TRIMA calculation applies a triangular weighting pattern to each data point:
 
 TRIMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)

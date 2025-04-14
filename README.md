@@ -35,8 +35,9 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 |-----------|-------------|----------------|----------------|
 | **SMA** | Simple MA - the indicator equivalent of using a calculator to add 2+2 | [sma.pine](indicators/trends/sma.pine) | [Docs](docs/trends/sma.md) |
 | **EMA** | Exponential MA – for those who like recursion and regret | [ema.pine](indicators/trends/ema.pine) | [Docs](docs/trends/ema.md) |
-| **DEMA** | Double Exponential MA – for when you want your signal to arrive before your brain does | [dema.pine](indicators/trends/dema.pine) | [Docs](docs/trends/dema.md) |
-| **TEMA** | Triple Exponential MA – three times the complexity, twice the whipsaw, same disappointment | [tema.pine](indicators/trends/tema.pine) | [Docs](docs/trends/tema.md) |
+| **DEMA** | Double Exponential MA – for traders who think "if one recursion is good, two must be better" | [dema.pine](indicators/trends/dema.pine) | [Docs](docs/trends/dema.md) |
+| **TEMA** | Triple Exponential MA – when you're so afraid of lag you'll accept mathematical hallucinations instead | [tema.pine](indicators/trends/tema.pine) | [Docs](docs/trends/tema.md) |
+| **QEMA** | Quadruple Exponential MA – congratulations, we've mathematically engineered a seizure detector | [qema.pine](indicators/trends/qema.pine) | [Docs](docs/trends/qema.md) |
 | **WMA** | Weighted MA – treating recent candles like the favorite children they are | [wma.pine](indicators/trends/wma.pine) | [Docs](docs/trends/wma.md) |
 | **DWMA** | Double Weighted MA – twice the math for roughly the same result, because reasons | [dwma.pine](indicators/trends/dwma.pine) | [Docs](docs/trends/dwma.md) |
 | **ZLEMA** | Zero Lag Exponential MA – a unicorn | [zlema.pine](indicators/trends/zlema.pine) | [Docs](docs/trends/zlema.md) |
@@ -58,7 +59,7 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | Indicator | Type | Lag | Smoothness | Accuracy | Overshooting | CPU Anger |
 |-----------|------|-----|------------|----------|--------------|------------|
 | **RMA** | IIR | High | High | Low | Very Low | Low |
-| **TRIMA** | FIR | High | Very High | Low | None | Medium |
+| **TRIMA** | FIR | High | High | Low | None | Medium |
 | **SINEMA** | FIR | Medium | High | Medium | Low | Medium |
 | **SMA** | FIR | High | High | Low | None | Low |
 | **EPMA** | FIR | Medium | Low | Medium | Low | High |
@@ -66,15 +67,16 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **PWMA** | FIR | Medium | High | Medium | None | Medium |
 | **DWMA** | FIR | Medium | Medium | High | Low | Medium |
 | **EMA** | IIR | Medium | Medium | Medium | Low | Low |
-| **REMA** | IIR | Medium | Medium-High | Medium-High | Low | Low |
+| **REMA** | IIR | Medium | Medium | Medium | Low | Low |
 | **DEMA** | IIR | Low | Medium | High | Medium | Medium |
 | **TEMA** | IIR | Low | Medium | Very High | High | Medium |
-| **HMA** | FIR | Low | Medium-High | High | Medium | High |
-| **HEMA** | IIR | Low | High | High | Low | High |
+| **QEMA** | IIR | Low | Low | Very High | High | High |
+| **HMA** | FIR | Low | High | Very High | Medium | High |
+| **HEMA** | IIR | Low | High | Very High | Low | High |
 | **ZLEMA** | IIR | Very Low | Low | Very High | Medium | Medium |
-| **ZLDEMA** | IIR | Very Low | Very Low | Very High | Medium-High | Medium |
-| **ZLTEMA** | IIR | Extremely Low | Very Low | Extremely High | High | High |
-| **JMA** | IIR | Extremely Low | High | Very High | Low | Very High |
+| **ZLDEMA** | IIR | Very Low | Very Low | Very High | Medium | Medium |
+| **ZLTEMA** | IIR | Extremely Low | Very Low | Very High | High | High |
+| **JMA** | IIR | Extremely Low | High | Very High | Low | High |
 
 
 ## Indicator Characteristics (aka: Why Your Backtest Lies)

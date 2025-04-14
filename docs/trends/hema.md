@@ -6,10 +6,6 @@ The Hull Exponential Moving Average (HEMA) is an advanced technical indicator th
 
 ## Mathematical Foundation
 
-### Basic Formula
-
-HEMA is calculated using these steps:
-
 1. Calculate first EMA with accelerated period:
    EMA₁ = EMA(signal, α_fast)
    where:

@@ -6,10 +6,6 @@ The Jurik Moving Average (JMA) is an advanced adaptive moving average developed 
 
 ## Mathematical Foundation
 
-### Basic Formula
-
-JMA employs a multi-stage calculation process:
-
 1. **Volatility-Adjusted Smoothing:**
 
    $ \Delta_1 = P_t - U_t $

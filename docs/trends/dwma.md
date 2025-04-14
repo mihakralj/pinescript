@@ -6,8 +6,6 @@ The Double Weighted Moving Average (DWMA) is a FIR technical indicator that appl
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 DWMA is calculated by applying WMA twice:
 
 1. First WMA calculation:

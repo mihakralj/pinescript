@@ -6,8 +6,6 @@ The Regularized Exponential Moving Average (REMA) is a modified exponential movi
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The REMA calculation combines exponential smoothing with a regularization term:
 
 R(t) = λ(E(t) - G(t)) + G(t)

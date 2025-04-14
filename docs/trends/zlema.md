@@ -6,10 +6,6 @@ The Zero-Lag Exponential Moving Average (ZLEMA) indicator is designed to reduce 
 
 ## Mathematical Foundation
 
-### Basic Formula
-
-ZLEMA is calculated using the following formula:
-
 ZLEMA = α(2P_t - P_{t-lag}) + (1-α)ZLEMA_{t-1}
 
 Where:

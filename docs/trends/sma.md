@@ -6,8 +6,6 @@ The Simple Moving Average (SMA) is a fundamental technical indicator that calcul
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The SMA is calculated by summing the signals for a specific number of periods and then dividing by the number of periods:
 
 SMA = (P₁ + P₂ + ... + Pₙ) / n

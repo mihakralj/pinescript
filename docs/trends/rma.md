@@ -18,8 +18,6 @@ RMA is a core component in several of Wilder's indicators:
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The RMA calculation uses Wilder's specific smoothing approach:
 
 RMA₍ₙ₎ = (RMA₍ₙ₋₁₎ × (period - 1) + Price₍ₙ₎) / period

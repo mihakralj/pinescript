@@ -14,8 +14,6 @@ The PWMA leverages Pascal's triangle, a triangular array of binomial coefficient
 
 ## Mathematical Foundation
 
-### Basic Formula
-
 The PWMA calculation uses binomial coefficients from Pascal's triangle:
 
 PWMA = ∑(Price₍ᵢ₎ × C(n-1,i)) / ∑(C(n-1,i))
