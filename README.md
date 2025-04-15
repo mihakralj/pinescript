@@ -54,64 +54,11 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **PWMA** | Pascal Weighted MA – using 17th century math to lose money with 21st century efficiency | [pwma.pine](indicators/trends/pwma.pine) | [Docs](docs/trends/pwma.md) |
 | **REMA** | Regularized Exponential MA –  an EMA that went to therapy and learned to stop overreacting | [rema.pine](indicators/trends/rema.pine) | [Docs](docs/trends/rema.md) |
 
+## Documentation
 
-## Indicator Classification
-
-| Indicator | Type | Lag | Smoothness | Accuracy | Overshooting | CPU Anger |
-|-----------|------|-----|------------|----------|--------------|------------|
-| **RMA** | IIR | High | High | Low | Very Low | Low |
-| **TRIMA** | FIR | High | High | Low | None | Medium |
-| **SINEMA** | FIR | Medium | High | Medium | Low | Medium |
-| **SMA** | FIR | High | High | Low | None | Low |
-| **EPMA** | FIR | Medium | Low | Medium | Low | High |
-| **WMA** | FIR | Medium | Medium | Medium | None | Medium |
-| **PWMA** | FIR | Medium | High | Medium | None | Medium |
-| **DWMA** | FIR | Medium | Medium | High | Low | Medium |
-| **EMA** | IIR | Medium | Medium | Medium | Low | Low |
-| **REMA** | IIR | Medium | Medium | Medium | Low | Low |
-| **DEMA** | IIR | Low | Medium | High | Medium | Medium |
-| **TEMA** | IIR | Low | Medium | Very High | High | Medium |
-| **QEMA** | IIR | Low | Low | Very High | High | High |
-| **HWMA** | IIR | Low | High | Very High | Medium | High |
-| **HMA** | FIR | Low | High | Very High | Medium | High |
-| **HEMA** | IIR | Low | High | Very High | Low | High |
-| **ZLEMA** | IIR | Very Low | Low | Very High | Medium | Medium |
-| **ZLDEMA** | IIR | Very Low | Very Low | Very High | Medium | Medium |
-| **ZLTEMA** | IIR | Extremely Low | Very Low | Very High | High | High |
-| **JMA** | IIR | Extremely Low | High | Very High | Low | High |
-
-
-## Indicator Characteristics (aka: Why Your Backtest Lies)
-
-### **Type**  
-There are two kinds of indicators in this world: those that remember too much, and those that forget on purpose. You're either dealing with an obedient filter that operates strictly within its assigned window, or with one that recursively consults its own increasingly blurry past like a wizard staring into a cracked crystal ball.
-  - **FIR (Finite Impulse Response)** – Uses a fixed-length memory, doesn't try to predict the future, and behaves like a well-trained dog. Great if you like indicators that mind their business and stay where you left them.
-  - **IIR (Infinite Impulse Response)** – Recursive, has "infinite memory" like your ex, and can wander off unexpectedly because it "remembers something from 40 bars ago." Dangerous, unpredictable, fun at parties.
-
-### **Lag**
-Lag is that frustrating quality of an indicator that makes it technically correct, but completely useless *in the moment*. Think of it as the indicator equivalent of hindsight — great for telling you what you should've done three trades ago, but nowhere to be found when you're about to FOMO into a green candle.
-  - **High Lag** – This indicator waits until the move is basically over before it acts up. But hey, at least it's accurate — sort of like calling the winner of a race two minutes after it ends. It'll draw the right shape and trend... eventually. Just not in time for it to matter unless you're trading with the reflexes of a sloth on Ambien.
-  - **Low Lag** – Shows up early, full of energy, probably holding a meme coin and a hot take. These indicators try to predict what's happening *right now*, which means they're often confidently wrong. Expect a flurry of early signals and just as many early regrets — trusting one is like letting a squirrel on Adderall manage your trades.
-
-### **Smoothness**  
-The silky illusion that makes an indicator look intelligent when it's really just heavily sedated. This is the property that determines how much your plotted line behaves like a gentle meandering stream—or a drunk squirrel on a sugar high.
-  - **High Smoothness** – The line glides across your chart like a figure skater. It's elegant, serene, and completely disconnected from reality. Useful when you need a trend line that won't emotionally destabilize you.
-  - **Low Smoothness** – Think seismograph during a Metallica concert. Every price tick is a personal emergency. Useful if you enjoy indicators that yell "BUY!" and "SELL!" every three seconds.
-
-### **Accuracy**  
-How easily the indicator freaks out.  
-  - **High Accuracy** – Reacts instantly to every tiny price twitch. Great for panic signals.  
-  - **Low Accuracy** – Ignores most things. Might still be processing that dip from two weeks ago.
-
-### **Overshooting**  
-Overshooting is what happens when your indicator tries to be helpful by aggressively predicting where price *might* go—only to promptly reverse itself in shame once reality kicks in. It's like a weatherman announcing a hurricane and then telling you it's sunny an hour later.
-  - **High Overshoot** – High overshoot indicators are bold liars. These indicators like to leap dramatically ahead of price, only to awkwardly walk it back a few bars later. Great for triggering premature entries, existential doubt, and that feeling that the market is gaslighting you.
-  - **Low Overshoot** – These are the chill indicators. They don't overreact, don't jump to conclusions, and don't force you into false trades. They also might be too cautious to be useful in fast-moving markets, preferring instead to sip tea while the candles go full chaos mode.
-
-### **CPU Anger**  
-  How likely your indicator is to crash PineScript or cause your laptop fan to become a jet engine.  
-  - **Low** – Code runs like a dream. Or at least like PineScript was meant to work.  
-  - **High** – Congratulations, you've written a GPU stress test in Pine.
+For detailed information about indicator types and characteristics, see:
+- [Indicators Classification](docs/classification.md)
+- [Indicators Progress Tracker](docs/indicators.md)
 
 ## Contributing (if you dare)
 

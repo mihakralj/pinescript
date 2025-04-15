@@ -2,7 +2,6 @@
 
 | Indicator | Name | Status | Description |
 |-----------|------|--------|-------------|
-| **Simple Complexity** |||
 | SMA | Simple Moving Average | ✅ | Basic arithmetic mean of signal over N periods |
 | EMA | Exponential Moving Average | ✅ | Weighted average with exponential decay |
 | WMA | Weighted Moving Average | ✅ | Linear-weighted average giving more weight to recent signals |
@@ -15,7 +14,6 @@
 | FWMA | Fibonacci Weighted Moving Average | ❌ | Forward-looking weighted calculation |
 | PWMA | Pascal Weighted Moving Average | ✅ | A moving average that uses Pascal's triangle coefficients as weights |
 | MMA | Modified Moving Average | ❌ | Modified version of EMA with different weighting |
-| **Medium Complexity** |||
 | DEMA | Double Exponential Moving Average | ✅ | Reduced lag double EMA |
 | TEMA | Triple Exponential Moving Average | ✅ | Further reduced lag triple EMA |
 | HMA | Hull Moving Average | ✅ | Reduced lag WMA with trend emphasis |
@@ -29,7 +27,6 @@
 | MGDI | McGinley Dynamic Indicator | ❌ | Price momentum based dynamic average |
 | T3 | Triple Exponential Moving Average (T3) | ❌ | Tim Tillson's improved triple EMA |
 | VIDYA | Variable Index Dynamic Average | ❌ | Volatility-based dynamic average |
-| **Complex Implementation** |||
 | ZLDEMA | Zero-Lag Double Exponential Moving Average | ✅ | Advanced DEMA with lag reduction |
 | ZLTEMA | Zero-Lag Triple Exponential Moving Average | ✅ | Advanced TEMA with lag reduction |
 | KAMA | Kaufman Adaptive Moving Average | ❌ | Adapts to market noise using efficiency ratio |
