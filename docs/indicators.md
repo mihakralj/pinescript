@@ -11,7 +11,7 @@
 | QEMA | Quadruple Exponential Moving Average | ✅ | Simplified EMA calculation |
 | EPMA | Endpoint Moving Average | ✅ | Basic average emphasizing recent endpoints |
 | SINEMA | Sine-weighted Moving Average | ✅ | Uses sine function for weight distribution |
-| HWMA |Holt-Winters Moving Average | ❌ | Uses Hann window function for weighting |
+| HWMA |Holt-Winters Moving Average | ✅ | Uses Hann window function for weighting |
 | FWMA | Fibonacci Weighted Moving Average | ❌ | Forward-looking weighted calculation |
 | PWMA | Pascal Weighted Moving Average | ✅ | A moving average that uses Pascal's triangle coefficients as weights |
 | MMA | Modified Moving Average | ❌ | Modified version of EMA with different weighting |

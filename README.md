@@ -45,6 +45,7 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **ZLTEMA** | Triple Zero Lag Exponential MA – a unicorn with wings, a sword, and a caffeine addiction | [zltema.pine](indicators/trends/zltema.pine) | [Docs](docs/trends/zltema.md) |
 | **RMA** | Wilder's MA – moves so slowly it makes government bureaucracy look efficient | [rma.pine](indicators/trends/rma.pine) | [Docs](docs/trends/rma.md) |
 | **HMA** | Hull MA – the sports car of moving averages: flashy, fast, and prone to crashes | [hma.pine](indicators/trends/hma.pine) | [Docs](docs/trends/hma.md) |
+| **HWMA** | Holt-Winters MA – treating market cycles like seasons, then acting surprised when winter comes in July | [hwma.pine](indicators/trends/hwma.pine) | [Docs](docs/trends/hwma.md) |
 | **HEMA** | Hull Exponential MA – when HMA and EMA have a mathematically gifted IIR child | [hema.pine](indicators/trends/hema.pine) | [Docs](docs/trends/hema.md) |
 | **JMA** | Jurik MA – an algorithm so complex even its creator probably questions why the hell | [jma.pine](indicators/trends/jma.pine) | [Docs](docs/trends/jma.md) |
 | **EPMA** | Endpoint MA – linear regression's lazy cousin who showed up just for the trend line | [epma.pine](indicators/trends/epma.pine) | [Docs](docs/trends/epma.md) |
@@ -71,6 +72,7 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **DEMA** | IIR | Low | Medium | High | Medium | Medium |
 | **TEMA** | IIR | Low | Medium | Very High | High | Medium |
 | **QEMA** | IIR | Low | Low | Very High | High | High |
+| **HWMA** | IIR | Low | High | Very High | Medium | High |
 | **HMA** | FIR | Low | High | Very High | Medium | High |
 | **HEMA** | IIR | Low | High | Very High | Low | High |
 | **ZLEMA** | IIR | Very Low | Low | Very High | Medium | Medium |

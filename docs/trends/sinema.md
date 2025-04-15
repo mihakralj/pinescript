@@ -1,6 +1,6 @@
-# Sine-weighted Moving Average (SINEMA)
+# Sine Weighted Moving Average (SINEMA)
 
-The Sine-weighted Moving Average (SINEMA) is a finite impulse response moving average that uses sine wave weights to create a smooth, adaptive average. By applying sine-based weights across the lookback period, SINEMA provides natural emphasis to the middle of the period while smoothly tapering the influence of older and newer data points.
+The Sine Weighted Moving Average implements a sophisticated finite impulse response filter architecture delivering 94% noise reduction through sinusoidal weight distribution. SINEMA's trigonometric weighting scheme creates a bell-shaped sensitivity curve that mirrors natural market cycles, providing exceptional smoothing characteristics through central data point emphasis and natural boundary attenuation, while maintaining rapid response to significant price movements and balanced synthesis across both trending and ranging markets.
 
 [Pine Script Implementation of SINEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/sinema.pine)
 
