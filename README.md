@@ -54,9 +54,18 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **PWMA** | Pascal Weighted MA – using 17th century math to lose money with 21st century efficiency | [pwma.pine](indicators/trends/pwma.pine) | [Docs](docs/trends/pwma.md) |
 | **REMA** | Regularized Exponential MA –  an EMA that went to therapy and learned to stop overreacting | [rema.pine](indicators/trends/rema.pine) | [Docs](docs/trends/rema.md) |
 
+### Errors
+
+| Error | Description | Implementation | Documentation |
+|-----------|-------------|----------------|----------------|
+| **HUBER** | Huber Loss - the diplomatic negotiator that cares deeply about small errors but refuses to completely melt down over outliers | [huber.pine](indicators/errors/huber.pine) | [Docs](docs/errors/huber.md) |
+| **MAE** | Mean Absolute Error - treats all your trading mistakes equally, unlike your significant other| [mae.pine](indicators/errors/mae.pine) | [Docs](docs/errors/mae.md) |
+| **MSE** | Mean Squared Error - for when you want your big mistakes to haunt you exponentially more than your small ones | [mse.pine](indicators/errors/mse.pine) | [Docs](docs/errors/mse.md) |
+
 ## Documentation
 
 For detailed information about indicator types and characteristics, see:
+
 - [Indicators Classification](docs/classification.md)
 - [Indicators Progress Tracker](docs/indicators.md)
 
