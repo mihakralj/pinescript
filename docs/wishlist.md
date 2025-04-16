@@ -49,8 +49,8 @@
 
 ## Numeric/Geometric Transformations
 
-| Code | Name	|  Status | Description |
-|-----------|------------------------------------------|--------|------------------------------------------------------------------|
+| Code         | Name                            | Status | Description |
+|--------------|---------------------------------|--------|------------------------------------------------------------------|
 | LINEAR       | Linear Transformation           | ❌ | Linear scaling & shifting |
 | LOG          | Logarithmic Transformation      | ❌ | Natural logarithm transform for stabilizing variance |
 | EXP          | Exponential Transformation      | ❌ | Exponential transform for modeling growth or decay |
@@ -85,21 +85,16 @@
 | MAPE      | Mean Absolute Percentage Error            | ✅ | Average of absolute percentage differences between forecast/actual |
 | MASE      | Mean Absolute Scaled Error                | ✅ | MAE scaled by the MAE of a naive forecast                         |
 | MDA       | Mean Directional Accuracy                 | ✅ | Percentage of times forecast direction matches actual direction    |
-| ME        | Mean Error                                | ❌ | Average of differences between predictions and actual values       |
-| MPE       | Mean Percentage Error                     | ❌ | Average of percentage differences between forecasts and actuals   |
+| ME        | Mean Error                                | ✅ | Average of differences between predictions and actual values       |
+| MPE       | Mean Percentage Error                     | ✅ | Average of percentage differences between forecasts and actuals   |
 | MSE       | Mean Squared Error                        | ✅ | Average of squared differences between predictions and actuals     |
-| MSLE      | Mean Squared Logarithmic Error            | ❌ | Average of squared logarithmic errors for relative measurement    |
-| RAE       | Relative Absolute Error                   | ❌ | Ratio of MAE to the MAE of a naive model                         |
-| RMSE      | Root Mean Squared Error                   | ❌ | Square root of the average of squared errors                      |
-| RMSLE     | Root Mean Squared Logarithmic Error       | ❌ | Square root of the mean squared logarithmic error                |
-| RSE       | Relative Squared Error                    | ❌ | Ratio of squared errors to squared errors of a naive model        |
-| RSQUARED  | R-Squared (Coefficient of Determination)  | ❌ | Proportion of variance in dependent variable explained by model   |
-| SMAPE     | Symmetric Mean Absolute Percentage Error  | ❌ | Symmetric alternative to MAPE for zero/near-zero values          |
-| RMSE       | Root Mean Squared Error                  | ❌ | Square root of the average of squared errors  |
-| RMSLE      | Root Mean Squared Logarithmic Error      | ❌ | Square root of the mean squared logarithmic error |
-| RSE        | Relative Squared Error                   | ❌ | Ratio of squared errors to squared errors of a naive model |
-| RSQUARED   | R-Squared (Coefficient of Determination) | ❌ | Proportion of variance in dependent variable explained by model |
-| SMAPE      | Symmetric Mean Absolute Percentage Error | ❌ | Symmetric alternative to MAPE that handles zero/near-zero values |
+| MSLE      | Mean Squared Logarithmic Error            | ✅ | Average of squared logarithmic errors for relative measurement    |
+| RAE       | Relative Absolute Error                   | ✅ | Ratio of MAE to the MAE of a naive model                         |
+| RMSE      | Root Mean Squared Error                   | ✅ | Square root of the average of squared errors                      |
+| RMSLE     | Root Mean Squared Logarithmic Error       | ✅ | Square root of the mean squared logarithmic error                |
+| RSE       | Relative Squared Error                    | ✅ | Ratio of squared errors to squared errors of a naive model        |
+| RSQUARED  | R-Squared (Coefficient of Determination)  | ✅ | Proportion of variance in dependent variable explained by model   |
+| SMAPE     | Symmetric Mean Absolute Percentage Error  | ✅ | Symmetric alternative to MAPE for zero/near-zero values          |
 
 ## Price Channels and Bands
 

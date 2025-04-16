@@ -9,6 +9,7 @@ The Double Exponential Moving Average implements an advanced dual-stage IIR filt
 DEMA = 2 × EMA(source) - EMA(EMA(source))
 
 Where:
+
 - EMA(source) is the first exponential moving average of the source signal
 - EMA(EMA(source)) is the exponential moving average applied to the result of the first EMA
 
@@ -39,7 +40,6 @@ DEMA is a composite Infinite Impulse Response (IIR) filter that processes data t
 
 ### Transfer Properties (Frequency Domain)
 
-The frequency domain characteristics of DEMA include:
 1. **Roll-off Rate**: Steeper than single EMA due to cascaded filtering
 2. **Frequency Response**:
    - Enhanced high-frequency pass-through from lag reduction
@@ -51,7 +51,6 @@ The frequency domain characteristics of DEMA include:
 
 ### Response Properties (Time Domain)
 
-The time domain characteristics demonstrate:
 1. **Impulse Response**:
    - Infinite memory extent from both EMAs
    - Complex interaction between cascaded stages
@@ -80,6 +79,7 @@ This dual compensation ensures DEMA values are valid from the first bar without 
 ### Alpha vs Period
 
 As with EMA, DEMA can be fine-tuned using α directly instead of period:
+
 - Provides more precise control over smoothing
 - Avoids the discrete steps inherent in period-based calculations
 - Allows for more sophisticated optimization in trading strategies
