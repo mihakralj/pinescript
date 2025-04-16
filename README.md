@@ -67,7 +67,7 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 For detailed information about indicator types and characteristics, see:
 
 - [Indicators Classification](docs/classification.md)
-- [Indicators Progress Tracker](docs/indicators.md)
+- [Wishlist](docs/wishlist.md)
 
 ## Contributing (if you dare)
 

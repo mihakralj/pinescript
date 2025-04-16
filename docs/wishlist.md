@@ -2,22 +2,21 @@
 
 ## Moving Average Indicators
 
-| Indicator  | Name                                    | Status | Description                                                     |
-|------------|----------------------------------------|--------|----------------------------------------------------------------|
-| AFIRMA     | Adaptive FIR Moving Average            | ❌     | Uses finite impulse response filtering                          |
-| ALMA       | Arnaud Legoux Moving Average           | ❌     | Uses Gaussian distribution for weights                          |
-| DEMA       | Double Exponential Moving Average       | ✅     | Reduced lag double EMA                                         |
+| Indicator  | Name                                    | Status | Description                                                  |
+|------------|----------------------------------------|--------|---------------------------------------------------------------|
+| AFIRMA     | Adaptive FIR Moving Average            | ❌     | Uses finite impulse response filtering                         |
+| ALMA       | Arnaud Legoux Moving Average           | ❌     | Uses Gaussian distribution for weights                         |
+| DEMA       | Double Exponential Moving Average      | ✅     | Reduced lag double EMA                                         |
 | DSMA       | Dynamic Simple Moving Average          | ❌     | Adapts period based on volatility                              |
 | DWMA       | Dynamic Weighted Moving Average        | ✅     | Adapts to market volatility                                    |
-| EMA        | Exponential Moving Average             | ✅     | Weighted average with exponential decay                         |
-| EPMA       | Endpoint Moving Average                | ✅     | Basic average emphasizing recent endpoints                      |
+| EMA        | Exponential Moving Average             | ✅     | Weighted average with exponential decay                        |
+| EPMA       | Endpoint Moving Average                | ✅     | Basic average emphasizing recent endpoints                     |
 | FRAMA      | Fractal Adaptive Moving Average        | ❌     | Uses fractal dimension for adaptation                          |
-| FWMA       | Fibonacci Weighted Moving Average      | ❌     | Forward-looking weighted calculation                           |
 | GMA        | Gaussian Moving Average                | ❌     | Based on normal distribution                                   |
 | HEMA       | Hull Exponential Moving Average        | ✅     | Hull-based smoothing using EMA instead of WMA                  |
 | HMA        | Hull Moving Average                    | ✅     | Reduced lag WMA with trend emphasis                            |
 | HTIT       | Hilbert Transform Instantaneous Trend  | ❌     | Based on Hilbert Transform                                     |
-| HWMA       | Holt-Winters Moving Average           | ✅     | Uses Hann window function for weighting                        |
+| HWMA       | Holt-Winters Moving Average            | ✅     | Uses Hann window function for weighting                        |
 | JMA        | Jurik Moving Average                   | ✅     | Complex smoothing with minimal lag                             |
 | KAMA       | Kaufman Adaptive Moving Average        | ❌     | Adapts to market noise using efficiency ratio                  |
 | LTMA       | Linear Time Moving Average             | ❌     | Uses linear regression over time                               |
@@ -27,25 +26,54 @@
 | MMA        | Modified Moving Average                | ❌     | Modified version of EMA with different weighting               |
 | PWMA       | Pascal Weighted Moving Average         | ✅     | A moving average that uses Pascal's triangle coefficients      |
 | QEMA       | Quadruple Exponential Moving Average   | ✅     | Simplified EMA calculation                                     |
-| REMA       | Regularized Exponential Moving Average | ✅     | Optimized EMA using regularization                            |
+| REMA       | Regularized Exponential Moving Average | ✅     | Optimized EMA using regularization                             |
 | RMA        | wildeR Moving Average                  | ✅     | Variation of EMA with different smoothing factor               |
 | SINEMA     | Sine-weighted Moving Average           | ✅     | Uses sine function for weight distribution                     |
 | SMA        | Simple Moving Average                  | ✅     | Basic arithmetic mean of signal over N periods                 |
 | SMMA       | Smoothed Moving Average                | ❌     | Smoothed version of simple moving average                      |
-| SSF        | Ehler's Super Smoother Filter         | ❌     | Advanced noise reduction filter                                |
-| SUPERTREND | Supertrend                            | ❌     | Trend following indicator based on ATR                         |
+| SSF        | Ehler's Super Smoother Filter          | ❌     | Advanced noise reduction filter                                |
+| SUPERTREND | Supertrend                             | ❌     | Trend following indicator based on ATR                         |
 | SWMA       | Symmetric Weighted Moving Average      | ❌     | Balanced weight distribution moving average                    |
-| T3         | Triple Exponential Moving Average (T3) | ❌     | Tim Tillson's improved triple EMA                             |
-| TEMA       | Triple Exponential Moving Average      | ✅     | Further reduced lag triple EMA                                |
-| TRIMA      | Triangular Moving Average             | ✅     | Double-smoothed SMA with triangular weight distribution        |
-| VIDYA      | Variable Index Dynamic Average         | ❌     | Volatility-based dynamic average                              |
-| VWAP       | Volume Weighted Average Price          | ❌     | Price average weighted by volume                              |
-| VWMA       | Volume Weighted Moving Average         | ❌     | Moving average weighted by volume                             |
+| T3         | Triple Exponential Moving Average (T3) | ❌     | Tim Tillson's improved triple EMA                              |
+| TEMA       | Triple Exponential Moving Average      | ✅     | Further reduced lag triple EMA                                 |
+| TRIMA      | Triangular Moving Average              | ✅     | Double-smoothed SMA with triangular weight distribution        |
+| VIDYA      | Variable Index Dynamic Average         | ❌     | Volatility-based dynamic average                               |
+| VWAP       | Volume Weighted Average Price          | ❌     | Price average weighted by volume                               |
+| VWMA       | Volume Weighted Moving Average         | ❌     | Moving average weighted by volume                              |
 | WCP        | Weighted Closing Price                 | ❌     | Price calculation with emphasis on closing price               |
 | WMA        | Weighted Moving Average                | ✅     | Linear-weighted average giving more weight to recent signals   |
-| ZLDEMA     | Zero-Lag Double Exponential MA        | ✅     | Advanced DEMA with lag reduction                              |
-| ZLEMA      | Zero-Lag Exponential Moving Average   | ✅     | EMA with minimal lag                                          |
-| ZLTEMA     | Zero-Lag Triple Exponential MA        | ✅     | Advanced TEMA with lag reduction                              |
+| ZLDEMA     | Zero-Lag Double Exponential MA         | ✅     | Advanced DEMA with lag reduction                               |
+| ZLEMA      | Zero-Lag Exponential Moving Average    | ✅     | EMA with minimal lag                                           |
+| ZLTEMA     | Zero-Lag Triple Exponential MA         | ✅     | Advanced TEMA with lag reduction                               |
+
+
+## Numeric/Geometric Transformations
+
+| Code | Name	|  Status | Description |
+|-----------|------------------------------------------|--------|------------------------------------------------------------------|
+| LINEAR       | Linear Transformation           | ❌ | Linear scaling & shifting |
+| LOG          | Logarithmic Transformation      | ❌ | Natural logarithm transform for stabilizing variance |
+| EXP          | Exponential Transformation      | ❌ | Exponential transform for modeling growth or decay |
+| SQRT         | Square Root Transformation      | ❌ | The square root to the input data, useful for variance stabilization |
+| DIFF         | Difference                      | ❌ | The absolute difference (first order) |
+| CHANGE       | Percentage Change               | ❌ | Percentage change of relative changes |
+| MINMAX_SCALE | Min-Max Scaling (Normalization) | ❌ | Scales data to a specific range (e.g., [0, 1] or [-1, 1]) |
+| STANDARDIZE  | Standardization                 | ❌ | Z-score Normalization around zero with unit variance |
+| RELU         | Rectified Linear Unit           | ❌ | ReLU activation function (max(0, x)) |
+| TANH         | Hyperbolic Tangent              | ❌ | Hyperbolic tangent function, scaling output between -1 and 1 |
+| SIGMOID      | Logistic Function               | ❌ | Sigmoid function, scaling output between 0 and 1 |
+| SSSIGMOID    | Scaled & Shifted Logistics fn   | ❌ | Scaled and shifted sigmoid function, scaling output between -1 and 1 |
+| POLYFIT      | Polynomial Fitting              | ❌ | Fits a polynomial of a specified degree to the input data |
+| SLOPE        | Direction/Magnitude             | ❌ | First derivative, rate of change |
+| CURVATURE    | Acceleration/Deceleration       | ❌ | Second derivative, curvature or concavity |
+| JERK         | Jerk/Smoothness                 | ❌ | Third derivative, jaggedness or smoothness |
+| CORRELATION  | Correlation (Pearson's)         | ❌ | Calculates the Pearson correlation coefficient between two data series |
+| STDDEV       | Standard Deviation              | ❌ | Calculates the standard deviation of the input data |
+| VARIANCE     | Variance                        | ❌ | Calculates the variance of the input data |
+| MEDIAN       | Median                          | ❌ | Calculates the median of the input data |
+| MODE         | Mode                            | ❌ | Calculates the mode of the input data |
+| QUANTILE     | Quantile                        | ❌ | Calculates the specified quantile of the input data |
+
 
 ## Error Metrics
 
@@ -53,10 +81,10 @@
 |-----------|------------------------------------------|--------|------------------------------------------------------------------|
 | HUBER     | Huber Loss                                | ✅ | Robust error measurement less sensitive to outliers                |
 | MAE       | Mean Absolute Error                       | ✅ | Average of absolute differences between predictions and actuals    |
-| MAPD      | Mean Absolute Percentage Deviation        | ❌ | Average of absolute percentage deviations from reference value    |
-| MAPE      | Mean Absolute Percentage Error            | ❌ | Average of absolute percentage differences between forecast/actual |
-| MASE      | Mean Absolute Scaled Error                | ❌ | MAE scaled by the MAE of a naive forecast                         |
-| MDA       | Mean Directional Accuracy                 | ❌ | Percentage of times forecast direction matches actual direction    |
+| MAPD      | Mean Absolute Percentage Deviation        | ✅ | Average of absolute percentage deviations from reference value    |
+| MAPE      | Mean Absolute Percentage Error            | ✅ | Average of absolute percentage differences between forecast/actual |
+| MASE      | Mean Absolute Scaled Error                | ✅ | MAE scaled by the MAE of a naive forecast                         |
+| MDA       | Mean Directional Accuracy                 | ✅ | Percentage of times forecast direction matches actual direction    |
 | ME        | Mean Error                                | ❌ | Average of differences between predictions and actual values       |
 | MPE       | Mean Percentage Error                     | ❌ | Average of percentage differences between forecasts and actuals   |
 | MSE       | Mean Squared Error                        | ✅ | Average of squared differences between predictions and actuals     |

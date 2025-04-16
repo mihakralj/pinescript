@@ -8,31 +8,31 @@ The Jurik Moving Average represents a breakthrough in adaptive filtering technol
 
 1. **Volatility-Adjusted Smoothing:**
 
-   $ \Delta_1 = P_t - U_t $
+   Δ₁ = Pₜ - Uₜ
 
-   $ \Delta_2 = P_t - L_t $
+   Δ₂ = Pₜ - Lₜ
 
-   $ V_t = \max(|\Delta_1|, |\Delta_2|) $
+   Vₜ = max(|Δ₁|, |Δ₂|)
 
 2. **Adaptive Parameter Calculation:**
 
-   $ r_v = \min(\max(\frac{V_t}{V_{avg}}, 1.0), len_1^{\frac{1}{pow_1}}) $
+   rᵥ = min(max(Vₜ/Vₐᵥᵧ, 1.0), len₁^(1/pow₁))
 
-   $ pow_2 = r_v^{pow_1} $
+   pow₂ = rᵥ^pow₁
 
-   $ K_v = (\frac{len_2}{len_2+1})^{\sqrt{pow_2}} $
+   Kᵥ = (len₂/(len₂+1))^√pow₂
 
 3. **Final JMA Value:**
 
-   $ ma_1 = P_t + \alpha(ma_1 - P_t) $
+   ma₁ = Pₜ + α(ma₁ - Pₜ)
 
-   $ det_0 = (P_t - ma_1)(1 - \beta) + \beta det_0 $
+   det₀ = (Pₜ - ma₁)(1 - β) + β det₀
 
-   $ ma_2 = ma_1 + (phase \times det_0) $
+   ma₂ = ma₁ + (phase × det₀)
 
-   $ det_1 = (ma_2 - JMA_t)(1 - \alpha)^2 + \alpha^2 det_1 $
+   det₁ = (ma₂ - JMAₜ)(1 - α)² + α² det₁
 
-   $ JMA_{t+1} = JMA_t + det_1 $
+   JMAₜ₊₁ = JMAₜ + det₁
 
 Where:
 - α is the adaptive smoothing factor
