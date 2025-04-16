@@ -1,0 +1,46 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Kaufman's Adaptive Moving Average", "KAMA", overlay=true)
+
+//@function Calculates KAMA using adaptive smoothing based on market volatility
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/kama.md
+//@param source Series to calculate KAMA from
+//@param period Length of the efficiency ratio lookback period
+//@param fast_alpha Fastest EMA constant (2/(2+1))
+//@param slow_alpha Slowest EMA constant (2/(30+1))
+//@returns KAMA value
+kama(series float source, simple int period, simple float fast_alpha=0.666667, simple float slow_alpha=0.0645) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    if fast_alpha <= 0 or slow_alpha <= 0
+        runtime.error("Alpha values must be greater than 0")
+    if fast_alpha <= slow_alpha
+        runtime.error("Fast alpha must be greater than slow alpha")
+    var float kama = na
+    float change = math.abs(source - source[1])
+    float volatility = math.sum(math.abs(source - source[1]), period)
+    float er = volatility != 0 ? change / volatility : 0  // Efficiency Ratio
+    float sc = math.pow(er * (fast_alpha - slow_alpha) + slow_alpha, 2)  // Smoothing Constant
+    kama := na(kama) ? source : kama + sc * (source - kama)
+    kama
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(10, "Period", minval=1)
+i_source = input.source(close, "Source")
+i_fast = input.int(2, "Fast EMA Period", minval=2)
+i_slow = input.int(30, "Slow EMA Period", minval=2)
+
+// Calculation
+fast_alpha = 2.0/(float(i_fast)+1.0)
+slow_alpha = 2.0/(float(i_slow)+1.0)
+kama = kama(i_source, i_period, fast_alpha, slow_alpha)
+
+// Plot
+plot(kama, "Custom KAMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, kama), "Price Crosses KAMA", "Price crossed KAMA on {{ticker}}")

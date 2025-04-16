@@ -53,14 +53,20 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **TRIMA** | Triangular MA –  because nothing says "I understand math" like averaging an average | [trima.pine](indicators/trends/trima.pine) | [Docs](docs/trends/trima.md) |
 | **PWMA** | Pascal Weighted MA – using 17th century math to lose money with 21st century efficiency | [pwma.pine](indicators/trends/pwma.pine) | [Docs](docs/trends/pwma.md) |
 | **REMA** | Regularized Exponential MA –  an EMA that went to therapy and learned to stop overreacting | [rema.pine](indicators/trends/rema.pine) | [Docs](docs/trends/rema.md) |
+| **ALMA** | Arnaud Legoux MA – a Gaussian distribution curve decided to trade stocks while wearing a beret and smoking Gauloises | [alma.pine](indicators/trends/alma.pine) | [Docs](docs/trends/alma.md) |
+| **KAMA** | Kaufman's Adaptive MA – the chameleon of moving averages that changes its personality more than your ex | [kama.pine](indicators/trends/kama.pine) | [Docs](docs/trends/kama.md) |
 
 ### Errors
 
 | Error | Description | Implementation | Documentation |
 |-----------|-------------|----------------|----------------|
 | **HUBER** | Huber Loss - the diplomatic negotiator that cares deeply about small errors but refuses to completely melt down over outliers | [huber.pine](indicators/errors/huber.pine) | [Docs](docs/errors/huber.md) |
-| **MAE** | Mean Absolute Error - treats all your trading mistakes equally, unlike your significant other| [mae.pine](indicators/errors/mae.pine) | [Docs](docs/errors/mae.md) |
-| **MSE** | Mean Squared Error - for when you want your big mistakes to haunt you exponentially more than your small ones | [mse.pine](indicators/errors/mse.pine) | [Docs](docs/errors/mse.md) |
+| **MAE** | Mean Absolute Error - treats all trading mistakes equally, just like I treat my children (at least that's what I tell them) | [mae.pine](indicators/errors/mae.pine) | [Docs](docs/errors/mae.md) |
+| **MSE** | Mean Squared Error - for when big mistakes haunt exponentially more than small ones | [mse.pine](indicators/errors/mse.pine) | [Docs](docs/errors/mse.md) |
+| **MAPD** | Mean Absolute Percentage Deviation - because expressing failure as a percentage somehow makes it feel more scientific | [mapd.pine](indicators/errors/mapd.pine) | [Docs](docs/errors/mapd.md) |
+| **MAPE** | Mean Absolute Percentage Error - perfect for quantifying disappointment in neat little percentage points | [mape.pine](indicators/errors/mape.pine) | [Docs](docs/errors/mape.md) |
+| **MASE** | Mean Absolute Scaled Error - compares current disasters to previous ones and calls it "progress" | [mase.pine](indicators/errors/mase.pine) | [Docs](docs/errors/mase.md) |
+| **MPE** | Mean Percentage Error - allows positive and negative errors to cancel out, like profits and losses, but brokers still charges fees for both | [mpe.pine](indicators/errors/mpe.pine) | [Docs](docs/errors/mpe.md)
 
 ## Documentation
 

@@ -5,7 +5,7 @@
 | Indicator  | Name                                    | Status | Description                                                  |
 |------------|----------------------------------------|--------|---------------------------------------------------------------|
 | AFIRMA     | Adaptive FIR Moving Average            | ❌     | Uses finite impulse response filtering                         |
-| ALMA       | Arnaud Legoux Moving Average           | ❌     | Uses Gaussian distribution for weights                         |
+| ALMA       | Arnaud Legoux Moving Average           | ✅     | Uses Gaussian distribution for weights                         |
 | DEMA       | Double Exponential Moving Average      | ✅     | Reduced lag double EMA                                         |
 | DSMA       | Dynamic Simple Moving Average          | ❌     | Adapts period based on volatility                              |
 | DWMA       | Dynamic Weighted Moving Average        | ✅     | Adapts to market volatility                                    |
@@ -18,7 +18,7 @@
 | HTIT       | Hilbert Transform Instantaneous Trend  | ❌     | Based on Hilbert Transform                                     |
 | HWMA       | Holt-Winters Moving Average            | ✅     | Uses Hann window function for weighting                        |
 | JMA        | Jurik Moving Average                   | ✅     | Complex smoothing with minimal lag                             |
-| KAMA       | Kaufman Adaptive Moving Average        | ❌     | Adapts to market noise using efficiency ratio                  |
+| KAMA       | Kaufman Adaptive Moving Average        | ✅     | Adapts to market noise using efficiency ratio                  |
 | LTMA       | Linear Time Moving Average             | ❌     | Uses linear regression over time                               |
 | MAAF       | Moving Average Adaptive Filter         | ❌     | Advanced adaptive filtering technique                          |
 | MAMA       | MESA Adaptive Moving Average           | ❌     | Complex cycle analysis using MESA                              |
