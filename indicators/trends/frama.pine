@@ -1,0 +1,57 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Fractal Adaptive Moving Average", "FRAMA", overlay=true)
+
+//@function Calculates FRAMA using fractal dimension to determine the optimal alpha
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/trends/frama.md
+//@param source Series to calculate FRAMA from
+//@param period Number of bars used in the calculation
+//@returns FRAMA value with fractal-based adaptive smoothing
+frama(series float src, simple int p) =>
+    // Ensure period is even
+    p_adj = p % 2 == 0 ? p : p + 1
+    var float f = src
+    if bar_index >= p_adj
+        float h_p = p_adj / 2
+        float hh1 = src
+        float ll1 = src
+        for i = 0 to h_p - 1
+            hh1 := math.max(hh1, src[i])
+            ll1 := math.min(ll1, src[i])
+        float hh2 = src[h_p]
+        float ll2 = src[h_p]
+        for i = h_p to p_adj - 1
+            hh2 := math.max(hh2, src[i])
+            ll2 := math.min(ll2, src[i])
+        float hh3 = math.max(hh1, hh2)
+        float ll3 = math.min(ll1, ll2)
+        float n1 = (hh1 - ll1) / h_p
+        float n2 = (hh2 - ll2) / h_p
+        float n3 = (hh3 - ll3) / p_adj
+        float dimen = 1.0
+        if n1 > 0 and n2 > 0 and n3 > 0
+            dimen := (math.log(n1 + n2) - math.log(n3)) / math.log(2)
+        dimen := math.max(1.0, math.min(2.0, dimen))
+        float alpha = math.exp(-4.6 * (dimen - 1))
+        alpha := math.max(0.01, math.min(1.0, alpha))
+        f := alpha * src + (1 - alpha) * f
+    else
+        f := src
+    f
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(16, "Period", minval=2)
+i_source = input.source(close, "Source")
+
+// Calculation
+frama_value = frama(i_source, i_period)
+
+// Plot
+plot(frama_value, "FRAMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, frama_value), "Price Crosses FRAMA", "Price crossed FRAMA on {{ticker}}")

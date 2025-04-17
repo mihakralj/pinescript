@@ -7,11 +7,11 @@
 | AFIRMA     | Adaptive FIR Moving Average            | ❌     | Uses finite impulse response filtering                         |
 | ALMA       | Arnaud Legoux Moving Average           | ✅     | Uses Gaussian distribution for weights                         |
 | DEMA       | Double Exponential Moving Average      | ✅     | Reduced lag double EMA                                         |
-| DSMA       | Dynamic Simple Moving Average          | ❌     | Adapts period based on volatility                              |
+| DSMA       | Deviation-Scaled Moving Average        | ✅     | Adaptive filter that scales based on volatility |
 | DWMA       | Dynamic Weighted Moving Average        | ✅     | Adapts to market volatility                                    |
 | EMA        | Exponential Moving Average             | ✅     | Weighted average with exponential decay                        |
 | EPMA       | Endpoint Moving Average                | ✅     | Basic average emphasizing recent endpoints                     |
-| FRAMA      | Fractal Adaptive Moving Average        | ❌     | Uses fractal dimension for adaptation                          |
+| FRAMA      | Fractal Adaptive Moving Average        | ✅     | Uses fractal dimension for adaptation                          |
 | GMA        | Gaussian Moving Average                | ❌     | Based on normal distribution                                   |
 | HEMA       | Hull Exponential Moving Average        | ✅     | Hull-based smoothing using EMA instead of WMA                  |
 | HMA        | Hull Moving Average                    | ✅     | Reduced lag WMA with trend emphasis                            |
