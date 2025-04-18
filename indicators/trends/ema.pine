@@ -14,9 +14,10 @@ ema(series float source, simple float alpha) =>
     var float EPSILON = 1e-10        // constant - smalest relevant value
     var float raw_ema = 0.0
     var float e = 1.0
-    raw_ema := alpha * (source - raw_ema) + raw_ema
-    e := (1 - alpha) * e
-    e > EPSILON ? raw_ema / (1.0 - e) : raw_ema
+    if not na(source)
+        raw_ema := alpha * (source - raw_ema) + raw_ema
+        e := (1 - alpha) * e
+        e > EPSILON ? raw_ema / (1.0 - e) : raw_ema
 
 
 // ---------- Main loop ----------

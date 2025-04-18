@@ -2,7 +2,7 @@
 
 The Hull Exponential Moving Average implements an innovative hybrid architecture delivering 85% lag reduction and 96% noise suppression through logarithmic coefficient distribution and cubic acceleration processing. HEMA's sophisticated multi-stage algorithm provides 97% trend detection accuracy and 0.25 bar average detection latency, while achieving 94% noise reduction in volatile conditions through Hull-exponential synthesis and mathematically optimized error compensation, executing complete filter passes in under 0.5 microseconds on standard hardware.
 
-[Pine Script Implementation of HEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/hema.pine)
+[Pine Script Implementation of HEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/hema.pine)
 
 ## Mathematical Foundation
 
@@ -29,7 +29,6 @@ HEMA is a composite Infinite Impulse Response (IIR) filter that processes data t
 
 ### Transfer Properties (Frequency Domain)
 
-The frequency domain characteristics of HEMA include:
 1. **Roll-off Rate**: Approximately -20dB per decade, smoother than HMA
 2. **Frequency Response**:
    - Smoother high-frequency attenuation curve
@@ -42,7 +41,6 @@ The frequency domain characteristics of HEMA include:
 
 ### Response Properties (Time Domain)
 
-The time domain characteristics demonstrate:
 1. **Impulse Response**:
    - Infinite response tail (theoretically)
    - Exponential decay for past signals
@@ -60,7 +58,6 @@ The time domain characteristics demonstrate:
 
 ## Initialization Properties
 
-This implementation uses sophisticated error compensation techniques:
 1. Compensates for initialization bias using scaling factors
 2. Adapts compensation during initial periods
 3. Includes epsilon protection against division by zero

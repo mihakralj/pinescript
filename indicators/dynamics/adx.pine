@@ -1,0 +1,52 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Average Directional Movement Index", "ADX", overlay=false)
+
+//@function Calculates ADX using Wilder's smoothing with compensated RMA
+//@doc https://github.com/mihakralj/pinescript/blob/main/docs/dynamics/adx.md
+//@param period Number of bars used in the calculation
+//@returns tuple of ADX value, +DI, -DI
+adx(simple int period = 14) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    var float EPSILON = 1e-10
+    float alpha = 1.0/float(period)
+    float tr = na(close[1]) ? high - low : math.max(high - low, math.max(math.abs(high - close[1]), math.abs(low - close[1])))
+    float plus_dm = na(high[1]) ? 0.0 : high - high[1] > low[1] - low and high - high[1] > 0 ? high - high[1] : 0.0
+    float minus_dm = na(low[1]) ? 0.0 : low[1] - low > high - high[1] and low[1] - low > 0 ? low[1] - low : 0.0
+    var float e = 1.0
+    var float tr_raw = na
+    tr_raw := na(tr_raw) ? tr : (tr_raw * (period - 1) + tr) / period
+    float tr_smooth = e > EPSILON ? tr_raw / (1.0 - e) : tr_raw
+    var float pdm_raw = na
+    pdm_raw := na(pdm_raw) ? plus_dm : (pdm_raw * (period - 1) + plus_dm) / period
+    float plus_dm_smooth = e > EPSILON ? pdm_raw / (1.0 - e) : pdm_raw
+    var float mdm_raw = na
+    mdm_raw := na(mdm_raw) ? minus_dm : (mdm_raw * (period - 1) + minus_dm) / period
+    float minus_dm_smooth = e > EPSILON ? mdm_raw / (1.0 - e) : mdm_raw
+    float plus_di = tr_smooth != 0.0 ? math.min(100 * plus_dm_smooth / tr_smooth, 50.0) : 0.0
+    float minus_di = tr_smooth != 0.0 ? math.min(100 * minus_dm_smooth / tr_smooth, 50.0) : 0.0
+    float dx = plus_di + minus_di != 0.0 ? 100 * math.abs(plus_di - minus_di) / (plus_di + minus_di) : 0.0
+    var float adx_raw = na
+    adx_raw := na(adx_raw) ? 0.0 : (adx_raw * (period - 1) + dx) / period
+    float adx_value = e > EPSILON ? adx_raw / (1.0 - e) : adx_raw
+    e := (1 - alpha) * e
+    [adx_value, plus_di, minus_di]
+
+// Inputs
+i_period = input.int(14, "Period", minval=1, tooltip="Number of bars used in the calculation")
+
+// Calculate ADX
+[adx_value, plus_di, minus_di] = adx(i_period)
+
+// Plot
+plot(adx_value, "ADX", color.new(color.white, 0), 2)
+plot(plus_di, "+DI", color.new(color.green, 0), 1)
+plot(minus_di, "-DI", color.new(color.red, 0), 1)
+
+// Alert conditions
+alertcondition(ta.crossover(plus_di, minus_di), "+DI crosses above -DI", "+DI crossed above -DI on {{ticker}}")
+alertcondition(ta.crossunder(plus_di, minus_di), "-DI crosses above +DI", "-DI crossed above +DI on {{ticker}}")
+alertcondition(ta.crossover(adx_value, 25), "Strong trend begins", "ADX crossed above 25 on {{ticker}}")
+alertcondition(ta.crossunder(adx_value, 20), "Weak trend begins", "ADX crossed below 20 on {{ticker}}")

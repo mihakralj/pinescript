@@ -14,10 +14,11 @@ rma(series float source, simple int period) =>
     var float EPSILON = 1e-10        // constant - smallest relevant value
     var float raw_rma = 0.0
     var float e = 1.0
-    alpha = 1.0/float(period)        // Wilder's smoothing factor
-    raw_rma := (raw_rma * (period - 1) + source) / period
-    e := (1 - alpha) * e
-    e > EPSILON ? raw_rma / (1.0 - e) : raw_rma
+    if not na(source)
+        alpha = 1.0/float(period)        // Wilder's smoothing factor
+        raw_rma := (raw_rma * (period - 1) + source) / period
+        e := (1 - alpha) * e
+        e > EPSILON ? raw_rma / (1.0 - e) : raw_rma
 
 
 // ---------- Main loop ----------

@@ -4,7 +4,7 @@ Kaufman's Adaptive Moving Average was developed by Perry Kaufman in the 1990s an
 
 Kaufman created KAMA after years studying various trading systems across different markets. His approach was inspired by earlier adaptive techniques but innovated by creating a formula that could automatically adjust to changing market conditions without manual intervention. KAMA has become a popular technical indicator among traders who need a moving average that responds quickly to significant price movements while ignoring minor fluctuations.
 
-[Pine Script Implementation of KAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/kama.pine)
+[Pine Script Implementation of KAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/kama.pine)
 
 ## Mathematical Foundation
 

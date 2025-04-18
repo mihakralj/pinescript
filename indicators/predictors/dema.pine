@@ -16,10 +16,11 @@ dema(series float source, simple float alpha) =>
     var float raw_ema2 = 0.0
     var float e = 1.0  // compensation factor
     e := (1 - alpha) * e
-    float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
-    raw_ema1 := alpha * (source - raw_ema1) + raw_ema1
-    raw_ema2 := alpha * (raw_ema1 * compensation - raw_ema2) + raw_ema2
-    compensation * (2 * raw_ema1 - raw_ema2)
+    if not na(source)
+        float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
+        raw_ema1 := alpha * (source - raw_ema1) + raw_ema1
+        raw_ema2 := alpha * (raw_ema1 * compensation - raw_ema2) + raw_ema2
+        compensation * (2 * raw_ema1 - raw_ema2)
 
 
 // ---------- Main loop ----------

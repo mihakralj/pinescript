@@ -29,6 +29,25 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 
 ## What's in the box? (Besides existential dread)
 
+For detailed information about indicator types and characteristics, see:
+
+- [DSP Filters](./filters/index.md)
+- [Predictors (Leading Indicators)](./predictors/index.md)
+- [Trends (Trailing Indicators)](./trends/index.md)
+- [Numerics & Statistical Transformations](./numerics/index.md)
+- [Error Metrics](./errors/index.md)
+- [Price Channels and Bands](./channels/index.md)
+- [Trend Dynamics](./dynamics/index.md)
+- [Stop and Reverse Indicators](./reversals/index.md)
+- [Momentum Indicators](./momentum/index.md)
+- [Oscillators](./oscillators/index.md)
+- [Cycles Indicators](./cycles/index.md)
+- [Volume Indicators](./volume/index.md)
+- [Volatility Indicators](./volatility/index.md)
+- [Machine Learning and Neural Network Functions](./nn_activators/index.md)
+
+[Indicators Classification](docs/classification.md)
+
 ### Averages & Trends
 
 | Indicator | Description | Implementation | Documentation |
@@ -68,12 +87,6 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 | **MASE** | Mean Absolute Scaled Error - compares current disasters to previous ones and calls it "progress" | [mase.pine](indicators/errors/mase.pine) | [Docs](docs/errors/mase.md) |
 | **MPE** | Mean Percentage Error - allows positive and negative errors to cancel out, like profits and losses, but brokers still charges fees for both | [mpe.pine](indicators/errors/mpe.pine) | [Docs](docs/errors/mpe.md)
 
-## Documentation
-
-For detailed information about indicator types and characteristics, see:
-
-- [Indicators Classification](docs/classification.md)
-- [Wishlist](docs/wishlist.md)
 
 ## Contributing (if you dare)
 

@@ -2,13 +2,14 @@
 
 The Triple Exponential Moving Average implements an innovative triple-cascade IIR filter architecture delivering 82% lag reduction and 95% price correlation through strategic coefficient optimization. TEMA's sophisticated three-stage filtering process provides 91% trend identification accuracy with only 0.8 bars of phase delay, while achieving 73% faster trend detection during rapid market transitions through optimized frequency response characteristics and mathematical coefficient weighting, establishing new benchmarks in both computational efficiency and market responsiveness.
 
-[Pine Script Implementation of TEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/tema.pine)
+[Pine Script Implementation of TEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/tema.pine)
 
 ## Mathematical Foundation
 
 TEMA = 3 × EMA(source) - 3 × EMA(EMA(source)) + EMA(EMA(EMA(source)))
 
 Where:
+
 - EMA(source) is the first exponential moving average of the source signal
 - EMA(EMA(source)) is the second exponential moving average
 - EMA(EMA(EMA(source))) is the third exponential moving average
@@ -43,7 +44,6 @@ TEMA is a composite Infinite Impulse Response (IIR) filter that processes data t
 
 ### Transfer Properties (Frequency Domain)
 
-The frequency domain characteristics of TEMA include:
 1. **Roll-off Rate**: Approximately -18dB per octave due to triple cascade
 2. **Frequency Response**:
    - Exceptional high-frequency attenuation
@@ -55,7 +55,6 @@ The frequency domain characteristics of TEMA include:
 
 ### Response Properties (Time Domain)
 
-The time domain characteristics demonstrate:
 1. **Impulse Response**:
    - Triple infinite memory extent
    - Complex cascade interactions
@@ -85,6 +84,7 @@ This triple compensation ensures TEMA values are valid from the first bar withou
 ### Alpha vs Period
 
 As with other IIR moving averages, TEMA can be fine-tuned using α directly instead of period:
+
 - Provides more precise control over smoothing
 - Avoids the discrete steps inherent in period-based calculations
 - Allows for more sophisticated optimization in trading strategies

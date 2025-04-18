@@ -4,7 +4,7 @@ The Hull Moving Average implements a revolutionary multi-stage FIR architecture 
 
 HMA's advanced algorithmic design combines strategic weight distribution with momentum-enhanced signal processing, resulting in 67% faster trend detection than conventional averages. Performance analysis demonstrates 88% reduction in false signals during sideways markets, while maintaining 97% correlation with primary trends through its sophisticated multi-timeframe synthesis.
 
-[Pine Script Implementation of HMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/hma.pine)
+[Pine Script Implementation of HMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/hma.pine)
 
 ## Mathematical Foundation
 
@@ -19,6 +19,7 @@ The HMA is calculated using the four steps:
 4. Calculate final HMA with sqrt(n): HMA = WMA(diff, √n)
 
 Where:
+
 - n is the period of the HMA
 - WMA is the Weighted Moving Average
 - signal is the input signal series
@@ -27,6 +28,7 @@ Where:
 ### Weighted Moving Average Components
 
 Each WMA component uses linear weighting where:
+
 - Most recent signal has highest weight
 - Weights decrease linearly for older signals
 - Sum of weights denominator = n(n+1)/2
@@ -37,7 +39,6 @@ The HMA is a composite Finite Impulse Response (FIR) filter that processes data 
 
 ### Transfer Properties (Frequency Domain)
 
-The frequency domain characteristics of HMA include:
 1. **Roll-off Rate**: Approximately -24dB per octave roll-off
 2. **Frequency Response**:
    - Enhanced high-frequency pass-through from period-halving
@@ -47,7 +48,6 @@ The frequency domain characteristics of HMA include:
 
 ### Response Properties (Time Domain)
 
-The time domain characteristics demonstrate:
 1. **Impulse Response**:
    - Multi-scale processing through different periods
    - Zero response outside component windows

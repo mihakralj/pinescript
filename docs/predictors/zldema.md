@@ -2,7 +2,7 @@
 
 The Zero-Lag Double Exponential Moving Average implements a hybrid dual-stage predictive architecture delivering 93% lag reduction and 95% noise suppression through synchronized dual-ZLEMA processing with optimized 1.5/0.5 coefficient distribution. ZLDEMA's sophisticated error-compensated algorithm provides 98% trend detection accuracy and 0.2 bar average detection latency, while achieving 96% noise reduction in volatile conditions through mathematically optimized stage synthesis and precise numerical stability control, executing complete filter passes in under 0.7 microseconds on standard hardware.
 
-[Pine Script Implementation of ZLDEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/zldema.pine)
+[Pine Script Implementation of ZLDEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/zldema.pine)
 
 ## Mathematical Foundation
 
@@ -11,6 +11,7 @@ ZLDEMA is calculated by applying the ZLEMA technique twice and combining the res
 ZLDEMA = 1.5 × ZLEMA₁(source) - 0.5 × ZLEMA₂(ZLEMA₁(source))
 
 Where:
+
 - ZLEMA₁ is the first zero-lag exponential moving average
 - ZLEMA₂ is the second zero-lag exponential moving average applied to ZLEMA₁
 - The 1.5/0.5 weighting reduces overshooting compared to traditional DEMA's 2/1 ratio
@@ -18,18 +19,18 @@ Where:
 ### Detailed Breakdown
 
 1. **Dynamic Lag Calculation:**
-   $ lag = \min(\lfloor\frac{1}{\alpha} - 0.5\rfloor, \lfloor\frac{bar\_index}{2}\rfloor) $
+   lag = min(floor(1/α - 0.5), floor(bar_index/2))
 
 2. **First ZLEMA Stage:**
-   - Zero-lag signal: $ P_{zero\_lag} = 2P_t - P_{t-lag} $
-   - First ZLEMA: $ ZLEMA_1 = \alpha(P_{zero\_lag} - ZLEMA_1) + ZLEMA_1 $
+   - Zero-lag signal: P_zero_lag = 2P_t - P_(t-lag)
+   - First ZLEMA: ZLEMA_1 = α(P_zero_lag - ZLEMA_1) + ZLEMA_1
 
 3. **Second ZLEMA Stage:**
    - Applied to first ZLEMA output
    - Uses same α and lag values for consistency
 
 4. **Final ZLDEMA Calculation:**
-   $ ZLDEMA = 1.5 × ZLEMA_1 - 0.5 × ZLEMA_2 $
+   ZLDEMA = 1.5 × ZLEMA_1 - 0.5 × ZLEMA_2
 
    This modified weighting (1.5/0.5 instead of traditional DEMA's 2/1) provides a more balanced approach:
    - Reduces the overshooting tendency inherent in combining two sensitive indicators
@@ -39,6 +40,7 @@ Where:
 ### Smoothing Factor
 
 Like ZLEMA and DEMA, ZLDEMA uses a smoothing factor α where:
+
 - Valid range: 0 < α < 1
 - Can be derived from period N as α = 2/(N+1)
 - Same α is used for both ZLEMA calculations
@@ -49,7 +51,6 @@ ZLDEMA is a hybrid Infinite Impulse Response (IIR) filter that combines two ZLEM
 
 ### Transfer Properties (Frequency Domain)
 
-The frequency domain characteristics of ZLDEMA include:
 1. **Roll-off Rate**: Complex cascade of modified ZLEMA responses
 2. **Frequency Response**:
    - Enhanced pass-through from both ZLEMA stages
@@ -61,7 +62,6 @@ The frequency domain characteristics of ZLDEMA include:
 
 ### Response Properties (Time Domain)
 
-The time domain characteristics demonstrate:
 1. **Impulse Response**:
    - Dual predictive compensation
    - Modified exponential decay sequence
@@ -83,11 +83,11 @@ The implementation includes sophisticated error tracking and compensation:
 
 1. **Per-Stage Error Tracking:**
    - Each ZLEMA stage tracks its own error term:
-   $ e_t = (1-\alpha)e_{t-1} $
+   e_t = (1-α)e_(t-1)
 
 2. **Compensation Application:**
    - Both stages apply compensation individually:
-   $ ZLEMA_{compensated} = e_t > \epsilon ? \frac{ZLEMA_t}{1-e_t} : ZLEMA_t $
+   ZLEMA_compensated = e_t > ε ? ZLEMA_t/(1-e_t) : ZLEMA_t
 
 3. **Numerical Stability:**
    - Uses small epsilon (1e-10) to prevent division by zero
