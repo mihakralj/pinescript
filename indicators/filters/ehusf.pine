@@ -1,0 +1,53 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Ehlers Ultrasmooth Filter", "EHUltra", overlay=true)
+
+//@function Calculates Ehlers Ultrasmooth Filter
+//@param source Series to calculate EHUS from
+//@param length Number of bars used in the calculation
+//@returns EHUS value with optimized smoothing
+ehusf(series float src, simple int length) =>
+    var float SQRT2_PI = math.sqrt(2) * math.pi
+    var float usf = na
+    var float c1 = 0.0, var float c2 = 0.0, var float c3 = 0.0
+    var int prev_length = 0
+    if prev_length != length
+        arg = SQRT2_PI / float(length)
+        exp_arg = math.exp(-arg)
+        c2 := 2 * exp_arg * math.cos(arg)
+        c3 := -exp_arg * exp_arg
+        c1 := (1 + c2 - c3) / 4
+        prev_length := length
+    float ssrc = nz(src, src[1])
+    float src1 = nz(src[1], ssrc)
+    float src2 = nz(src[2], src1)
+    float us1 = nz(usf[1], src1)
+    float us2 = nz(usf[2], src2)
+    usf := (1 - c1) * ssrc + (2 * c1 - c2) * src1 - (c1 + c3) * src2 + c2 * us1 + c3 * us2
+    usf
+
+dirtyData(float source, simple int interval = 10, simple int gap_size = 1) =>
+    result = source
+    if bar_index == 0
+        result := na
+    else
+        cycle_position = bar_index % interval
+        if cycle_position < gap_size
+            result := na
+    result
+
+// ---------- Main loop ----------
+
+// Inputs
+i_length = input.int(20, "Length", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculation
+ehusf = ehusf(i_source, i_length)
+dirty = ehusf(dirtyData(i_source), i_length)
+
+// Plot
+plot(ehusf, "Ehlers UltraSmooth", color.new(color.yellow, 0), 2)
+plot(dirty, "Dirty Data", color.new(color.blue, 0), 2)
+

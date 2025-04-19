@@ -4,7 +4,7 @@
 indicator("Huber Loss", "Huber")
 
 //@function Calculates Huber Loss between two sources using SMA for averaging
-//@doc https://github.com/mihakralj/pinescript/blob/main/docs/errors/huber.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/huber.md
 //@param source1 First series to compare
 //@param source2 Second series to compare
 //@param period Lookback period for error averaging

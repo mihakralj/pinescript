@@ -1,0 +1,38 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Weighted Moving Average", "WMA", overlay=true)
+
+//@function Calculates WMA using weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/wma.md
+//@param source Series to calculate WMA from
+//@param period Lookback period - FIR window size
+//@returns WMA value, calculates from first bar using available data
+wma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
+    float sum = 0.0
+    float weight = p * (p + 1) * 0.5
+    for i = 0 to p - 1
+        float w = p - i
+        price = source[i]
+        sum := not na(price) ? sum + price * w : sum
+        weight := na(price) ? weight - w : weight
+    weight > 0 ? sum / weight : na
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(10, "Period", minval=1)
+i_source = input.source(close, "Source")
+
+// Calculation
+wma = wma(i_source, i_period)
+
+// Plot
+plot(wma, "Custom WMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, wma), "Price Crosses WMA", "Price crossed WMA on {{ticker}}")

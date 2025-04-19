@@ -4,7 +4,7 @@
 indicator("R-squared (Coefficient of Determination)", "R²")
 
 //@function Calculates the R-squared (Coefficient of Determination) between two sources
-//@doc https://github.com/mihakralj/pinescript/blob/main/docs/errors/rsquared.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rsquared.md
 //@param source1 First series to compare (actual)
 //@param source2 Second series to compare (predicted)
 //@param period Lookback period for averaging
@@ -73,4 +73,3 @@ score = rsquared(i_source1, i_source2, i_period)
 // Plot
 plot(score, "R²", color.new(color.red, 60), linewidth = 2, style = plot.style_area)
 plot(i_source2, "EMA", color.new(color.yellow, 0), linewidth = 1, style = plot.style_line, force_overlay = true)
-

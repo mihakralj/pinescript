@@ -1,0 +1,55 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Tillson T3 Moving Average", "T3", overlay=true)
+
+//@function Calculates T3 using six EMAs with volume factor optimization
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/t3.md
+//@param source Series to calculate T3 from
+//@param alpha Smoothing factor (typically 2/(period+1))
+//@param vfactor Volume factor controlling smoothing (default 0.7)
+//@returns T3 value with optimized coefficients
+t3(series float source, simple float alpha, simple float vfactor = 0.7) =>
+    if alpha <= 0
+        runtime.error("Alpha must be greater than 0")
+
+    var float[] raw_ema = array.new_float(6, na)
+    var float e = 0.0, var float sma = 0.0, var int count = 0
+    count := count + 1
+    sma := count == 1 ? source : (sma * (count - 1) + source) / count
+    e := count == 1 ? 0.0 : (1 - alpha) * e
+    float comp = e > 1e-10 ? 1.0 / (1.0 - e) : 1.0
+    float input = count <= math.round(2/alpha) ? sma : source
+
+    // Optimized coefficient calculation using volume factor powers
+    float v2 = vfactor * vfactor, v3 = v2 * vfactor
+    float[] c = array.from(-v3, 3.0 * (v2 + v3), -3.0 * (2.0 * v2 + vfactor + v3), 1.0 + 3.0 * vfactor + v3 + 3.0 * v2)
+
+    // Optimized EMA chain calculation
+    raw_ema.set(0, na(raw_ema.get(0)) ? input : alpha * (input - raw_ema.get(0)) + raw_ema.get(0))
+    float prev = raw_ema.get(0) * comp
+    for i = 1 to 5
+        raw_ema.set(i, na(raw_ema.get(i)) ? raw_ema.get(i-1) : alpha * (prev - raw_ema.get(i)) + raw_ema.get(i))
+        prev := raw_ema.get(i) * comp
+
+    // Final T3 calculation with compensation
+    comp * (c.get(0) * prev + c.get(1) * (raw_ema.get(4) * comp) +
+           c.get(2) * (raw_ema.get(3) * comp) + c.get(3) * (raw_ema.get(2) * comp))
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(10, "Period", minval=1)
+i_vfactor = input.float(0.7, "Volume Factor", minval=0.0, maxval=1.0, step=0.1)
+i_source = input.source(close, "Source")
+
+// Calculations
+alpha = 2.0/(float(i_period)+1.0)  // Calculate alpha from period
+t3 = t3(i_source, alpha, i_vfactor)   // Call function with parameters
+
+// Plots
+plot(t3, "T3", color.new(color.yellow, 0), 2)
+
+// Alert condition for price crossing T3
+alertcondition(ta.cross(i_source, t3), "Price Crosses T3", "Price crossed T3 on {{ticker}}")
