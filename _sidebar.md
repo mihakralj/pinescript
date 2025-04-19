@@ -1,6 +1,6 @@
 * [Home](/)
 
-* [Trends - FIR](./indicators/trends_FIR/_index.md) (10/12)
+* [Trends - FIR](./indicators/trends_FIR/_index.md) 10/12
   * [ALMA: Arnaud Legoux MA](indicators/trends_FIR/alma.md)
   * [DWMA: Double Weighted MA](indicators/trends_FIR/dwma.md)
   * [EPMA: Endpoint MA](indicators/trends_FIR/epma.md)
@@ -14,7 +14,7 @@
   * AFIRMA: Adaptive Finite Impulse Response MA
   * SWMA: Symmetric Weighted MA
 
-* [Trends - IIR](./indicators/trends_IIR/_index.md) (16/26)
+* [Trends - IIR](./indicators/trends_IIR/_index.md) 16/26
   * [DEMA: Double Exponential MA](indicators/trends_IIR/dema.md)
   * [DSMA: Deviation-Scaled MA](indicators/trends_IIR/dsma.md)
   * [EMA: Exponential MA](indicators/trends_IIR/ema.md)
@@ -42,7 +42,7 @@
   * VWMA: Volume Weighted MA
   * WCP: Weighted Closing Price
 
-* [Oscillators](./indicators/oscillators/_index.md) (0/46)
+* [Oscillators](./indicators/oscillators/_index.md) 0/46
   * AC: Acceleration Oscillator
   * AO: Awesome Oscillator
   * APO: Absolute Price Oscillator
@@ -94,7 +94,7 @@
   * ULTOSC: Ultimate Oscillator
   * WILLR: Williams %R
 
-* [Momentum Indicators](./indicators/momentum/_index.md) (0/21)
+* [Momentum Indicators](./indicators/momentum/_index.md) 0/21
   * APO: Absolute Price Oscillator
   * BOP: Balance of Power
   * CCI: Commodity Channel Index
@@ -117,7 +117,7 @@
   * ULTOSC: Ultimate Oscillator
   * WILLR: Williams %R
 
-* [Volatility Indicators](./indicators/volatility/_index.md) (0/17)
+* [Volatility Indicators](./indicators/volatility/_index.md) 0/17
   * ABBER: Aberration
   * ACCBANDS: Acceleration Bands
   * ADR: Average Daily Range
@@ -136,7 +136,7 @@
   * JVOLTY: Jurik Volatility
   * MASSI: Mass Index
 
-* [Volume Indicators](./indicators/volume/_index.md) (0/22)
+* [Volume Indicators](./indicators/volume/_index.md) 0/22
   * AD: Accumulation/Distribution Line
   * ADOSC: Chaikin A/D Oscillator
   * AOBV: Archer On-Balance Volume
@@ -160,7 +160,7 @@
   * VWMA: Volume Weighted MA
   * WAD: Williams Accumulation/Distribution
 
-* [Trend Dynamics](./indicators/dynamics/_index.md) (2/22)
+* [Trend Dynamics](./indicators/dynamics/_index.md) 2/22
   * [ADX: Average Directional Movement Index](indicators/dynamics/adx.md)
   * [AROON: Aroon](indicators/dynamics/aroon.md)
   * ADXR: Average Directional Movement Rating
@@ -184,7 +184,7 @@
   * TTM: TTM Trend
   * VORTEX: Vortex Indicator
 
-* [Cycles Indicators](./indicators/cycles/_index.md) (0/8)
+* [Cycles Indicators](./indicators/cycles/_index.md) 0/8
   * DSS: Double Smoothed Stochastic
   * EBSW: Even Better Sinewave
   * HT_DCPERIOD: Hilbert Transform - Dominant Cycle Period
@@ -194,7 +194,7 @@
   * MESA: MESA Sine Wave
   * SINE: Sine Wave
 
-* [Price Channels and Bands](./indicators/channels/_index.md) (0/21)
+* [Price Channels and Bands](./indicators/channels/_index.md) 0/21
   * ABBER: Aberration
   * ACCBANDS: Acceleration Bands
   * BB: Bollinger Bands
@@ -217,7 +217,7 @@
   * SDC: Standard Deviation Channel
   * STARC: Stoller Average Range Channel
 
-* [Stop and Reverse Indicators](./indicators/reversals/_index.md) (0/7)
+* [Stop and Reverse Indicators](./indicators/reversals/_index.md) 0/7
   * ATRS: ATR Trailing Stop
   * CE: Chandelier Exit
   * CKSP: Chande Kroll Stop
@@ -226,14 +226,14 @@
   * SUPER: SuperTrend
   * VS: Volatility Stop
 
-* [Signal Filters](./indicators/filters/_index.md) (4/5)
+* [Signal Filters](./indicators/filters/_index.md) 4/5
   * [EHBPF: Ehlers Bandpass Filter](indicators/filters/ehbpf.md)
   * [EHHPF: Ehlers Highpass Filter](indicators/filters/ehhpf.md)
   * [EHSSF: Ehlers Super Smoother Filter](indicators/filters/ehssf.md)
   * [EHUSF: Ehlers Ultra Smoother Filter](indicators/filters/ehusf.md)
   * MAAF: MA Adaptive Filter
 
-* [Numerics & Statistical Transformations](./indicators/numerics/_index.md) (0/22)
+* [Numerics & Statistical Transformations](./indicators/numerics/_index.md) 0/22
   * LINEAR: Linear Transformation
   * LOG: Logarithmic Transformation
   * EXP: Exponential Transformation
@@ -257,7 +257,7 @@
   * MODE: Mode
   * QUANTILE: Quantile
 
-* [Error Metrics](./indicators/errors/_index.md) (16/16)
+* [Error Metrics](./indicators/errors/_index.md) 16/16
   * [DIRTY: Dirty Data Injection](indicators/errors/dirty.md)
   * [HUBER: Huber Loss](indicators/errors/huber.md)
   * [MAE: Mean Absolute Error](indicators/errors/mae.md)
