@@ -2,7 +2,7 @@
 
 The Jurik Moving Average represents a breakthrough in adaptive filtering technology, achieving 97% noise reduction and sub-2.1 bar phase delay through multi-stage volatility normalization and dynamic parameter optimization. JMA's proprietary algorithm synthesizes adaptive volatility-based smoothing, intelligent phase compensation, and dynamic coefficient optimization, enabling 86% reduction in false signals while maintaining 99.7% correlation with price trends during volatile conditions and executing complete filter passes in under 10 microseconds on standard hardware.
 
-[Pine Script Implementation of JMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/jma.pine)
+[Pine Script Implementation of JMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/jma.pine)
 
 ## Mathematical Foundation
 

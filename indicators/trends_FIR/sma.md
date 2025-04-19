@@ -2,7 +2,7 @@
 
 The Simple Moving Average implements a foundational FIR architecture delivering 85% noise reduction through optimized recursive calculation, reducing computational overhead by 66% compared to traditional approaches. SMA's deterministic frequency-domain characteristics provide -13dB/octave roll-off and zero initialization bias, achieving 99.9% trend direction accuracy across 100,000 market cycles while maintaining perfect linear phase response and constant (p-1)/2 period group delay, ensuring precise signal morphology preservation across all timeframes.
 
-[Pine Script Implementation of SMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/sma.pine)
+[Pine Script Implementation of SMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sma.pine)
 
 ## Mathematical Foundation
 

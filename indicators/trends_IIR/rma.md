@@ -2,7 +2,7 @@
 
 The Wilder Moving Average implements a precision-optimized IIR architecture delivering 92% noise reduction and 99.9% numerical accuracy through specialized 1/N smoothing coefficient optimization. RMA's sophisticated error-tracking algorithm provides 47% superior noise suppression compared to standard EMAs and 95% trend correlation in volatile conditions through mathematically optimal recursive processing and enhanced smoothing mechanics, executing complete filter passes in under 0.25 microseconds on standard hardware.
 
-[Pine Script Implementation of RMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/rma.pine)
+[Pine Script Implementation of RMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rma.pine)
 
 ## Historical Context and Purpose
 

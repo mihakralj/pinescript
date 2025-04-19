@@ -2,7 +2,7 @@
 
 The Fractal Adaptive Moving Average represents a breakthrough in fractal-based adaptive filtering, achieving 92% noise reduction and 1.8 bar average lag through dynamic fractal dimension analysis and exponential coefficient optimization. FRAMA's sophisticated algorithm, developed by John Ehlers, synthesizes Hurst exponent principles with adaptive smoothing, enabling 89% reduction in false signals while maintaining 98.5% correlation with price trends during both trending and consolidating conditions.
 
-[Pine Script Implementation of FRAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/frama.pine)
+[Pine Script Implementation of FRAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/frama.pine)
 
 ## Core Concepts
 

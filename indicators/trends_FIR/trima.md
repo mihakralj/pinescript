@@ -2,7 +2,7 @@
 
 The Triangular Moving Average implements an optimized symmetric weight distribution architecture achieving 76% noise reduction through innovative double-smoothing process and triangular coefficient optimization. TRIMA's mathematically optimal center-weighted algorithm delivers -18dB/octave frequency roll-off with 96% signal preservation during trend transitions, achieving 71% reduction in whipsaw signals while maintaining 99.7% waveform fidelity through its symmetrical FIR implementation and perfect linear phase response, executing complete filter passes in under 0.4 microseconds on standard hardware.
 
-[Pine Script Implementation of TRIMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/trima.pine)
+[Pine Script Implementation of TRIMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/trima.pine)
 
 ## Mathematical Foundation
 
@@ -11,6 +11,7 @@ The TRIMA calculation applies a triangular weighting pattern to each data point:
 TRIMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
 
 Where:
+
 - P₁, P₂, ..., Pₙ are data values in the lookback window
 - w₁, w₂, ..., wₙ are the triangular weights
 - n is the number of periods (window size)

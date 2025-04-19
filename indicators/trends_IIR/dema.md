@@ -2,7 +2,7 @@
 
 The Double Exponential Moving Average implements an advanced dual-stage IIR filter architecture delivering 64% lag reduction and 92% noise suppression through strategic coefficient optimization. DEMA's innovative compensation algorithm provides 99.8% initialization accuracy and 43% faster trend detection than single-stage EMAs, while achieving 87% reduction in false signals during high-volatility conditions through enhanced frequency-domain selectivity and dual-cascade processing, executing complete filter passes in under 0.5 microseconds on standard hardware.
 
-[Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/predictors/dema.pine)
+[Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.pine)
 
 ## Mathematical Foundation
 

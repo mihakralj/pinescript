@@ -2,7 +2,7 @@
 
 The Modified Moving Average combines a simple moving average with a weighted component to provide a balanced smoothing effect. The weighting scheme emphasizes central values while maintaining overall data representation, delivering improved responsiveness compared to traditional moving averages while preserving stability through its dual-component approach.
 
-[Pine Script Implementation of MMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/mma.pine)
+[Pine Script Implementation of MMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/mma.pine)
 
 ## Mathematical Foundation
 

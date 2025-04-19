@@ -2,7 +2,7 @@
 
 The Arnaud Legoux Moving Average was developed by Arnaud Legoux and Jean-Charles Doux in 2009, introduced as a solution to the perpetual struggle between lag reduction and noise filtering in technical analysis. Legoux applied principles from signal processing and Gaussian statistics to create a more balanced approach. Unlike conventional moving averages that use linear or exponential weighting schemes, ALMA implements a Gaussian distribution curve to weight price data, placing the curve's peak near the most recent prices. This significantly reduces lag while maintaining effective noise filtering, addressing a fundamental challenge that had plagued technical analysts for decades.
 
-[Pine Script Implementation of ALMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/alma.pine)
+[Pine Script Implementation of ALMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/alma.pine)
 
 ## Mathematical Foundation
 

@@ -2,7 +2,7 @@
 
 The Weighted Moving Average implements a linear-progressive FIR architecture delivering 52% faster signal response and 83% noise reduction through precise arithmetic weight distribution. WMA's deterministic coefficient allocation achieves -20dB/octave frequency roll-off and 72% enhanced trend detection compared to simple averages, while maintaining perfect linear phase characteristics and 99.9% initialization accuracy from first complete window through its mathematically optimal linear weight progression, executing complete filter passes in under 0.3 microseconds on standard hardware.
 
-[Pine Script Implementation of WMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/wma.pine)
+[Pine Script Implementation of WMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/wma.pine)
 
 ## Mathematical Foundation
 

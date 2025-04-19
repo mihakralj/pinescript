@@ -2,7 +2,7 @@
 
 The Regularized Exponential Moving Average implements an adaptive smoothing architecture delivering 87% noise reduction and 93% trend identification accuracy through precision-tuned regularization coefficients and momentum-based parameter optimization. REMA's innovative lambda-controlled algorithm provides 76% reduction in false signals compared to standard EMAs and 91% trend correlation through dynamic momentum compensation and mathematically optimized regularization framework, executing complete filter passes in under 0.35 microseconds on standard hardware.
 
-[Pine Script Implementation of REMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/rema.pine)
+[Pine Script Implementation of REMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rema.pine)
 
 ## Mathematical Foundation
 

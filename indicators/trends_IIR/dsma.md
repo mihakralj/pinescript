@@ -2,7 +2,7 @@
 
 The Deviation-Scaled Moving Average implements an adaptive IIR filter architecture that dynamically adjusts to market volatility through standard deviation scaling. By automatically increasing responsiveness during high-deviation periods and maintaining stability during normal conditions, DSMA delivers 63% faster signal adaptation during volatile markets while preserving 82% noise reduction during stable phases. This hybrid approach achieves 91% accuracy in trend detection while executing in under 0.5 microseconds per data point on standard hardware.
 
-[Pine Script Implementation of DSMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/dsma.pine)
+[Pine Script Implementation of DSMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dsma.pine)
 
 ## Mathematical Foundation
 

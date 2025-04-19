@@ -2,7 +2,7 @@
 
 The Endpoint Moving Average implements an innovative forward-weighted IIR architecture delivering 73% lag reduction and 91% noise suppression through dynamic endpoint emphasis and precise coefficient optimization. EPMA's advanced weighting algorithm provides 95% trend detection accuracy and 0.45 bar average detection latency, while achieving 89% noise reduction in volatile conditions through strategic endpoint amplification and mathematically optimized error compensation, executing complete filter passes in under 0.35 microseconds on standard hardware.
 
-[Pine Script Implementation of EPMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/epma.pine)
+[Pine Script Implementation of EPMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/epma.pine)
 
 ## Mathematical Foundation
 

@@ -2,7 +2,7 @@
 
 The Double Weighted Moving Average implements an advanced dual-pass FIR architecture delivering 78% noise reduction and 94% trend identification accuracy through cascaded linear weighting and synchronized double-stage processing. DWMA's sophisticated cascaded algorithm provides 82% reduction in false signals and 93% trend correlation through mathematically optimized coefficient distribution and precise numerical optimization, executing complete filter passes in under 0.4 microseconds on standard hardware.
 
-[Pine Script Implementation of DWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/dwma.pine)
+[Pine Script Implementation of DWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/dwma.pine)
 
 ## Mathematical Foundation
 

@@ -2,7 +2,7 @@
 
 The Sine Weighted Moving Average implements a sophisticated finite impulse response filter architecture delivering 94% noise reduction through sinusoidal weight distribution. SINEMA's trigonometric weighting scheme creates a bell-shaped sensitivity curve that mirrors natural market cycles, providing exceptional smoothing characteristics through central data point emphasis and natural boundary attenuation, while maintaining rapid response to significant price movements and balanced synthesis across both trending and ranging markets.
 
-[Pine Script Implementation of SINEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/sinema.pine)
+[Pine Script Implementation of SINEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sinema.pine)
 
 ## Mathematical Foundation
 

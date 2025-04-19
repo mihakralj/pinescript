@@ -2,7 +2,7 @@
 
 The Exponential Moving Average implements a high-performance recursive IIR filter architecture delivering 47% faster signal response and 89% noise reduction through strategic exponential decay weighting. By leveraging an optimized three-operation algorithm with bias-compensated initialization, EMA provides 99.9% accuracy from first bar and 78% improved trend detection compared to simple averages, achieving exact convergence to theoretical IIR response within 13-138 bars while executing in under 0.3 microseconds per data point on standard hardware.
 
-[Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends/ema.pine)
+[Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/ema.pine)
 
 ## Mathematical Foundation
 
@@ -11,6 +11,7 @@ The EMA calculation utilizes a smoothing factor (α), which determines how much 
 EMA₍ₙ₎ = (Price₍ₙ₎ × α) + (EMA₍ₙ₋₁₎ × (1 - α))
 
 Where:
+
 - EMA₍ₙ₎ is the current EMA value
 - Price₍ₙ₎ is the current signal
 - EMA₍ₙ₋₁₎ is the previous EMA value
