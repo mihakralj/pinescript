@@ -2,11 +2,11 @@
 
 | Code       | Name                                   | Status | Description                                                      |
 |------------|---------------------------------------|--------|------------------------------------------------------------------|
-| [ADX](/indicators/dynamics/adx.md)        | Average Directional Movement Index    | ✅     | Measures trend strength                                          |
+| [ADX](/indicators/dynamics/adx.md)        | Average Directional Movement Index    | ✔️     | Measures trend strength                                          |
 | ADXR       | Average Directional Movement Rating   | ❌     | Smoothed version of ADX                                          |
 | ALLIGATOR  | Williams Alligator                    | ❌     | Three smoothed MAs to identify trends                            |
 | AMAT       | Archer MAs Trends                     | ❌     | System using multiple MAs to identify trends                      |
-| [AROON](/indicators/dynamics/aroon.md)      | Aroon                                 | ✅     | Measures time between highs and lows                             |
+| [AROON](/indicators/dynamics/aroon.md)      | Aroon                                 | ✔️     | Measures time between highs and lows                             |
 | AROONOSC   | Aroon Oscillator                      | ❌     | Difference between Aroon Up and Aroon Down                       |
 | CHOP       | Choppiness Index                      | ❌     | Measures market choppiness or trendiness                         |
 | DX         | Directional Movement Index            | ❌     | Measures trend strength                                          |

@@ -12,10 +12,10 @@
 | CWT        | Continuous Wavelet Transform| ❌     | Time-frequency analysis with variable resolution             |
 | DWT        | Discrete Wavelet Transform  | ❌     | Multi-resolution analysis using wavelet decomposition        |
 | EACP       | Ehlers Autocorrelation Periodogram | ❌ | Advanced cycle detection using autocorrelation             |
-| [EHBPF](./indicators/filters/ehbpf.md)      | Ehlers Bandpass Filter                 | ✅     | Combines highpass and lowpass for frequency band isolation    |
-| [EHHPF](./indicators/filters/ehhpf.md)      | Ehlers Highpass Filter                 | ✅     | Isolates high-frequency components of price movement          |
-| [EHLP](./indicators/filters/ehlp.md)       | Ehlers Lowpass Filter      | ✅     | Smooths price data while preserving trend components          |
-| [EHUSF](./indicators/filters/ehusf.md)    | Ehlers Ultrasmooth Filter  | ✅     | Advanced smoothing with optimized coefficients                |
+| [EHBPF](./indicators/filters/ehbpf.md)      | Ehlers Bandpass Filter                 | ✔️     | Combines highpass and lowpass for frequency band isolation    |
+| [EHHPF](./indicators/filters/ehhpf.md)      | Ehlers Highpass Filter                 | ✔️     | Isolates high-frequency components of price movement          |
+| [EHLP](./indicators/filters/ehlp.md)       | Ehlers Lowpass Filter      | ✔️     | Smooths price data while preserving trend components          |
+| [EHUSF](./indicators/filters/ehusf.md)    | Ehlers Ultrasmooth Filter  | ✔️     | Advanced smoothing with optimized coefficients                |
 | HOMOD      | Homodyne Discriminator     | ❌     | Cycle detection using phase discrimination                    |
 | HP         | Hodrick-Prescott Filter    | ❌     | Trend extraction filter popular in quantitative analysis      |
 | HWC        | Holt-Winters Channel       | ❌     | Adaptive bands based on triple exponential smoothing          |

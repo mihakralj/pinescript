@@ -23,8 +23,8 @@
 | HLV        | High-Low Volatility                   | ❌     | Volatility based on high-low range                              |
 | HV         | Historical Volatility                 | ❌     | Standard deviation of price changes                              |
 | ICH        | Ichimoku Cloud                        | ❌     |                                                                |
-| [JVOLTY](/indicators/volatility/jvolty.md)      | Jurik Volatility                      | ✅     | Jurik's implementation of volatility                             |
-| [JVOLTYN](/indicators/volatility/jvoltyn.md)    | Normalized Jurik Volatility [0,1]     | ✅     | Jurik's implementation of volatility                             |
+| [JVOLTY](/indicators/volatility/jvolty.md)      | Jurik Volatility                      | ✔️     | Jurik's implementation of volatility                             |
+| [JVOLTYN](/indicators/volatility/jvoltyn.md)    | Normalized Jurik Volatility [0,1]     | ✔️     | Jurik's implementation of volatility                             |
 | KC         | Keltner Channels                      | ❌     |                                                                |
 | MASSI      | Mass Index                            | ❌     |                            |
 | NATR       | Normalized Average True Range         | ❌     | Measures market volatility                                       |

@@ -27,11 +27,21 @@
       --sidebar-nav-link-border-color: #58a6ff;
       --heading-color: #c9d1d9;
       --link-color: #58a6ff;
+      --ui-lib-typography-font-size: 18px;
+      --ui-lib-typography-line-height: 28px;
     }
 
     body {
       background-color: var(--background-primary);
       color: var(--text-color-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+      font-feature-settings: "tnum" on, "lnum" on;
+      font-style: normal;
+      font-size: var(--ui-lib-typography-font-size);
+      font-weight: 400;
+      font-variant-numeric: lining-nums tabular-nums;
+      line-height: var(--ui-lib-typography-line-height);
+      overflow-wrap: break-word;
     }
 
     .sidebar {
@@ -82,6 +92,11 @@
       color: var(--text-color-primary);
       max-width: 100%; /* Modified: Changed from default fixed width */
       padding: 2rem 1rem; /* Modified: Reduced horizontal padding */
+      font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+      font-feature-settings: "tnum" on, "lnum" on;
+      font-size: var(--ui-lib-typography-font-size);
+      line-height: var(--ui-lib-typography-line-height);
+      width: 100%;
     }
 
     .markdown-section code {
