@@ -11,15 +11,13 @@
 | ICH        | Ichimoku Cloud                        | ❌     | Japanese system for support/resistance and trends                |
 | KC         | Keltner Channel                       | ❌     | Volatility-based envelope set around EMA                         |
 | MAE        | MA Envelope                           | ❌     | Percentage bands around MA                                       |
-| MAX        | Highest value over period             | ❌     | Returns highest value over specified period                      |
-| MAXINDEX   | Index of highest value                | ❌     | Returns index of highest value over specified period             |
-| MIN        | Lowest value over period              | ❌     | Returns lowest value over specified period                       |
-| MININDEX   | Index of lowest value                 | ❌     | Returns index of lowest value over specified period              |
 | MINMAX     | Lowest and highest values             | ❌     | Returns both lowest and highest values over period               |
-| MINMAXINDEX| Indexes of lowest and highest values  | ❌     | Returns indexes of both lowest and highest values                |
 | PCH        | Price Channel                         | ❌     | Shows high and low points over a period                          |
-| PIV        | Pivot Points                          | ❌     | Calculates potential support/resistance levels                    |
-| PP         | Price Pivots                          | ❌     | Identifies price pivot points                                    |
-| RPP        | Rolling Pivot Points                  | ❌     | Rolling calculation of pivot points                              |
 | SDC        | Standard Deviation Channel            | ❌     | Channels based on standard deviation of price                    |
+| ATRB       | ATR Bands                            | ❌     | Volatility bands using Average True Range                       |
+| JVOLTY     | Jurik Volatility Channels            | ❌     | Advanced volatility-based channels with noise filtering         |
+| PPB        | Pivot Points Bands                   | ❌     | Support/resistance bands based on pivot calculations            |
+| REGC       | Regression Channels                  | ❌     | Linear regression with standard error bands                     |
+| STB        | Super Trend Bands                    | ❌     | Trend-following bands with volatility filtering                 |
 | STARC      | Stoller Average Range Channel         | ❌     | Combines SMA with ATR for trading bands                          |
+| VWAPB      | VWAP Bands                          | ❌     | Volume-weighted bands with standard deviation                   |
