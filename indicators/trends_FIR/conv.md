@@ -2,7 +2,7 @@
 
 The Convolution Moving Average implements a flexible, user-customizable filter that can apply any arbitrary kernel to price data. This generalized FIR filter allows traders to create specialized moving averages with unique frequency-domain characteristics by designing their own weight distributions or using predefined kernels. CONV enables superior control over noise reduction and signal preservation characteristics through direct kernel manipulation.
 
-[Pine Script Implementation of CONV](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/conv.md)
+[Pine Script Implementation of CONV](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/conv.pine)
 
 ## Mathematical Foundation
 

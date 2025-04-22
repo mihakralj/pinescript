@@ -2,7 +2,7 @@
 
 The Savitzky-Golay Moving Average implements polynomial-based smoothing that optimally preserves the higher moments of the data while filtering noise. SGMA uses least-squares polynomial fitting across a sliding window to enhance signal features such as maxima, minima, and width without introducing significant distortion. This advanced technique is particularly valuable for preserving rapid changes in trends while effectively removing noise.
 
-[Pine Script Implementation of SGMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sgma.md)
+[Pine Script Implementation of SGMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sgma.pine)
 
 ## Mathematical Foundation
 
@@ -30,11 +30,13 @@ The implementation uses pre-computed coefficients for common combinations of win
 ### Full Window and Polynomial Order Requirements
 
 SGMA requires:
+
 - An odd number of data points (window size)
 - A polynomial degree less than the window size
 - At least window size data points for a complete calculation
 
 The implementation handles the initialization period by:
+
 1. Using available data points with appropriate weighting
 2. Normalizing weights based on available valid (non-NA) values
 

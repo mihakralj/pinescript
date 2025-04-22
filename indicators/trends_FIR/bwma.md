@@ -2,7 +2,7 @@
 
 The Bessel-Weighted Moving Average implements an optimized weight distribution architecture using the Bessel function to achieve superior noise reduction with exceptional preservation of signal characteristics. BWMA's specialized weighting algorithm delivers excellent frequency response with minimal side-lobes while maintaining signal integrity during trend transitions, reducing whipsaw signals while preserving waveform fidelity through its symmetrical FIR implementation and linear phase response.
 
-[Pine Script Implementation of BWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/bwma.md)
+[Pine Script Implementation of BWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/bwma.pine)
 
 ## Mathematical Foundation
 

@@ -2,7 +2,7 @@
 
 The Blackman Moving Average implements an optimized weight distribution using the Blackman window function to achieve superior frequency domain characteristics. BLMA's cosine-based weighting algorithm provides excellent side-lobe suppression while preserving signal structure, reducing noise and false signals while maintaining accuracy during trend transitions through its symmetrical FIR implementation.
 
-[Pine Script Implementation of BLMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/blma.md)
+[Pine Script Implementation of BLMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/blma.pine)
 
 ## Mathematical Foundation
 
