@@ -1,18 +1,25 @@
 * [Home](/)
 
-* [Trends - FIR](./indicators/trends_FIR/_index.md) 10/12
+* [Trends - FIR](./indicators/trends_FIR/_index.md) 19/19
   * [ALMA: Arnaud Legoux MA](indicators/trends_FIR/alma.md)
+  * [AFIRMA: Adaptive Finite Impulse Response MA](indicators/trends_FIR/afirma.md)
+  * [BLMA: Blackman Window MA](indicators/trends_FIR/blma.md)
+  * [CONV: Convolution MA with any kernel](indicators/trends_FIR/conv.md)
+  * [BWMA: Bessel-Weighted MA](indicators/trends_FIR/bwma.md)
   * [DWMA: Double Weighted MA](indicators/trends_FIR/dwma.md)
   * [EPMA: Endpoint MA](indicators/trends_FIR/epma.md)
+  * [GWMA: Gaussian-Weighted MA](indicators/trends_FIR/gwma.md)
   * [HMA: Hull MA](indicators/trends_FIR/hma.md)
   * [HWMA: Holt-Winters MA](indicators/trends_FIR/hwma.md)
   * [PWMA: Pascal Weighted MA](indicators/trends_FIR/pwma.md)
+  * [SGMA: Savitzky-Golay MA](indicators/trends_FIR/sgma.md)
   * [SINEMA: Sine-weighted MA](indicators/trends_FIR/sinema.md)
   * [SMA: Simple MA](indicators/trends_FIR/sma.md)
   * [TRIMA: Triangular MA](indicators/trends_FIR/trima.md)
+  * [VWMA: Volume Weighted MA](indicators/trends_FIR/vwma.md)
+  * [HAMMA: Hamming Window MA](indicators/trends_FIR/hamma.md)
+  * [HANMA: Hanning Window MA](indicators/trends_FIR/hanma.md)
   * [WMA: Weighted MA](indicators/trends_FIR/wma.md)
-  * AFIRMA: Adaptive Finite Impulse Response MA
-  * SWMA: Symmetric Weighted MA
 
 * [Trends - IIR](./indicators/trends_IIR/_index.md) 16/26
   * [DEMA: Double Exponential MA](indicators/trends_IIR/dema.md)

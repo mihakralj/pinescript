@@ -8,28 +8,43 @@ indicator("Double Weighted Moving Average", "DWMA", overlay=true)
 //@param source Series to calculate DWMA from
 //@param period Lookback period for both smoothing passes
 //@returns DWMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
 dwma(series float src, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
     int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
-    float sum1 = 0.0, float weightSum1 = 0.0
-    for i = 0 to p - 1
-        if not na(src[i])
-            sum1 += src[i] * (p - i)
-            weightSum1 += p - i
-    float currentWma = weightSum1 > 0 ? sum1 / weightSum1 : na
-    var float[] wmaHistory = array.new_float(0)
-    array.push(wmaHistory, currentWma)
-    if array.size(wmaHistory) > period
-        array.shift(wmaHistory)
-    float sum2 = 0.0, float weightSum2 = 0.0
-    int availableValues = math.min(array.size(wmaHistory), p)
-    for i = 0 to availableValues - 1
-        float wmaVal = array.get(wmaHistory, availableValues - 1 - i)
-        if not na(wmaVal)
-            sum2 += wmaVal * (p - i)
-            weightSum2 += p - i
-    weightSum2 > 0 ? sum2 / weightSum2 : na
+    if p <= 1
+        src
+    else
+        float sum1 = 0.0
+        int weightSum1 = 0
+        for i = 0 to p - 1
+            float price = src[i]
+            if not na(price)
+                int weight = p - i
+                sum1 += price * weight
+                weightSum1 += weight
+        float currentWma = nz(sum1 / weightSum1, na)
+        var float[] wmaBuffer = array.new_float(period, na)
+        var int bufferPos = 0
+        var int validCount = 0
+        array.set(wmaBuffer, bufferPos, currentWma)
+        bufferPos := (bufferPos + 1) % period
+        validCount := math.min(validCount + 1, period)
+        if validCount <= 0
+            na
+        else
+            float sum2 = 0.0
+            int weightSum2 = 0
+            for i = 0 to validCount - 1
+                int idx = (bufferPos - 1 - i + period) % period
+                float wmaVal = array.get(wmaBuffer, idx)
+                if not na(wmaVal)
+                    int weight = p - i
+                    sum2 += wmaVal * weight
+                    weightSum2 += weight
+            nz(sum2 / weightSum2, na)
+
 
 
 // ---------- Main loop ----------
@@ -43,6 +58,3 @@ dwma = dwma(i_source, i_period)
 
 // Plot
 plot(dwma, "Custom DWMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, dwma), "Price Crosses DWMA", "Price crossed DWMA on {{ticker}}")

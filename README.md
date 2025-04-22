@@ -1,56 +1,99 @@
-# PineScript Technical Indicators Library
+# Pine Script Moving Averages
 
-![Pine Script v6.0](https://img.shields.io/badge/Pine%20Script-v6.0-blue?style=flat&logo=tradingview&logoColor=white)
+This repository contains a collection of Pine Script implementations for various moving average indicators. These indicators are widely used in technical analysis to identify trends and smooth out price data. Each indicator is implemented with detailed documentation and customizable parameters to suit different trading strategies.
 
-*A begrudgingly assembled pile of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI. Written in PineScript — because apparently, suffering builds character.*
+## Features
 
-## Welcome, young chart wizards
+- **Comprehensive Collection**: Includes popular moving averages such as SMA, EMA, DEMA, TEMA, and more.
+- **Customizable Parameters**: Easily adjust periods, sources, and other settings.
+- **Zero-Lag Variants**: Implements advanced zero-lag techniques for reduced lag.
+- **Documentation**: Each indicator is accompanied by a detailed Markdown file explaining its mathematical foundation, usage, and advantages.
+- **Alerts**: Built-in alert conditions for crossing signals.
 
-So you've decided to get rich using the arcane arts of Pine Script, huh? Good for you. This repository contains a patchwork quilt of lovingly hand-stitched technical indicators, each written with mathematical precision, begrudging care, and a healthy disdain for PineScript's idea of "features."
+## Indicators
 
-Don't worry if you're new to this – odds are high you are. And yes, some of this will look like algebra had a baby with Excel. But stick around. You might just learn something useful. Or at least how *not* to blow up your crypto account in Tradingview with some *can't fail* strategy off some Tiktok video.
+The following indicators are included:
 
-## Features (for those who read those)
+1. **Simple Moving Average (SMA)**
+   - [Documentation](docs/trends/sma.md)
+   - [Implementation](indicators/trends/sma.pine)
 
-- **Mathematically Accurate**: These aren't your average forum-copy-paste indicators. They're implemented as intended by people who know their FIRs from their IIRs. You're welcome.
-- **Optimized Code**: Because every millisecond counts when your backtest goes from +2000% to -73% in live trading.
-- **Proper Initialization**: No hand-waving with 'na' values or voodoo warm-up tricks. These scripts do it the right way, from bar one.
-- **Error Compensation**: FIR, IIR, LOL – if it can be made more accurate, I made it so. Because numbers matter. Especially when they're wrong.
-- **Reasonable Documentation**: When I felt like it, I wrote stuff down. If you're confused, it's either in the docs or your future.
-- **MIT Licensed**: Use it, abuse it, fork it, launch a coin named after it. Just don't DM asking for custom work. This is not Fiverr.
+2. **Exponential Moving Average (EMA)**
+   - [Documentation](docs/trends/ema.md)
+   - [Implementation](indicators/trends/ema.pine)
 
-## So... how do you use this?
+3. **Double Exponential Moving Average (DEMA)**
+   - [Documentation](docs/trends/dema.md)
+   - [Implementation](indicators/trends/dema.pine)
 
-1. Navigate to the `indicators/` folder. Find your poison – sorry, your *indicator*.
-2. If you have no idea what you're doing, copy the whole script. If you *think* you do, steal the function block and use it in your masterwork.
-3. Paste it into TradingView's editor. If you don't know where that is, you may not be ready. Go back. Train more.
-4. Apply it to your chart. Watch it do math better than your last three indicators combined. That includes many built-in indicators in PineScript library
-5. Shower the dev with Github stars and fame. Not because I care, but because validation keeps me from writing Python again.
+4. **Triple Exponential Moving Average (TEMA)**
+   - [Documentation](docs/trends/tema.md)
+   - [Implementation](indicators/trends/tema.pine)
 
-## What's in the box? (Besides existential dread)
+5. **Weighted Moving Average (WMA)**
+   - [Documentation](docs/trends/wma.md)
+   - [Implementation](indicators/trends/wma.pine)
 
-For detailed information about indicator types and characteristics, see:
+6. **Hull Moving Average (HMA)**
+   - [Documentation](docs/trends/hma.md)
+   - [Implementation](indicators/trends/hma.pine)
 
-- [Trends - Finite Impulse Response](./indicators/trends_FIR/_index.md)
-- [Trends - Infinite Impulse Response](./indicators/trends_IIR/_index.md)
-- [Oscillators](./indicators/oscillators/_index.md)
-- [Momentum Indicators](./indicators/momentum/_index.md)
-- [Volatility Indicators](./indicators/volatility/_index.md)
-- [Volume Indicators](./indicators/volume/_index.md)
-- [Trend Dynamics](./indicators/dynamics/_index.md)
-- [Cycles Indicators](./indicators/cycles/_index.md)
-- [Price Channels and Bands](./indicators/channels/_index.md)
-- [Stop and Reverse Indicators](./indicators/reversals/_index.md)
-- [Signal Filters](./indicators/filters/_index.md)
-- [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
-- [Error Metrics](./indicators/errors/_index.md)
+7. **Jurik Moving Average (JMA)**
+   - [Documentation](docs/trends/jma.md)
+   - [Implementation](indicators/trends/jma.pine)
 
-## Contributing (if you dare)
+8. **Wilder's Moving Average (RMA)**
+   - [Documentation](docs/trends/rma.md)
+   - [Implementation](indicators/trends/rma.pine)
 
-I wrote this stuff while cursing PineScript's quirks and limitations. If you want to contribute, be warned: your PR better be clean, efficient, and mathematically legit. Bonus points if it comes with no bugs and solves world hunger.
+9. **Endpoint Moving Average (EPMA)**
+   - [Documentation](docs/trends/epma.md)
+   - [Implementation](indicators/trends/epma.pine)
 
-Please don't ask me to make an "indicator that never fails to predict the future." I already made one: it's called "not trading."
+10. **Zero-Lag Exponential Moving Average (ZLEMA)**
+    - [Documentation](docs/trends/zlema.md)
+    - [Implementation](indicators/trends/zlema.pine)
+
+11. **Zero-Lag Double Exponential Moving Average (ZLDEMA)**
+    - [Documentation](docs/trends/zldema.md)
+    - [Implementation](indicators/trends/zldema.pine)
+
+12. **Zero-Lag Triple Exponential Moving Average (ZLTEMA)**
+    - [Documentation](docs/trends/zltema.md)
+    - [Implementation](indicators/trends/zltema.pine)
+
+13. **Triangular Moving Average (TRIMA)**
+    - [Documentation](docs/trends/trima.md)
+    - [Implementation](indicators/trends/trima.pine)
+
+14. **Double Weighted Moving Average (DWMA)**
+    - [Documentation](docs/trends/dwma.md)
+    - [Implementation](indicators/trends/dwma.pine)
+
+## Installation
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/your-username/pinescript.git
+   ```
+
+2. Open the desired `.pine` file in the Pine Script editor on TradingView.
+
+3. Customize the parameters as needed and add the script to your chart.
 
 ## License
 
-MIT. Do what you want. Seriously. Start a shady token. Build your own cult. Just don't blame me when the backtest lied to you.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Contributing
+
+Contributions are welcome! If you have suggestions for new indicators or improvements, feel free to open an issue or submit a pull request.
+
+## Acknowledgments
+
+- Developed by Miha Kralj.
+- Inspired by various technical analysis techniques and methodologies.
+
+---
+
+Happy Trading! 🚀

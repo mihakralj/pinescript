@@ -1,15 +1,15 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Pascal Weighted Moving Average", "PWMA", overlay=true)
+indicator("Hanning Moving Average", "HANMA", overlay=true)
 
-//@function Calculates PWMA using Pascal's triangle coefficients as weights with compensator
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/pwma.md
-//@param source Series to calculate PWMA from
+//@function Calculates HANMA using Hanning window weighting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hanma.md
+//@param source Series to calculate HANMA from
 //@param period Lookback period - FIR window size
-//@returns PWMA value, calculates from first bar using available data
+//@returns HANMA value, calculates from first bar using available data
 //@optimized for performance and dirty data
-pwma(series float source, simple int period) =>
+hanma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
     int p = math.min(bar_index + 1, period)
@@ -17,13 +17,9 @@ pwma(series float source, simple int period) =>
     var int last_p = 1
     if last_p != p
         weights := array.new_float(p, 0.0)
-        array.set(weights, 0, 1.0)
-        if p > 1
-            float prev_weight = 1.0
-            for i = 1 to p - 1
-                float curr_weight = prev_weight * (p - i) / i
-                array.set(weights, i, curr_weight)
-                prev_weight := curr_weight
+        for i = 0 to p - 1
+            float w = 0.5 * (1.0 - math.cos(2.0 * math.pi * i / (p - 1)))
+            array.set(weights, i, w)
         last_p := p
     float sum = 0.0
     float weight_sum = 0.0
@@ -42,7 +38,10 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-pwma_value = pwma(i_source, i_period)
+hanma_value = hanma(i_source, i_period)
 
 // Plot
-plot(pwma_value, "PWMA", color.new(color.yellow, 0), 2)
+plot(hanma_value, "HANMA", color.new(color.yellow, 0), 2)
+
+// Alert
+alertcondition(ta.cross(i_source, hanma_value), "Price Crosses HANMA", "Price crossed HANMA on {{ticker}}")

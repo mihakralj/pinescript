@@ -1,0 +1,21 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Accumulation/Distribution Line", "ADL", overlay=false)
+
+//@function Computes the Accumulation/Distribution (AD) line without using built-in cumulative functions
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/adl.md
+//@returns The cumulative Accumulation/Distribution value for the current bar
+adl() =>
+    money_flow = high != low ? ((2*close - high - low) / (high - low)) * volume : 0.0
+    var float cumAD = 0.0
+    cumAD := bar_index == 0 ? money_flow : cumAD + money_flow
+    cumAD
+
+// ---------- Main Loop ----------
+
+// Calculation
+adl = adl()
+
+// Plot
+plot(adl, "AD", color.new(color.yellow, 0), linewidth=2)

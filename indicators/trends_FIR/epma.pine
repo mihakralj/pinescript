@@ -7,22 +7,24 @@ indicator("Endpoint Moving Average", "EPMA", overlay=true)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/epma.md
 //@param source Series to calculate EPMA from
 //@param period Lookback period
-//@param endpoint_weight Weight factor for endpoint emphasis (≥1.0)
-//@returns EPMA value from first bar with proper compensation
-epma(series float source, simple int period, simple float endpoint_weight) =>
-    if period < 1
+//@returns EPMA value with proper weight distribution
+//@optimized for performance and dirty data
+epma(series float source, simple int period) =>
+    if period <= 0
         runtime.error("Period must be greater than 0")
-    if endpoint_weight < 1.0
-        runtime.error("Endpoint weight must be greater than or equal to 1.0")
-    var float EPSILON = 1e-10        // constant - smallest relevant value
-    var float raw_epma = 0.0
-    var float e = 1.0
-    float alpha = (2.0 * endpoint_weight) / (float(period) + endpoint_weight)
-    float endpoint_factor = endpoint_weight * alpha
-    float history_factor = 1.0 - endpoint_factor
-    raw_epma := endpoint_factor * source + history_factor * raw_epma
-    e := history_factor * e
-    e > EPSILON ? raw_epma / (1.0 - e) : raw_epma
+    int p = math.max(1, math.min(bar_index + 1, period))
+    if p <= 1
+        source
+    else
+        float weightedSum = 0.0
+        float totalWeight = 0.0
+        for i = 0 to p - 1
+            float price = source[i]
+            if not na(price)
+                int weight = p - i
+                weightedSum += price * weight
+                totalWeight += weight
+        nz(weightedSum / totalWeight, na)
 
 
 // ---------- Main loop ----------
@@ -30,13 +32,9 @@ epma(series float source, simple int period, simple float endpoint_weight) =>
 // Inputs
 i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
-i_endpoint_weight = input.float(1.5, "Endpoint Weight", minval=1.0, maxval=3.0, step=0.1)
 
 // Calculation
-epma = epma(i_source, i_period, i_endpoint_weight)
+epma = epma(i_source, i_period)
 
 // Plot
 plot(epma, "EPMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, epma), "Price Crosses EPMA", "Price crossed EPMA on {{ticker}}")

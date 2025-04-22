@@ -1,18 +1,23 @@
 # Finite Impulse Response (FIR) Trends and Predictors
 
-Finite Impulse Response (FIR) indicators use a fixed window of price data points and have a finite memory of past inputs. They compute outputs based solely on inputs within that window, making them mathematically predictable with deterministic frequency-domain characteristics.
-
-| Indicator  | Name                                    | Status | Description                                                  |
-|------------|----------------------------------------|--------|---------------------------------------------------------------|
-| AFIRMA     | Adaptive Finite Impulse Response MA     | ❌     | Uses finite impulse response filtering                       |
-| [ALMA](/indicators/trends_FIR/alma.md)       | Arnaud Legoux MA                       | ✔️     | Uses Gaussian distribution for weights                       |
-| [DWMA](/indicators/trends_FIR/dwma.md)       | Double Weighted MA                     | ✔️     | Double-weighted method for improved smoothing                |
-| [EPMA](/indicators/trends_FIR/epma.md)       | Endpoint MA                            | ✔️     | Basic average emphasizing recent endpoints                   |
-| [HMA](/indicators/trends_FIR/hma.md)        | Hull MA                                | ✔️     | Reduced lag WMA with trend emphasis                          |
-| [HWMA](/indicators/trends_FIR/hwma.md)       | Holt Weighted MA                       | ✔️     | Uses finite window with Holt's method                        |
-| [PWMA](/indicators/trends_FIR/pwma.md)       | Pascal Weighted MA                     | ✔️     | A MA that uses Pascal's triangle coefficients                |
-| [SMA](/indicators/trends_FIR/sma.md)        | Simple MA                              | ✔️     | Basic arithmetic mean of signal over N periods               |
-| [SINEMA](/indicators/trends_FIR/sinema.md)     | Sine-weighted MA                       | ✔️     | Uses sine function for weight distribution                   |
-| SWMA       | Symmetric Weighted MA                  | ❌     | Balanced weight distribution MA                              |
-| [TRIMA](/indicators/trends_FIR/trima.md)      | Triangular MA                          | ✔️     | Double-smoothed SMA with triangular weight distribution      |
-| [WMA](/indicators/trends_FIR/wma.md)        | Weighted MA                            | ✔️     | Linear-weighted average giving more weight to recent signals |
+| Indicator | Name |
+| ------------ | ---------------------------------------- |
+| [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA |
+| [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA |
+| [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA |
+| [CONV](/indicators/trends_FIR/conv.md) | Convolution MA with any kernel |
+| [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA |
+| [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA |
+| [EPMA](/indicators/trends_FIR/epma.md) | Endpoint MA |
+| [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted MA |
+| [HAMMA](/indicators/trends_FIR/hamma.md) | Hamming Window MA |
+| [HANMA](/indicators/trends_FIR/hanma.md) | Hanning Window MA |
+| [HMA](/indicators/trends_FIR/hma.md) | Hull MA |
+| [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA |
+| [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted MA |
+| [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA |
+| [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA |
+| [SMA](/indicators/trends_FIR/sma.md) | Simple MA |
+| [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA |
+| [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA |
+| [WMA](/indicators/trends_FIR/wma.md) | Weighted MA |

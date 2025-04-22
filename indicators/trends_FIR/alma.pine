@@ -10,6 +10,7 @@ indicator("Arnaud Legoux Moving Average", "ALMA", overlay=true)
 //@param offset Controls the Gaussian peak location (0 to 1)
 //@param sigma Controls the Gaussian distribution width/curve shape
 //@returns ALMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
 alma(series float source, simple int period, simple float offset = 0.85, simple float sigma = 6.0) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
@@ -17,23 +18,23 @@ alma(series float source, simple int period, simple float offset = 0.85, simple 
         runtime.error("Offset must be between 0 and 1")
     if sigma <= 0
         runtime.error("Sigma must be greater than 0")
-
-    int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
-    if p <= 0
+    int p = math.min(bar_index + 1, period)
+    if p <= 1
         source
     else
         float m = (1 - offset) * (p - 1)
         float s = p / sigma
-        float s2 = 2 * math.pow(s, 2)
+        float s2 = 2 * (s * s)
         float sum = 0.0
         float weight_sum = 0.0
         for i = 0 to p - 1
-            price = source[i]
+            float price = source[i]
             if not na(price)
-                float weight = math.exp(-math.pow(i - m, 2) / s2) // Gaussian weight
+                float diff = i - m
+                float weight = math.exp(-(diff * diff) / s2)
                 sum += price * weight
                 weight_sum += weight
-        weight_sum > 0 ? sum / weight_sum : source
+        nz(sum / weight_sum, source)
 
 
 // ---------- Main loop ----------
@@ -49,6 +50,3 @@ alma_value = alma(i_source, i_period, i_offset, i_sigma)
 
 // Plot
 plot(alma_value, "ALMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, alma_value), "Price Crosses ALMA", "Price crossed ALMA on {{ticker}}")

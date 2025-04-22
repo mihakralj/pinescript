@@ -1,54 +1,54 @@
 # Oscillators
 
-| Code       | Name                                   | Status | Description                                                      |
-|------------|---------------------------------------|--------|------------------------------------------------------------------|
-| AC         | Acceleration Oscillator               | ❌     | Measures acceleration of price movement                          |
-| AO         | Awesome Oscillator                    | ❌     | Measures market momentum using price midpoints                    |
-| APO        | Absolute Price Oscillator             | ❌     | Absolute difference between two MAs                              |
-| AROON      | Aroon                                 | ❌     | Measures time between highs and lows                             |
-| AROONOSC   | Aroon Oscillator                      | ❌     | Difference between Aroon Up and Aroon Down                       |
-| BBI        | Bulls Bears Index                     | ❌     | Compares bullish and bearish market forces                       |
-| BIAS       | Bias                                  | ❌     | Measures deviation of price from MA                              |
-| BOP        | Balance of Power                      | ❌     | Measures strength of buyers vs sellers                           |
-| BRAR       | BRAR                                  | ❌     | Compares bullish and bearish forces                              |
-| CCI        | Commodity Channel Index               | ❌     | Measures current price relative to average price                  |
-| CFO        | Chande Forecast Oscillator            | ❌     | Compares price to linear regression forecast                     |
-| CG         | Center of Gravity                     | ❌     | Measures cyclical components of price movement                   |
-| CHOP       | Choppiness Index                      | ❌     | Measures market choppiness or trendiness                         |
-| CMO        | Chande Momentum Oscillator            | ❌     | Momentum oscillator measuring relative strength/weakness          |
-| COPPOCK    | Coppock Curve                         | ❌     | Long-term momentum indicator                                     |
-| CRSI       | Connors RSI                           | ❌     | Enhanced RSI that incorporates multiple factors                   |
-| CTI        | Correlation Trend Indicator           | ❌     | Uses correlation to identify trends                              |
-| DOSC       | Derivative Oscillator                 | ❌     | Derivative of an oscillator                                      |
-| EFI        | Elder Force Index                     | ❌     | Measures force behind price movement                             |
-| ER         | Efficiency Ratio                      | ❌     | Measures market efficiency                                       |
-| ERI        | Elder Ray Index                       | ❌     | Measures bull and bear power                                     |
-| FISHER     | Fisher Transform                      | ❌     | Converts price to normal distribution                            |
-| FOSC       | Forecast Oscillator                   | ❌     | Compares price to linear regression forecast                     |
-| INERTIA    | Inertia                               | ❌     | Measures resistance to price movement                            |
-| KDJ        | KDJ Indicator                         | ❌     | Modified stochastic indicator                                    |
-| KRI        | Kairi Relative Index                  | ❌     | Measures deviation from MA                                       |
-| KST        | KST Oscillator                        | ❌     | Long-term momentum oscillator                                    |
-| MFI        | Money Flow Index                      | ❌     | Volume-weighted RSI, measures buying/selling pressure            |
-| MOM        | Momentum                              | ❌     | Measures rate of price change                                    |
-| PGO        | Pretty Good Oscillator                | ❌     | Measures price strength                                          |
-| PPO        | Percentage Price Oscillator           | ❌     | Shows relationship between two MAs as percentage                 |
-| PSL        | Psychological Line                    | ❌     | Measures market sentiment                                        |
-| PVO        | Percentage Volume Oscillator          | ❌     | Shows volume trend using percentage                              |
-| QQE        | Quantitative Qualitative Estimation   | ❌     | Advanced RSI-based indicator                                     |
-| ROC        | Rate of Change                        | ❌     | Measures percentage change in price                              |
-| RSI        | Relative Strength Index               | ❌     | Measures speed and change of price movements                     |
-| RSX        | Relative Strength Xtra                | ❌     | Enhanced RSI calculation                                         |
-| RVI        | Relative Vigor Index                  | ❌     | Compares closing price to opening price                          |
-| RVGI       | Relative Vigor Index                  | ❌     | Enhanced measurement of price vigor                              |
-| SLOPE      | Slope                                 | ❌     | Measures rate of change of linear regression                     |
-| SMI        | Stochastic Momentum Index             | ❌     | Improved stochastic oscillator                                   |
-| SQUEEZE    | Squeeze                               | ❌     | Identifies market compression and expansion                      |
-| STOCH      | Stochastic Oscillator                 | ❌     | Compares closing price to price range over time                  |
-| STOCHF     | Stochastic Fast                       | ❌     | Fast stochastic calculation                                      |
-| STOCHRSI   | Stochastic RSI                        | ❌     | Applies stochastic calculation to RSI values                     |
-| TD_SEQ     | TD Sequential                         | ❌     | Tom DeMark's sequential indicator                                |
-| TRIX       | Triple Exponential Average            | ❌     | Triple-smoothed momentum oscillator                              |
-| TSI        | True Strength Index                   | ❌     | Double-smoothed momentum oscillator                              |
-| ULTOSC     | Ultimate Oscillator                   | ❌     | Multi-timeframe weighted oscillator                              |
-| WILLR      | Williams %R                           | ❌     | Measures overbought/oversold levels                              |
+| Code | Name |
+| ------------ | --------------------------------------- |
+| AC | Acceleration Oscillator |
+| AO | Awesome Oscillator |
+| APO | Absolute Price Oscillator |
+| AROON | Aroon |
+| AROONOSC | Aroon Oscillator |
+| BBI | Bulls Bears Index |
+| BIAS | Bias |
+| BOP | Balance of Power |
+| BRAR | BRAR |
+| CCI | Commodity Channel Index |
+| CFO | Chande Forecast Oscillator |
+| CG | Center of Gravity |
+| CHOP | Choppiness Index |
+| CMO | Chande Momentum Oscillator |
+| COPPOCK | Coppock Curve |
+| CRSI | Connors RSI |
+| CTI | Correlation Trend Indicator |
+| DOSC | Derivative Oscillator |
+| EFI | Elder Force Index |
+| ER | Efficiency Ratio |
+| ERI | Elder Ray Index |
+| FISHER | Fisher Transform |
+| FOSC | Forecast Oscillator |
+| INERTIA | Inertia |
+| KDJ | KDJ Indicator |
+| KRI | Kairi Relative Index |
+| KST | KST Oscillator |
+| MFI | Money Flow Index |
+| MOM | Momentum |
+| PGO | Pretty Good Oscillator |
+| PPO | Percentage Price Oscillator |
+| PSL | Psychological Line |
+| PVO | Percentage Volume Oscillator |
+| QQE | Quantitative Qualitative Estimation |
+| ROC | Rate of Change |
+| RSI | Relative Strength Index |
+| RSX | Relative Strength Xtra |
+| RVI | Relative Vigor Index |
+| RVGI | Relative Vigor Index |
+| SLOPE | Slope |
+| SMI | Stochastic Momentum Index |
+| SQUEEZE | Squeeze |
+| STOCH | Stochastic Oscillator |
+| STOCHF | Stochastic Fast |
+| STOCHRSI | Stochastic RSI |
+| TD_SEQ | TD Sequential |
+| TRIX | Triple Exponential Average |
+| TSI | True Strength Index |
+| ULTOSC | Ultimate Oscillator |
+| WILLR | Williams %R |

@@ -8,25 +8,25 @@ indicator("Simple Moving Average", "SMA", overlay=true)
 //@param source Series to calculate SMA from
 //@param period Lookback period - FIR window size
 //@returns SMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
 sma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    int p = math.min(math.max(1, period), 4000)
-    var float[] buffer = array.new_float(p, na)
+    var int p = math.min(math.max(1, period), 4000)
+    var array<float> buffer = array.new_float(p, na)
     var int head = 0
     var float sum = 0.0
     var int valid_count = 0
     float oldest = array.get(buffer, head)
     if not na(oldest)
-        sum := sum - oldest
-        valid_count := valid_count - 1
+        sum -= oldest
+        valid_count -= 1
     if not na(source)
-        sum := sum + source
-        valid_count := valid_count + 1
+        sum += source
+        valid_count += 1
     array.set(buffer, head, source)
     head := (head + 1) % p
-    valid_count > 0 ? sum / valid_count : source
-
+    nz(sum / valid_count, source)
 
 // ---------- Main loop ----------
 
@@ -35,10 +35,10 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-sma = sma(i_source, i_period)
+sma_value = sma(i_source, i_period)
 
 // Plot
-plot(sma, "Custom SMA", color.new(color.yellow, 0), 2)
+plot(sma_value, "Custom SMA", color.new(color.yellow, 0), 2)
 
 // Alert
-alertcondition(ta.cross(i_source, sma), "Price Crosses SMA", "Price crossed SMA on {{ticker}}")
+alertcondition(ta.cross(i_source, sma_value), "Price Crosses SMA", "Price crossed SMA on {{ticker}}")

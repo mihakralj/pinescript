@@ -1,0 +1,25 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Long name", "short name", overlay=true)
+
+//@function description
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.md
+//@param source 
+//@param 
+//@returns 
+template(series float source) =>
+    0.0
+
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(close, "Source")
+i_period = input.int(20, "Period", minval=1)
+
+// Calculation
+
+// Plot
+plot(i_source, "name", color.new(color.yellow, 0), 2)

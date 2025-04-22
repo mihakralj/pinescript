@@ -8,40 +8,33 @@ indicator("Hull Moving Average", "HMA", overlay=true)
 //@param source Series to calculate HMA from
 //@param period Lookback period - FIR window size
 //@returns HMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
 hma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
-    int half_period = math.max(1, math.round(p / 2))
-    int sqrt_period = math.max(1, math.round(math.sqrt(p)))
-    float sum_half = 0.0
-    float sum_full = 0.0
-    float sum_sqrt = 0.0
-    float weight_half = math.max(0.1, half_period * (half_period + 1) * 0.5)
-    float weight_full = math.max(0.1, p * (p + 1) * 0.5)
-    float weight_sqrt = math.max(0.1, sqrt_period * (sqrt_period + 1) * 0.5)
+    p = math.min(bar_index + 1, period)
+    half_p = math.max(1, math.round(p / 2))
+    sqrt_p = math.max(1, math.round(math.sqrt(p)))
+    sum_half = 0.0, sum_full = 0.0, sum_sqrt = 0.0, weight_half = 0.0, weight_full = 0.0, weight_sqrt = 0.0
     for i = 0 to p - 1
         price = source[i]
-        float w_half = i < half_period ? half_period - i : 0.0
-        float w_full = p - i
         if not na(price)
+            w_half = i < half_p ? half_p - i : 0
+            w_full = p - i
             sum_half += price * w_half
             sum_full += price * w_full
-        else
-            if w_half > 0
-                weight_half -= math.max(0.1, w_half)
-            weight_full -= math.max(0.1, w_full)
-    float wma_half = sum_half / weight_half
-    float wma_full = sum_full / weight_full
-    float diff = 2.0 * wma_half - wma_full
-    for i = 0 to sqrt_period - 1
-        float d = diff[i]
-        float w_sqrt = sqrt_period - i
+            weight_half += w_half
+            weight_full += w_full
+    wma_half = nz(sum_half / weight_half, na)
+    wma_full = nz(sum_full / weight_full, na)
+    diff = na(wma_half) or na(wma_full) ? na : 2.0 * wma_half - wma_full
+    for i = 0 to sqrt_p - 1
+        d = diff[i]
         if not na(d)
+            w_sqrt = sqrt_p - i
             sum_sqrt += d * w_sqrt
-        else
-            weight_sqrt -= math.max(0.1, w_sqrt)
-    sum_sqrt / weight_sqrt
+            weight_sqrt += w_sqrt
+    nz(sum_sqrt / weight_sqrt, na)
 
 
 // ---------- Main loop ----------
@@ -55,6 +48,3 @@ hma = hma(i_source, i_period)
 
 // Plot
 plot(hma, "Custom HMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, hma), "Price Crosses HMA", "Price crossed HMA on {{ticker}}")
