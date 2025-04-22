@@ -1,0 +1,477 @@
+//@version=6
+// The MIT License (MIT)
+// © mihakralj
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/_index.md
+
+library("errors", overlay=false)
+
+//@function Calculates Mean Absolute Error between two sources using SMA for averaging
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mae.md
+//@param source1 First series to compare
+//@param source2 Second series to compare
+//@param period Lookback period for error averaging
+//@returns MAE value averaged over the specified period using SMA
+export mae(series float source1, series float source2, simple int period) =>
+    absolute_error = math.abs(source1 - source2)
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(absolute_error)
+        sum := sum + absolute_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, absolute_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : absolute_error
+
+//@function Calculates Mean Squared Error between two sources using SMA for averaging
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mse.md
+//@param source1 First series to compare
+//@param source2 Second series to compare
+//@param period Lookback period for error averaging
+//@returns MSE value averaged over the specified period using SMA
+export mse(series float source1, series float source2, simple int period) =>
+    squared_error = math.pow(source1 - source2, 2)
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(squared_error)
+        sum := sum + squared_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, squared_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : squared_error
+
+//@function Calculates Root Mean Squared Error between two sources using SMA for averaging
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rmse.md
+//@param source1 First series to compare
+//@param source2 Second series to compare
+//@param period Lookback period for error averaging
+//@returns RMSE value averaged over the specified period using SMA
+export rmse(series float source1, series float source2, simple int period) =>
+    squared_error = math.pow(source1 - source2, 2)
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(squared_error)
+        sum := sum + squared_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, squared_error)
+    head := (head + 1) % p
+    float mse = valid_count > 0 ? sum / valid_count : squared_error
+    math.sqrt(mse)
+
+//@function Calculates Huber error between two sources
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/huber.md
+//@param source1 First series to compare
+//@param source2 Second series to compare
+//@param period Lookback period for error averaging
+//@param delta Threshold for transition between MSE and MAE (default: 1.0)
+//@returns Huber error value averaged over the specified period
+export huber(series float source1, series float source2, simple int period, simple float delta = 1.0) =>
+    error = source1 - source2
+    huber_error = math.abs(error) <= delta ? 0.5 * math.pow(error, 2) : delta * (math.abs(error) - 0.5 * delta)
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(huber_error)
+        sum := sum + huber_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, huber_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : huber_error
+
+//@function Calculates Mean Absolute Percentage Deviation
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mapd.md
+//@param source1 First series to compare
+//@param source2 Second series to compare
+//@param period Lookback period for error averaging
+//@returns MAPD value averaged over the specified period
+export mapd(series float source1, series float source2, simple int period) =>
+    percentage_diff = source2 != 0 ? math.abs(source1 - source2) / math.abs(source2) : na
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(percentage_diff)
+        sum := sum + percentage_diff
+        valid_count := valid_count + 1
+    array.set(buffer, head, percentage_diff)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : percentage_diff
+
+//@function Calculates Mean Absolute Percentage Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mape.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns MAPE value averaged over the specified period
+export mape(series float source1, series float source2, simple int period) =>
+    percentage_error = source1 != 0 ? math.abs((source1 - source2) / source1) : na
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(percentage_error)
+        sum := sum + percentage_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, percentage_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : percentage_error
+
+//@function Calculates Mean Absolute Scaled Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mase.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@param naive_period Period for naive forecast (default: 1)
+//@returns MASE value averaged over the specified period
+export mase(series float source1, series float source2, simple int period, simple int naive_period = 1) =>
+    error = math.abs(source1 - source2)
+    naive_error = math.abs(source1 - source1[naive_period])
+    scaled_error = naive_error != 0 ? error / naive_error : na
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(scaled_error)
+        sum := sum + scaled_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, scaled_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : scaled_error
+
+//@function Calculates Mean Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/me.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns ME value averaged over the specified period
+export me(series float source1, series float source2, simple int period) =>
+    error = source1 - source2
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(error)
+        sum := sum + error
+        valid_count := valid_count + 1
+    array.set(buffer, head, error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : error
+
+//@function Calculates Mean Percentage Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mpe.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns MPE value averaged over the specified period
+export mpe(series float source1, series float source2, simple int period) =>
+    percentage_error = source1 != 0 ? (source1 - source2) / source1 : na
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(percentage_error)
+        sum := sum + percentage_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, percentage_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : percentage_error
+
+//@function Calculates Mean Squared Logarithmic Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/msle.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns MSLE value averaged over the specified period
+export msle(series float source1, series float source2, simple int period) =>
+    s1 = source1 > 0 ? source1 : 0.00001
+    s2 = source2 > 0 ? source2 : 0.00001
+    log_error = math.pow(math.log(s1) - math.log(s2), 2)
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(log_error)
+        sum := sum + log_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, log_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : log_error
+
+//@function Calculates Relative Absolute Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rae.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns RAE value averaged over the specified period
+export rae(series float source1, series float source2, simple int period) =>
+    mae_value = math.abs(source1 - source2)
+    mean_actual = 0.0
+    var float[] actuals = array.new_float(period, na)
+    var int head = 0
+    var float sum_actual = 0.0
+    var int valid_count_actual = 0
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    
+    float oldest_actual = array.get(actuals, head)
+    if not na(oldest_actual)
+        sum_actual := sum_actual - oldest_actual
+        valid_count_actual := valid_count_actual - 1
+    if not na(source1)
+        sum_actual := sum_actual + source1
+        valid_count_actual := valid_count_actual + 1
+    array.set(actuals, head, source1)
+    mean_actual := valid_count_actual > 0 ? sum_actual / valid_count_actual : source1
+    
+    abs_mean_diff = math.abs(source1 - mean_actual)
+    
+    var float[] buffer = array.new_float(p, na)
+    var float[] mean_diff_buffer = array.new_float(p, na)
+    var float sum_error = 0.0
+    var float sum_mean_diff = 0.0
+    var int valid_count = 0
+    
+    float oldest_error = array.get(buffer, head)
+    float oldest_mean_diff = array.get(mean_diff_buffer, head)
+    
+    if not na(oldest_error) and not na(oldest_mean_diff)
+        sum_error := sum_error - oldest_error
+        sum_mean_diff := sum_mean_diff - oldest_mean_diff
+        valid_count := valid_count - 1
+    
+    if not na(mae_value) and not na(abs_mean_diff)
+        sum_error := sum_error + mae_value
+        sum_mean_diff := sum_mean_diff + abs_mean_diff
+        valid_count := valid_count + 1
+    
+    array.set(buffer, head, mae_value)
+    array.set(mean_diff_buffer, head, abs_mean_diff)
+    head := (head + 1) % p
+    
+    sum_mean_diff != 0 and valid_count > 0 ? (sum_error / valid_count) / (sum_mean_diff / valid_count) : na
+
+//@function Calculates Root Mean Squared Logarithmic Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rmsle.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns RMSLE value averaged over the specified period
+export rmsle(series float source1, series float source2, simple int period) =>
+    s1 = source1 > 0 ? source1 : 0.00001
+    s2 = source2 > 0 ? source2 : 0.00001
+    log_error = math.pow(math.log(s1) - math.log(s2), 2)
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(log_error)
+        sum := sum + log_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, log_error)
+    head := (head + 1) % p
+    float msle = valid_count > 0 ? sum / valid_count : log_error
+    math.sqrt(msle)
+
+//@function Calculates Relative Squared Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rse.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns RSE value averaged over the specified period
+export rse(series float source1, series float source2, simple int period) =>
+    squared_error = math.pow(source1 - source2, 2)
+    
+    mean_actual = 0.0
+    var float[] actuals = array.new_float(period, na)
+    var int head = 0
+    var float sum_actual = 0.0
+    var int valid_count_actual = 0
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    
+    float oldest_actual = array.get(actuals, head)
+    if not na(oldest_actual)
+        sum_actual := sum_actual - oldest_actual
+        valid_count_actual := valid_count_actual - 1
+    if not na(source1)
+        sum_actual := sum_actual + source1
+        valid_count_actual := valid_count_actual + 1
+    array.set(actuals, head, source1)
+    mean_actual := valid_count_actual > 0 ? sum_actual / valid_count_actual : source1
+    
+    squared_mean_diff = math.pow(source1 - mean_actual, 2)
+    
+    var float[] buffer = array.new_float(p, na)
+    var float[] mean_diff_buffer = array.new_float(p, na)
+    var float sum_error = 0.0
+    var float sum_mean_diff = 0.0
+    var int valid_count = 0
+    
+    float oldest_error = array.get(buffer, head)
+    float oldest_mean_diff = array.get(mean_diff_buffer, head)
+    
+    if not na(oldest_error) and not na(oldest_mean_diff)
+        sum_error := sum_error - oldest_error
+        sum_mean_diff := sum_mean_diff - oldest_mean_diff
+        valid_count := valid_count - 1
+    
+    if not na(squared_error) and not na(squared_mean_diff)
+        sum_error := sum_error + squared_error
+        sum_mean_diff := sum_mean_diff + squared_mean_diff
+        valid_count := valid_count + 1
+    
+    array.set(buffer, head, squared_error)
+    array.set(mean_diff_buffer, head, squared_mean_diff)
+    head := (head + 1) % p
+    
+    sum_mean_diff != 0 and valid_count > 0 ? (sum_error / valid_count) / (sum_mean_diff / valid_count) : na
+
+//@function Calculates R-squared (coefficient of determination)
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rsquared.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for averaging
+//@returns R-squared value averaged over the specified period
+export rsquared(series float source1, series float source2, simple int period) =>
+    rse_value = rse(source1, source2, period)
+    1 - nz(rse_value, 0)
+
+//@function Calculates Symmetric Mean Absolute Percentage Error
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/smape.md
+//@param source1 First series to compare (actual)
+//@param source2 Second series to compare (forecast)
+//@param period Lookback period for error averaging
+//@returns SMAPE value averaged over the specified period
+export smape(series float source1, series float source2, simple int period) =>
+    abs_diff = math.abs(source1 - source2)
+    abs_sum = math.abs(source1) + math.abs(source2)
+    smape_error = abs_sum != 0 ? 2 * abs_diff / abs_sum : na
+    
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(math.max(1, period), 4000)
+    var float[] buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum := sum - oldest
+        valid_count := valid_count - 1
+    if not na(smape_error)
+        sum := sum + smape_error
+        valid_count := valid_count + 1
+    array.set(buffer, head, smape_error)
+    head := (head + 1) % p
+    valid_count > 0 ? sum / valid_count : smape_error
+
+//@function Injects NA values into a data series at regular intervals
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/dirty.md
+//@param source Series to inject NA values into
+//@param interval Frequency of NA value injections
+//@param gap_size Size of NA value gaps
+//@returns Series with NA values injected at specified intervals
+export dirty(series float source, simple int interval = 10, simple int gap_size = 1) =>
+    result = source
+    if bar_index == 0
+        result := na
+    else
+        cycle_position = bar_index % interval
+        if cycle_position < gap_size
+            result := na
+    result

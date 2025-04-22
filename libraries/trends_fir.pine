@@ -1,0 +1,688 @@
+//@version=6
+// The MIT License (MIT)
+// © mihakralj
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/_index.md
+
+library("fir", overlay=false)
+
+//@function Calculates SMA using simple smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sma.md
+//@param source Series to calculate SMA from
+//@param period Lookback period - FIR window size
+//@returns SMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export sma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    var int p = math.min(math.max(1, period), 4000)
+    var array<float> buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum -= oldest
+        valid_count -= 1
+    if not na(source)
+        sum += source
+        valid_count += 1
+    array.set(buffer, head, source)
+    head := (head + 1) % p
+    nz(sum / valid_count, source)
+
+//@function Calculates a convolution MA using any custom kernel
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/conv.md
+//@param source Series to calculate CONV from
+//@param kernel Array of weights to use as convolution kernel
+//@returns CONV value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export conv(series float source, simple array<float> kernel) =>
+    int kernel_size = array.size(kernel)
+    if kernel_size <= 0
+        runtime.error("Kernel must not be empty")
+    var array<float> norm_kernel = array.new_float(1, 1.0)
+    var int last_kernel_size = 1
+    if last_kernel_size != kernel_size
+        norm_kernel := array.copy(kernel)
+        float kernel_sum = 0.0
+        for i = 0 to kernel_size - 1
+            kernel_sum += array.get(kernel, i)
+        if kernel_sum != 0.0
+            float inv_sum = 1.0 / kernel_sum
+            for i = 0 to kernel_size - 1
+                array.set(norm_kernel, i, array.get(kernel, i) * inv_sum)
+        last_kernel_size := kernel_size
+    int p = math.min(bar_index + 1, kernel_size)
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(norm_kernel, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates SINEMA using sine-wave weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sinema.md
+//@param source Series to calculate SINEMA from
+//@param period Lookback period - FIR window size
+//@returns SINEMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export sinema(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var int prev_p = 0
+    var array<float> sine_weights = array.new_float(period, 0.0)
+    if p != prev_p
+        sine_weights := array.new_float(p, 0.0)
+        for j = 0 to p - 1
+            array.set(sine_weights, j, math.sin(math.pi * (j + 1) / p))
+        prev_p := p
+    float sum = 0.0
+    float weight = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(sine_weights, i)
+            sum += price * w
+            weight += w
+    nz(sum / weight, source)
+
+//@function Calculates SGMA using Savitzky-Golay filter with polynomial fitting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sgma.md
+//@param source Series to calculate SGMA from
+//@param period Lookback period - FIR window size (must be odd)
+//@param deg Polynomial degree (default: 2)
+//@returns SGMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export sgma(series float source, simple int period, simple int deg = 2) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int use_period = period % 2 == 0 ? period + 1 : period 
+    int use_deg = deg < 0 or deg >= use_period ? 2 : math.min(deg, 4)  
+    int p = math.min(bar_index + 1, use_period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    var int last_deg = use_deg
+    if last_p != p or last_deg != use_deg
+        weights := array.new_float(p, 0.0)
+        if use_deg == 2
+            if p == 5
+                array.set(weights, 0, -0.0857)
+                array.set(weights, 1, 0.3429)
+                array.set(weights, 2, 0.4857)
+                array.set(weights, 3, 0.3429)
+                array.set(weights, 4, -0.0857)
+            else if p == 7
+                array.set(weights, 0, -0.0476)
+                array.set(weights, 1, 0.0952)
+                array.set(weights, 2, 0.2857)
+                array.set(weights, 3, 0.3333)
+                array.set(weights, 4, 0.2857)
+                array.set(weights, 5, 0.0952)
+                array.set(weights, 6, -0.0476)
+            else if p == 9
+                array.set(weights, 0, -0.0281)
+                array.set(weights, 1, 0.0337)
+                array.set(weights, 2, 0.1236)
+                array.set(weights, 3, 0.2247)
+                array.set(weights, 4, 0.2921)
+                array.set(weights, 5, 0.2247)
+                array.set(weights, 6, 0.1236)
+                array.set(weights, 7, 0.0337)
+                array.set(weights, 8, -0.0281)
+            else
+                float half_window = (p - 1) / 2.0
+                float total_weight = 0.0
+                for i = 0 to p - 1
+                    float x = i - half_window
+                    float norm_x = x / half_window
+                    float w = 1.0 - norm_x * norm_x
+                    array.set(weights, i, w)
+                    total_weight += w
+                float inv_total = 1.0 / total_weight
+                for i = 0 to p - 1
+                    array.set(weights, i, array.get(weights, i) * inv_total)
+        else
+            float half_window = (p - 1) / 2.0
+            float total_weight = 0.0
+            for i = 0 to p - 1
+                float x = i - half_window
+                float norm_x = x / half_window
+                float w = 0.0
+                if use_deg == 0
+                    w := 1.0
+                else if use_deg == 1
+                    w := 1.0 - math.abs(norm_x)
+                else if use_deg == 3
+                    w := 1.0 - math.abs(math.pow(norm_x, 3))
+                else if use_deg == 4
+                    w := 1.0 - math.pow(norm_x, 4)
+                else  // use_deg == 2
+                    w := 1.0 - norm_x * norm_x
+                array.set(weights, i, w)
+                total_weight += w
+            if total_weight > 0.0
+                float inv_total = 1.0 / total_weight
+                for i = 0 to p - 1
+                    array.set(weights, i, array.get(weights, i) * inv_total)
+        last_p := p
+        last_deg := use_deg
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates AFIRMA using various windowing functions
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/afirma.md
+//@param source Series to calculate AFIRMA from
+//@param period Lookback period - window size
+//@param windowType Window function type (1:Hanning, 2:Hamming, 3:Blackman, 4:Blackman-Harris)
+//@returns AFIRMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export afirma(series float source, simple int period, simple int windowType = 4) =>
+    float result = source
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    if windowType < 1 or windowType > 4
+        runtime.error("WindowType should be in range [1-4]")
+    int p = math.min(bar_index + 1, period)
+    if p > 1
+        var float[] coefs = array.new_float(1, 0.0)
+        var int prevPeriod = 0
+        var int prevWindowType = -1
+        if p != prevPeriod or windowType != prevWindowType
+            coefs := array.new_float(p, 0.0)
+            float a0 = 0.35875, float a1 = -0.48829, float a2 = 0.14128, float a3 = -0.01168 // Blackman-Harris
+            if windowType == 1  // Hanning
+                a0 := 0.50, a1 := -0.50
+            else if windowType == 2  // Hamming
+                a0 := 0.54, a1 := -0.46
+            else if windowType == 3  // Blackman
+                a0 := 0.42, a1 := -0.50, a2 := 0.08
+            float TWO_PI = 6.28318530718
+            float twoPiDivP = TWO_PI / p
+            for k = 0 to p - 1
+                float kTwoPiDivP = k * twoPiDivP
+                float coef = a0 + a1 * math.cos(kTwoPiDivP)
+                if a2 != 0.0
+                    coef += a2 * math.cos(2.0 * kTwoPiDivP)
+                if a3 != 0.0
+                    coef += a3 * math.cos(3.0 * kTwoPiDivP)
+                array.set(coefs, k, coef)
+            prevPeriod := p
+            prevWindowType := windowType
+        float sum = 0.0, float weightSum = 0.0, int validCount = 0
+        for i = 0 to p - 1
+            float price = source[i]
+            if not na(price)
+                float coef = array.get(coefs, i)
+                sum += price * coef
+                weightSum += coef
+                validCount += 1
+        result := validCount > 0 and weightSum > 0 ? sum / weightSum : source
+    result
+
+//@function Calculates ALMA using Gaussian distribution weights
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/alma.md
+//@param source Series to calculate ALMA from
+//@param period Lookback period - window size
+//@param offset Controls the Gaussian peak location (0 to 1)
+//@param sigma Controls the Gaussian distribution width/curve shape
+//@returns ALMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export alma(series float source, simple int period, simple float offset = 0.85, simple float sigma = 6.0) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    if offset < 0 or offset > 1
+        runtime.error("Offset must be between 0 and 1")
+    if sigma <= 0
+        runtime.error("Sigma must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    if p <= 1
+        source
+    else
+        float m = (1 - offset) * (p - 1)
+        float s = p / sigma
+        float s2 = 2 * (s * s)
+        float sum = 0.0
+        float weight_sum = 0.0
+        for i = 0 to p - 1
+            float price = source[i]
+            if not na(price)
+                float diff = i - m
+                float weight = math.exp(-(diff * diff) / s2)
+                sum += price * weight
+                weight_sum += weight
+        nz(sum / weight_sum, source)
+
+//@function Calculates BLMA using Blackman window weighting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/blma.md
+//@param source Series to calculate BLMA from
+//@param period Lookback period - FIR window size
+//@returns BLMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export blma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    if last_p != p
+        weights := array.new_float(p, 0.0)
+        float total_weight = 0.0
+        float a0 = 0.42
+        float a1 = 0.5
+        float a2 = 0.08
+        float inv_p_minus_1 = 1.0 / (p - 1)
+        float pi2 = 2.0 * math.pi
+        float pi4 = 4.0 * math.pi
+        for i = 0 to p - 1
+            float ratio = i * inv_p_minus_1
+            float term1 = a1 * math.cos(pi2 * ratio)
+            float term2 = a2 * math.cos(pi4 * ratio)
+            float w = a0 - term1 + term2
+            array.set(weights, i, w)
+            total_weight += w
+        float inv_total = 1.0 / total_weight
+        for i = 0 to p - 1
+            array.set(weights, i, array.get(weights, i) * inv_total)
+        last_p := p
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates BWMA using Bessel window weighting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/bwma.md
+//@param source Series to calculate BWMA from
+//@param period Lookback period - FIR window size
+//@param order Bessel function order (default: 0)
+//@returns BWMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export bwma(series float source, simple int period, simple int order = 0) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    if order < 0
+        runtime.error("Bessel order must be non-negative")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    var int last_order = order
+    if last_p != p or last_order != order
+        weights := array.new_float(p, 0.0)
+        float total_weight = 0.0
+        float scale = 2.0 / (p - 1)
+        float power = order / 2.0 + 0.5
+        for i = 0 to p - 1
+            float x = i * scale - 1.0
+            float arg = 1.0 - x * x
+            float w = 0.0
+            if arg > 0.0
+                if order == 0
+                    w := arg
+                else if order == 1
+                    w := arg * math.sqrt(arg)
+                else
+                    w := math.pow(arg, power)
+            array.set(weights, i, w)
+            total_weight += w
+        if total_weight > 0.0
+            float inv_total = 1.0 / total_weight
+            for i = 0 to p - 1
+                array.set(weights, i, array.get(weights, i) * inv_total)
+        last_p := p
+        last_order := order
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates DWMA using double weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/dwma.md
+//@param source Series to calculate DWMA from
+//@param period Lookback period for both smoothing passes
+//@returns DWMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export dwma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
+    if p <= 1
+        source
+    else
+        float sum1 = 0.0
+        int weightSum1 = 0
+        for i = 0 to p - 1
+            float price = source[i]
+            if not na(price)
+                int weight = p - i
+                sum1 += price * weight
+                weightSum1 += weight
+        float currentWma = nz(sum1 / weightSum1, na)
+        var float[] wmaBuffer = array.new_float(period, na)
+        var int bufferPos = 0
+        var int validCount = 0
+        array.set(wmaBuffer, bufferPos, currentWma)
+        bufferPos := (bufferPos + 1) % period
+        validCount := math.min(validCount + 1, period)
+        if validCount <= 0
+            na
+        else
+            float sum2 = 0.0
+            int weightSum2 = 0
+            for i = 0 to validCount - 1
+                int idx = (bufferPos - 1 - i + period) % period
+                float wmaVal = array.get(wmaBuffer, idx)
+                if not na(wmaVal)
+                    int weight = p - i
+                    sum2 += wmaVal * weight
+                    weightSum2 += weight
+            nz(sum2 / weightSum2, na)
+
+//@function Calculates EPMA using exponential smoothing with endpoint emphasis
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/epma.md
+//@param source Series to calculate EPMA from
+//@param period Lookback period
+//@returns EPMA value with proper weight distribution
+//@optimized for performance and dirty data
+export epma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.max(1, math.min(bar_index + 1, period))
+    if p <= 1
+        source
+    else
+        float weightedSum = 0.0
+        float totalWeight = 0.0
+        for i = 0 to p - 1
+            float price = source[i]
+            if not na(price)
+                int weight = p - i
+                weightedSum += price * weight
+                totalWeight += weight
+        nz(weightedSum / totalWeight, na)
+
+//@function Calculates GWMA using Gaussian window weighting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/gwma.md
+//@param source Series to calculate GWMA from
+//@param period Lookback period - FIR window size
+//@param sigma Controls the width of the Gaussian bell curve (default: 0.4)
+//@returns GWMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export gwma(series float source, simple int period, simple float sigma = 0.4) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    var float last_sigma = sigma
+    if last_p != p or last_sigma != sigma
+        weights := array.new_float(p, 0.0)
+        float center = (p - 1) / 2.0
+        float inv_sigmap = 1.0 / (sigma * p)
+        float total = 0.0
+        for i = 0 to p - 1
+            float x = (i - center) * inv_sigmap
+            float w = math.exp(-0.5 * x * x)
+            array.set(weights, i, w)
+            total += w
+        float inv_total = 1.0 / total
+        for i = 0 to p - 1
+            array.set(weights, i, array.get(weights, i) * inv_total)
+        last_p := p
+        last_sigma := sigma
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates HAMMA using Hamming window weighting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hamma.md
+//@param source Series to calculate HAMMA from
+//@param period Lookback period - FIR window size
+//@returns HAMMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export hamma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    if last_p != p
+        weights := array.new_float(p, 0.0)
+        for i = 0 to p - 1
+            float w = 0.54 - 0.46 * math.cos(2.0 * math.pi * i / (p - 1))
+            array.set(weights, i, w)
+        last_p := p
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates HANMA using Hanning window weighting
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hanma.md
+//@param source Series to calculate HANMA from
+//@param period Lookback period - FIR window size
+//@returns HANMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export hanma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    if last_p != p
+        weights := array.new_float(p, 0.0)
+        for i = 0 to p - 1
+            float w = 0.5 * (1.0 - math.cos(2.0 * math.pi * i / (p - 1)))
+            array.set(weights, i, w)
+        last_p := p
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates HMA in a single pass combining all WMA calculations
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hma.md
+//@param source Series to calculate HMA from
+//@param period Lookback period - FIR window size
+//@returns HMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export hma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    p = math.min(bar_index + 1, period)
+    half_p = math.max(1, math.round(p / 2))
+    sqrt_p = math.max(1, math.round(math.sqrt(p)))
+    sum_half = 0.0, sum_full = 0.0, sum_sqrt = 0.0, weight_half = 0.0, weight_full = 0.0, weight_sqrt = 0.0
+    for i = 0 to p - 1
+        price = source[i]
+        if not na(price)
+            w_half = i < half_p ? half_p - i : 0
+            w_full = p - i
+            sum_half += price * w_half
+            sum_full += price * w_full
+            weight_half += w_half
+            weight_full += w_full
+    wma_half = nz(sum_half / weight_half, na)
+    wma_full = nz(sum_full / weight_full, na)
+    diff = na(wma_half) or na(wma_full) ? na : 2.0 * wma_half - wma_full
+    for i = 0 to sqrt_p - 1
+        d = diff[i]
+        if not na(d)
+            w_sqrt = sqrt_p - i
+            sum_sqrt += d * w_sqrt
+            weight_sqrt += w_sqrt
+    nz(sum_sqrt / weight_sqrt, na)
+
+//@function Calculates HWMA using triple exponential smoothing with level, velocity, and acceleration components
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hwma.md
+//@param source Series to calculate HWMA from
+//@param alpha Level smoothing factor
+//@param beta Velocity smoothing factor
+//@param gamma Acceleration smoothing factor
+//@param period When used, calculate alpha/beta/gamma from period
+//@returns HWMA value from first bar with proper compensation
+//@optimized for performance and dirty data
+export hwma(series float source, float alpha = 0, float beta = 0, float gamma = 0, simple int period = 0) =>
+    float a = period > 0 ? 2.0/(float(period) + 1.0) : alpha
+    float b = period > 0 ? 1.0/float(period) : beta
+    float g = period > 0 ? 1.0/float(period) : gamma
+    var float F = na, var float V = 0.0, var float A = 0.0
+    if na(source)
+        if na(F)
+            na
+        else
+            float prevF = F, float prevV = V, float prevA = A
+            F := prevF + prevV + 0.5 * prevA
+            V := prevV + prevA
+            A := 0.9 * prevA
+            F
+    else
+        if na(F)
+            F := source
+            F
+        else
+            float prevF = F, float prevV = V, float prevA = A
+            F := a * source + (1 - a) * (prevF + prevV + 0.5 * prevA)
+            V := b * (F - prevF) + (1 - b) * (prevV + prevA)
+            A := g * (V - prevV) + (1 - g) * prevA
+            F + V + 0.5 * A
+
+//@function Calculates PWMA using Pascal's triangle coefficients as weights with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/pwma.md
+//@param source Series to calculate PWMA from
+//@param period Lookback period - FIR window size
+//@returns PWMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export pwma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    if last_p != p
+        weights := array.new_float(p, 0.0)
+        array.set(weights, 0, 1.0)
+        if p > 1
+            float prev_weight = 1.0
+            for i = 1 to p - 1
+                float curr_weight = prev_weight * (p - i) / i
+                array.set(weights, i, curr_weight)
+                prev_weight := curr_weight
+        last_p := p
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates TRIMA using triangular weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/trima.md
+//@param source Series to calculate TRIMA from
+//@param period Lookback period - FIR window size
+//@returns TRIMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export trima(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    var array<float> weights = array.new_float(1, 1.0)
+    var int last_p = 1
+    if last_p != p
+        weights := array.new_float(p, 0.0)
+        int mid = math.floor(p/2)
+        for i = 0 to p - 1
+            array.set(weights, i, math.min(i, p - 1 - i) + 1)
+        last_p := p
+    float sum = 0.0
+    float weight_sum = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = array.get(weights, i)
+            sum += price * w
+            weight_sum += w
+    nz(sum / weight_sum, source)
+
+//@function Calculates VWMA using weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/vwma.md
+//@param source Series to calculate VWMA from
+//@param period Lookback period - FIR window size
+//@returns VWMA value, calculates from first bar using available data
+//@optimized for minimum operations and handling dirty data
+export vwma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, period)
+    float sum = 0.0
+    float actual_weight = 0.0
+    int weight_factor = 1
+    for i = p - 1 to 0
+        if not(na(source[i]) or na(volume[i]))
+            sum += source[i] * volume[i] * weight_factor
+            actual_weight += volume[i] * weight_factor
+        weight_factor += 1
+    nz(sum / actual_weight, source)
+
+//@function Calculates WMA using weighted smoothing with compensator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/wma.md
+//@param source Series to calculate WMA from
+//@param period Lookback period - FIR window size
+//@returns WMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
+export wma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    int p = math.min(bar_index + 1, math.min(period, 4000))
+    var int last_p = 1
+    var float weight_sum = 1.0
+    if last_p != p
+        weight_sum := p * (p + 1) * 0.5
+        last_p := p
+    float sum = 0.0
+    float actual_weight = 0.0
+    for i = 0 to p - 1
+        float price = source[i]
+        if not na(price)
+            float w = p - i
+            sum += price * w
+            actual_weight += w
+    nz(sum / actual_weight, source)

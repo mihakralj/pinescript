@@ -8,7 +8,7 @@ indicator("Dirty Data Injection", "Dirty Data", overlay=true)
 //@param source Series to inject NA values into
 //@param interval Frequency of NA value injections
 //@returns Series with NA values injected at specified intervals
-dirtyData(float source, simple int interval = 10, simple int gap_size = 1) =>
+dirty(float source, simple int interval = 10, simple int gap_size = 1) =>
     result = source
     if bar_index == 0
         result := na
@@ -24,7 +24,7 @@ interval = input.int(10, "NA Injection Interval", minval=2)
 gap_size = input.int(5, "NA Gap Size", minval=1)
 
 // Calculation
-dirty = dirtyData(source, interval, gap_size)
+dirty = dirty(source, interval, gap_size)
 
 // Plot
 plot(dirty, "Dirty Data", color=color.yellow, linewidth = 2)
