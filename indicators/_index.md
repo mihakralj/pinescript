@@ -138,6 +138,7 @@
 | LF                                          | Filters      | Laguerre Filter                                    |
 | LINEAR                                      | Numerics     | Linear Transformation                              |
 | LOG                                         | Numerics     | Logarithmic Transformation                         |
+| [LSMA](/indicators/trends_FIR/lsma.md)      | Trends_FIR   | Least Squares Moving Average                       |
 | LTMA                                        | Trends_IIR   | Linear Time MA                                     |
 | MAAF                                        | Filters      | MA Adaptive Filter                                 |
 | MACD                                        | Dynamics     | MA Convergence Divergence                          |
@@ -145,7 +146,7 @@
 | MACDFIX                                     | Dynamics     | MA Convergence/Divergence Fix 12/26                |
 | [MAE](/indicators/errors/mae.md)            | Errors       | Mean Absolute Error                                |
 | MAENV                                       | Channels     | MA Envelope                                        |
-| MAMA                                        | Trends_IIR   | MESA Adaptive MA                                   |
+| [MAMA](/indicators/trends_IIR/mama.md)      | Trends_IIR   | MESA Adaptive MA                                   |
 | [MAPD](/indicators/errors/mapd.md)          | Errors       | Mean Absolute Percentage Deviation                 |
 | [MAPE](/indicators/errors/mape.md)          | Errors       | Mean Absolute Percentage Error                     |
 | [MASE](/indicators/errors/mase.md)          | Errors       | Mean Absolute Scaled Error                         |
@@ -162,7 +163,6 @@
 | MINMAX_SCALE                                | Numerics     | Min-Max Scaling (Normalization)                    |
 | MINUS_DI                                    | Dynamics     | Minus Directional Indicator                        |
 | MINUS_DM                                    | Dynamics     | Minus Directional Movement                         |
-| [MMA](/indicators/trends_IIR/mma.md)        | Trends_IIR   | Modified MA                                        |
 | MODE                                        | Numerics     | Mode                                               |
 | MOM                                         | Momentum     | Momentum                                           |
 | [MPE](/indicators/errors/mpe.md)            | Errors       | Mean Percentage Error                              |
@@ -237,6 +237,7 @@
 | SQUEEZE                                     | Oscillators  | Squeeze                                            |
 | SSF                                         | Filters      | Super Smoother Filter                              |
 | STANDARDIZE                                 | Numerics     | Standardization                                    |
+| [STC](/indicators/cycles/stc.md)            | Cycles       | Schaff Trend Cycle                                 |
 | STARC                                       | Channels     | Stoller Average Range Channel                      |
 | STARC                                       | Volatility   | Starc Bands                                        |
 | STB                                         | Channels     | Super Trend Bands                                  |

@@ -1,6 +1,6 @@
 * [Home](/)
 
-* [Trends - FIR](./indicators/trends_FIR/_index.md) 19/19
+* [Trends - FIR](./indicators/trends_FIR/_index.md) 20/20
   * [ALMA: Arnaud Legoux MA](indicators/trends_FIR/alma.md)
   * [AFIRMA: Adaptive Finite Impulse Response MA](indicators/trends_FIR/afirma.md)
   * [BLMA: Blackman Window MA](indicators/trends_FIR/blma.md)
@@ -11,6 +11,7 @@
   * [GWMA: Gaussian-Weighted MA](indicators/trends_FIR/gwma.md)
   * [HMA: Hull MA](indicators/trends_FIR/hma.md)
   * [HWMA: Holt-Winters MA](indicators/trends_FIR/hwma.md)
+  * [LSMA: Least Squares Moving Average](indicators/trends_FIR/lsma.md)
   * [PWMA: Pascal Weighted MA](indicators/trends_FIR/pwma.md)
   * [SGMA: Savitzky-Golay MA](indicators/trends_FIR/sgma.md)
   * [SINEMA: Sine-weighted MA](indicators/trends_FIR/sinema.md)
@@ -21,7 +22,7 @@
   * [HANMA: Hanning Window MA](indicators/trends_FIR/hanma.md)
   * [WMA: Weighted MA](indicators/trends_FIR/wma.md)
 
-* [Trends - IIR](./indicators/trends_IIR/_index.md) 16/26
+* [Trends - IIR](./indicators/trends_IIR/_index.md) 15/25
   * [DEMA: Double Exponential MA](indicators/trends_IIR/dema.md)
   * [DSMA: Deviation-Scaled MA](indicators/trends_IIR/dsma.md)
   * [EMA: Exponential MA](indicators/trends_IIR/ema.md)
@@ -29,7 +30,6 @@
   * [HEMA: Hull Exponential MA](indicators/trends_IIR/hema.md)
   * [JMA: Jurik MA](indicators/trends_IIR/jma.md)
   * [KAMA: Kaufman Adaptive MA](indicators/trends_IIR/kama.md)
-  * [MMA: Modified MA](indicators/trends_IIR/mma.md)
   * [QEMA: Quadruple Exponential MA](indicators/trends_IIR/qema.md)
   * [REMA: Regularized Exponential MA](indicators/trends_IIR/rema.md)
   * [RMA: wildeR MA](indicators/trends_IIR/rma.md)
@@ -39,7 +39,7 @@
   * [ZLEMA: Zero-Lag Exponential MA](indicators/trends_IIR/zlema.md)
   * [ZLTEMA: Zero-Lag Triple Exponential MA](indicators/trends_IIR/zltema.md)
   * HTIT: Hilbert Transform Instantaneous Trend
-  * MAMA: MESA Adaptive MA
+  * [MAMA: MESA Adaptive MA](indicators/trends_IIR/mama.md)
   * GMA: Gaussian MA
   * LTMA: Linear Time MA
   * MGDI: McGinley Dynamic Indicator
@@ -49,15 +49,15 @@
   * VWMA: Volume Weighted MA
   * WCP: Weighted Closing Price
 
-* [Cycles Indicators](./indicators/cycles/_index.md) 0/8
+* [Cycles Indicators](./indicators/cycles/_index.md) 2/9
+  * [STC: Schaff Trend Cycle](indicators/cycles/stc.md)
   * DSS: Double Smoothed Stochastic
   * EBSW: Even Better Sinewave
   * HT_DCPERIOD: Hilbert Transform - Dominant Cycle Period
   * HT_DCPHASE: Hilbert Transform - Dominant Cycle Phase
   * HT_PHASOR: Hilbert Transform - Phasor Components
   * HT_SINE: Hilbert Transform - SineWave
-  * MESA: MESA Sine Wave
-  * SINE: Sine Wave
+    * SINE: Sine Wave
 
 * [Error Metrics](./indicators/errors/_index.md) 16/16
   * [DIRTY: Dirty Data Injection](indicators/errors/dirty.md)

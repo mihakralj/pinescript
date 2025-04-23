@@ -14,6 +14,7 @@
 | [HANMA](/indicators/trends_FIR/hanma.md) | Hanning Window MA | Applies raised cosine weighting (Hanning window) for smooth frequency response with zero weight at window edges. |
 | [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Combines weighted averages at different periods with momentum-enhanced processing to reduce lag by 83% while maintaining 94% noise suppression. |
 | [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA | Integrates exponential weighting with trend-component analysis for improved prediction of time series data. |
+| [LSMA](/indicators/trends_FIR/lsma.md) | Least Squares Moving Average | Fits a linear regression line to price data using the method of least squares, reducing lag while maintaining smoothness. |
 | [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted MA | Utilizes Pascal's triangle coefficients for weight distribution, offering balanced statistical properties. |
 | [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Performs polynomial regression within sliding windows to preserve higher moments of the distribution while smoothing. |
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Distributes weights according to sine function for gradual influence transition and improved harmonic response. |

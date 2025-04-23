@@ -1,0 +1,76 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Schaff Trend Cycle", "STC", overlay=false)
+
+ema(series float source,simple int period=0,simple float alpha=0)=>
+    if alpha<=0 and period<=0
+        runtime.error("Alpha or period must be provided")
+    float a=alpha>0?alpha:2.0/math.max(period,1)
+    var float ema=na
+    var float result=na
+    var float e=1.0 
+    var bool warmup=true
+    if not na(source)
+        if na(ema)
+            ema:=0
+            result:=source
+        else
+            ema:=a*(source-ema)+ema
+            if warmup
+                e*=(1-a)
+                float c=1.0/(1.0-e)
+                result:=c*ema
+                if e<=1e-10
+                    warmup:=false
+            else
+                result:=ema
+    result
+
+stoch(series float src, series float hi, series float lo, simple int len) =>
+    float highest = ta.highest(hi, len)
+    float lowest = ta.lowest(lo, len)
+    float price_range = highest - lowest
+    price_range > 0 ? 100 * (src - lowest) / price_range : 0
+
+//@function Calculates the Schaff Trend Cycle (STC) indicator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/stc.md
+//@param source Input price series
+//@param cycleLength Main cycle length parameter for lookback periods
+//@param fastLength Period for fast EMA calculation
+//@param slowLength Period for slow EMA calculation
+//@param smoothingType Type of smoothing (0:none, 1:ema, 2:sigmoid, 3:digital)
+//@returns Smoothed STC value
+stc(series float source, simple int cycleLength, simple int fastLength, simple int slowLength, simple int smoothingType = 2) =>
+    float fast_ema = ema(source, fastLength)
+    float slow_ema = ema(source, slowLength)
+    float macdLine = fast_ema - slow_ema
+    float stoch1_raw = stoch(macdLine, macdLine, macdLine, cycleLength)
+    float stoch1 = ema(stoch1_raw, 3)
+    float stoch2 = stoch(stoch1, stoch1, stoch1, cycleLength)
+    float stcValue = stoch2
+    if smoothingType == 1
+        stcValue := ema(stoch2, 3)
+    else if smoothingType == 2
+        stcValue := 100 / (1 + math.exp(-0.1 * (stcValue - 50)))
+    else if smoothingType == 3
+        stcValue := stcValue > 75 ? 100 : stcValue < 25 ? 0 : stcValue[1]
+    stcValue
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(close, title="Source")
+i_cycleLength = input.int(12, title="Cycle Length", minval=2)
+i_fastLength = input.int(26, title="Fast Length", minval=2)
+i_slowLength = input.int(50, title="Slow Length", minval=2)
+i_smoothingType = input.int(2, title="Smoothing", minval=0, maxval=3, tooltip="0: none, 1:ema, 2:sigmoid, 3:digital")
+
+// Calculation
+stcValue = stc(i_source, i_cycleLength, i_fastLength, i_slowLength, i_smoothingType)
+
+// Plot
+plot(stcValue, "STC", color.new(color.blue, 0), 2)
+hline(75, "Upper Threshold", color.new(color.red, 50))
+hline(25, "Lower Threshold", color.new(color.green, 50))
+hline(50, "Mid Line", color.new(color.gray, 50), linestyle=hline.style_dotted)

@@ -6,47 +6,45 @@ indicator("Tillson T3 Moving Average", "T3", overlay=true)
 //@function Calculates T3 using six EMAs with volume factor optimization
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/t3.md
 //@param source Series to calculate T3 from
-//@param alpha Smoothing factor (typically 2/(period+1))
-//@param vfactor Volume factor controlling smoothing (default 0.7)
+//@param period Smoothing period
+//@param v Volume factor controlling smoothing (default 0.7)
 //@returns T3 value with optimized coefficients
-t3(series float source, simple float alpha, simple float vfactor = 0.7) =>
-    if alpha <= 0
-        runtime.error("Alpha must be greater than 0")
-
-    var float[] raw_ema = array.new_float(6, na)
-    var float e = 0.0, var float sma = 0.0, var int count = 0
-    count := count + 1
-    sma := count == 1 ? source : (sma * (count - 1) + source) / count
-    e := count == 1 ? 0.0 : (1 - alpha) * e
-    float comp = e > 1e-10 ? 1.0 / (1.0 - e) : 1.0
-    float input = count <= math.round(2/alpha) ? sma : source
-
-    // Optimized coefficient calculation using volume factor powers
-    float v2 = vfactor * vfactor, v3 = v2 * vfactor
-    float[] c = array.from(-v3, 3.0 * (v2 + v3), -3.0 * (2.0 * v2 + vfactor + v3), 1.0 + 3.0 * vfactor + v3 + 3.0 * v2)
-
-    // Optimized EMA chain calculation
-    raw_ema.set(0, na(raw_ema.get(0)) ? input : alpha * (input - raw_ema.get(0)) + raw_ema.get(0))
-    float prev = raw_ema.get(0) * comp
-    for i = 1 to 5
-        raw_ema.set(i, na(raw_ema.get(i)) ? raw_ema.get(i-1) : alpha * (prev - raw_ema.get(i)) + raw_ema.get(i))
-        prev := raw_ema.get(i) * comp
-
-    // Final T3 calculation with compensation
-    comp * (c.get(0) * prev + c.get(1) * (raw_ema.get(4) * comp) +
-           c.get(2) * (raw_ema.get(3) * comp) + c.get(3) * (raw_ema.get(2) * comp))
-
+t3(series float src, simple int period, simple float v) =>
+    if period <= 0
+        runtime.error("T3 period must be > 0")
+    var float  a     = 2.0 / (period + 1)
+    var float  v2    = v * v
+    var float  v3    = v2 * v
+    var float  c1    = -v3
+    var float  c2    = 3.0 * (v2 + v3)
+    var float  c3    = -3.0 * (2.0 * v2 + v + v3)
+    var float  c4    = 1.0 + 3.0 * v + 3.0 * v2 + v3
+    var float e1 = na, var float e2 = na, var float e3 = na
+    var float e4 = na, var float e5 = na, var float e6 = na
+    float res = na
+    if not na(src)
+        if na(e1)
+            e1 := src, e2 := src, e3 := src, e4 := src, e5 := src, e6 := src
+            res := src
+        else
+            e1 += a * (src - e1)
+            e2 += a * (e1 - e2)
+            e3 += a * (e2 - e3)
+            e4 += a * (e3 - e4)
+            e5 += a * (e4 - e5)
+            e6 += a * (e5 - e6)
+            res := c1*e6 + c2*e5 + c3*e4 + c4*e3
+    res
 
 // ---------- Main loop ----------
 
 // Inputs
+i_source = input.source(close, "Source")
 i_period = input.int(10, "Period", minval=1)
 i_vfactor = input.float(0.7, "Volume Factor", minval=0.0, maxval=1.0, step=0.1)
-i_source = input.source(close, "Source")
 
 // Calculations
-alpha = 2.0/(float(i_period)+1.0)  // Calculate alpha from period
-t3 = t3(i_source, alpha, i_vfactor)   // Call function with parameters
+t3 = t3(i_source, i_period, i_vfactor)
 
 // Plots
 plot(t3, "T3", color.new(color.yellow, 0), 2)

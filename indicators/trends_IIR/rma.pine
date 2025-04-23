@@ -8,6 +8,7 @@ indicator("Wilder's Moving Average", "RMA", overlay=true)
 //@param source Series to calculate RMA from
 //@param period Smoothing period
 //@returns RMA value from first bar with proper compensation for early values
+//@optimized for performance and dirty data
 rma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")

@@ -8,5 +8,5 @@
 | HT_DCPHASE | Hilbert Transform - Dominant Cycle Phase |
 | HT_PHASOR | Hilbert Transform - Phasor Components |
 | HT_SINE | Hilbert Transform - SineWave |
-| MESA | MESA Sine Wave |
 | SINE | Sine Wave |
+| [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle |
