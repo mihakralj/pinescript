@@ -44,5 +44,3 @@ mma_value = mma(i_source, i_period)
 // Plot
 plot(mma_value, "MMA", color.new(color.yellow, 0), 2)
 
-// Alert
-alertcondition(ta.cross(i_source, mma_value), "Price Crosses MMA", "Price crossed MMA on {{ticker}}")

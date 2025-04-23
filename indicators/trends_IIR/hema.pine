@@ -8,28 +8,29 @@ indicator("Hull Exponential Moving Average", "HEMA", overlay=true)
 //@param source Series to calculate HEMA from
 //@param period Lookback period
 //@returns HEMA value, calculates from first bar using available data
+//@optimized for performance and dirty data
 hema(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    var float raw_ema_fast = source
-    var float raw_ema_slow = source
-    var float raw_ema_final = source
-    var float EPSILON = 1e-10
-    var float e = 1.0
-    int p = math.max(1, math.min(math.min(bar_index + 1, period), 4000))
-    float alpha_slow = 2.0 / (float(p) + 1.0)
-    alpha_fast = 1.0 - math.pow(1.0 - alpha_slow, 3.0)
-    float alpha_final = 2.0 / (math.sqrt((2.0 / alpha_slow) - 1.0) + 1.0)
-    if not na(source)
-        raw_ema_fast := alpha_fast * (source - raw_ema_fast) + raw_ema_fast
-        raw_ema_slow := alpha_slow * (source - raw_ema_slow) + raw_ema_slow
-        e := (1.0 - alpha_slow) * e
-    float comp = e > EPSILON ? math.min(10.0, 1.0 / (1.0 - e)) : 1.0
-    float ema_fast = raw_ema_fast * comp
-    float ema_slow = raw_ema_slow * comp
-    float diff = na(ema_fast) or na(ema_slow) ? na : 1.693147 * ema_fast - 0.693147 * ema_slow // 1+ln(2) and ln(2)
-    raw_ema_final := na(diff) ? raw_ema_final : alpha_final * (diff - raw_ema_final) + raw_ema_final
-    raw_ema_final * comp
+    float alphaSlow = 2.0 / (float(period) + 1.0)
+    float alphaFast = 1.0 - math.pow(1.0 - alphaSlow, 3.0)
+    float alphaFinal = 2.0 / (math.sqrt((2.0 / alphaSlow) - 1.0) + 1.0)
+    var float emaFast = na
+    var float emaSlow = na
+    var float hema = na
+    if na(source)
+        hema
+    else
+        if na(emaFast)
+            emaFast := source
+            emaSlow := source
+            hema := source
+        else
+            emaFast := alphaFast * (source - emaFast) + emaFast
+            emaSlow := alphaSlow * (source - emaSlow) +  emaSlow
+            float diff = 1.693147 * emaFast - 0.693147 * emaSlow
+            hema := alphaFinal * (diff - hema) + hema
+        hema
 
 
 // ---------- Main loop ----------
@@ -44,5 +45,3 @@ hema = hema(i_source, i_period)
 // Plot
 plot(hema, "Custom HEMA", color.new(color.yellow, 0), 2)
 
-// Alert
-alertcondition(ta.cross(i_source, hema), "Price Crosses HEMA", "Price crossed HEMA on {{ticker}}")

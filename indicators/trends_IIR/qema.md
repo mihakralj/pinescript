@@ -1,6 +1,6 @@
 # Quadruple Exponential Moving Average (QEMA)
 
-The Quadruple Exponential Moving Average implements an advanced four-stage cascade architecture delivering 98% lag reduction and 93% noise suppression through progressive smoothing optimization with golden ratio coefficient distribution. QEMA's sophisticated ratio-controlled algorithm provides 99.5% trend detection accuracy and 0.1 bar average detection latency, while achieving 94% noise reduction in volatile conditions through mathematically optimized progressive smoothing and precise numerical stability control, executing complete filter passes in under 0.8 microseconds on standard hardware.
+The Quadruple Exponential Moving Average implements an advanced four-stage cascade architecture delivering superior lag reduction and robust noise suppression through progressive smoothing optimization. QEMA's sophisticated four-stage filtering process provides exceptional trend identification accuracy with minimal phase delay, while achieving faster trend detection during rapid market transitions through optimized coefficient distribution.
 
 [Pine Script Implementation of QEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/qema.pine)
 
@@ -8,48 +8,80 @@ The Quadruple Exponential Moving Average implements an advanced four-stage casca
 
 QEMA = 4 × EMA₁ - 6 × EMA₂ + 4 × EMA₃ - EMA₄
 
-The coefficients (4, -6, 4, -1) are designed to provide maximum lag reduction while maintaining signal integrity.
+Where:
 
-### Smoothing Factors
+- EMA₁ is the first exponential moving average of the source signal
+- EMA₂ is the second exponential moving average
+- EMA₃ is the third exponential moving average
+- EMA₄ is the fourth exponential moving average
+
+### Detailed Breakdown
+
+1. Calculate first EMA:
+   EMA₁ = EMA(source, α₁)
+
+2. Calculate second EMA:
+   EMA₂ = EMA(EMA₁, α₂)
+
+3. Calculate third EMA:
+   EMA₃ = EMA(EMA₂, α₃)
+
+4. Calculate fourth EMA:
+   EMA₄ = EMA(EMA₃, α₄)
+
+5. Apply QEMA formula:
+   QEMA = 4 × EMA₁ - 6 × EMA₂ + 4 × EMA₃ - EMA₄
+
+The coefficients (4, -6, 4, -1) are selected to effectively eliminate the inherent lag while maintaining a smooth output.
+
+### Smoothing Factor
 
 QEMA uses a progressive smoothing factor system:
 
-- Base α₁ = often calculated as 2 / (period + 1)
-- Each subsequent alpha increases by a ratio: α₂ = α₁ × ratio, α₃ = α₂ × ratio, α₄ = α₃ × ratio
-- The ratio parameter allows fine-tuning of progressive smoothing (default = φ (golden ratio) ≈ 1.618)
+- Base α₁ is calculated as 2 / (period + 1)
+- Each subsequent alpha increases by a ratio:
+  α₂ = α₁ × r
+  α₃ = α₂ × r
+  α₄ = α₃ × r
+- where r is derived from α₁: r = (1/α₁)^(1/3)
+- r represents the maximum possible ratio that still maintains numerical stability
+
+This progressive adjustment ensures balance between responsiveness and smoothness across all four EMA stages while preserving numerical stability throughout the calculation process.
 
 ## Initialization and Compensation
 
-This implementation uses complex compensation technique:
+This implementation uses advanced initialization strategies to ensure numerical stability:
 
-1. All four EMA stages use progressive smoothing factors
-2. Compensation factor is calculated as: 1 / (1 - e), where e is the product of (1 - αₙ) terms
-3. Epsilon threshold (1e-10) prevents division by zero
-4. The final QEMA applies compensation to the weighted sum of all EMAs
+1. All EMA stages are initialized with the first valid source value rather than using progressive initialization
+2. The implementation calculates each EMA independently using its corresponding alpha value
+3. The mathematical formula applies precise coefficient weighting (4, -6, 4, -1) for optimal lag compensation
+4. The ratio-controlled alpha progression ensures each filter stage maintains proper response characteristics
+5. First-bar validity is achieved through synchronized initialization of all filter stages
 
-This approach ensures accurate values from the first bar without requiring a warm-up period.
+This comprehensive approach eliminates warm-up artifacts and provides mathematically consistent results from the very first calculation bar.
 
-### Progressive Smoothing
+### Alpha vs Period
 
-- Fine control over each EMA stage's responsiveness
-- Optimized balance between lag reduction and noise filtering
-- Customizable behavior through ratio adjustment
-- Smooth transition between different smoothing levels
+As with other IIR moving averages, QEMA can be fine-tuned using α directly instead of period:
+
+- Provides more precise control over smoothing
+- Avoids the discrete steps inherent in period-based calculations
+- Allows for more sophisticated optimization in trading strategies
 
 ## Advantages and Disadvantages
 
 ### Advantages
 
-- **Minimal Lag**: Fastest response among EMA-based indicators
-- **Superior Trend Detection**: Earliest identification of trend changes
-- **Progressive Smoothing**: Customizable through ratio parameter
-- **No Warm-up Required**: Accurate from first bar with compensation
-- **Enhanced Signal Generation**: Extremely early entry/exit signals
+- **Fourth-Order Lag Reduction**: The quadruple EMA architecture provides superior lag reduction compared to all lower-order EMA variants (EMA, DEMA, TEMA)
+- **Optimized Coefficient Distribution**: The precise 4, -6, 4, -1 coefficient selection balances maximum lag reduction with minimal signal distortion
+- **Adaptive Progressive Smoothing**: The ratio-based alpha progression creates an adaptive filter cascade that responds differently to various frequency components
+- **Numerical Stability Control**: The mathematically derived ratio parameter ensures stability while maximizing responsiveness
+- **Early Signal Generation**: Provides the earliest possible indication of trend changes among all EMA-derived indicators
 
 ### Disadvantages
 
-- **Maximum Overshooting**: Most aggressive lag reduction leads to pronounced overshooting
-- **High Parameter Sensitivity**: Changes in period or ratio have dramatic effects
-- **Noise Amplification**: Highest responsiveness can lead to false signals
-- **Complex Dependencies**: Quadruple cascaded EMAs with ratio progression
-- **Resource Intensive**: Most complex calculations among EMA variants
+- **Maximum Overshooting Potential**: The aggressive fourth-order lag reduction creates the most pronounced overshooting during sharp reversals of any EMA variant
+- **Highest Computational Complexity**: Requires four separate EMA calculations plus coefficient application, making it the most resource-intensive EMA variant
+- **Sensitive Ratio Parameter**: The derived ratio value is critical - even small deviations can cause instability or reduce effectiveness
+- **Error Propagation**: Each EMA stage compounds any calculation errors from previous stages, potentially amplifying numerical imprecisions
+- **Excessive Responsiveness**: In highly volatile markets, the extreme responsiveness can generate excessive false signals compared to lower-order alternatives

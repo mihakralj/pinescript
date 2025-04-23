@@ -32,6 +32,3 @@ rma = rma(i_source, i_period)
 
 // Plot
 plot(rma, "Wilder's RMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, rma), "Price Crosses RMA", "Price crossed Wilder's RMA on {{ticker}}")

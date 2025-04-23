@@ -10,6 +10,7 @@ indicator("Kaufman's Adaptive Moving Average", "KAMA", overlay=true)
 //@param fast_alpha Fastest EMA constant (2/(2+1))
 //@param slow_alpha Slowest EMA constant (2/(30+1))
 //@returns KAMA value
+//@optimized for performance and dirty data
 kama(series float source, simple int period, simple float fast_alpha=0.666667, simple float slow_alpha=0.0645) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
@@ -17,13 +18,18 @@ kama(series float source, simple int period, simple float fast_alpha=0.666667, s
         runtime.error("Alpha values must be greater than 0")
     if fast_alpha <= slow_alpha
         runtime.error("Fast alpha must be greater than slow alpha")
-    var float kama = na
-    float change = math.abs(source - source[1])
-    float volatility = math.sum(math.abs(source - source[1]), period)
-    float er = volatility != 0 ? change / volatility : 0  // Efficiency Ratio
-    float sc = math.pow(er * (fast_alpha - slow_alpha) + slow_alpha, 2)  // Smoothing Constant
-    kama := na(kama) ? source : kama + sc * (source - kama)
-    kama
+    var float kama_state = na
+    float current_kama = na
+    if not na(source)
+        float change_val = math.abs(source - source[period])
+        float volatility_val = math.sum(math.abs(source - source[1]), period)
+        float er = 0.0
+        if not na(change_val) and not na(volatility_val) and volatility_val != 0.0
+            er := change_val / volatility_val
+        float sc = math.pow(er * (fast_alpha - slow_alpha) + slow_alpha, 2)
+        kama_state := na(kama_state) ? source : kama_state + sc * (source - kama_state)
+        current_kama := kama_state
+    current_kama
 
 
 // ---------- Main loop ----------
@@ -41,6 +47,3 @@ kama = kama(i_source, i_period, fast_alpha, slow_alpha)
 
 // Plot
 plot(kama, "Custom KAMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, kama), "Price Crosses KAMA", "Price crossed KAMA on {{ticker}}")

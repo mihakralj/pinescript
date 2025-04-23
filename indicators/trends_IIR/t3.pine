@@ -51,5 +51,3 @@ t3 = t3(i_source, alpha, i_vfactor)   // Call function with parameters
 // Plots
 plot(t3, "T3", color.new(color.yellow, 0), 2)
 
-// Alert condition for price crossing T3
-alertcondition(ta.cross(i_source, t3), "Price Crosses T3", "Price crossed T3 on {{ticker}}")

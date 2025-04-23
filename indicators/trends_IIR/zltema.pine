@@ -40,6 +40,3 @@ zltema = zltema(i_source, alpha)   // Call function with correct parameters
 
 // Plots
 plot(zltema, "ZLTEMA", color.new(color.yellow, 0), 2)
-
-// Alert condition for price crossing ZLTEMA
-alertcondition(ta.cross(i_source, zltema), "Price Crosses ZLTEMA", "Price crossed ZLTEMA on {{ticker}}")

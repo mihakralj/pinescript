@@ -6,44 +6,38 @@ indicator("Quadruple Exponential Moving Average", "QEMA", overlay=true)
 //@function Calculates QEMA using quadruple exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/qema.md
 //@param source Series to calculate QEMA from
-//@param alpha Base smoothing factor
-//@param ratio Ratio for other alpha progressions
 //@returns QEMA value from first bar with proper compensation
-qema(series float source, simple float alpha1, simple float ratio = 1.618) =>
-    if alpha1 <= 0
-        runtime.error("Alpha must be greater than 0")
-    if ratio <= 1.0
-        runtime.error("Ratio must be greater than 1")
-    var simple float EPSILON = 1e-10
-    var float raw_ema1 = 0.0
-    var float raw_ema2 = 0.0
-    var float raw_ema3 = 0.0
-    var float raw_ema4 = 0.0
-    var float e = 1.0
-    float alpha2 = alpha1 * ratio
-    float alpha3 = alpha2 * ratio
-    float alpha4 = alpha3 * ratio
-    e := math.min((1 - alpha1) * (1 - alpha2) * (1 - alpha3) * (1 - alpha4) * e, 1.0)
-    float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
-    raw_ema1 := alpha1 * (source - raw_ema1) + raw_ema1
-    raw_ema2 := alpha2 * (raw_ema1 - raw_ema2) + raw_ema2
-    raw_ema3 := alpha3 * (raw_ema2 - raw_ema3) + raw_ema3
-    raw_ema4 := alpha4 * (raw_ema3 - raw_ema4) + raw_ema4
-    compensation * (4 * raw_ema1 - 6 * raw_ema2 + 4 * raw_ema3 - raw_ema4)
+//@optimized for performance and dirty data
+qema(series float source, int period = 0, float alpha = 0.0) =>
+    // derive α₁ from period if not given
+    float a1 = alpha > 0 ? alpha : (period > 0 ? 2.0/(period+1):alpha)
+    float r = math.pow(1/a1, 1/3)
+    float a2 = a1 * r
+    float a3 = a2 * r
+    float a4 = a3 * r
+    var float ema1 = na, var float ema2 = na, var float ema3 = na, var float ema4 = na
+    float result = na
+    if not na(source)
+        if na(ema1)
+            ema1 := source, ema2 := source, ema3 := source, ema4 := source
+            result := source
+        else
+            ema1 := a1*(source - ema1) + ema1
+            ema2 := a2*(ema1 - ema2) + ema2
+            ema3 := a3*(ema2 - ema3) + ema3
+            ema4 := a4*(ema3 - ema4) + ema4
+            result := 4*ema1 - 6*ema2 + 4*ema3 - ema4
+    result
+
 
 // ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(20, "Period", minval=1)
-ratio = input.float(1.5, "Ratio", minval=1.01, maxval=5.0, step=0.01)
 i_source = input.source(close, "Source")
 
 // Calculation
-alpha = 2.0/(float(i_period)+1.0)
-qema = qema(i_source, alpha, ratio)
+qema = qema(i_source, i_period) 
 
 // Plot
 plot(qema, "Custom QEMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, qema), "Price Crosses QEMA", "Price crossed QEMA on {{ticker}}")

@@ -42,6 +42,3 @@ rema = rema(i_source, i_period, i_lambda)
 
 // Plot
 plot(rema, "REMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, rema), "Price Crosses REMA", "Price crossed REMA on {{ticker}}")

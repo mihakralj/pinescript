@@ -9,26 +9,44 @@ indicator("Deviation-Scaled Moving Average", "DSMA", overlay=true)
 //@param period Length of the lookback period for both average and deviation calculation
 //@param scale_factor Combined scaling/smoothing factor (0.01-0.9)
 //@returns DSMA value that adapts to market volatility through deviation scaling
-dsma(series float source, simple int period, simple float scale_factor=0.5) =>
-    var float dsma_value = source, filt = 0.0, filt1 = 0.0, filt2 = 0.0, zeros1 = 0.0, sum_squared = 0.0
-    var float[] filt_squared = array.new_float(period)
-    var int buffer_index = 0
+//@optimized for performance and dirty data
+dsma(series float source, simple int period, simple float scaleFactor=0.5) =>
     float a1 = math.exp(-1.414 * math.pi / (period * 0.5))
     float b1 = 2.0 * a1 * math.cos(1.414 * math.pi / (period * 0.5))
     float c1 = 1.0 - b1 + a1 * a1
-    float zeros = source - dsma_value
-    filt := c1 * 0.5 * (zeros + zeros1) + b1 * filt1 - a1 * a1 * filt2
-    float filt_sq = filt * filt
-    sum_squared := sum_squared + filt_sq - array.get(filt_squared, buffer_index)
-    array.set(filt_squared, buffer_index, filt_sq)
-    float alpha = sum_squared > 0 ?
-         math.min(scale_factor * math.abs(filt/math.sqrt(sum_squared/period)) * (5.0/period), 1.0) : 0.1
-    dsma_value := alpha * source + (1 - alpha) * dsma_value
-    zeros1 := zeros
-    filt2 := filt1
-    filt1 := filt
-    buffer_index := (buffer_index + 1) % period
-    dsma_value
+    float c1Half = c1 * 0.5
+    float periodRecip = 1.0 / period
+    float scaleAdjustment = scaleFactor * 5.0 * periodRecip
+    var float result = na
+    var float filt = 0.0
+    var float filt1 = 0.0
+    var float filt2 = 0.0
+    var float zeros1 = 0.0
+    var float sumSquared = 0.0
+    var float[] filtSquared = array.new_float(period, 0.0)
+    var int bufferIndex = 0
+    if na(source)
+        result
+    else
+        if na(result)
+            result := source
+        else
+            float zeros = source - result
+            filt := c1Half * (zeros + zeros1) + b1 * filt1 - a1 * a1 * filt2
+            float filtSq = filt * filt
+            sumSquared := sumSquared + filtSq - filtSquared.get(bufferIndex)
+            filtSquared.set(bufferIndex, filtSq)
+            bufferIndex := (bufferIndex + 1) % period
+            float rms = math.sqrt(math.max(sumSquared * periodRecip, 1e-10))
+            float alpha = math.min(scaleAdjustment * math.abs(filt / rms), 1.0)
+            result := alpha * source + (1 - alpha) * result
+            zeros1 := zeros
+            filt2 := filt1
+            filt1 := filt
+        result
+
+
+// ---------- Main loop ----------
 
 // Inputs
 source = input.source(close, "Source")
@@ -40,6 +58,3 @@ value = dsma(source, period, scale)
 
 // Plot
 plot(value, "DSMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(source, value), "Price Crosses DSMA", "Price crossed DSMA on {{ticker}}")

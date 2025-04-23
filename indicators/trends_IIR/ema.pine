@@ -8,16 +8,30 @@ indicator("Exponential Moving Average", "EMA", overlay=true)
 //@param source Series to calculate EMA from
 //@param alpha smoothing factor, used to calculate alpha as 2/(period+1)
 //@returns EMA value from first bar with proper compensation
-ema(series float source, simple float alpha) =>
-    if alpha <= 0
-        runtime.error("Alpha must be greater than 0")
-    var float EPSILON = 1e-10        // constant - smalest relevant value
-    var float raw_ema = 0.0
-    var float e = 1.0
+//@optimized for performance and dirty data
+ema(series float source,simple int period=0,simple float alpha=0)=>
+    if alpha<=0 and period<=0
+        runtime.error("Alpha or period must be provided")
+    float a=alpha>0?alpha:2.0/math.max(period,1)
+    var float ema=na
+    var float result=na
+    var float e=1.0 
+    var bool warmup=true
     if not na(source)
-        raw_ema := alpha * (source - raw_ema) + raw_ema
-        e := (1 - alpha) * e
-        e > EPSILON ? raw_ema / (1.0 - e) : raw_ema
+        if na(ema)
+            ema:=0
+            result:=source
+        else
+            ema:=a*(source-ema)+ema
+            if warmup
+                e*=(1-a)
+                float c=1.0/(1.0-e)
+                result:=c*ema
+                if e<=1e-10
+                    warmup:=false
+            else
+                result:=ema
+    result
 
 
 // ---------- Main loop ----------
@@ -27,11 +41,7 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-alpha = 2.0/(float(i_period)+1.0)  // calculate alpha from period
-ema = ema(i_source, alpha)  // calculate alpha from period
+ema = ema(i_source, period=i_period)
 
 // Plot
 plot(ema, "Custom EMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, ema), "Price Crosses EMA", "Price crossed EMA on {{ticker}}")

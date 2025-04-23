@@ -8,20 +8,34 @@ indicator("Triple Exponential Moving Average", "TEMA", overlay=true)
 //@param source Series to calculate TEMA from
 //@param alpha smoothing factor
 //@returns TEMA value from first bar with proper compensation
-tema(series float source, simple float alpha) =>
-    if alpha <= 0
-        runtime.error("Alpha must be greater than 0")
-    var simple float EPSILON = 1e-10        // constant - smallest relevant value
-    var float raw_ema1 = 0.0
-    var float raw_ema2 = 0.0
-    var float raw_ema3 = 0.0
-    var float e = 1.0  // compensation factor
-    e := (1 - alpha) * e
-    float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
-    raw_ema1 := alpha * (source - raw_ema1) + raw_ema1
-    raw_ema2 := alpha * (raw_ema1 * compensation - raw_ema2) + raw_ema2
-    raw_ema3 := alpha * (raw_ema2 * compensation - raw_ema3) + raw_ema3
-    compensation * (3 * raw_ema1 - 3 * raw_ema2 + raw_ema3)
+//@optimized for performance and dirty data
+tema(series float source,simple int period=0,simple float alpha=0)=>
+    if alpha<=0 and period<=0
+        runtime.error("Alpha or period must be provided")
+    float a=alpha>0?alpha:2.0/math.max(period,1)
+    var float ema1=na,var float ema2=na,var float ema3=na
+    var float e=1.0
+    var bool warmup=true
+    var float result=na
+    if not na(source)
+        if na(ema1)
+            ema1:=0,ema2:=0,ema3:=0
+            result:=source
+        else
+            ema1:=a*(source-ema1)+ema1
+            if warmup
+                e*=(1-a)
+                float c=1.0/(1.0-e)
+                ema2:=a*(ema1*c-ema2)+ema2
+                ema3:=a*(ema2*c-ema3)+ema3
+                result:=c*(3*ema1-3*ema2+ema3)
+                if e<=1e-10
+                    warmup:=false
+            else
+                ema2:=a*(ema1-ema2)+ema2
+                ema3:=a*(ema2-ema3)+ema3
+                result:=3*ema1-3*ema2+ema3
+    result
 
 
 // ---------- Main loop ----------
@@ -31,11 +45,7 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-alpha = 2.0/(float(i_period)+1.0)  // calculate alpha from period
-tema = tema(i_source, alpha)
+tema = tema(i_source, period=i_period)
 
 // Plot
 plot(tema, "Custom TEMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, tema), "Price Crosses TEMA", "Price crossed TEMA on {{ticker}}")
