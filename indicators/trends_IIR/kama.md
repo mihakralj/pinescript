@@ -1,14 +1,16 @@
 # Kaufman's Adaptive Moving Average (KAMA)
 
-Kaufman's Adaptive Moving Average was developed by Perry Kaufman in the 1990s and introduced in his 1995 book "Smarter Trading." Unlike traditional moving averages, KAMA adjusts its sensitivity based on market conditions.
+## Historical Background
 
-Kaufman created KAMA after years studying various trading systems across different markets. His approach was inspired by earlier adaptive techniques but innovated by creating a formula that could automatically adjust to changing market conditions without manual intervention. KAMA has become a popular technical indicator among traders who need a moving average that responds quickly to significant price movements while ignoring minor fluctuations.
+Kaufman's Adaptive Moving Average was developed by Perry Kaufman in the 1990s and introduced in his 1995 book "Smarter Trading." Unlike traditional moving averages with fixed parameters, KAMA was designed to automatically adjust its sensitivity based on market conditions.
 
-[Pine Script Implementation of KAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/kama.pine)
+Kaufman created KAMA after years of studying various trading systems across different markets. His approach was inspired by earlier adaptive techniques but innovated by creating a formula that could automatically adjust to changing market conditions without manual intervention. Since its introduction, KAMA has become a popular technical indicator among traders who need a moving average that responds quickly to significant price movements while ignoring minor fluctuations.
+
+[Pine Script Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/kama.pine)
 
 ## Core Concepts
 
-KAMA was designed to address the limitations of fixed-parameter moving averages through:
+KAMA addresses the limitations of fixed-parameter moving averages through:
 
 - Efficiency Ratio (ER) to measure the directional movement relative to volatility
 - Dynamic smoothing constant that adapts to market conditions
@@ -17,88 +19,57 @@ KAMA was designed to address the limitations of fixed-parameter moving averages 
 
 ## Mathematical Foundation
 
-KAMA = KAMA_previous + SC × (source - KAMA_previous)
+$KAMA = KAMA_{previous} + SC \times (source - KAMA_{previous})$
 
 Where:
+- $SC$ (Smoothing Constant) = $[ER \times (Fast_\alpha - Slow_\alpha) + Slow_\alpha]^2$
+- $ER$ (Efficiency Ratio) = $Change / Volatility$
+- $Change = |source - source[period]|$
+- $Volatility = \sum|source - source[1]|$ for period
 
-- SC (Smoothing Constant) = [ER × (Fast_α - Slow_α) + Slow_α]²
-- ER (Efficiency Ratio) = Change / Volatility
-- Change = |source - source[period]|
-- Volatility = Σ|source - source[1]| for period
-
-### Detailed Breakdown
+## Calculation Process
 
 1. Calculate Efficiency Ratio:
-   - Measure directional change: |current price - price period bars ago|
-   - Measure volatility: Sum of |price changes| over period
-   - ER = Change / Volatility (ranges from 0 to 1)
+   - Measure directional change: $|current\ price - price\ period\ bars\ ago|$
+   - Measure volatility: Sum of $|price\ changes|$ over period
+   - $ER = Change / Volatility$ (ranges from 0 to 1)
 
 2. Calculate Smoothing Constant:
-   - SC = [ER × (Fast_α - Slow_α) + Slow_α]²
-   - Fast_α typically = 2/(2+1) = 0.6667 (responsive)
-   - Slow_α typically = 2/(30+1) = 0.0645 (stable)
-   - SC dynamically adjusts between Fast_α and Slow_α based on ER
+   - $SC = [ER \times (Fast_\alpha - Slow_\alpha) + Slow_\alpha]^2$
+   - $Fast_\alpha$ typically = $2/(2+1) = 0.6667$ (responsive)
+   - $Slow_\alpha$ typically = $2/(30+1) = 0.0645$ (stable)
+   - SC dynamically adjusts between $Fast_\alpha$ and $Slow_\alpha$ based on ER
 
 3. Apply KAMA formula:
-   - KAMA = KAMA_previous + SC × (source - KAMA_previous)
+   - $KAMA = KAMA_{previous} + SC \times (source - KAMA_{previous})$
 
 The adaptive nature allows KAMA to be more responsive during trending markets (high ER) and more stable during sideways markets (low ER).
 
-### Smoothing Factors
-
 KAMA uses a squared smoothing factor to emphasize the difference between trending and non-trending markets:
-
-- When ER = 1 (perfect trend): SC = Fast_α²
-- When ER = 0 (pure noise): SC = Slow_α²
+- When ER = 1 (perfect trend): $SC = Fast_\alpha^2$
+- When ER = 0 (pure noise): $SC = Slow_\alpha^2$
 - The squared value creates a non-linear response curve that enhances adaptivity
 
-### Adaptive Smoothing Mechanism
-
-- Market-aware filtering through ER calculation
-- Self-adjusting time constants based on price behavior
-- Continuous adaptation without parameter changes
-- Balance between trend following and noise reduction
-
-## Advantages and Disadvantages
+## Advantages and Limitations
 
 ### Advantages
+- Automatically adjusts to changing market conditions
+- Responds quickly during genuine market movements
+- Provides stability during sideways or choppy markets
+- Valid from the first bar without extensive warm-up
+- No need to change parameters as market conditions shift
+- Less prone to false signals during consolidation phases
 
-- **Market Adaptivity**: Automatically adjusts to changing market conditions
-- **Reduced Lag in Trends**: Responds quickly during genuine market movements
-- **Noise Filtering**: Provides stability during sideways or choppy markets
-- **No Warm-up Required**: Valid from the first bar
-- **Self-Optimizing**: No need to change parameters as market conditions shift
-- **Reduced Whipsaws**: Less prone to false signals during consolidation phases
+### Limitations
+- More calculations required than simple moving averages
+- Initial selection of fast/slow parameters impacts overall behavior
+- May be slower to recognize the beginning of new trends
+- ER calculation can be sensitive to the selected period
+- More difficult to predict exact responses compared to traditional moving averages
 
-### Disadvantages
+## Sources
 
-- **Computational Complexity**: More calculations required than simple moving averages
-- **Parameter Sensitivity**: Initial selection of fast/slow parameters impacts overall behavior
-- **Delayed Recognition of New Trends**: May be slower to recognize the beginning of new trends
-- **Efficiency Ratio Limitations**: ER calculation can be sensitive to the selected period
-- **Non-Linear Behavior**: More difficult to predict exact responses compared to traditional moving averages
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Trend Following**: KAMA excels in identifying and following established trends
-- **Noise Filtering**: Superior at filtering market noise in choppy conditions
-- **Signal Generation**: Effective in crossover systems with reduced false signals
-- **Adaptive Systems**: Ideal for systems that need to adjust to changing market conditions
-
-### Parameter Selection
-
-- **Period (10-20)**: Standard range for the Efficiency Ratio calculation
-- **Fast EMA (2-5)**: Controls maximum responsiveness, lower values increase speed
-- **Slow EMA (20-30)**: Controls minimum responsiveness, higher values increase smoothing
-- **Custom Settings**: (10, 2, 30) is the standard configuration
-
-### Complementary Indicators
-
-KAMA performs best when combined with:
-
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Indicators**: Volume analysis to validate price movements
-- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
-- **Support/Resistance Tools**: Key price levels for entry/exit confirmation
+1. Kaufman, P. (1995). *Smarter Trading*. McGraw-Hill.
+2. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
+3. Kaufman, P. (1998). "Adaptive Moving Averages," *Technical Analysis of Stocks & Commodities*.
+4. Ehlers, J. (2001). *Rocket Science for Traders*. John Wiley & Sons.

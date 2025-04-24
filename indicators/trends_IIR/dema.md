@@ -1,12 +1,16 @@
 # Double Exponential Moving Average (DEMA)
 
-The Double Exponential Moving Average is a dual-stage IIR filter that reduces lag compared to standard EMAs. Developed by Patrick Mulloy in 1994 and published in the February issue of Technical Analysis of Stocks & Commodities magazine, DEMA quickly gained popularity among technical analysts. It achieves lag reduction through a mathematical approach that applies a second EMA to the first EMA result, then uses these values in a formula designed to minimize delay while preserving signal quality. Since its introduction, DEMA has become a standard component in many trading platforms and is widely used in algorithmic trading systems.
+## Historical Background
 
-[Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.pine)
+The Double Exponential Moving Average (DEMA) was developed by Patrick Mulloy in 1994 and published in the February issue of Technical Analysis of Stocks & Commodities magazine. Mulloy sought to create a moving average that reduced the lag inherent in traditional EMAs while preserving signal quality.
+
+Since its introduction, DEMA has gained significant popularity among technical analysts and has become a standard component in many trading platforms. It is widely used in algorithmic trading systems where minimizing lag without sacrificing reliability is crucial.
+
+[Pine Script Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.pine)
 
 ## Core Concepts
 
-DEMA was designed to address the lag inherent in traditional moving averages while maintaining signal quality. Its key principles include:
+DEMA addresses the lag inherent in traditional moving averages while maintaining signal quality through:
 
 - Double-smoothing to reduce noise while preserving trend information
 - Strategic coefficient weighting (2× first EMA minus second EMA) to minimize lag
@@ -15,41 +19,34 @@ DEMA was designed to address the lag inherent in traditional moving averages whi
 
 ## Mathematical Foundation
 
-DEMA = 2 × EMA(source) - EMA(EMA(source))
+$DEMA = 2 \times EMA(source) - EMA(EMA(source))$
 
 Where:
+- $EMA(source)$ is the first exponential moving average of the source signal
+- $EMA(EMA(source))$ is the exponential moving average applied to the result of the first EMA
 
-- EMA(source) is the first exponential moving average of the source signal
-- EMA(EMA(source)) is the exponential moving average applied to the result of the first EMA
-
-### Calculation Process
+## Calculation Process
 
 1. Calculate first EMA:
-   EMA₁ = EMA(source, period)
+   $EMA_1 = EMA(source, period)$
 
 2. Calculate second EMA:
-   EMA₂ = EMA(EMA₁, period)
+   $EMA_2 = EMA(EMA_1, period)$
 
 3. Apply DEMA formula:
-   DEMA = 2 × EMA₁ - EMA₂
+   $DEMA = 2 \times EMA_1 - EMA_2$
 
 The formula works by amplifying the first EMA (multiplying by 2) and then subtracting the second EMA. This mathematical approach reduces lag by compensating for the delay introduced in the smoothing process.
 
-### Smoothing Factor
-
 Like EMA, DEMA uses a smoothing factor α calculated as:
 
-α = 2 / (period + 1)
+$\alpha = \frac{2}{period + 1}$
 
 The same α is used for both EMA calculations to maintain consistency in the smoothing process.
 
-## Technical Characteristics
+## Technical Implementation
 
-DEMA is a composite Infinite Impulse Response (IIR) filter that processes data through two EMAs with lag reduction. Its behavior can be analyzed in both frequency and time domains.
-
-### Initialization and Compensation
-
-This implementation applies compensation techniques to both EMA stages:
+DEMA is a composite Infinite Impulse Response (IIR) filter that processes data through two EMAs with lag reduction. The implementation applies compensation techniques to both EMA stages:
 
 1. First EMA stage is compensated for initialization bias
 2. Second EMA stage applies compensation to the output of the first stage
@@ -57,51 +54,24 @@ This implementation applies compensation techniques to both EMA stages:
 
 This approach improves accuracy of early values, reducing the need for extended warm-up periods.
 
-### Alpha vs Period
-
-As with EMA, DEMA can be fine-tuned using α directly instead of period:
-
-- Provides more precise control over smoothing
-- Avoids the discrete steps inherent in period-based calculations
-- Allows for more sophisticated optimization in trading strategies
-
-## Performance Considerations
+## Advantages and Limitations
 
 ### Advantages
-
-- **Reduced Lag**: Responds more quickly to price changes than standard EMA
-- **Improved Trend Tracking**: Follows trends while maintaining reasonable smoothness
-- **Minimal Warm-up**: With compensation, provides usable values earlier
-- **Signal Quality**: Maintains better signal quality than simple lag-reduction methods
-- **Established Method**: Based on proven IIR filter principles
+- Responds more quickly to price changes than standard EMA
+- Follows trends while maintaining reasonable smoothness
+- With compensation, provides usable values earlier
+- Maintains better signal quality than simple lag-reduction methods
+- Based on proven IIR filter principles
 
 ### Limitations
+- Can overshoot the source signal during sharp reversals
+- Small changes in period/α can significantly alter behavior
+- Higher responsiveness may introduce noise in sideways markets
+- Cascaded EMAs require more computational steps
+- More complex to implement correctly than single-stage moving averages
 
-- **Overshooting**: Can overshoot the source signal during sharp reversals
-- **Parameter Sensitivity**: Small changes in period/α can significantly alter behavior
-- **Noise Handling**: Higher responsiveness may introduce noise in sideways markets
-- **Calculation Complexity**: Cascaded EMAs require more computational steps
+## Sources
 
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Trend Following**: DEMA excels in markets with clear directional movement
-- **Breakout Confirmation**: Provides earlier confirmation of price breakouts than standard EMAs
-- **Signal Generation**: Effective in crossover systems with price or other moving averages
-- **Medium-Term Trading**: Balances responsiveness with reasonable noise filtering
-
-### Parameter Selection
-
-- **Short Periods (7-14)**: Highly responsive, suitable for short-term trading and volatile markets
-- **Medium Periods (15-30)**: Balanced approach for swing trading and intermediate trends
-- **Long Periods (30-50)**: Identifies significant trends while maintaining responsiveness
-
-### Complementary Indicators
-
-DEMA performs best when combined with:
-
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Indicators**: Volume analysis to validate price movements
-- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
-- **Price Action**: Support/resistance levels and chart patterns for confirmation
+1. Mulloy, P. (1994). "Smoothing Data with Faster Moving Averages," *Technical Analysis of Stocks & Commodities*, February.
+2. Ehlers, J. (2001). *Rocket Science for Traders*. John Wiley & Sons.
+3. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.

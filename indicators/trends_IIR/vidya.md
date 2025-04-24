@@ -1,92 +1,69 @@
 # Variable Index Dynamic Average (VIDYA)
 
-The Variable Index Dynamic Average (VIDYA) is an adaptive moving average that adjusts its smoothing factor based on market volatility. It was developed by Tushar Chande to create a more responsive moving average during volatile market periods and a smoother average during low volatility periods. Introduced by Tushar Chande in the early 1990s, VIDYA quickly gained recognition among technical analysts for its innovative approach to volatility-based adaptation. Its adoption has grown significantly in algorithmic trading systems and professional trading platforms. The indicator's approach to volatility-based smoothing has influenced the development of numerous adaptive indicators in technical analysis.
+## Historical Background
 
-## Formula
+The Variable Index Dynamic Average (VIDYA) was developed by Tushar Chande in the early 1990s as an adaptive moving average that adjusts its smoothing factor based on market volatility. Chande recognized that traditional moving averages with fixed parameters struggled to adapt to changing market conditions. VIDYA addressed this limitation by becoming more responsive during volatile periods and smoother during low volatility phases.
 
-VIDYA uses a volatility index (VI) to adjust the smoothing factor:
+Since its introduction, VIDYA has gained significant recognition among technical analysts and has been incorporated into numerous algorithmic trading systems and professional platforms. Its approach to volatility-based adaptation has influenced the development of many other adaptive indicators in technical analysis.
 
-```
-α = 2 / (period + 1)
-VI = StdDev(price, 5) / StdDev(price, period)
-VI is clamped to [0,1] range
-SC = α * VI
-VIDYA_today = VIDYA_yesterday + SC * (Price_today - VIDYA_yesterday)
-```
-
-Where:
-- α is the base smoothing factor
-- VI is the volatility index
-- SC is the scaled smoothing constant
-
-## Implementation
-
-The VIDYA indicator introduces adaptive behavior by scaling the EMA smoothing factor based on relative volatility. When volatility is high, VIDYA responds faster to price changes, while during low volatility periods, it produces a smoother line.
-
-Key features of the implementation:
-- Uses standard deviation ratios to measure relative volatility
-- Includes proper initialization and warmup compensation
-- Handles boundary conditions and edge cases
-- Clamps the volatility index between 0 and 1 to prevent extreme values
+[Pine Script Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/vidya.pine)
 
 ## Core Concepts
 
-VIDYA was designed to address the limitations of fixed-parameter moving averages through:
+VIDYA addresses the limitations of fixed-parameter moving averages through:
 
 - Volatility-based adaptation of the smoothing factor
 - Standard deviation ratios to measure relative volatility
 - Dynamic response to changing market conditions
 - Automatic adjustment based on market behavior
 
-## Parameters
+## Mathematical Foundation
 
-- `source`: The price series to calculate VIDYA from (default: close)
-- `period`: The length of the smoothing period (default: 10)
-- `std_period`: The length of the standard deviation period (default: same as period)
+VIDYA uses a volatility index (VI) to adjust the smoothing factor:
 
-## Comparison with other Indicators
+$\alpha = \frac{2}{period + 1}$
 
-VIDYA differs from standard moving averages like SMA and EMA by its adaptive nature. Compared to other adaptive indicators:
+$VI = \frac{StdDev(price, 5)}{StdDev(price, period)}$
 
-- Unlike KAMA which uses the Efficiency Ratio, VIDYA uses a volatility ratio
-- VIDYA tends to be more responsive than EMA during high volatility periods
-- Compared to DEMA, VIDYA uses volatility to adjust its smoothing rather than double smoothing
+$VI$ is clamped to $[0,1]$ range
 
-## Use Cases
+$SC = \alpha \times VI$
 
-VIDYA is particularly useful for:
+$VIDYA_{today} = VIDYA_{yesterday} + SC \times (Price_{today} - VIDYA_{yesterday})$
 
-- Trend following in markets with varying volatility
-- Reducing lag during volatile market conditions
-- Smoothing price action during consolidation periods
-- Signal generation in adaptive trading systems
+Where:
+- $\alpha$ is the base smoothing factor
+- $VI$ is the volatility index
+- $SC$ is the scaled smoothing constant
 
-## Performance Considerations
+## Calculation Process
 
-The implementation is optimized for both performance and proper handling of dirty data. It includes a warmup compensation mechanism to provide accurate results from the first available bar.
+1. Calculate the base smoothing factor $\alpha$ using the specified period
+2. Compute the volatility index (VI) as the ratio of short-term volatility to longer-term volatility
+3. Ensure VI remains within the [0,1] range by clamping extreme values
+4. Determine the scaled smoothing constant (SC) by multiplying $\alpha$ by VI
+5. Calculate VIDYA using an EMA-like formula with the scaled smoothing constant
 
-## Usage Recommendations
+The implementation introduces adaptive behavior by scaling the EMA smoothing factor based on relative volatility. When volatility is high, VIDYA responds faster to price changes, while during low volatility periods, it produces a smoother line.
 
-### Optimal Applications
+## Advantages and Limitations
 
-- **Volatile Markets**: VIDYA excels in markets with varying volatility regimes
-- **Trend Following**: Automatically adjusts to changing market conditions
-- **Signal Generation**: Provides more reliable crossover signals by adapting to volatility
-- **Risk Management**: Responds appropriately to changing market risk conditions
+### Advantages
+- Automatically adapts to changing market volatility
+- Reduces lag during volatile market conditions
+- Provides smoother output during low volatility periods
+- Maintains signal integrity across different market regimes
+- Helps filter out noise while remaining responsive to significant movements
 
-### Parameter Selection
+### Limitations
+- Requires more computational resources than standard moving averages
+- Sensitivity to volatility calculation parameters
+- May be overly responsive during extreme volatility events
+- Standard deviation calculations introduce additional complexity
+- Performance depends on appropriate parameter selection
 
-- **Period (10-20)**: More responsive, suitable for shorter-term trading
-- **Period (20-30)**: Balanced approach for most market conditions
-- **Period (30+)**: More stable baseline with adaptive response to volatility
-- **StdDev Period (5)**: Standard setting for volatility measurement
-- **StdDev Period (3-7)**: Adjust based on market characteristics
+## Sources
 
-### Complementary Indicators
-
-VIDYA performs best when combined with:
-
-- **Volatility Indicators**: ATR or Bollinger Bands to confirm volatility conditions
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Analysis**: Volume confirmation for signal validation
-- **Support/Resistance Tools**: Key price levels for entry/exit confirmation
+1. Chande, T. (1992). "Adapting Moving Averages to Market Volatility," *Technical Analysis of Stocks & Commodities*
+2. Chande, T. & Kroll, S. (1994). *The New Technical Trader*
+3. Kaufman, P. (2013). "Adaptive Moving Averages," *Trading Systems and Methods*, 5th Edition

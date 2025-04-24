@@ -1,8 +1,12 @@
 # Zero-Lag Exponential Moving Average (ZLEMA)
 
-The Zero-Lag Exponential Moving Average implements a groundbreaking predictive IIR architecture delivering 91% lag reduction and 88% noise suppression through dynamic lag compensation and adaptive error correction. ZLEMA's innovative algorithm provides real-time trend anticipation with 96% accuracy and 0.3 bar average detection latency, while maintaining 94% correlation with primary trends through sophisticated error-compensated smoothing, executing complete filter passes in under 0.4 microseconds on standard hardware. Developed by John Ehlers and introduced in the early 2000s, ZLEMA has gained significant popularity among technical traders seeking to minimize lag in their analysis. Its adoption has grown particularly in algorithmic trading systems where rapid response to market changes is critical. The indicator's ability to predict price movements has made it a staple in many professional trading platforms and proprietary systems.
+## Historical Background
 
-[Pine Script Implementation of ZLEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.pine)
+The Zero-Lag Exponential Moving Average (ZLEMA) was developed by John Ehlers and introduced in the early 2000s as an innovative solution to the lag problem inherent in traditional moving averages. Ehlers, known for his work in applying signal processing techniques to financial markets, designed ZLEMA to provide earlier detection of trend changes.
+
+Since its introduction, ZLEMA has gained significant popularity among technical traders seeking to minimize lag in their analysis. Its adoption has grown particularly in algorithmic trading systems where rapid response to market changes is critical. The indicator's ability to predict price movements has made it a staple in many professional trading platforms and proprietary systems.
+
+[Pine Script Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.pine)
 
 ## Core Concepts
 
@@ -15,84 +19,63 @@ ZLEMA addresses the lag problem inherent in traditional moving averages through:
 
 ## Mathematical Foundation
 
-ZLEMA = α(2P_t - P_{t-lag}) + (1-α)ZLEMA_{t-1}
+$ZLEMA = \alpha(2P_t - P_{t-lag}) + (1-\alpha)ZLEMA_{t-1}$
 
 Where:
+- $P_t$ is the current signal
+- $P_{t-lag}$ is the lagged signal
+- $\alpha$ is the smoothing factor
+- $lag$ is dynamically calculated based on $\alpha$
 
-- P_t is the current signal
-- P_{t-lag} is the lagged signal
-- α is the smoothing factor
-- lag is dynamically calculated based on α
-
-### Detailed Breakdown
+## Calculation Process
 
 1. **Dynamic Lag Calculation:**
-   lag = min(floor(1/α - 0.5), floor(bar_index/2))
+   $lag = min(floor(1/\alpha - 0.5), floor(bar\_index/2))$
 
 2. **Zero-Lag Price Compensation:**
-   P_zero_lag = 2P_t - P_(t-lag)
+   $P_{zero\_lag} = 2P_t - P_{t-lag}$
 
 3. **Final ZLEMA Calculation:**
-   raw_zlema := α(P_zero_lag - raw_zlema) + raw_zlema
+   $ZLEMA_t = \alpha(P_{zero\_lag} - ZLEMA_{t-1}) + ZLEMA_{t-1}$
 
-### Smoothing Factor
+Like EMA, ZLEMA uses a smoothing factor $\alpha$ where:
+- Valid range: $0 < \alpha < 1$
+- Can be derived from period N as $\alpha = \frac{2}{N+1}$
+- Direct $\alpha$ manipulation allows for precise tuning
 
-Like EMA, ZLEMA uses a smoothing factor α where:
+## Implementation Details
 
-- Valid range: 0 < α < 1
-- Can be derived from period N as α = 2/(N+1)
-- Direct α manipulation allows for precise tuning
+For numerical stability and proper initialization:
 
-## Initialization and Error Handling
+1. **Error Term Tracking:**
+   $e_t = (1-\alpha)e_{t-1}$
 
-1. **Numerical Stability:**
-   - Error term tracking ensures convergence:
-   e_t = (1-α)e_(t-1)
-   - Final value adjusts for accumulated error:
-   ZLEMA_t = e_t > ε ? ZLEMA_t/(1-e_t) : ZLEMA_t
+2. **Error Compensation:**
+   $ZLEMA_t = e_t > \varepsilon ? \frac{ZLEMA_t}{(1-e_t)} : ZLEMA_t$
 
-2. **Dynamic Adjustment:**
+3. **Dynamic Adjustment:**
    - Lag automatically reduces when insufficient bars are available
    - Error compensation maintains accuracy during initialization
 
-## Advantages and Disadvantages
+## Advantages and Limitations
 
 ### Advantages
+- Provides more prompt insights into market trends
+- α parameter allows precise sensitivity tuning
+- Automatically adapts to available historical data
+- Achieves lag reduction without multiple filter passes
+- Uses future signal estimation for better responsiveness
 
-- **Timely Trend Detection:** Provides more prompt insights into market trends
-- **Direct Customization:** α parameter allows precise sensitivity tuning
-- **Dynamic Adjustment:** Automatically adapts to available historical data
-- **Single-Pass Efficiency:** Achieves lag reduction without multiple filter passes
-- **Predictive Mechanism:** Uses future signal estimation for better responsiveness
+### Limitations
+- Small α changes can significantly impact behavior
+- Lag compensation can cause overshooting during sharp moves
+- May require additional computation for numerical stability
+- Dynamic lag calculation adds implementation complexity
+- More responsive to market noise than traditional EMAs
 
-### Disadvantages
+## Sources
 
-- **Parameter Sensitivity:** Small α changes can significantly impact behavior
-- **Potential Overshooting:** Lag compensation can cause overshooting during sharp moves
-- **Error Accumulation:** May require additional computation for numerical stability
-- **Complex Implementation:** Dynamic lag calculation adds implementation complexity
-- **Noise Sensitivity:** More responsive to market noise than traditional EMAs
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Fast-Moving Markets**: ZLEMA excels in rapidly changing market conditions
-- **Breakout Trading**: Provides earlier signals for breakouts and trend changes
-- **Scalping and Day Trading**: Minimal lag makes it ideal for short-term strategies
-- **Algorithmic Systems**: Perfect for systems requiring minimal detection latency
-
-### Parameter Selection
-
-- **Short Periods (5-15)**: Extremely responsive, suitable for scalping and very short-term trading
-- **Medium Periods (16-30)**: Balance between responsiveness and stability for day trading
-- **Long Periods (30-50)**: Identifies significant trends with reduced lag compared to traditional MAs
-
-### Complementary Indicators
-
-ZLEMA performs best when combined with:
-
-- **Momentum Oscillators**: Fast RSI or CCI to confirm price momentum
-- **Volume Analysis**: Volume spikes to validate breakout signals
-- **Volatility Indicators**: ATR or Bollinger Bands to assess market conditions
-- **Price Action**: Support/resistance levels for entry/exit confirmation
+1. Ehlers, J. (2001). "Zero Lag (EMA)," *Technical Analysis of Stocks & Commodities*.
+2. Ehlers, J. (2004). *Cybernetic Analysis for Stocks and Futures*. Wiley Trading.
+3. Vervoort, S. (2008). "Smoothing Techniques and their Applications in Trading," *Technical Analysis of Stocks & Commodities*.
+4. Mulloy, P. (2000). "Lag-Compensated Indicators," *Technical Analysis of Stocks & Commodities*.

@@ -1,8 +1,12 @@
 # Wilder's Moving Average (RMA)
 
-The Wilder Moving Average implements a precision-optimized IIR architecture delivering 92% noise reduction and 99.9% numerical accuracy through specialized 1/N smoothing coefficient optimization. RMA's sophisticated error-tracking algorithm provides 47% superior noise suppression compared to standard EMAs and 95% trend correlation in volatile conditions through mathematically optimal recursive processing and enhanced smoothing mechanics, executing complete filter passes in under 0.25 microseconds on standard hardware. Developed by J. Welles Wilder Jr. in the late 1970s and introduced in his 1978 book "New Concepts in Technical Trading Systems," RMA quickly became a cornerstone of technical analysis. Wilder created this moving average specifically for his technical indicators, including RSI, ATR, and DMI/ADX. Its adoption has been widespread, particularly in trend-following and volatility-based trading systems. The RMA's unique smoothing approach has made it a standard component in virtually all technical analysis platforms.
+## Historical Background
 
-[Pine Script Implementation of RMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rma.pine)
+Wilder's Moving Average (RMA) was developed by J. Welles Wilder Jr. in the late 1970s. Introduced in his influential 1978 book "New Concepts in Technical Trading Systems," RMA quickly became a cornerstone of technical analysis.
+
+Wilder created this moving average specifically for his innovative technical indicators, including RSI (Relative Strength Index), ATR (Average True Range), and DMI/ADX (Directional Movement Index/Average Directional Index). Its adoption has been widespread, particularly in trend-following and volatility-based trading systems. The RMA's unique smoothing approach has made it a standard component in virtually all technical analysis platforms.
+
+[Pine Script Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rma.pine)
 
 ## Core Concepts
 
@@ -13,110 +17,69 @@ Wilder's RMA was designed specifically for technical indicators requiring:
 - Specific 1/N smoothing factor for optimal indicator performance
 - Balanced approach between responsiveness and stability
 
-## Historical Context and Purpose
-
 Wilder needed a moving average that would be more responsive than SMA but less volatile than EMA for his technical indicators. His solution was to use a modified exponential moving average with a specific smoothing factor of 1/period, which became known as RMA. This smoothing factor creates a more stable line that reduces noise while maintaining sensitivity to signal changes.
-
-### Primary Applications
-
-RMA is a core component in several of Wilder's indicators:
-
-- Relative Strength Index (RSI)
-- Average True Range (ATR)
-- Average Directional Index (ADX)
-- Directional Movement Index (DMI)
 
 ## Mathematical Foundation
 
 The RMA calculation uses Wilder's specific smoothing approach:
 
-RMA₍ₙ₎ = (RMA₍ₙ₋₁₎ × (period - 1) + Price₍ₙ₎) / period
+$RMA_{n} = \frac{RMA_{n-1} \times (period - 1) + Price_{n}}{period}$
 
 Where:
+- $RMA_{n}$ is the current RMA value
+- $RMA_{n-1}$ is the previous RMA value
+- $Price_{n}$ is the current signal
+- $period$ is the lookback period
 
-- RMA₍ₙ₎ is the current RMA value
-- RMA₍ₙ₋₁₎ is the previous RMA value
-- Price₍ₙ₎ is the current signal
-- period is the lookback period
+## Calculation Process
 
-### Optimized Formula
+The formula can be rewritten in terms of alpha ($\alpha = \frac{1}{period}$):
 
-The formula can be rewritten in terms of alpha (α = 1/period):
+$RMA_{n} = \alpha \times Price_{n} + (1 - \alpha) \times RMA_{n-1}$
 
-RMA₍ₙ₎ = α × Price₍ₙ₎ + (1 - α) × RMA₍ₙ₋₁₎
+This form shows RMA as a specific case of exponential smoothing where $\alpha = \frac{1}{period}$.
 
-This form shows RMA as a specific case of exponential smoothing where α = 1/period.
+### Implementation Methods
 
-## Initialization Methods
+1. **Traditional Initialization (SMA-based)**
+   - Uses SMA for the first period's worth of data
+   - Creates a discontinuity when switching from SMA to RMA
+   - Requires waiting for a full period before getting meaningful values
 
-### 1. SMA Initialization (Traditional)
+2. **Compensated Initialization**
+   - Starts calculation from first bar with zero initialization
+   - Tracks the influence of missing history through a compensation factor
+   - Adjusts the raw RMA value based on this compensation
+   - Gradually reduces compensation as more data becomes available
 
-Traditionally, RMA is initialized using SMA for the first period's worth of data. This approach:
+   The corrected RMA is calculated as:
+   
+   $RMA_{corrected} = \frac{RMA_{raw}}{1 - compensation}$
+   
+   Where:
+   - $RMA_{raw}$ is the standard RMA calculation
+   - Compensation decays by $(1-\alpha)$ each bar
+   - $\alpha = \frac{1}{period}$ (Wilder's smoothing factor)
 
-- Provides a reasonable starting point
-- Creates a discontinuity when switching from SMA to RMA
-- Requires waiting for a full period before getting meaningful values
-
-### 2. Compensated Initialization (this Implementation)
-
-This implementation uses the same compensation technique as our EMA implementation:
-
-1. Starts calculation from first bar with zero initialization
-2. Tracks the influence of missing history through a compensation factor
-3. Adjusts the raw RMA value based on this compensation
-4. Gradually reduces compensation as more data becomes available
-
-### The Compensation Formula
-
-The corrected RMA is calculated as:
-
-RMA₍corrected₎ = RMA₍raw₎ / (1 - compensation)
-
-Where:
-
-- RMA₍raw₎ is the standard RMA calculation
-- Compensation decays by (1-α) each bar
-- α = 1/period (Wilder's smoothing factor)
-
-## Advantages and Disadvantages
+## Advantages and Limitations
 
 ### Advantages
+- Smoother than EMA, reducing noise in technical indicators
+- Only needs previous value, not entire lookback period
+- Works exceptionally well with Wilder's technical indicators
+- With compensation, provides accurate values from first bar
+- Avoids initialization discontinuities
 
-- **Stability**: Smoother than EMA, reducing noise in technical indicators
-- **Memory Efficient**: Only needs previous value, not entire lookback period
-- **Consistency**: Works well with Wilder's technical indicators
-- **No Warm-up**: With compensation, provides accurate values from first bar
-- **Smooth Transition**: Avoids initialization discontinuities
+### Limitations
+- Slower to respond to signal changes than EMA
+- Primarily used in Wilder's indicators
+- Less flexible than EMA in terms of smoothing factor
+- Calculation errors compound over time
+- Each value depends on all previous values
 
-### Disadvantages
+## Sources
 
-- **More Lag**: Slower to respond to signal changes than EMA
-- **Limited Usage**: Primarily used in Wilder's indicators
-- **Fixed Smoothing**: Less flexible than EMA in terms of smoothing factor
-- **Recursive Nature**: Calculation errors compound over time
-- **Historical Dependency**: Each value depends on all previous values
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Wilder's Indicators**: RMA is essential for authentic calculation of RSI, ATR, and DMI/ADX
-- **Trend Following**: Excellent for identifying established trends with minimal noise
-- **Volatility Analysis**: Superior smoothing for volatility-based indicators
-- **Long-Term Analysis**: Ideal for longer-term trend identification
-
-### Parameter Selection
-
-- **Period (7-14)**: Standard range for Wilder's original indicators
-- **Period (14)**: Classic setting for RSI and many other Wilder indicators
-- **Period (10-20)**: Balanced approach for general trend following
-- **Period (20+)**: Maximum noise reduction for long-term analysis
-
-### Complementary Indicators
-
-RMA performs best when combined with:
-
-- **Wilder's Indicators**: RSI, ATR, DMI/ADX as originally designed
-- **Momentum Oscillators**: Stochastic or CCI for confirmation
-- **Volume Indicators**: OBV or Volume Profile for validation
-- **Support/Resistance Tools**: Pivot points or Fibonacci levels for entry/exit points
+1. Wilder, J.W. (1978). *New Concepts in Technical Trading Systems*. Trend Research.
+2. Pring, M.J. (2002). *Technical Analysis Explained*, 4th Edition. McGraw-Hill.
+3. Kaufman, P.J. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
+4. Murphy, J.J. (1999). *Technical Analysis of the Financial Markets*. New York Institute of Finance.
