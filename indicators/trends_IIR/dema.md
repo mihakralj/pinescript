@@ -105,4 +105,3 @@ DEMA performs best when combined with:
 - **Volume Indicators**: Volume analysis to validate price movements
 - **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
 - **Price Action**: Support/resistance levels and chart patterns for confirmation
-
