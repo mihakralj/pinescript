@@ -118,3 +118,26 @@ For fine-tuned strategies with IIR filters, use α directly instead of deriving 
 - **False Signals**: In ranging or choppy markets, increased sensitivity can generate more false signals than SMA
 - **Overfitting Risk**: The flexibility of α parameter can lead to overfitting during strategy optimization
 - **Recursive Dependency**: Each EMA value depends on the previous one, so calculation errors compound
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Trend Following**: EMA excels in identifying and following established trends
+- **Signal Generation**: Works well as a component in crossover systems (price/EMA or fast/slow EMA)
+- **Dynamic Support/Resistance**: Functions as a moving support or resistance level in trending markets
+- **Volatility Filtering**: Helps filter out market noise while preserving important price action
+
+### Parameter Selection
+
+- **Short Periods (5-20)**: More responsive, better for short-term trading and volatile markets
+- **Medium Periods (21-50)**: Balance between responsiveness and stability, suitable for swing trading
+- **Long Periods (50+)**: Identify major trends, useful for position trading and long-term analysis
+
+### Complementary Indicators
+
+EMA performs best when combined with:
+
+- **Momentum Oscillators**: RSI or MACD to confirm trend strength
+- **Volume Indicators**: Volume confirmation adds validity to EMA signals
+- **Volatility Measures**: ATR can help adjust EMA period based on market conditions
