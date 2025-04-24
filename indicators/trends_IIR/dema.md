@@ -19,28 +19,28 @@ DEMA addresses the lag inherent in traditional moving averages while maintaining
 
 ## Mathematical Foundation
 
-$DEMA = 2 \times EMA(source) - EMA(EMA(source))$
+DEMA = 2 × EMA(source) - EMA(EMA(source))
 
 Where:
-- $EMA(source)$ is the first exponential moving average of the source signal
-- $EMA(EMA(source))$ is the exponential moving average applied to the result of the first EMA
+- EMA(source) is the first exponential moving average of the source signal
+- EMA(EMA(source)) is the exponential moving average applied to the result of the first EMA
 
 ## Calculation Process
 
 1. Calculate first EMA:
-   $EMA_1 = EMA(source, period)$
+   EMA_1 = EMA(source, period)
 
 2. Calculate second EMA:
-   $EMA_2 = EMA(EMA_1, period)$
+   EMA_2 = EMA(EMA_1, period)
 
 3. Apply DEMA formula:
-   $DEMA = 2 \times EMA_1 - EMA_2$
+   DEMA = 2 × EMA_1 - EMA_2
 
 The formula works by amplifying the first EMA (multiplying by 2) and then subtracting the second EMA. This mathematical approach reduces lag by compensating for the delay introduced in the smoothing process.
 
 Like EMA, DEMA uses a smoothing factor α calculated as:
 
-$\alpha = \frac{2}{period + 1}$
+α = 2/(period + 1)
 
 The same α is used for both EMA calculations to maintain consistency in the smoothing process.
 

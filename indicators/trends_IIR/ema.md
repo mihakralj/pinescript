@@ -21,13 +21,13 @@ The EMA is based on the principle of exponential weighting, where:
 
 The EMA calculation utilizes a smoothing factor (α), which determines how much weight is given to the most recent signal. The standard formula is:
 
-$EMA_{n} = (Price_{n} \times \alpha) + (EMA_{n-1} \times (1 - \alpha))$
+EMA_n = (Price_n × α) + (EMA_n-1 × (1 - α))
 
 Where:
-- $EMA_{n}$ is the current EMA value
-- $Price_{n}$ is the current signal
-- $EMA_{n-1}$ is the previous EMA value
-- $\alpha$ is the smoothing factor
+- EMA_n is the current EMA value
+- Price_n is the current signal
+- EMA_n-1 is the previous EMA value
+- α is the smoothing factor
 
 ## Calculation Process
 
@@ -35,13 +35,13 @@ Where:
 
 The calculation can be implemented more efficiently by rearranging the formula:
 
-$EMA_{n} = \alpha \times (Price_{n} - EMA_{n-1}) + EMA_{n-1}$
+EMA_n = α × (Price_n - EMA_n-1) + EMA_n-1
 
 This form requires only three operations instead of four and is mathematically equivalent.
 
 The smoothing factor α is typically calculated as:
 
-$\alpha = \frac{2}{period + 1}$
+α = 2/(period + 1)
 
 Where 'period' is the chosen lookback period for the EMA.
 
@@ -49,11 +49,11 @@ Where 'period' is the chosen lookback period for the EMA.
 
 EMA calculation presents a fundamental challenge: the formula requires previous EMA values, but what happens at the start of the series? Several approaches exist:
 
-1. **Zero Initialization** ($EMA_{0} = 0$)
+1. **Zero Initialization** (EMA_0 = 0)
    - Assumes all previous values were zero
    - Leads to significant underestimation of early values
 
-2. **First-Value Initialization** ($EMA_{0} = Price_{0}$)
+2. **First-Value Initialization** (EMA_0 = Price_0)
    - Assumes all previous values equaled the first signal
    - Creates overestimation bias in many cases
 
@@ -70,11 +70,11 @@ EMA calculation presents a fundamental challenge: the formula requires previous 
 
 The compensated EMA is calculated as:
 
-$EMA_{corrected} = \frac{EMA_{raw}}{1 - compensation}$
+EMA_corrected = EMA_raw/(1 - compensation)
 
 Where:
-- $EMA_{raw}$ is the standard EMA calculation starting from zero
-- Compensation starts at 1.0 and decays by multiplying by $(1-\alpha)$ on each bar
+- EMA_raw is the standard EMA calculation starting from zero
+- Compensation starts at 1.0 and decays by multiplying by (1-α) on each bar
 
 ## Advantages and Limitations
 

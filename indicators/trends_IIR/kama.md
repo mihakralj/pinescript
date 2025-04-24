@@ -19,35 +19,35 @@ KAMA addresses the limitations of fixed-parameter moving averages through:
 
 ## Mathematical Foundation
 
-$KAMA = KAMA_{previous} + SC \times (source - KAMA_{previous})$
+KAMA = KAMA_previous + SC × (source - KAMA_previous)
 
 Where:
-- $SC$ (Smoothing Constant) = $[ER \times (Fast_\alpha - Slow_\alpha) + Slow_\alpha]^2$
-- $ER$ (Efficiency Ratio) = $Change / Volatility$
-- $Change = |source - source[period]|$
-- $Volatility = \sum|source - source[1]|$ for period
+- SC (Smoothing Constant) = [ER × (Fast_α - Slow_α) + Slow_α]²
+- ER (Efficiency Ratio) = Change / Volatility
+- Change = |source - source[period]|
+- Volatility = Σ|source - source[1]| for period
 
 ## Calculation Process
 
 1. Calculate Efficiency Ratio:
-   - Measure directional change: $|current\ price - price\ period\ bars\ ago|$
-   - Measure volatility: Sum of $|price\ changes|$ over period
-   - $ER = Change / Volatility$ (ranges from 0 to 1)
+   - Measure directional change: |current price - price period bars ago|
+   - Measure volatility: Sum of |price changes| over period
+   - ER = Change / Volatility (ranges from 0 to 1)
 
 2. Calculate Smoothing Constant:
-   - $SC = [ER \times (Fast_\alpha - Slow_\alpha) + Slow_\alpha]^2$
-   - $Fast_\alpha$ typically = $2/(2+1) = 0.6667$ (responsive)
-   - $Slow_\alpha$ typically = $2/(30+1) = 0.0645$ (stable)
-   - SC dynamically adjusts between $Fast_\alpha$ and $Slow_\alpha$ based on ER
+   - SC = [ER × (Fast_α - Slow_α) + Slow_α]²
+   - Fast_α typically = 2/(2+1) = 0.6667 (responsive)
+   - Slow_α typically = 2/(30+1) = 0.0645 (stable)
+   - SC dynamically adjusts between Fast_α and Slow_α based on ER
 
 3. Apply KAMA formula:
-   - $KAMA = KAMA_{previous} + SC \times (source - KAMA_{previous})$
+   - KAMA = KAMA_previous + SC × (source - KAMA_previous)
 
 The adaptive nature allows KAMA to be more responsive during trending markets (high ER) and more stable during sideways markets (low ER).
 
 KAMA uses a squared smoothing factor to emphasize the difference between trending and non-trending markets:
-- When ER = 1 (perfect trend): $SC = Fast_\alpha^2$
-- When ER = 0 (pure noise): $SC = Slow_\alpha^2$
+- When ER = 1 (perfect trend): SC = Fast_α²
+- When ER = 0 (pure noise): SC = Slow_α²
 - The squared value creates a non-linear response curve that enhances adaptivity
 
 ## Advantages and Limitations

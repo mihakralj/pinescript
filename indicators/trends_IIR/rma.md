@@ -23,21 +23,21 @@ Wilder needed a moving average that would be more responsive than SMA but less v
 
 The RMA calculation uses Wilder's specific smoothing approach:
 
-$RMA_{n} = \frac{RMA_{n-1} \times (period - 1) + Price_{n}}{period}$
+RMA_n = (RMA_n-1 × (period - 1) + Price_n)/period
 
 Where:
-- $RMA_{n}$ is the current RMA value
-- $RMA_{n-1}$ is the previous RMA value
-- $Price_{n}$ is the current signal
-- $period$ is the lookback period
+- RMA_n is the current RMA value
+- RMA_n-1 is the previous RMA value
+- Price_n is the current signal
+- period is the lookback period
 
 ## Calculation Process
 
-The formula can be rewritten in terms of alpha ($\alpha = \frac{1}{period}$):
+The formula can be rewritten in terms of alpha (α = 1/period):
 
-$RMA_{n} = \alpha \times Price_{n} + (1 - \alpha) \times RMA_{n-1}$
+RMA_n = α × Price_n + (1 - α) × RMA_n-1
 
-This form shows RMA as a specific case of exponential smoothing where $\alpha = \frac{1}{period}$.
+This form shows RMA as a specific case of exponential smoothing where α = 1/period.
 
 ### Implementation Methods
 
@@ -54,12 +54,12 @@ This form shows RMA as a specific case of exponential smoothing where $\alpha = 
 
    The corrected RMA is calculated as:
    
-   $RMA_{corrected} = \frac{RMA_{raw}}{1 - compensation}$
+   RMA_corrected = RMA_raw/(1 - compensation)
    
    Where:
-   - $RMA_{raw}$ is the standard RMA calculation
-   - Compensation decays by $(1-\alpha)$ each bar
-   - $\alpha = \frac{1}{period}$ (Wilder's smoothing factor)
+   - RMA_raw is the standard RMA calculation
+   - Compensation decays by (1-α) each bar
+   - α = 1/period (Wilder's smoothing factor)
 
 ## Advantages and Limitations
 

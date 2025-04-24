@@ -19,32 +19,32 @@ TEMA addresses the lag inherent in traditional moving averages through:
 
 ## Mathematical Foundation
 
-$TEMA = 3 \times EMA(source) - 3 \times EMA(EMA(source)) + EMA(EMA(EMA(source)))$
+TEMA = 3 × EMA(source) - 3 × EMA(EMA(source)) + EMA(EMA(EMA(source)))
 
 Where:
-- $EMA(source)$ is the first exponential moving average of the source signal
-- $EMA(EMA(source))$ is the second exponential moving average
-- $EMA(EMA(EMA(source)))$ is the third exponential moving average
+- EMA(source) is the first exponential moving average of the source signal
+- EMA(EMA(source)) is the second exponential moving average
+- EMA(EMA(EMA(source))) is the third exponential moving average
 
 ## Calculation Process
 
 1. Calculate first EMA:
-   $EMA_1 = EMA(source, period)$
+   EMA_1 = EMA(source, period)
 
 2. Calculate second EMA:
-   $EMA_2 = EMA(EMA_1, period)$
+   EMA_2 = EMA(EMA_1, period)
 
 3. Calculate third EMA:
-   $EMA_3 = EMA(EMA_2, period)$
+   EMA_3 = EMA(EMA_2, period)
 
 4. Apply TEMA formula:
-   $TEMA = 3 \times EMA_1 - 3 \times EMA_2 + EMA_3$
+   TEMA = 3 × EMA_1 - 3 × EMA_2 + EMA_3
 
 The coefficients (3 and -3) are designed to effectively eliminate the inherent lag while maintaining a smooth output.
 
 Like EMA and DEMA, TEMA uses a smoothing factor α calculated as:
 
-$\alpha = \frac{2}{period + 1}$
+α = 2/(period + 1)
 
 The same α is used for all three EMA calculations to maintain consistency in the smoothing process.
 

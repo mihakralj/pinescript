@@ -21,15 +21,15 @@ VIDYA addresses the limitations of fixed-parameter moving averages through:
 
 VIDYA uses a volatility index (VI) to adjust the smoothing factor:
 
-$\alpha = \frac{2}{period + 1}$
+α = 2/(period + 1)
 
-$VI = \frac{StdDev(price, 5)}{StdDev(price, period)}$
+VI = StdDev(price, 5)/StdDev(price, period)
 
-$VI$ is clamped to $[0,1]$ range
+VI is clamped to [0,1] range
 
-$SC = \alpha \times VI$
+SC = α × VI
 
-$VIDYA_{today} = VIDYA_{yesterday} + SC \times (Price_{today} - VIDYA_{yesterday})$
+VIDYA_today = VIDYA_yesterday + SC × (Price_today - VIDYA_yesterday)
 
 Where:
 - $\alpha$ is the base smoothing factor

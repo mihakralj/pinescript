@@ -19,39 +19,39 @@ ZLEMA addresses the lag problem inherent in traditional moving averages through:
 
 ## Mathematical Foundation
 
-$ZLEMA = \alpha(2P_t - P_{t-lag}) + (1-\alpha)ZLEMA_{t-1}$
+ZLEMA = α(2P_t - P_t-lag) + (1-α)ZLEMA_t-1
 
 Where:
-- $P_t$ is the current signal
-- $P_{t-lag}$ is the lagged signal
-- $\alpha$ is the smoothing factor
-- $lag$ is dynamically calculated based on $\alpha$
+- P_t is the current signal
+- P_t-lag is the lagged signal
+- α is the smoothing factor
+- lag is dynamically calculated based on α
 
 ## Calculation Process
 
 1. **Dynamic Lag Calculation:**
-   $lag = min(floor(1/\alpha - 0.5), floor(bar\_index/2))$
+   lag = min(floor(1/α - 0.5), floor(bar_index/2))
 
 2. **Zero-Lag Price Compensation:**
-   $P_{zero\_lag} = 2P_t - P_{t-lag}$
+   P_zero_lag = 2P_t - P_t-lag
 
 3. **Final ZLEMA Calculation:**
-   $ZLEMA_t = \alpha(P_{zero\_lag} - ZLEMA_{t-1}) + ZLEMA_{t-1}$
+   ZLEMA_t = α(P_zero_lag - ZLEMA_t-1) + ZLEMA_t-1
 
-Like EMA, ZLEMA uses a smoothing factor $\alpha$ where:
-- Valid range: $0 < \alpha < 1$
-- Can be derived from period N as $\alpha = \frac{2}{N+1}$
-- Direct $\alpha$ manipulation allows for precise tuning
+Like EMA, ZLEMA uses a smoothing factor α where:
+- Valid range: 0 < α < 1
+- Can be derived from period N as α = 2/(N+1)
+- Direct α manipulation allows for precise tuning
 
 ## Implementation Details
 
 For numerical stability and proper initialization:
 
 1. **Error Term Tracking:**
-   $e_t = (1-\alpha)e_{t-1}$
+   e_t = (1-α)e_t-1
 
 2. **Error Compensation:**
-   $ZLEMA_t = e_t > \varepsilon ? \frac{ZLEMA_t}{(1-e_t)} : ZLEMA_t$
+   ZLEMA_t = e_t > ε ? ZLEMA_t/(1-e_t) : ZLEMA_t
 
 3. **Dynamic Adjustment:**
    - Lag automatically reduces when insufficient bars are available

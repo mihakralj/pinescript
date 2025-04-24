@@ -35,9 +35,9 @@ The MAMA calculation is based on the Hilbert Transform to determine cycle period
    - Determines appropriate adaptation speed
 
 3. **Adaptive Alpha Formula:**
-   - $\alpha = FastLimit / (PhaseRatio + 1)$
-   - Constrained between $SlowLimit$ and $FastLimit$
-   - $PhaseRatio$ derived from dominant cycle period
+   - α = FastLimit / (PhaseRatio + 1)
+   - Constrained between SlowLimit and FastLimit
+   - PhaseRatio derived from dominant cycle period
 
 ## Calculation Process
 
@@ -61,10 +61,10 @@ The MAMA calculation is based on the Hilbert Transform to determine cycle period
    - Constrain within user-defined limits (FastLimit, SlowLimit)
 
 6. **MAMA Calculation:**
-   - $MAMA_t = \alpha \times Price_t + (1 - \alpha) \times MAMA_{t-1}$
+   - MAMA_t = α × Price_t + (1 - α) × MAMA_t-1
 
 7. **FAMA Calculation:**
-   - $FAMA_t = 0.5 \times \alpha \times MAMA_t + (1 - 0.5 \times \alpha) \times FAMA_{t-1}$
+   - FAMA_t = 0.5 × α × MAMA_t + (1 - 0.5 × α) × FAMA_t-1
 
 ## Advantages and Limitations
 
