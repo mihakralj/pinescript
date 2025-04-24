@@ -8,33 +8,41 @@ indicator("Zero-Lag Double Exponential Moving Average", "ZLDEMA", overlay=true)
 //@param source Series to calculate ZLDEMA from
 //@param alpha Smoothing factor (typically 2/(period+1))
 //@returns ZLDEMA value with zero-lag effect applied
-
-zldema(series float source, simple float alpha) =>
-    if alpha <= 0
-        runtime.error("Alpha must be greater than 0")
-    var float EPSILON = 1e-10
-    var float raw_ema1 = 0.0
-    var float raw_ema2 = 0.0
-    var float e = 1.0
-    int lag = math.round(math.min((1 / alpha) - 0.5, bar_index / 2))
-    float zlema_input = 2 * source - source[lag]
-    raw_ema1 := alpha * (zlema_input - raw_ema1) + raw_ema1
-    e := (1 - alpha) * e
-    float compensation = e > EPSILON ? 1.0 / (1.0 - e) : 1.0
-    float ema1_compensated = raw_ema1 * compensation
-    raw_ema2 := alpha * (ema1_compensated - raw_ema2) + raw_ema2
-    compensation * ((1.5 * raw_ema1) - (0.5 * raw_ema2))
+//@optimized for performance and dirty data
+zldema(series float source,simple int period)=>
+    if period<=0
+        runtime.error("Period must be greater than 0")
+    simple float alpha=2.0/(period+1.0)
+    simple int lag=math.max(1,math.round((period-1)/2))
+    var priceBuffer=array.new<float>(lag+1,0.0)
+    var float raw_ema1=na
+    var float raw_ema2=na
+    var float zldemaValue=na
+    if not na(source)
+        if na(zldemaValue)
+            zldemaValue:=source
+            raw_ema1:=source
+            raw_ema2:=source
+            array.fill(priceBuffer,source)
+        else
+            array.shift(priceBuffer)
+            array.push(priceBuffer,source)
+            float laggedPrice=array.get(priceBuffer,0)
+            float zlema_input=2*source-laggedPrice
+            raw_ema1:=alpha*(zlema_input-raw_ema1)+raw_ema1
+            raw_ema2:=alpha*(raw_ema1-raw_ema2)+raw_ema2
+            zldemaValue:=(1.5*raw_ema1)-(0.5*raw_ema2)
+    zldemaValue
 
 
 // ---------- Main loop ----------
 
 // Inputs
-i_period = input.int(2000, "Period", minval=1)
+i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculations
-alpha = 2.0/(float(i_period)+1.0)  // Calculate alpha from period
-zldema = zldema(i_source, alpha)   // Call function with correct parameters
+zldema = zldema(i_source, i_period) 
 
 // Plots
 plot(zldema, "ZLDEMA", color.new(color.yellow, 0), 2)
