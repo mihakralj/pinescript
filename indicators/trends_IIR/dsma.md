@@ -128,4 +128,3 @@ Input data selection affects filter behavior:
    - Assumes normal distribution
    - May lag in extremely volatile conditions
    - Requires sufficient data for accurate deviation calculation
-
