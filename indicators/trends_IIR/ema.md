@@ -1,6 +1,6 @@
 # Exponential Moving Average (EMA)
 
-The Exponential Moving Average implements a high-performance recursive IIR filter architecture delivering 47% faster signal response and 89% noise reduction through strategic exponential decay weighting. By leveraging an optimized three-operation algorithm with bias-compensated initialization, EMA provides 99.9% accuracy from first bar and 78% improved trend detection compared to simple averages, achieving exact convergence to theoretical IIR response within 13-138 bars while executing in under 0.3 microseconds per data point on standard hardware.
+The Exponential Moving Average implements a high-performance recursive IIR filter architecture delivering 47% faster signal response and 89% noise reduction through strategic exponential decay weighting. By leveraging an optimized three-operation algorithm with bias-compensated initialization, EMA provides 99.9% accuracy from first bar and 78% improved trend detection compared to simple averages, achieving exact convergence to theoretical IIR response within 13-138 bars while executing in under 0.3 microseconds per data point on standard hardware. First introduced in the 1950s, EMA has become one of the most widely used technical indicators in financial markets. Its popularity stems from its balance of responsiveness and stability, making it a core component in countless trading systems and platforms worldwide. The EMA's elegant mathematical properties have made it a standard tool in signal processing beyond finance, including in communications, control systems, and data analysis.
 
 [Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/ema.pine)
 
@@ -108,3 +108,26 @@ For fine-tuned strategies with IIR filters, use α directly instead of deriving 
 - **False Signals**: In ranging or choppy markets, increased sensitivity can generate more false signals than SMA
 - **Overfitting Risk**: The flexibility of α parameter can lead to overfitting during strategy optimization
 - **Recursive Dependency**: Each EMA value depends on the previous one, so calculation errors compound
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Trend Following**: EMA excels in identifying and following established trends
+- **Signal Generation**: Works well as a component in crossover systems (price/EMA or fast/slow EMA)
+- **Dynamic Support/Resistance**: Functions as a moving support or resistance level in trending markets
+- **Volatility Filtering**: Helps filter out market noise while preserving important price action
+
+### Parameter Selection
+
+- **Short Periods (5-20)**: More responsive, better for short-term trading and volatile markets
+- **Medium Periods (21-50)**: Balance between responsiveness and stability, suitable for swing trading
+- **Long Periods (50+)**: Identify major trends, useful for position trading and long-term analysis
+
+### Complementary Indicators
+
+EMA performs best when combined with:
+
+- **Momentum Oscillators**: RSI or MACD to confirm trend strength
+- **Volume Indicators**: Volume confirmation adds validity to EMA signals
+- **Volatility Measures**: ATR can help adjust EMA period based on market conditions
