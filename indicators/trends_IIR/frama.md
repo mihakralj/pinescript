@@ -1,6 +1,6 @@
 # Fractal Adaptive Moving Average (FRAMA)
 
-The Fractal Adaptive Moving Average represents a breakthrough in fractal-based adaptive filtering, achieving 92% noise reduction and 1.8 bar average lag through dynamic fractal dimension analysis and exponential coefficient optimization. FRAMA's sophisticated algorithm, developed by John Ehlers, synthesizes Hurst exponent principles with adaptive smoothing, enabling 89% reduction in false signals while maintaining 98.5% correlation with price trends during both trending and consolidating conditions.
+The Fractal Adaptive Moving Average represents a breakthrough in fractal-based adaptive filtering, achieving 92% noise reduction and 1.8 bar average lag through dynamic fractal dimension analysis and exponential coefficient optimization. FRAMA's sophisticated algorithm, developed by John Ehlers, synthesizes Hurst exponent principles with adaptive smoothing, enabling 89% reduction in false signals while maintaining 98.5% correlation with price trends during both trending and consolidating conditions. Introduced by John Ehlers in 2005, FRAMA quickly gained recognition among advanced technical analysts for its ability to adapt to changing market conditions. Its adoption has grown significantly in algorithmic trading systems and professional trading platforms, particularly in markets with varying volatility regimes. FRAMA's unique approach to measuring market fractality has influenced the development of numerous adaptive indicators in the technical analysis field.
 
 [Pine Script Implementation of FRAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/frama.pine)
 
@@ -81,6 +81,30 @@ As Ehlers explains in his original paper, market prices exhibit fractal properti
 - **Lag in Transitions**: May show delayed response at trend reversals
 - **Period Constraints**: Must use periods divisible by 4
 - **Initial Values**: Requires sufficient historical data for accurate dimension calculation
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Volatile Markets**: FRAMA excels in markets with alternating trending and ranging conditions
+- **Multiple Timeframe Analysis**: Particularly effective when applied across different timeframes
+- **Trend Identification**: Superior at detecting the early stages of trend development
+- **Adaptive Systems**: Ideal component in systems that need to adjust to changing market conditions
+
+### Parameter Selection
+
+- **Short Periods (16-24)**: More responsive, better for short-term trading in active markets
+- **Medium Periods (32-48)**: Balance between responsiveness and stability for swing trading
+- **Long Periods (64+)**: Identify major trends while filtering significant noise
+
+### Complementary Indicators
+
+FRAMA performs best when combined with:
+
+- **Volatility Indicators**: ATR or Bollinger Bands to confirm market conditions
+- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
+- **Volume Analysis**: Volume confirmation adds validity to FRAMA signals
+- **Fractal Indicators**: Pairs well with other fractal-based tools for confirmation
 
 ## References
 
