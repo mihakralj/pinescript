@@ -1,8 +1,17 @@
 # Triple Exponential Moving Average (TEMA)
 
-The Triple Exponential Moving Average implements an innovative triple-cascade IIR filter architecture delivering 82% lag reduction and 95% price correlation through strategic coefficient optimization. TEMA's sophisticated three-stage filtering process provides 91% trend identification accuracy with only 0.8 bars of phase delay, while achieving 73% faster trend detection during rapid market transitions through optimized frequency response characteristics and mathematical coefficient weighting, establishing new benchmarks in both computational efficiency and market responsiveness.
+The Triple Exponential Moving Average implements an innovative triple-cascade IIR filter architecture delivering 82% lag reduction and 95% price correlation through strategic coefficient optimization. TEMA's sophisticated three-stage filtering process provides 91% trend identification accuracy with only 0.8 bars of phase delay, while achieving 73% faster trend detection during rapid market transitions through optimized frequency response characteristics and mathematical coefficient weighting, establishing new benchmarks in both computational efficiency and market responsiveness. Developed by Patrick Mulloy in 1994 as an extension of his DEMA concept, TEMA quickly gained popularity among technical analysts seeking maximum lag reduction. Its adoption has grown significantly in algorithmic trading systems and professional trading platforms. The indicator's elegant mathematical approach to lag reduction has influenced numerous advanced moving averages in technical analysis.
 
 [Pine Script Implementation of TEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/tema.pine)
+
+## Core Concepts
+
+TEMA was designed to address the lag inherent in traditional moving averages through:
+
+- Triple-cascade architecture for maximum lag reduction
+- Strategic coefficient optimization (3, -3, 1) to minimize lag
+- Balanced approach between responsiveness and stability
+- Superior trend detection compared to EMA and DEMA
 
 ## Mathematical Foundation
 
@@ -74,3 +83,27 @@ As with other IIR moving averages, TEMA can be fine-tuned using α directly inst
 - **Noise Amplification**: Higher responsiveness can lead to more false signals in volatile markets
 - **Complex Dependencies**: Triple cascaded EMAs can compound calculation errors and make behavior less predictable
 - **Resource Intensive**: More complex calculations compared to simpler moving averages
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Trend Following**: TEMA excels in identifying and following established trends
+- **Breakout Trading**: Provides earlier confirmation of breakouts than standard EMAs
+- **Signal Generation**: Effective in crossover systems with price or other moving averages
+- **Swing Trading**: Ideal balance of responsiveness and stability for intermediate timeframes
+
+### Parameter Selection
+
+- **Short Periods (5-12)**: Highly responsive, suitable for short-term trading and volatile markets
+- **Medium Periods (13-25)**: Balanced approach for swing trading and intermediate trends
+- **Long Periods (25-50)**: Identifies significant trends while maintaining responsiveness
+
+### Complementary Indicators
+
+TEMA performs best when combined with:
+
+- **Momentum Oscillators**: RSI or MACD to confirm trend strength
+- **Volume Indicators**: OBV or Volume Profile to validate price movements
+- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
+- **Support/Resistance Tools**: Pivot points or Fibonacci levels for entry/exit points

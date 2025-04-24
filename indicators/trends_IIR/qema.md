@@ -1,8 +1,17 @@
 # Quadruple Exponential Moving Average (QEMA)
 
-The Quadruple Exponential Moving Average implements an advanced four-stage cascade architecture delivering superior lag reduction and robust noise suppression through progressive smoothing optimization. QEMA's sophisticated four-stage filtering process provides exceptional trend identification accuracy with minimal phase delay, while achieving faster trend detection during rapid market transitions through optimized coefficient distribution.
+The Quadruple Exponential Moving Average implements an advanced four-stage cascade architecture delivering superior lag reduction and robust noise suppression through progressive smoothing optimization. QEMA's sophisticated four-stage filtering process provides exceptional trend identification accuracy with minimal phase delay, while achieving faster trend detection during rapid market transitions through optimized coefficient distribution. Developed as an extension of the TEMA concept, QEMA represents the ultimate evolution in EMA-based lag reduction techniques. Its adoption has grown among advanced technical analysts and quantitative traders seeking maximum responsiveness. The indicator's sophisticated mathematical approach has established new benchmarks in moving average performance for specialized applications requiring minimal detection latency.
 
 [Pine Script Implementation of QEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/qema.pine)
+
+## Core Concepts
+
+QEMA extends the principles of TEMA to a fourth order through:
+
+- Four-stage cascade architecture for maximum lag reduction
+- Optimized coefficient distribution (4, -6, 4, -1) to minimize lag
+- Progressive smoothing factor system for balanced response
+- Advanced mathematical approach to lag elimination
 
 ## Mathematical Foundation
 
@@ -85,3 +94,27 @@ As with other IIR moving averages, QEMA can be fine-tuned using α directly inst
 - **Sensitive Ratio Parameter**: The derived ratio value is critical - even small deviations can cause instability or reduce effectiveness
 - **Error Propagation**: Each EMA stage compounds any calculation errors from previous stages, potentially amplifying numerical imprecisions
 - **Excessive Responsiveness**: In highly volatile markets, the extreme responsiveness can generate excessive false signals compared to lower-order alternatives
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Ultra-Fast Response Systems**: QEMA excels in applications requiring absolute minimum lag
+- **Breakout Detection**: Provides the earliest possible signals for breakouts
+- **HFT and Scalping**: Ideal for ultra-short-term trading strategies
+- **Technical Research**: Valuable for studying price dynamics with minimal lag
+
+### Parameter Selection
+
+- **Short Periods (4-10)**: Extremely responsive, suitable for scalping and HFT
+- **Medium Periods (10-20)**: Balance between responsiveness and stability
+- **Long Periods (20-30)**: Maximum lag reduction while maintaining some noise filtering
+
+### Complementary Indicators
+
+QEMA performs best when combined with:
+
+- **Confirmation Filters**: Additional filters to reduce false signals
+- **Volatility Indicators**: ATR-based filters to avoid trading during extreme volatility
+- **Volume Analysis**: Volume confirmation for signal validation
+- **Market Regime Filters**: Trend strength indicators to identify suitable market conditions

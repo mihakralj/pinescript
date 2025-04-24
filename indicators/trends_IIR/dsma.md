@@ -4,6 +4,15 @@ The Deviation-Scaled Moving Average is an adaptive IIR filter that adjusts its s
 
 [Pine Script Implementation of DSMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dsma.pine)
 
+## Core Concepts
+
+DSMA was designed to address the limitations of fixed-parameter moving averages through:
+
+- Volatility-based adaptation of the smoothing factor
+- Dynamic response to changing market conditions
+- Increased responsiveness during significant price movements
+- Enhanced stability during normal market conditions
+
 ## Mathematical Foundation
 
 The DSMA calculation uses a dynamically adjusted smoothing factor (α) that scales based on the normalized deviation of the current price from its moving average:
@@ -128,3 +137,30 @@ Input data selection affects filter behavior:
    - Assumes normal distribution
    - May lag in extremely volatile conditions
    - Requires sufficient data for accurate deviation calculation
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Volatile Markets**: DSMA excels in markets with varying volatility regimes
+- **Breakout Trading**: Automatically increases responsiveness during breakouts
+- **Adaptive Systems**: Ideal for systems that need to adjust to changing market conditions
+- **Risk Management**: Provides better signals during high-volatility periods
+
+### Parameter Selection
+
+- **Period (10-20)**: More responsive, suitable for shorter-term trading
+- **Period (20-30)**: Balanced approach for most market conditions
+- **Period (30+)**: More stable baseline with adaptive response to volatility
+- **Scale Factor (0.3-0.5)**: Subtle adaptation for conservative strategies
+- **Scale Factor (0.5-0.7)**: Balanced performance in most conditions
+- **Scale Factor (0.7-0.9)**: Aggressive adaptation for maximum responsiveness
+
+### Complementary Indicators
+
+DSMA performs best when combined with:
+
+- **Volatility Indicators**: ATR or Bollinger Bands to confirm volatility conditions
+- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
+- **Volume Analysis**: Volume confirmation for breakout validation
+- **Market Regime Filters**: Trend strength indicators to identify suitable market conditions

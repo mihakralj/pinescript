@@ -1,8 +1,17 @@
 # Wilder's Moving Average (RMA)
 
-The Wilder Moving Average implements a precision-optimized IIR architecture delivering 92% noise reduction and 99.9% numerical accuracy through specialized 1/N smoothing coefficient optimization. RMA's sophisticated error-tracking algorithm provides 47% superior noise suppression compared to standard EMAs and 95% trend correlation in volatile conditions through mathematically optimal recursive processing and enhanced smoothing mechanics, executing complete filter passes in under 0.25 microseconds on standard hardware.
+The Wilder Moving Average implements a precision-optimized IIR architecture delivering 92% noise reduction and 99.9% numerical accuracy through specialized 1/N smoothing coefficient optimization. RMA's sophisticated error-tracking algorithm provides 47% superior noise suppression compared to standard EMAs and 95% trend correlation in volatile conditions through mathematically optimal recursive processing and enhanced smoothing mechanics, executing complete filter passes in under 0.25 microseconds on standard hardware. Developed by J. Welles Wilder Jr. in the late 1970s and introduced in his 1978 book "New Concepts in Technical Trading Systems," RMA quickly became a cornerstone of technical analysis. Wilder created this moving average specifically for his technical indicators, including RSI, ATR, and DMI/ADX. Its adoption has been widespread, particularly in trend-following and volatility-based trading systems. The RMA's unique smoothing approach has made it a standard component in virtually all technical analysis platforms.
 
 [Pine Script Implementation of RMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rma.pine)
+
+## Core Concepts
+
+Wilder's RMA was designed specifically for technical indicators requiring:
+
+- Superior noise reduction compared to standard EMAs
+- Consistent smoothing behavior across different market conditions
+- Specific 1/N smoothing factor for optimal indicator performance
+- Balanced approach between responsiveness and stability
 
 ## Historical Context and Purpose
 
@@ -86,3 +95,28 @@ Where:
 - **Fixed Smoothing**: Less flexible than EMA in terms of smoothing factor
 - **Recursive Nature**: Calculation errors compound over time
 - **Historical Dependency**: Each value depends on all previous values
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Wilder's Indicators**: RMA is essential for authentic calculation of RSI, ATR, and DMI/ADX
+- **Trend Following**: Excellent for identifying established trends with minimal noise
+- **Volatility Analysis**: Superior smoothing for volatility-based indicators
+- **Long-Term Analysis**: Ideal for longer-term trend identification
+
+### Parameter Selection
+
+- **Period (7-14)**: Standard range for Wilder's original indicators
+- **Period (14)**: Classic setting for RSI and many other Wilder indicators
+- **Period (10-20)**: Balanced approach for general trend following
+- **Period (20+)**: Maximum noise reduction for long-term analysis
+
+### Complementary Indicators
+
+RMA performs best when combined with:
+
+- **Wilder's Indicators**: RSI, ATR, DMI/ADX as originally designed
+- **Momentum Oscillators**: Stochastic or CCI for confirmation
+- **Volume Indicators**: OBV or Volume Profile for validation
+- **Support/Resistance Tools**: Pivot points or Fibonacci levels for entry/exit points

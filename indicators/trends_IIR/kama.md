@@ -6,6 +6,15 @@ Kaufman created KAMA after years studying various trading systems across differe
 
 [Pine Script Implementation of KAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/kama.pine)
 
+## Core Concepts
+
+KAMA was designed to address the limitations of fixed-parameter moving averages through:
+
+- Efficiency Ratio (ER) to measure the directional movement relative to volatility
+- Dynamic smoothing constant that adapts to market conditions
+- Squared smoothing factor to emphasize the difference between trending and non-trending markets
+- Self-adjusting time constants based on price behavior
+
 ## Mathematical Foundation
 
 KAMA = KAMA_previous + SC × (source - KAMA_previous)
@@ -68,3 +77,28 @@ KAMA uses a squared smoothing factor to emphasize the difference between trendin
 - **Delayed Recognition of New Trends**: May be slower to recognize the beginning of new trends
 - **Efficiency Ratio Limitations**: ER calculation can be sensitive to the selected period
 - **Non-Linear Behavior**: More difficult to predict exact responses compared to traditional moving averages
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Trend Following**: KAMA excels in identifying and following established trends
+- **Noise Filtering**: Superior at filtering market noise in choppy conditions
+- **Signal Generation**: Effective in crossover systems with reduced false signals
+- **Adaptive Systems**: Ideal for systems that need to adjust to changing market conditions
+
+### Parameter Selection
+
+- **Period (10-20)**: Standard range for the Efficiency Ratio calculation
+- **Fast EMA (2-5)**: Controls maximum responsiveness, lower values increase speed
+- **Slow EMA (20-30)**: Controls minimum responsiveness, higher values increase smoothing
+- **Custom Settings**: (10, 2, 30) is the standard configuration
+
+### Complementary Indicators
+
+KAMA performs best when combined with:
+
+- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
+- **Volume Indicators**: Volume analysis to validate price movements
+- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
+- **Support/Resistance Tools**: Key price levels for entry/exit confirmation

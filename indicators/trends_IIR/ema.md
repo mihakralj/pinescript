@@ -4,6 +4,15 @@ The Exponential Moving Average implements a high-performance recursive IIR filte
 
 [Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/ema.pine)
 
+## Core Concepts
+
+The EMA is based on the principle of exponential weighting, where:
+
+- Recent prices receive greater weight than older prices
+- The weighting decreases exponentially with each older period
+- All historical prices influence the current EMA value
+- The smoothing factor (α) determines the rate of decay in weighting
+
 ## Mathematical Foundation
 
 The EMA calculation utilizes a smoothing factor (α), which determines how much weight is given to the most recent signal. The standard formula is:

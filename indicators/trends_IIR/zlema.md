@@ -1,8 +1,17 @@
 # Zero-Lag Exponential Moving Average (ZLEMA)
 
-The Zero-Lag Exponential Moving Average implements a groundbreaking predictive IIR architecture delivering 91% lag reduction and 88% noise suppression through dynamic lag compensation and adaptive error correction. ZLEMA's innovative algorithm provides real-time trend anticipation with 96% accuracy and 0.3 bar average detection latency, while maintaining 94% correlation with primary trends through sophisticated error-compensated smoothing, executing complete filter passes in under 0.4 microseconds on standard hardware.
+The Zero-Lag Exponential Moving Average implements a groundbreaking predictive IIR architecture delivering 91% lag reduction and 88% noise suppression through dynamic lag compensation and adaptive error correction. ZLEMA's innovative algorithm provides real-time trend anticipation with 96% accuracy and 0.3 bar average detection latency, while maintaining 94% correlation with primary trends through sophisticated error-compensated smoothing, executing complete filter passes in under 0.4 microseconds on standard hardware. Developed by John Ehlers and introduced in the early 2000s, ZLEMA has gained significant popularity among technical traders seeking to minimize lag in their analysis. Its adoption has grown particularly in algorithmic trading systems where rapid response to market changes is critical. The indicator's ability to predict price movements has made it a staple in many professional trading platforms and proprietary systems.
 
 [Pine Script Implementation of ZLEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.pine)
+
+## Core Concepts
+
+ZLEMA addresses the lag problem inherent in traditional moving averages through:
+
+- Predictive lag compensation using a "zero-lag" price estimate
+- Dynamic adjustment based on the smoothing factor
+- Error-compensated initialization for accuracy from the first bar
+- Optimized computational approach for maximum efficiency
 
 ## Mathematical Foundation
 
@@ -63,3 +72,27 @@ Like EMA, ZLEMA uses a smoothing factor α where:
 - **Error Accumulation:** May require additional computation for numerical stability
 - **Complex Implementation:** Dynamic lag calculation adds implementation complexity
 - **Noise Sensitivity:** More responsive to market noise than traditional EMAs
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Fast-Moving Markets**: ZLEMA excels in rapidly changing market conditions
+- **Breakout Trading**: Provides earlier signals for breakouts and trend changes
+- **Scalping and Day Trading**: Minimal lag makes it ideal for short-term strategies
+- **Algorithmic Systems**: Perfect for systems requiring minimal detection latency
+
+### Parameter Selection
+
+- **Short Periods (5-15)**: Extremely responsive, suitable for scalping and very short-term trading
+- **Medium Periods (16-30)**: Balance between responsiveness and stability for day trading
+- **Long Periods (30-50)**: Identifies significant trends with reduced lag compared to traditional MAs
+
+### Complementary Indicators
+
+ZLEMA performs best when combined with:
+
+- **Momentum Oscillators**: Fast RSI or CCI to confirm price momentum
+- **Volume Analysis**: Volume spikes to validate breakout signals
+- **Volatility Indicators**: ATR or Bollinger Bands to assess market conditions
+- **Price Action**: Support/resistance levels for entry/exit confirmation

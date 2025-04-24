@@ -4,6 +4,15 @@ The Double Exponential Moving Average is a dual-stage IIR filter that reduces la
 
 [Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.pine)
 
+## Core Concepts
+
+DEMA was designed to address the lag inherent in traditional moving averages while maintaining signal quality. Its key principles include:
+
+- Double-smoothing to reduce noise while preserving trend information
+- Strategic coefficient weighting (2× first EMA minus second EMA) to minimize lag
+- Balanced approach between responsiveness and stability
+- Improved trend detection compared to standard EMA
+
 ## Mathematical Foundation
 
 DEMA = 2 × EMA(source) - EMA(EMA(source))
@@ -72,4 +81,28 @@ As with EMA, DEMA can be fine-tuned using α directly instead of period:
 - **Parameter Sensitivity**: Small changes in period/α can significantly alter behavior
 - **Noise Handling**: Higher responsiveness may introduce noise in sideways markets
 - **Calculation Complexity**: Cascaded EMAs require more computational steps
+
+## Usage Recommendations
+
+### Optimal Applications
+
+- **Trend Following**: DEMA excels in markets with clear directional movement
+- **Breakout Confirmation**: Provides earlier confirmation of price breakouts than standard EMAs
+- **Signal Generation**: Effective in crossover systems with price or other moving averages
+- **Medium-Term Trading**: Balances responsiveness with reasonable noise filtering
+
+### Parameter Selection
+
+- **Short Periods (7-14)**: Highly responsive, suitable for short-term trading and volatile markets
+- **Medium Periods (15-30)**: Balanced approach for swing trading and intermediate trends
+- **Long Periods (30-50)**: Identifies significant trends while maintaining responsiveness
+
+### Complementary Indicators
+
+DEMA performs best when combined with:
+
+- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
+- **Volume Indicators**: Volume analysis to validate price movements
+- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
+- **Price Action**: Support/resistance levels and chart patterns for confirmation
 
