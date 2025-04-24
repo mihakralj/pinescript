@@ -1,6 +1,6 @@
 # Double Exponential Moving Average (DEMA)
 
-The Double Exponential Moving Average is a dual-stage IIR filter that reduces lag compared to standard EMAs. DEMA achieves this through a mathematical approach that applies a second EMA to the first EMA result, then uses these values in a formula designed to minimize delay while preserving signal quality.
+The Double Exponential Moving Average is a dual-stage IIR filter that reduces lag compared to standard EMAs. Developed by Patrick Mulloy in 1994 and published in the February issue of Technical Analysis of Stocks & Commodities magazine, DEMA quickly gained popularity among technical analysts. It achieves lag reduction through a mathematical approach that applies a second EMA to the first EMA result, then uses these values in a formula designed to minimize delay while preserving signal quality. Since its introduction, DEMA has become a standard component in many trading platforms and is widely used in algorithmic trading systems.
 
 [Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.pine)
 
@@ -73,13 +73,3 @@ As with EMA, DEMA can be fine-tuned using α directly instead of period:
 - **Noise Handling**: Higher responsiveness may introduce noise in sideways markets
 - **Calculation Complexity**: Cascaded EMAs require more computational steps
 
-## Usage Recommendations
-
-DEMA works best in:
-- Trending markets where lag reduction is critical
-- Scenarios requiring faster signal response
-- Systems where standard EMAs are too slow to capture price movements
-
-Consider alternative indicators in:
-- Highly volatile or choppy markets
-- Systems where smooth output is more important than responsiveness
