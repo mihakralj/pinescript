@@ -20,7 +20,7 @@
 | SMMA | Smoothed MA |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA |
-| VIDYA | Variable Index Dynamic Average |
+| [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average |
 | WCP | Weighted Closing Price |
 | [ZLDEMA](/indicators/trends_IIR/zldema.md) | Zero-Lag Double Exponential MA |
 | [ZLEMA](/indicators/trends_IIR/zlema.md) | Zero-Lag Exponential MA |

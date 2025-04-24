@@ -1,6 +1,6 @@
 * [Home](/)
 
-* [Trends - FIR](./indicators/trends_FIR/_index.md) 20/20
+* [Trends - FIR](./indicators/trends_FIR/_index.md)
   * [ALMA: Arnaud Legoux MA](indicators/trends_FIR/alma.md)
   * [AFIRMA: Adaptive Finite Impulse Response MA](indicators/trends_FIR/afirma.md)
   * [BLMA: Blackman Window MA](indicators/trends_FIR/blma.md)
@@ -22,7 +22,7 @@
   * [HANMA: Hanning Window MA](indicators/trends_FIR/hanma.md)
   * [WMA: Weighted MA](indicators/trends_FIR/wma.md)
 
-* [Trends - IIR](./indicators/trends_IIR/_index.md) 15/25
+* [Trends - IIR](./indicators/trends_IIR/_index.md)
   * [DEMA: Double Exponential MA](indicators/trends_IIR/dema.md)
   * [DSMA: Deviation-Scaled MA](indicators/trends_IIR/dsma.md)
   * [EMA: Exponential MA](indicators/trends_IIR/ema.md)
@@ -44,12 +44,10 @@
   * LTMA: Linear Time MA
   * MGDI: McGinley Dynamic Indicator
   * SMMA: Smoothed MA
-  * VIDYA: Variable Index Dynamic Average
-  * VWAP: Volume Weighted Average Price
-  * VWMA: Volume Weighted MA
+  * [VIDYA: Variable Index Dynamic Average](indicators/trends_IIR/vidya.md)
   * WCP: Weighted Closing Price
 
-* [Cycles Indicators](./indicators/cycles/_index.md) 2/9
+* [Cycles Indicators](./indicators/cycles/_index.md)
   * [STC: Schaff Trend Cycle](indicators/cycles/stc.md)
   * DSS: Double Smoothed Stochastic
   * EBSW: Even Better Sinewave
@@ -57,9 +55,9 @@
   * HT_DCPHASE: Hilbert Transform - Dominant Cycle Phase
   * HT_PHASOR: Hilbert Transform - Phasor Components
   * HT_SINE: Hilbert Transform - SineWave
-    * SINE: Sine Wave
+  * SINE: Sine Wave
 
-* [Error Metrics](./indicators/errors/_index.md) 16/16
+* [Error Metrics](./indicators/errors/_index.md)
   * [DIRTY: Dirty Data Injection](indicators/errors/dirty.md)
   * [HUBER: Huber Loss](indicators/errors/huber.md)
   * [MAE: Mean Absolute Error](indicators/errors/mae.md)
@@ -77,7 +75,7 @@
   * [RSQUARED: R-Squared (Coefficient of Determination)](indicators/errors/rsquared.md)
   * [SMAPE: Symmetric Mean Absolute Percentage Error](indicators/errors/smape.md)
 
-* [Momentum Indicators](./indicators/momentum/_index.md) 0/21
+* [Momentum Indicators](./indicators/momentum/_index.md)
   * APO: Absolute Price Oscillator
   * BOP: Balance of Power
   * CCI: Commodity Channel Index
@@ -100,7 +98,7 @@
   * ULTOSC: Ultimate Oscillator
   * WILLR: Williams %R
 
-* [Numerics & Statistical Transformations](./indicators/numerics/_index.md) 0/22
+* [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
   * LINEAR: Linear Transformation
   * LOG: Logarithmic Transformation
   * EXP: Exponential Transformation
@@ -124,7 +122,7 @@
   * MODE: Mode
   * QUANTILE: Quantile
 
-* [Oscillators](./indicators/oscillators/_index.md) 0/46
+* [Oscillators](./indicators/oscillators/_index.md)
   * AC: Acceleration Oscillator
   * AO: Awesome Oscillator
   * APO: Absolute Price Oscillator
@@ -176,7 +174,7 @@
   * ULTOSC: Ultimate Oscillator
   * WILLR: Williams %R
 
-* [Price Channels and Bands](./indicators/channels/_index.md) 0/21
+* [Price Channels and Bands](./indicators/channels/_index.md)
   * ABBER: Aberration
   * ACCBANDS: Acceleration Bands
   * BB: Bollinger Bands
@@ -199,14 +197,14 @@
   * SDC: Standard Deviation Channel
   * STARC: Stoller Average Range Channel
 
-* [Signal Filters](./indicators/filters/_index.md) 4/5
+* [Signal Filters](./indicators/filters/_index.md)
   * [EHBPF: Ehlers Bandpass Filter](indicators/filters/ehbpf.md)
   * [EHHPF: Ehlers Highpass Filter](indicators/filters/ehhpf.md)
   * [EHSSF: Ehlers Super Smoother Filter](indicators/filters/ehssf.md)
   * [EHUSF: Ehlers Ultra Smoother Filter](indicators/filters/ehusf.md)
   * MAAF: MA Adaptive Filter
 
-* [Stop and Reverse Indicators](./indicators/reversals/_index.md) 0/7
+* [Stop and Reverse Indicators](./indicators/reversals/_index.md)
   * ATRS: ATR Trailing Stop
   * CE: Chandelier Exit
   * CKSP: Chande Kroll Stop
@@ -215,7 +213,7 @@
   * SUPER: SuperTrend
   * VS: Volatility Stop
 
-* [Trend Dynamics](./indicators/dynamics/_index.md) 2/22
+* [Trend Dynamics](./indicators/dynamics/_index.md)
   * [ADX: Average Directional Movement Index](indicators/dynamics/adx.md)
   * [AROON: Aroon](indicators/dynamics/aroon.md)
   * ADXR: Average Directional Movement Rating
@@ -239,7 +237,7 @@
   * TTM: TTM Trend
   * VORTEX: Vortex Indicator
 
-* [Volatility Indicators](./indicators/volatility/_index.md) 2/17
+* [Volatility Indicators](./indicators/volatility/_index.md)
   * [JVOLTY: Jurik Volatility](indicators/volatility/jvolty.md)
   * [JVOLTYN: Normalized Jurik Volatility](indicators/volatility/jvoltyn.md)
   * ABBER: Aberration
@@ -259,7 +257,7 @@
   * HV: Historical Volatility
   * MASSI: Mass Index
 
-* [Volume Indicators](./indicators/volume/_index.md) 0/22
+* [Volume Indicators](./indicators/volume/_index.md)
   * AD: Accumulation/Distribution Line
   * ADOSC: Chaikin A/D Oscillator
   * AOBV: Archer On-Balance Volume

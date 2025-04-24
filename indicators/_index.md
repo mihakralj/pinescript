@@ -265,7 +265,7 @@
 | VARIANCE                                    | Numerics     | Variance                                           |
 | VC                                          | Volatility   | Volatility Cone                                    |
 | VF                                          | Volume       | Volume Force                                       |
-| VIDYA                                       | Trends_IIR   | Variable Index Dynamic Average                     |
+| [VIDYA](/indicators/trends_IIR/vidya.md)    | Trends_IIR   | Variable Index Dynamic Average                     |
 | VORTEX                                      | Dynamics     | Vortex Indicator                                   |
 | VOV                                         | Volatility   | Volatility of Volatility                           |
 | VP                                          | Volume       | Volume Profile                                     |
