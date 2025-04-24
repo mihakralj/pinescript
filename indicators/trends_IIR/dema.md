@@ -6,9 +6,7 @@ The Double Exponential Moving Average is a dual-stage IIR filter that reduces la
 
 ## Mathematical Foundation
 
-```
 DEMA = 2 × EMA(source) - EMA(EMA(source))
-```
 
 Where:
 
@@ -18,19 +16,13 @@ Where:
 ### Calculation Process
 
 1. Calculate first EMA:
-   ```
    EMA₁ = EMA(source, period)
-   ```
 
 2. Calculate second EMA:
-   ```
    EMA₂ = EMA(EMA₁, period)
-   ```
 
 3. Apply DEMA formula:
-   ```
    DEMA = 2 × EMA₁ - EMA₂
-   ```
 
 The formula works by amplifying the first EMA (multiplying by 2) and then subtracting the second EMA. This mathematical approach reduces lag by compensating for the delay introduced in the smoothing process.
 
