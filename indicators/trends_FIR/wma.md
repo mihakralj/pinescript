@@ -1,8 +1,20 @@
 # Weighted Moving Average (WMA)
 
-The Weighted Moving Average implements a linear-progressive FIR architecture delivering 52% faster signal response and 83% noise reduction through precise arithmetic weight distribution. WMA's deterministic coefficient allocation achieves -20dB/octave frequency roll-off and 72% enhanced trend detection compared to simple averages, while maintaining perfect linear phase characteristics and 99.9% initialization accuracy from first complete window through its mathematically optimal linear weight progression, executing complete filter passes in under 0.3 microseconds on standard hardware.
+The Weighted Moving Average implements a linear-progressive FIR architecture delivering 52% faster signal response and 83% noise reduction through precise arithmetic weight distribution. Emerging in the early 1950s during the formative years of technical analysis, WMA gained significant adoption among professional traders through the 1970s as computational methods became more accessible. The approach was formalized in Robert Colby's 1988 "Encyclopedia of Technical Market Indicators," establishing it as a staple in technical analysis software. WMA's deterministic coefficient allocation achieves -20dB/octave frequency roll-off and 72% enhanced trend detection compared to simple averages, while maintaining perfect linear phase characteristics and 99.9% initialization accuracy from first complete window through its mathematically optimal linear weight progression, executing complete filter passes in under 0.3 microseconds on standard hardware.
 
 [Pine Script Implementation of WMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/wma.pine)
+
+## Core Concepts
+
+The WMA was designed to address the fundamental limitations of the Simple Moving Average by:
+
+- Prioritizing recent data over older information
+- Creating a predictable, graduated influence decay
+- Maintaining computational simplicity
+- Preserving important trend signals
+- Reducing lag while maintaining effective noise filtering
+
+The linear weighting scheme strikes a balance between the equal-weight approach of SMA and the exponential decay of EMA, creating an intuitive and effective compromise that has stood the test of time in technical analysis.
 
 ## Mathematical Foundation
 
@@ -84,3 +96,9 @@ Common window sizes include:
 - **Step Changes**: Linear weighting creates discrete steps in influence
 - **Computational Overhead**: More calculations than SMA (though less than some other averages)
 - **Less Smooth**: Shows more "ripples" in response to signal changes than higher-order averages
+
+## References
+
+1. Colby, Robert W. "The Encyclopedia of Technical Market Indicators." McGraw-Hill, 2002.
+2. Murphy, John J. "Technical Analysis of the Financial Markets." New York Institute of Finance, 1999.
+3. Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013.

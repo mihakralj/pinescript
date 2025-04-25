@@ -41,17 +41,8 @@ ehbpf(series float src, simple int lp, simple int up) =>
     bpf := lp_c1 * hp + lp_c2 * bp1 + lp_c3 * bp2
     bpf
 
-dirtyData(float source, simple int interval = 10, simple int gap_size = 1) =>
-    result = source
-    if bar_index == 0
-        result := na
-    else
-        cycle_position = bar_index % interval
-        if cycle_position < gap_size
-            result := na
-    result
 
-// ---------- Main loop ----------
+    // ---------- Main loop ----------
 
 // Inputs
 i_lower = input.int(10, "Longer Period", minval=1)
@@ -63,4 +54,3 @@ ehbpf = ehbpf(i_source, i_lower, i_upper)
 
 // Plot
 plot(ehbpf, "EHBandpass", color.new(color.yellow, 0), 2)
-plot(ehbpf(dirtyData(i_source,10,1),i_lower,i_upper), "dirty", color.new(color.blue, 0), 2)

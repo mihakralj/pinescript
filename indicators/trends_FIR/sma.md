@@ -82,3 +82,10 @@ Common window sizes and their typical applications:
 - **Sudden Changes**: When a signal leaves the window, it can cause abrupt changes in the SMA
 - **Binary Cutoff**: Sharp cutoff between signals that have influence (1/p) and those with no influence (0)
 - **Poor Frequency Selectivity**: Relatively poor separation between signal and noise components
+
+## References
+
+1. Edwards, Robert D. and Magee, John. "Technical Analysis of Stock Trends." CRC Press, 2007.
+2. Murphy, John J. "Technical Analysis of the Financial Markets." New York Institute of Finance, 1999.
+3. Wilder, J. Welles. "New Concepts in Technical Trading Systems." Trend Research, 1978.
+4. Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013.

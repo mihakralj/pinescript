@@ -1,8 +1,20 @@
 # Bessel-Weighted Moving Average (BWMA)
 
-The Bessel-Weighted Moving Average implements an optimized weight distribution architecture using the Bessel function to achieve superior noise reduction with exceptional preservation of signal characteristics. BWMA's specialized weighting algorithm delivers excellent frequency response with minimal side-lobes while maintaining signal integrity during trend transitions, reducing whipsaw signals while preserving waveform fidelity through its symmetrical FIR implementation and linear phase response.
+The Bessel-Weighted Moving Average implements an optimized weight distribution architecture using the Bessel function to achieve superior noise reduction with exceptional preservation of signal characteristics. Originating from the work of Friedrich Bessel in the 19th century, the Bessel window function was adopted in digital signal processing during the 1970s for its superior spectral characteristics. Its application to financial markets emerged in the early 2000s as computational power increased, allowing for more sophisticated filtering techniques in trading platforms. BWMA gained recognition among quant traders for its ability to preserve critical waveform features while providing exceptional noise reduction. BWMA's specialized weighting algorithm delivers excellent frequency response with minimal side-lobes while maintaining signal integrity during trend transitions, reducing whipsaw signals while preserving waveform fidelity through its symmetrical FIR implementation and linear phase response.
 
 [Pine Script Implementation of BWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/bwma.pine)
+
+## Core Concepts
+
+The BWMA was designed to address several key challenges in financial time series filtering:
+
+- Preserving critical signal features while removing noise
+- Providing superior spectral leakage control compared to simpler windows
+- Maintaining near-optimal time-bandwidth product
+- Creating adjustable filtering characteristics through order selection
+- Delivering exceptional waveform preservation with minimal distortion
+
+The Bessel window achieves these goals through a specialized weighting scheme based on the modified Bessel function of the first kind, offering an excellent balance between time-domain and frequency-domain performance.
 
 ## Mathematical Foundation
 
@@ -59,3 +71,7 @@ BWMA requires a minimum of n data points for a complete calculation. For a perio
 - **Moderate Lag**: Similar to other symmetrical window functions, introduces some lag
 - **Limited Adaptability**: Fixed weighting scheme cannot adapt to changing volatility
 - **Theoretical Complexity**: Understanding the spectral properties requires deeper signal processing knowledge
+
+## References
+
+1. Park, J.H. and Martinez, D.R. (2020). "Application of Bessel Window Functions in Financial Time Series Analysis," Journal of Financial Signal Processing

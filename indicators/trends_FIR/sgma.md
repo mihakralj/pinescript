@@ -1,8 +1,20 @@
 # Savitzky-Golay Moving Average (SGMA)
 
-The Savitzky-Golay Moving Average implements polynomial-based smoothing that optimally preserves the higher moments of the data while filtering noise. SGMA uses least-squares polynomial fitting across a sliding window to enhance signal features such as maxima, minima, and width without introducing significant distortion. This advanced technique is particularly valuable for preserving rapid changes in trends while effectively removing noise.
+The Savitzky-Golay Moving Average implements polynomial-based smoothing that optimally preserves the higher moments of the data while filtering noise. Originally developed by Abraham Savitzky and Marcel J.E. Golay in 1964 for spectroscopic analysis in chemistry, this filtering method was published in "Analytical Chemistry" and quickly became a standard technique in signal processing. Its application to financial markets began in the 1990s as researchers sought more sophisticated methods for preserving important market structures while filtering noise. By the 2000s, it had been adopted by advanced trading platforms and quantitative analysts for its superior ability to maintain critical signal features. SGMA uses least-squares polynomial fitting across a sliding window to enhance signal features such as maxima, minima, and width without introducing significant distortion. This advanced technique is particularly valuable for preserving rapid changes in trends while effectively removing noise.
 
 [Pine Script Implementation of SGMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sgma.pine)
+
+## Core Concepts
+
+The SGMA was designed to address fundamental limitations in traditional moving averages through:
+
+- Polynomial fitting instead of simple averaging
+- Preservation of higher statistical moments (derivatives)
+- Superior feature retention during smoothing
+- Enhanced turning point identification
+- Minimal distortion of important signal characteristics
+
+SGMA achieves this balance through its innovative approach of fitting polynomials to local data segments, allowing it to model the underlying structure of price movement rather than simply averaging it, which preserves critical features that would otherwise be lost in conventional smoothing techniques.
 
 ## Mathematical Foundation
 
@@ -59,3 +71,9 @@ The implementation handles the initialization period by:
 - **Over-fitting Risk**: High polynomial degrees with small windows may fit noise
 - **Edge Effects**: Performance can degrade near the edges of the data series
 - **Odd-Length Requirement**: Window size must be odd
+
+## References
+
+1. Press, W.H. and Teukolsky, S.A. "Savitzky-Golay Smoothing Filters." Computers in Physics, 1990.
+2. Schafer, R.W. "What Is a Savitzky-Golay Filter?" IEEE Signal Processing Magazine, 2011.
+3. Gorry, P.A. "General Least-Squares Smoothing and Differentiation by the Convolution Method."

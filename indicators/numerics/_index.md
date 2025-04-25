@@ -39,3 +39,5 @@
 | TSF | Tsf |
 | VARIANCE | Variance |
 | ZSCORE | Z-score standardization |
+| CWT | Continuous Wavelet Transform |
+| DWT | Discrete Wavelet Transform |

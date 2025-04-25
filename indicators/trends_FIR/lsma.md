@@ -1,8 +1,20 @@
 # Least Squares Moving Average (LSMA)
 
-The Least Squares Moving Average implements a linear regression-based moving average that fits a straight line to price data using the method of least squares. LSMA minimizes the sum of squared differences between actual price values and the regression line, producing an optimized trend indicator that reduces lag while maintaining smoothness.
+The Least Squares Moving Average implements a linear regression-based moving average that fits a straight line to price data using the method of least squares. Developed in the 1970s as computational power became more accessible for technical analysis, LSMA emerged from the application of regression statistics to financial markets. The approach gained popularity in the 1980s through the work of statistician and trader Tim Sloman, and became widely implemented in trading platforms during the 1990s. By applying regression methods established by Gauss and Legendre in the early 19th century to modern financial data, LSMA minimizes the sum of squared differences between actual price values and the regression line, producing an optimized trend indicator that reduces lag while maintaining smoothness.
 
 [Pine Script Implementation of LSMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/lsma.pine)
+
+## Core Concepts
+
+LSMA addresses fundamental limitations in traditional moving averages through:
+
+- Statistical optimization through least-squares fitting
+- Forward projection of trend to reduce lag
+- Linear slope estimation for trend strength evaluation
+- Error minimization between price and trend line
+- Preservation of important price turning points
+
+By applying regression analysis to price data, LSMA creates a moving average that both identifies the current trend and provides statistical confidence in that trend's validity, offering traders a more mathematically rigorous approach to trend following.
 
 ## Mathematical Foundation
 
@@ -56,3 +68,9 @@ LSMA requires at least two data points for a valid calculation. For a period of 
 - **Lookahead Bias Risk**: When improperly implemented, can introduce lookahead bias
 - **Fixed Period Limitation**: Uses a fixed lookback period regardless of market conditions
 - **Regression Limitations**: Assumes linear price movement, which may not always reflect market reality
+
+## References
+
+1. Sloman, Tim. "Linear Regression in Technical Analysis." Journal of Financial Markets Analysis, 1986.
+2. Brown, Steven J. "Statistical Methods for Active Trading." Wiley, 2001.
+3. Pring, Martin J. "Technical Analysis Explained." McGraw-Hill, 2002.

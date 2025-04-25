@@ -147,7 +147,7 @@ Input data selection affects filter behavior:
 - **Adaptive Systems**: Ideal for systems that need to adjust to changing market conditions
 - **Risk Management**: Provides better signals during high-volatility periods
 
-### Parameter Selection
+### Parameters Selection
 
 - **Period (10-20)**: More responsive, suitable for shorter-term trading
 - **Period (20-30)**: Balanced approach for most market conditions

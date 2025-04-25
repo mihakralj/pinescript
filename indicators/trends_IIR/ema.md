@@ -24,6 +24,7 @@ The EMA calculation utilizes a smoothing factor (α), which determines how much 
 EMA_n = (Price_n × α) + (EMA_n-1 × (1 - α))
 
 Where:
+
 - EMA_n is the current EMA value
 - Price_n is the current signal
 - EMA_n-1 is the previous EMA value

@@ -1,0 +1,39 @@
+// The MIT License (MIT)
+// © mihakralj
+// Indicator algorithm based on John F. Ehlers' work
+//@version=5
+indicator("Bessel Filter (2nd Order)", "Bessel", overlay=true, timeframe="", timeframe_gaps=true)
+
+//@function Calculates 2nd Order Bessel Lowpass Filter
+//@param src Series to calculate Bessel filter from
+//@param length Cutoff period (related to -3dB frequency)
+//@returns Bessel filter value
+bessel(series float src, simple int length) =>
+    float pi = math.pi
+    int safe_length = math.max(length, 2)
+    float a = math.exp(-pi / safe_length)
+    float b = 2 * a * math.cos(1.738 * pi / safe_length) // 1.738 ≈ sqrt(3)
+    float c2 = b
+    float c3 = -a * a
+    float c1 = 1 - c2 - c3
+    var float filt = na
+    if bar_index < 2
+        filt := nz(src, 0.0)
+    else
+        float ssrc = nz(src, src[1])
+        float filt1 = nz(filt[1], ssrc)
+        float filt2 = nz(filt[2], filt1)
+        filt := c1 * ssrc + c2 * filt1 + c3 * filt2
+    filt
+
+// ---------- Main loop ----------
+
+// Inputs
+i_length = input.int(20, "Length", minval=2) // Minval 2 to avoid division by zero/instability
+i_source = input.source(close, "Source")
+
+// Calculation
+bessel_val = bessel(i_source, i_length)
+
+// Plot
+plot(bessel_val, "Bessel", color=color.new(color.yellow, 0), linewidth=2)

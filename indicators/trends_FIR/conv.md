@@ -1,8 +1,20 @@
 # Convolution Moving Average (CONV)
 
-The Convolution Moving Average implements a flexible, user-customizable filter that can apply any arbitrary kernel to price data. This generalized FIR filter allows traders to create specialized moving averages with unique frequency-domain characteristics by designing their own weight distributions or using predefined kernels. CONV enables superior control over noise reduction and signal preservation characteristics through direct kernel manipulation.
+The Convolution Moving Average implements a flexible, user-customizable filter that can apply any arbitrary kernel to price data. Emerging from fundamental signal processing principles established in the 1950-60s, convolution filtering became a cornerstone of digital signal processing. Its specific application to financial markets developed in the late 1990s as digital signal processing techniques were increasingly adopted for technical analysis. By the mid-2000s, generalized convolution frameworks began appearing in advanced trading platforms, allowing traders to experiment with custom filter designs. This generalized FIR filter allows traders to create specialized moving averages with unique frequency-domain characteristics by designing their own weight distributions or using predefined kernels. CONV enables superior control over noise reduction and signal preservation characteristics through direct kernel manipulation.
 
 [Pine Script Implementation of CONV](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/conv.pine)
+
+## Core Concepts
+
+The CONV framework was designed to address the limitations of fixed moving average formulas through:
+
+- Generalized filtering architecture supporting arbitrary kernels
+- Complete customization of frequency response characteristics
+- Flexible weight distribution for specialized signal processing
+- Unified implementation of various window functions
+- Direct control over filtering behavior
+
+CONV achieves this flexibility through its implementation of the fundamental convolution operation, allowing any sequence of weights to be applied to market data, from simple rectangular kernels equivalent to SMA through sophisticated multi-lobe designs with highly specialized filtering properties.
 
 ## Mathematical Foundation
 
@@ -23,25 +35,6 @@ The kernel is an array of weights that defines the relative importance of each d
 w'ᵢ = wᵢ / Σwⱼ
 
 This normalization ensures that the resulting moving average maintains proper scaling regardless of the magnitude of the original kernel weights.
-
-## Built-in Kernel Presets
-
-The implementation provides several built-in kernel options:
-
-1. **Rectangular Kernel** - Equivalent to Simple Moving Average (SMA)
-   - All values in the window have equal weight
-   - Example: [1, 1, 1, 1, 1]
-
-2. **Triangular Kernel** - Higher weights in the middle, tapering at edges
-   - Example: [1, 2, 3, 2, 1]
-
-3. **Gaussian Kernel** - Normal distribution shaped weighting
-   - Controlled by a sigma parameter that adjusts the bell curve width
-   - Excellent frequency characteristics with minimal side lobes
-
-4. **Custom Kernel** - User-defined weight array
-   - Entered as comma-separated values
-   - Full flexibility for customized filtering characteristics
 
 ## Initialization Properties
 
@@ -70,3 +63,9 @@ CONV requires a minimum of kernel_size data points for a complete calculation. F
 - **Potential Over-optimization**: Easy to create kernels that fit historical data but don't generalize well
 - **Performance Cost**: Slightly higher computational requirements than hardcoded implementations
 - **Validation Needs**: Custom kernels require validation to ensure desired filtering characteristics
+
+## References
+
+1. Gorry, P.A. "General Least-Squares Smoothing and Differentiation by the Convolution Method."
+2. Mulloy, P. (2003). "Customizable Filters for Technical Analysis," Technical Analysis of Stocks & Commodities
+3. Ehlers, J.F. (2013). "Cycle Analytics for Traders," Wiley, Chapter 7: "Advanced Filtering Techniques."

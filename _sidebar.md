@@ -28,10 +28,13 @@
   * [EMA: Exponential MA](indicators/trends_IIR/ema.md)
   * [FRAMA: Fractal Adaptive MA](indicators/trends_IIR/frama.md)
   * [HEMA: Hull Exponential MA](indicators/trends_IIR/hema.md)
+  * [HTIT: Hilbert Transform Instantaneous Trend](indicators/trends_IIR/htit.md)
   * [JMA: Jurik MA](indicators/trends_IIR/jma.md)
   * [KAMA: Kaufman Adaptive MA](indicators/trends_IIR/kama.md)
+  * [LTMA: Linear Time MA](indicators/trends_IIR/ltma.md)
   * [QEMA: Quadruple Exponential MA](indicators/trends_IIR/qema.md)
   * [REMA: Regularized Exponential MA](indicators/trends_IIR/rema.md)
+  * [RGMA: Recursive Gaussian MA](indicators/trends_IIR/rgma.md)
   * [RMA: wildeR MA](indicators/trends_IIR/rma.md)
   * [T3: Tillson T3 MA](indicators/trends_IIR/t3.md)
   * [TEMA: Triple Exponential MA](indicators/trends_IIR/tema.md)
@@ -39,6 +42,7 @@
   * [ZLEMA: Zero-Lag Exponential MA](indicators/trends_IIR/zlema.md)
   * [ZLTEMA: Zero-Lag Triple Exponential MA](indicators/trends_IIR/zltema.md)
   * [MAMA: MESA Adaptive MA](indicators/trends_IIR/mama.md)
+  * [MGDI: McGinley Dynamic Indicator](indicators/trends_IIR/mgdi.md)
   * [VIDYA: Variable Index Dynamic Average](indicators/trends_IIR/vidya.md)
 
 * [Cycles Indicators](./indicators/cycles/_index.md)
@@ -71,10 +75,16 @@
 * [Price Channels and Bands](./indicators/channels/_index.md)
 
 * [Signal Filters](./indicators/filters/_index.md)
+  * [Bilateral Filter](indicators/filters/bilateral.md)
+  * [Bessel Filter](indicators/filters/bessel.md)
+  * [Butterworth Filter](indicators/filters/butter.md)
+  * [Chebyshev Type I Filter](indicators/filters/cheby1.md)
+  * [Chebyshev Type II Filter](indicators/filters/cheby2.md)
   * [EHBPF: Ehlers Bandpass Filter](indicators/filters/ehbpf.md)
   * [EHHPF: Ehlers Highpass Filter](indicators/filters/ehhpf.md)
   * [EHSSF: Ehlers Super Smoother Filter](indicators/filters/ehssf.md)
   * [EHUSF: Ehlers Ultra Smoother Filter](indicators/filters/ehusf.md)
+  * [Elliptic (Cauer) Filter](indicators/filters/elliptic.md)
 
 * [Stop and Reverse Indicators](./indicators/reversals/_index.md)
 

@@ -1,8 +1,20 @@
 # Volume Weighted Moving Average (VWMA)
 
-The Volume Weighted Moving Average incorporates volume into the weighting scheme, providing a measure of the average price over a period, weighted by volume. This can be useful for identifying trends that are supported by significant volume.
+The Volume Weighted Moving Average incorporates volume into the weighting scheme, providing a measure of the average price over a period, weighted by volume. Developed in the 1970s during the early days of computerized technical analysis, VWMA gained popularity as traders recognized the importance of volume confirmation in price movements. The indicator became widely available in the 1980s through early technical analysis software, and by the 1990s had become a standard feature in most trading platforms. By incorporating volume as a weighting factor, VWMA addresses a fundamental limitation of price-only moving averages, creating a more comprehensive view of market activity that emphasizes price movements occurring on higher volume.
 
 [Pine Script Implementation of VWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/vwma.pine)
+
+## Core Concepts
+
+The VWMA was designed to address a fundamental limitation in traditional moving averages through:
+
+- Integration of volume data as a weighting factor
+- Emphasis on price movements confirmed by significant volume
+- De-emphasis of price changes occurring on low volume
+- Enhancement of trend identification through volume confirmation
+- More accurate representation of "true" market value
+
+VWMA achieves this by weighting each price by its corresponding volume before averaging, creating an indicator that responds more strongly to high-volume price movements while reducing the influence of price changes that occur on minimal volume, which often have less predictive significance.
 
 ## Mathematical Foundation
 
@@ -68,3 +80,9 @@ As a FIR filter, VWMA does not suffer from the convergence issues of IIR filters
 - **Step Changes**: Linear weighting creates discrete steps in influence
 - **Computational Overhead**: More calculations than SMA (though less than some other averages)
 - **Less Smooth**: Shows more "ripples" in response to signal changes than higher-order averages
+
+## References
+
+1. Achelis, Steven B. "Technical Analysis from A to Z." McGraw-Hill, 2000.
+2. Appel, Gerald. "Technical Analysis: Power Tools for Active Investors." Financial Times Prentice Hall, 2005.
+3. Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013.

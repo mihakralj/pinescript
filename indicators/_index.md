@@ -3,9 +3,8 @@
 | Indicator                                   | Category     | Description                                        |
 | ------------------------------------------- | ------------ | -------------------------------------------------- |
 | [ADX](/indicators/dynamics/adx.md)          | Dynamics     | Average Directional Movement Index                 |
-| ABBER                                       | Channels     | Aberration                                         |
+| ABBER                                       | Volatility   | Aberration                                         |
 | AC                                          | Oscillators  | Acceleration Oscillator                            |
-| ACCBANDS                                    | Channels     | Acceleration Bands                                 |
 | ACCBANDS                                    | Volatility   | Acceleration Bands                                 |
 | ADL                                         | Volume       | Accumulation/Distribution Line                     |
 | ADOSC                                       | Volume       | Chaikin A/D Oscillator                             |
@@ -18,39 +17,40 @@
 | AO                                          | Oscillators  | Awesome Oscillator                                 |
 | AOBV                                        | Volume       | Archer On-Balance Volume                           |
 | AP                                          | Volatility   | Andrew's Pitchfork                                 |
-| APO                                         | Oscillators  | Absolute Price Oscillator                          |
+| APO                                         | Momentum     | Absolute Price Oscillator                          |
 | [AROON](/indicators/dynamics/aroon.md)      | Dynamics     | Aroon                                              |
-| AROONOSC                                    | Oscillators  | Aroon Oscillator                                   |
+| AROONOSC                                    | Dynamics     | Aroon Oscillator                                   |
 | ATR                                         | Volatility   | Average True Range                                 |
 | ATRB                                        | Channels     | ATR Bands                                          |
 | ATRP                                        | Volatility   | Average True Range Percent                         |
-| ATRS                                        | Reversals    | ATR Trailing Stop                                  |
+| ATRS                                        | Volatility   | ATR Trailing Stop                                  |
 | BB                                          | Channels     | Bollinger Bands                                    |
 | BBAND                                       | Volatility   | Bollinger Bands®                                   |
 | BBI                                         | Oscillators  | Bulls Bears Index                                  |
 | BBW                                         | Volatility   | Bollinger Band Width                               |
 | BBWP                                        | Volatility   | Bollinger Band Width Percentile                    |
-| BESSEL                                      | Filters      | Bessel Filter                                      |
+| [Bessel Filter](/indicators/filters/bessel.md) | Filters      | Bessel Filter (Maximally Flat Group Delay)         |
 | BETA                                        | Numerics     | Beta                                               |
 | BIAS                                        | Oscillators  | Bias                                               |
+| [Bilateral Filter](/indicators/filters/bilateral.md) | Filters      | Bilateral Filter (Edge-Preserving Smoothing)     |
 | [BLMA](/indicators/trends_FIR/blma.md)      | Trends_FIR   | Blackman Window MA                                |
-| BOP                                         | Oscillators  | Balance of Power                                   |
+| BOP                                         | Momentum     | Balance of Power                                   |
 | BRAR                                        | Oscillators  | BRAR                                               |
-| BUTTER                                      | Filters      | Butterworth Filter                                 |
+| [Butterworth Filter](/indicators/filters/butter.md) | Filters      | Butterworth Filter (Maximally Flat Passband)     |
 | [BWMA](/indicators/trends_FIR/bwma.md)      | Trends_FIR   | Bessel-Weighted MA                                |
-| CCI                                         | Oscillators  | Commodity Channel Index                            |
+| CCI                                         | Momentum     | Commodity Channel Index                            |
 | CCV                                         | Volatility   | Close-to-Close Volatility                          |
-| CE                                          | Reversals    | Chandelier Exit                                    |
+| CE                                          | Volatility   | Chandelier Exit                                    |
 | CFO                                         | Oscillators  | Chande Forecast Oscillator                         |
 | CG                                          | Oscillators  | Center of Gravity                                  |
 | CHANGE                                      | Numerics     | Percentage Change                                  |
-| CHEBY1                                      | Filters      | Chebyshev Type I Filter                            |
-| CHEBY2                                      | Filters      | Chebyshev Type II Filter                           |
-| CHOP                                        | Oscillators  | Choppiness Index                                   |
+| [Chebyshev Type I Filter](/indicators/filters/cheby1.md) | Filters      | Chebyshev Type I Filter (Passband Ripple)        |
+| [Chebyshev Type II Filter](/indicators/filters/cheby2.md) | Filters      | Chebyshev Type II Filter (Stopband Ripple)       |
+| CHOP                                        | Dynamics     | Choppiness Index                                   |
 | CKSP                                        | Reversals    | Chande Kroll Stop                                  |
 | CMF                                         | Volume       | Chaikin Money Flow                                 |
-| CMO                                         | Oscillators  | Chande Momentum Oscillator                         |
-| Code                                        | Categorty    | Name                                               |
+| CMO                                         | Momentum     | Chande Momentum Oscillator                         |
+| Code                                        | Category     | Name                                               |
 | COINTEGRATION                               | Numerics     | Cointegration                                      |
 | COPPOCK                                     | Oscillators  | Coppock Curve                                      |
 | CORRELATION                                 | Numerics     | Correlation (Pearson's)                            |
@@ -60,7 +60,7 @@
 | CURVATURE                                   | Numerics     | Acceleration/Deceleration                          |
 | CV                                          | Volatility   | Conditional Volatility                             |
 | CVI                                         | Volatility   | Chaikin's Volatility                               |
-| CWT                                         | Filters      | Continuous Wavelet Transform                       |
+| CWT                                         | Numerics     | Continuous Wavelet Transform                       |
 | DC                                          | Channels     | Donchian Channel                                   |
 | DCHN                                        | Volatility   | Donchian Channels                                  |
 | [DEMA](/indicators/trends_IIR/dema.md)      | Trends_IIR   | Double Exponential MA                              |
@@ -72,16 +72,16 @@
 | [DSMA](/indicators/trends_IIR/dsma.md)      | Trends_IIR   | Deviation-Scaled MA                                |
 | DSS                                         | Cycles       | Double Smoothed Stochastic                         |
 | [DWMA](/indicators/trends_FIR/dwma.md)      | Trends_FIR   | Double Weighted MA                                 |
-| DWT                                         | Filters      | Discrete Wavelet Transform                         |
+| DWT                                         | Numerics     | Discrete Wavelet Transform                         |
 | DX                                          | Dynamics     | Directional Movement Index                         |
-| EACP                                        | Filters      | Ehlers Autocorrelation Periodogram                 |
+| EACP                                        | Cycles       | Ehlers Autocorrelation Periodogram                 |
 | EBSW                                        | Cycles       | Even Better Sinewave                               |
-| EFI                                         | Oscillators  | Elder Force Index                                  |
-| [EHBPF](./indicators/filters/ehbpf.md)      | Filters      | Ehlers Bandpass Filter                             |
-| [EHHPF](./indicators/filters/ehhpf.md)      | Filters      | Ehlers Highpass Filter                             |
-| [EHLP](./indicators/filters/ehlp.md)        | Filters      | Ehlers Lowpass Filter                              |
-| [EHUSF](./indicators/filters/ehusf.md)      | Filters      | Ehlers Ultrasmooth Filter                          |
-| ELLIP                                       | Filters      | Elliptic (Cauer) Filter                            |
+| EFI                                         | Volume       | Elder Force Index                                  |
+| [EHBPF](/indicators/filters/ehbpf.md)       | Filters      | Ehlers Bandpass Filter                             |
+| [EHHPF](/indicators/filters/ehhpf.md)       | Filters      | Ehlers Highpass Filter                             |
+| [EHLP](/indicators/filters/ehlp.md)         | Filters      | Ehlers Lowpass Filter                              |
+| [EHUSF](/indicators/filters/ehusf.md)       | Filters      | Ehlers Ultrasmooth Filter                          |
+| [Elliptic Filter](/indicators/filters/elliptic.md) | Filters      | Elliptic (Cauer) Filter (Steepest Roll-off)      |
 | [EMA](/indicators/trends_IIR/ema.md)        | Trends_IIR   | Exponential MA                                     |
 | ENTROPY                                     | Numerics     | Entropy                                            |
 | EOM                                         | Volume       | Ease of Movement                                   |
@@ -91,11 +91,12 @@
 | ERI                                         | Oscillators  | Elder Ray Index                                    |
 | EWMA                                        | Volatility   | Exponential Weighted MA Volatility                 |
 | EXP                                         | Numerics     | Exponential Transformation                         |
-| FCB                                         | Channels     | Fractal Chaos Bands                                |
+| FCB                                         | Volatility   | Fractal Chaos Bands                                |
 | FIR                                         | Filters      | Finite Impulse Response                            |
 | FISHER                                      | Oscillators  | Fisher Transform                                   |
 | FOSC                                        | Oscillators  | Forecast Oscillator                                |
 | [FRAMA](/indicators/trends_IIR/frama.md)    | Trends_IIR   | Fractal Adaptive MA                                |
+| GAUSS                                       | Filters      | Gaussian Filter                                    |
 | GKV                                         | Volatility   | Garman-Klass Volatility                            |
 | GMA                                         | Trends_IIR   | Gaussian MA                                        |
 | GRANGER                                     | Numerics     | Granger                                            |
@@ -104,20 +105,20 @@
 | [HEMA](/indicators/trends_IIR/hema.md)      | Trends_IIR   | Hull Exponential MA                                |
 | HLV                                         | Volatility   | High-Low Volatility                                |
 | [HMA](/indicators/trends_FIR/hma.md)        | Trends_FIR   | Hull MA                                            |
-| HOMOD                                       | Filters      | Homodyne Discriminator                             |
+| HOMOD                                       | Cycles       | Homodyne Discriminator                             |
 | HP                                          | Filters      | Hodrick-Prescott Filter                            |
 | HT_DCPERIOD                                 | Cycles       | Hilbert Transform - Dominant Cycle Period          |
 | HT_DCPHASE                                  | Cycles       | Hilbert Transform - Dominant Cycle Phase           |
 | HT_PHASOR                                   | Cycles       | Hilbert Transform - Phasor Components              |
 | HT_SINE                                     | Cycles       | Hilbert Transform - SineWave                       |
 | HT_TRENDMODE                                | Dynamics     | Hilbert Transform - Trend vs Cycle Mode            |
-| HTIT                                        | Trends_IIR   | Hilbert Transform Instantaneous Trend              |
+| [HTIT](/indicators/trends_IIR/htit.md)      | Trends_IIR   | Hilbert Transform Instantaneous Trend              |
 | [HUBER](/indicators/errors/huber.md)        | Errors       | Huber Loss                                         |
 | HURST                                       | Numerics     | Hurst                                              |
 | HV                                          | Volatility   | Historical Volatility                              |
-| HWC                                         | Filters      | Holt-Winters Channel                               |
+| HWC                                         | Cycles       | Holt-Winters Channel                               |
 | [HWMA](/indicators/trends_FIR/hwma.md)      | Trends_FIR   | Holt Weighted MA                                   |
-| ICH                                         | Channels     | Ichimoku Cloud                                     |
+| ICH                                         | Volatility   | Ichimoku Cloud                                     |
 | IIR                                         | Filters      | Infinite Impulse Response                          |
 | INERTIA                                     | Oscillators  | Inertia                                            |
 | JARQUE_BERA                                 | Numerics     | Jarque-Bera                                        |
@@ -126,7 +127,7 @@
 | [JVOLTY](/indicators/volatility/jvolty.md)  | Volatility   | Jurik Volatility                                   |
 | [JVOLTYN](/indicators/volatility/jvoltyn.md) | Volatility   | Normalized Jurik Volatility [0,1]                 |
 | [KAMA](/indicators/trends_IIR/kama.md)      | Trends_IIR   | Kaufman Adaptive MA                                |
-| KC                                          | Channels     | Keltner Channel                                    |
+| KC                                          | Volatility   | Keltner Channel                                    |
 | KDJ                                         | Oscillators  | KDJ Indicator                                      |
 | KENDALL                                     | Numerics     | Kendall                                            |
 | KF                                          | Filters      | Kalman Filter                                      |
@@ -137,9 +138,10 @@
 | KVO                                         | Volume       | Klinger Volume Oscillator                          |
 | LF                                          | Filters      | Laguerre Filter                                    |
 | LINEAR                                      | Numerics     | Linear Transformation                              |
+| LOESS                                       | Filters      | LOESS/LOWESS Smoothing                             |
 | LOG                                         | Numerics     | Logarithmic Transformation                         |
 | [LSMA](/indicators/trends_FIR/lsma.md)      | Trends_FIR   | Least Squares Moving Average                       |
-| LTMA                                        | Trends_IIR   | Linear Time MA                                     |
+| [LTMA](/indicators/trends_IIR/ltma.md)      | Trends_IIR   | Linear Time MA                                     |
 | MAAF                                        | Filters      | MA Adaptive Filter                                 |
 | MACD                                        | Dynamics     | MA Convergence Divergence                          |
 | MACDEXT                                     | Dynamics     | MACD with controllable MA type                     |
@@ -154,24 +156,26 @@
 | MAX                                         | Numerics     | Max                                                |
 | [MDA](/indicators/errors/mda.md)            | Errors       | Mean Directional Accuracy                          |
 | [ME](/indicators/errors/me.md)              | Errors       | Mean Error                                         |
-| MEDIAN                                      | Numerics     | Median                                             |
+| MEDIAN                                      | Filters      | Median                                             |
 | MESA                                        | Cycles       | MESA Sine Wave                                     |
-| MFI                                         | Oscillators  | Money Flow Index                                   |
-| MGDI                                        | Trends_IIR   | McGinley Dynamic Indicator                         |
+| MFI                                         | Volume       | Money Flow Index                                   |
+| [MGDI](/indicators/trends_IIR/mgdi.md)      | Trends_IIR   | McGinley Dynamic Indicator                         |
 | MIN                                         | Numerics     | Min                                                |
 | MINMAX                                      | Channels     | Lowest and highest values                          |
 | MINMAX_SCALE                                | Numerics     | Min-Max Scaling (Normalization)                    |
 | MINUS_DI                                    | Dynamics     | Minus Directional Indicator                        |
 | MINUS_DM                                    | Dynamics     | Minus Directional Movement                         |
+| MMA                                         | Trends_IIR   | Modified MA                                        |
 | MODE                                        | Numerics     | Mode                                               |
 | MOM                                         | Momentum     | Momentum                                           |
 | [MPE](/indicators/errors/mpe.md)            | Errors       | Mean Percentage Error                              |
 | [MSE](/indicators/errors/mse.md)            | Errors       | Mean Squared Error                                 |
 | [MSLE](/indicators/errors/msle.md)          | Errors       | Mean Squared Logarithmic Error                     |
 | NATR                                        | Volatility   | Normalized Average True Range                      |
+| NOTCH                                       | Filters      | Notch Filter                                       |
 | NVI                                         | Volume       | Negative Volume Index                              |
 | OBV                                         | Volume       | On-Balance Volume                                  |
-| PCH                                         | Channels     | Price Channel                                      |
+| PCH                                         | Volatility   | Price Channel                                      |
 | PERCENTILE                                  | Numerics     | Percentile                                         |
 | PGO                                         | Oscillators  | Pretty Good Oscillator                             |
 | PIV                                         | Reversals    | Pivot Points                                       |
@@ -181,16 +185,13 @@
 | POLYFIT                                     | Numerics     | Polynomial Fitting                                 |
 | PP                                          | Reversals    | Price Pivots                                       |
 | PPB                                         | Channels     | Pivot Points Bands                                 |
-| PPO                                         | Oscillators  | Percentage Price Oscillator                        |
+| PPO                                         | Momentum     | Percentage Price Oscillator                        |
 | PRS                                         | Momentum     | Price Relative Strength                            |
-| PSAR                                        | Reversals    | Parabolic SAR                                      |
+| PSAR                                        | Volatility   | Parabolic SAR                                      |
 | PSL                                         | Oscillators  | Psychological Line                                 |
 | PV                                          | Volatility   | Parkinson Volatility                               |
 | PVI                                         | Volume       | Positive Volume Index                              |
-| OBV                                         | Volume       | On-Balance Volume                                  |
-| PCH                                         | Channels     | Price Channel                                      |
-| PERCENTILE                                  | Numerics     | Percentile                                         |
-| PGO                                         | Oscillators  | Pretty Good Oscillator                             |
+| PVO                                         | Volume       | Percentage Volume Oscillator                       |
 | PVOL                                        | Volume       | Price-Volume                                       |
 | PVR                                         | Volume       | Price Volume Rank                                  |
 | PVT                                         | Volume       | Price Volume Trend                                 |
@@ -203,6 +204,7 @@
 | REGC                                        | Channels     | Regression Channels                                |
 | RELU                                        | Numerics     | Rectified Linear Unit                              |
 | [REMA](/indicators/trends_IIR/rema.md)      | Trends_IIR   | Regularized Exponential MA                         |
+| [RGMA](/indicators/trends_IIR/rgma.md)      | Trends_IIR   | Recursive Gaussian MA                              |
 | [RMA](/indicators/trends_IIR/rma.md)        | Trends_IIR   | wildeR MA                                          |
 | [RMSE](/indicators/errors/rmse.md)          | Errors       | Root Mean Squared Error                            |
 | [RMSLE](/indicators/errors/rmsle.md)        | Errors       | Root Mean Squared Logarithmic Error                |
@@ -212,13 +214,13 @@
 | ROCR100                                     | Momentum     | Rate of Change Ratio 100 scale                     |
 | RPP                                         | Reversals    | Rolling Pivot Points                               |
 | [RSE](/indicators/errors/rse.md)            | Errors       | Relative Squared Error                             |
-| RSI                                         | Oscillators  | Relative Strength Index                            |
+| RSI                                         | Momentum     | Relative Strength Index                            |
 | [RSQUARED](/indicators/errors/rsquared.md)  | Errors       | R-Squared (Coefficient of Determination)           |
 | RSV                                         | Volatility   | Rogers-Satchell Volatility                         |
 | RSX                                         | Oscillators  | Relative Strength Xtra                             |
 | RV                                          | Volatility   | Realized Volatility                                |
-| RVGI                                        | Oscillators  | Relative Vigor Index                               |
-| RVI                                         | Oscillators  | Relative Vigor Index                               |
+| RVGI                                        | Volatility   | Relative Vigor Index                               |
+| RVI                                         | Volatility   | Relative Vigor Index                               |
 | SAREXT                                      | Reversals    | Parabolic SAR - Extended                           |
 | SDC                                         | Channels     | Standard Deviation Channel                         |
 | SGF                                         | Filters      | Savitzky-Golay Filter                              |
@@ -235,17 +237,15 @@
 | SQRT                                        | Numerics     | Square Root Transformation                         |
 | [SGMA](/indicators/trends_FIR/sgma.md)      | Trends_FIR   | Savitzky-Golay MA                                 |
 | SQUEEZE                                     | Oscillators  | Squeeze                                            |
-| SSF                                         | Filters      | Super Smoother Filter                              |
 | STANDARDIZE                                 | Numerics     | Standardization                                    |
 | [STC](/indicators/cycles/stc.md)            | Cycles       | Schaff Trend Cycle                                 |
-| STARC                                       | Channels     | Stoller Average Range Channel                      |
 | STARC                                       | Volatility   | Starc Bands                                        |
 | STB                                         | Channels     | Super Trend Bands                                  |
 | STDDEV                                      | Numerics     | Standard Deviation                                 |
-| STOCH                                       | Oscillators  | Stochastic Oscillator                              |
-| STOCHF                                      | Oscillators  | Stochastic Fast                                    |
-| STOCHRSI                                    | Oscillators  | Stochastic RSI                                     |
-| SUPER                                       | Reversals    | SuperTrend                                         |
+| STOCH                                       | Momentum     | Stochastic Oscillator                              |
+| STOCHF                                      | Momentum     | Stochastic Fast                                    |
+| STOCHRSI                                    | Momentum     | Stochastic RSI                                     |
+| SUPER                                       | Dynamics     | SuperTrend                                         |
 | SV                                          | Volatility   | Stochastic Volatility                              |
 | SWMA                                        | Trends_FIR   | Symmetric Weighted MA                              |
 | [T3](/indicators/trends_IIR/t3.md)          | Trends_IIR   | Tillson T3 MA                                      |
@@ -255,13 +255,13 @@
 | THEIL                                       | Numerics     | Theil                                              |
 | TR                                          | Volatility   | True Range                                         |
 | [TRIMA](/indicators/trends_FIR/trima.md)    | Trends_FIR   | Triangular MA                                      |
-| TRIX                                        | Oscillators  | Triple Exponential Average                         |
+| TRIX                                        | Momentum     | Triple Exponential Average                         |
 | TSF                                         | Numerics     | Tsf                                                |
-| TSI                                         | Oscillators  | True Strength Index                                |
+| TSI                                         | Momentum     | True Strength Index                                |
 | TTM                                         | Dynamics     | TTM Trend                                          |
 | TVI                                         | Volume       | Trade Volume Index                                 |
 | UI                                          | Volatility   | Ulcer Index                                        |
-| ULTOSC                                      | Oscillators  | Ultimate Oscillator                                |
+| ULTOSC                                      | Momentum     | Ultimate Oscillator                                |
 | VARIANCE                                    | Numerics     | Variance                                           |
 | VC                                          | Volatility   | Volatility Cone                                    |
 | VF                                          | Volume       | Volume Force                                       |
@@ -270,14 +270,15 @@
 | VOV                                         | Volatility   | Volatility of Volatility                           |
 | VP                                          | Volume       | Volume Profile                                     |
 | VR                                          | Volatility   | Volatility Ratio                                   |
-| VS                                          | Reversals    | Volatility Stop                                    |
+| VS                                          | Volatility   | Volatility Stop                                    |
 | VWAD                                        | Volume       | Volume Weighted Accumulation/Distribution          |
 | VWAP                                        | Trends_IIR   | Volume Weighted Average Price                      |
 | VWAPB                                       | Channels     | VWAP Bands                                         |
 | [VWMA](/indicators/trends_FIR/vwma.md)      | Trends_FIR   | Volume Weighted MA                                 |
 | WAD                                         | Volume       | Williams Accumulation/Distribution                 |
 | WCP                                         | Trends_IIR   | Weighted Closing Price                             |
-| WILLR                                       | Oscillators  | Williams %R                                        |
+| WIENER                                      | Filters      | Wiener Filter                                      |
+| WILLR                                       | Momentum     | Williams %R                                        |
 | [WMA](/indicators/trends_FIR/wma.md)        | Trends_FIR   | Weighted MA                                        |
 | YZV                                         | Volatility   | Yang-Zhang Volatility                              |
 | [ZLDEMA](/indicators/trends_IIR/zldema.md)  | Trends_IIR   | Zero-Lag Double Exponential MA                     |

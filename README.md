@@ -1,8 +1,9 @@
 # PineScript Technical Indicators Library
 
 ![Pine Script v6.0](https://img.shields.io/badge/Pine%20Script-v6.0-blue?style=flat&logo=tradingview&logoColor=white)
+![Indicators Done](https://img.shields.io/badge/indicators-61%2F258-orange)
 
-*A begrudgingly assembled pile of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI. Written in PineScript — because apparently, suffering builds character.*
+*A begrudgingly assembled pile of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI — because apparently, suffering builds character.*
 
 ## Welcome, young chart wizards
 
@@ -45,9 +46,13 @@ For detailed information about indicator types and characteristics, see:
 - [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
 - [Error Metrics](./indicators/errors/_index.md)
 
+You can also explore [The Complete Master List of All Indicators](./indicators/_index.md) (Warning: Side effects may include widened eyes, sudden trading epiphanies, and the peculiar sensation that you might actually understand what's happening on your charts. No refunds.)
+
 ## Contributing (if you dare)
 
-I wrote this stuff while cursing PineScript's quirks and limitations. If you want to contribute, be warned: your PR better be clean, efficient, and mathematically legit. Bonus points if it comes with no bugs and solves world hunger.
+I crafted this library during late-night sessions where PineScript and I developed a love-hate relationship. (It's mostly hate. PineScript started it.) If you're brave enough to contribute, please ensure your PR is cleaner than my coffee mug, more efficient than my sleep schedule, and mathematically sound enough to make your calculus professor weep with joy.
+
+I'll settle for "doesn't crash TradingView" and "actually does what it claims to do." Extra karma if your indicator doesn't give false signals during sideways markets—that's the holy grail we're all pretending exists.
 
 Please don't ask me to make an "indicator that never fails to predict the future." I already made one: it's called "not trading."
 

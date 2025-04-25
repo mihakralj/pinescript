@@ -27,16 +27,6 @@ ehusf(series float src, simple int length) =>
     usf := (1 - c1) * ssrc + (2 * c1 - c2) * src1 - (c1 + c3) * src2 + c2 * us1 + c3 * us2
     usf
 
-dirtyData(float source, simple int interval = 10, simple int gap_size = 1) =>
-    result = source
-    if bar_index == 0
-        result := na
-    else
-        cycle_position = bar_index % interval
-        if cycle_position < gap_size
-            result := na
-    result
-
 // ---------- Main loop ----------
 
 // Inputs
@@ -45,9 +35,8 @@ i_source = input.source(close, "Source")
 
 // Calculation
 ehusf = ehusf(i_source, i_length)
-dirty = ehusf(dirtyData(i_source), i_length)
 
 // Plot
 plot(ehusf, "Ehlers UltraSmooth", color.new(color.yellow, 0), 2)
-plot(dirty, "Dirty Data", color.new(color.blue, 0), 2)
+
 
