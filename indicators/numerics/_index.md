@@ -33,11 +33,11 @@
 | SPEARMAN | Spearman |
 | SQRT | Square Root Transformation |
 | STANDARDIZE | Standardization |
-| STDDEV | Standard Deviation |
+| [STDDEV]((/indicators/numerics/stddev.md) ) | Standard Deviation |
 | TANH | Hyperbolic Tangent |
 | THEIL | Theil |
 | TSF | Tsf |
-| VARIANCE | Variance |
+| VAR | Variance |
 | ZSCORE | Z-score standardization |
 | CWT | Continuous Wavelet Transform |
 | DWT | Discrete Wavelet Transform |
