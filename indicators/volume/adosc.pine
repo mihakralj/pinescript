@@ -3,6 +3,10 @@
 //@version=6
 indicator("Chaikin A/D Oscillator", "ADOSC", overlay=false)
 
+// @function Calculates the Chaikin Accumulation/Distribution Oscillator (ADOSC), a momentum indicator derived from the ADL
+// @param shortPeriod (simple int) Length of the short-term EMA applied to the ADL
+// @param longPeriod (simple int) Length of the long-term EMA applied to the ADL
+// @returns (float) The ADOSC value for the current bar (difference between short and long EMAs of ADL)
 adosc(simple int shortPeriod, simple int longPeriod) =>
     float EPSILON = 1e-10
     if shortPeriod <= 0 or longPeriod <= 0
@@ -23,14 +27,13 @@ adosc(simple int shortPeriod, simple int longPeriod) =>
     float long_ema = e > EPSILON ? long_raw_ema / (1.0 - e) : long_raw_ema
     e := one_minus_long_alpha * e
     short_ema - long_ema
-    
-// ---------- Main Loop ----------
-// Inputs
+
+// ---------- Inputs ----------
 shortPeriod = input.int(3, "Short Period", minval=1)
 longPeriod = input.int(10, "Long Period", minval=1)
-// Calculation
 
+// ---------- Calculations ----------
 osc = adosc(shortPeriod, longPeriod)
 
-// Plot
-plot(osc, "ADOSC", color=color.new(color.yellow, 0), linewidth=2)
+// ---------- Plotting ----------
+plot(osc, "ADOSC", color.new(color.yellow, 0), linewidth=2)

@@ -1,166 +1,82 @@
-# Deviation-Scaled Moving Average (DSMA)
-
-The Deviation-Scaled Moving Average is an adaptive IIR filter that adjusts its smoothing factor based on market volatility. Introduced in the early 2000s as markets became increasingly electronic and volatile, DSMA gained adoption among algorithmic traders seeking more responsive indicators. It dynamically increases responsiveness during high-deviation periods while maintaining stability during normal conditions. This approach creates a balance between noise reduction in stable markets and quick adaptation during volatile phases, making it particularly useful in modern trading environments with rapidly changing market conditions.
+# DSMA: Deviation-Scaled Moving Average
 
 [Pine Script Implementation of DSMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dsma.pine)
 
+## Overview and Purpose
+
+The Deviation-Scaled Moving Average (DSMA) is an adaptive technical indicator that automatically adjusts its smoothing factor based on price deviation from the average. Introduced to address the limitations of fixed-parameter moving averages in volatile modern markets, DSMA provides a self-adjusting mechanism that becomes more responsive during significant price movements while maintaining stability during normal market conditions.
+
+Unlike traditional moving averages that apply the same smoothing regardless of market behavior, DSMA uses a second-order IIR filter to measure normalized price deviations and adjust its responsiveness accordingly. This creates a moving average that effectively reduces noise during sideways markets while responding quickly to genuine breakouts or trend changes. The result is an indicator that provides cleaner signals across different market regimes without requiring manual parameter adjustments.
+
 ## Core Concepts
 
-DSMA was designed to address the limitations of fixed-parameter moving averages through:
+* **Deviation-based adaptation:** Automatically adjusts the smoothing factor based on the normalized deviation of price from its moving average
+* **Filter-based measurement:** Uses a second-order IIR filter to detect meaningful deviations while filtering out random noise
+* **RMS normalization:** Applies root mean square calculations to properly scale deviation measurements across different market conditions
+* **Non-linear response:** Creates a proportional response curve that increases sensitivity during significant price movements
 
-- Volatility-based adaptation of the smoothing factor
-- Dynamic response to changing market conditions
-- Increased responsiveness during significant price movements
-- Enhanced stability during normal market conditions
+DSMA achieves its adaptive nature by filtering the deviation between price and the average, then normalizing this filtered deviation through root mean square calculations. This creates a scaling factor that determines how quickly the average responds to new price information - becoming more responsive during genuine market movements and more stable during normal conditions.
 
-## Mathematical Foundation
+## Common Settings and Parameters
 
-The DSMA calculation uses a dynamically adjusted smoothing factor (α) that scales based on the normalized deviation of the current price from its moving average:
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Period | 25 | Controls the base period and filter characteristics | Increase for longer-term trends, decrease for shorter-term signals |
+| Scale Factor | 0.9 | Determines the intensity of adaptive behavior | Lower (0.3-0.5) for more conservative adaptation, higher (0.7-0.9) for more aggressive adaptation |
+| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
 
-DSMA₍ₙ₎ = α × Price₍ₙ₎ + (1 - α) × DSMA₍ₙ₋₁₎
+**Pro Tip:** Many professional traders find that a scale factor around 0.7-0.8 with a slightly longer period (25-30) provides an optimal balance between responsiveness during breakouts and stability during normal market conditions.
 
-Where:
+## Calculation and Mathematical Foundation
 
-- DSMA₍ₙ₎ is the current DSMA value
-- Price₍ₙ₎ is the current signal
-- DSMA₍ₙ₋₁₎ is the previous DSMA value
-- α is the adaptive smoothing factor
+**Simplified explanation:**
+DSMA works by measuring how much price is deviating from its average in a meaningful way. When price makes significant moves away from the average, DSMA becomes more responsive to follow the new trend. When price is moving normally around the average, DSMA maintains a smoother, more stable line.
 
-### Adaptive Smoothing Factor
+**Technical formula:**
+1. Calculate filter parameters based on period:
+   - a₁ = exp(-1.414π/period)
+   - b₁ = 2a₁cos(1.414π/period)
+   - c₁ = 1 - b₁ + a₁²
 
-The adaptive smoothing factor α is calculated as:
+2. Calculate filtered deviation between price and average:
+   - zeros = price - average
+   - filt = c₁/2 × (zeros + previous_zeros) + b₁ × previous_filt - a₁² × previous_filt2
 
-α = min(scale_factor × |filt/rms| × (5/period), 1.0)
+3. Calculate RMS of filtered deviation:
+   - Store filt² in a rolling buffer
+   - RMS = sqrt(sum(filt²)/period)
 
-Where:
+4. Calculate adaptive alpha:
+   - α = min(scale_factor × |filt/RMS| × (5/period), 1.0)
 
-- scale_factor is the base scaling factor (0.01-0.9)
-- filt is the filtered deviation from moving average
-- rms is the root mean square of filtered deviations
-- period is the lookback window size
+5. Apply final formula:
+   - DSMA = α × price + (1-α) × previous_DSMA
 
-### Filter Calculation
+> 🔍 **Technical Note:** The second-order IIR filter used to process deviations provides significant advantages over simple deviation measurements. It effectively passes meaningful trend components while attenuating random noise, creating a much more reliable basis for adaptation. The RMS normalization ensures consistent behavior across different volatility environments, preventing over-response in highly volatile markets.
 
-The filtered deviation (filt) is computed using a second-order IIR filter:
+## Interpretation Details
 
-filt₍ₙ₎ = c₁/2 × (zeros₍ₙ₎ + zeros₍ₙ₋₁₎) + b₁ × filt₍ₙ₋₁₎ - a₁² × filt₍ₙ₋₂₎
+DSMA provides several key insights for traders:
 
-Where:
+- When price crosses above DSMA, it often signals the beginning of an uptrend
+- When price crosses below DSMA, it often signals the beginning of a downtrend
+- The slope of DSMA provides insight into trend strength and momentum
+- DSMA responds more quickly to significant breakouts than traditional moving averages
+- During consolidation periods, DSMA stabilizes to provide a clearer picture of the underlying trend
+- Multiple DSMA lines with different periods can identify key support/resistance levels
 
-- zeros₍ₙ₎ = Price₍ₙ₎ - DSMA₍ₙ₎
-- a₁ = exp(-1.414π/period)
-- b₁ = 2a₁cos(1.414π/period)
-- c₁ = 1 - b₁ + a₁²
+DSMA is particularly valuable for trading strategies that need to adapt to changing market conditions. It excels at filtering out noise during consolidations while still responding quickly to genuine breakouts, making it especially useful for breakout trading systems and trend-following strategies.
 
-## Implementation Details
+## Limitations and Considerations
 
-The Pine Script implementation includes several optimizations:
+* **Market conditions:** While adaptive, extreme volatility conditions can still create challenges for proper normalization
+* **Calculation complexity:** More computationally intensive than simple moving averages due to filtering and RMS calculations
+* **Parameter sensitivity:** Scale factor selection can significantly impact behavior despite the adaptive mechanism
+* **Initialization period:** Requires a full period of data to properly establish the RMS baseline
+* **Complementary tools:** Works best when combined with volume analysis or momentum indicators for confirmation
 
-### 1. Memory Management
+## References
 
-- Efficient array usage for deviation history
-- Single-pass RMS calculation
-- Minimal variable allocation
-
-### 2. Computational Optimization
-
-- Combined filter calculations
-- Optimized square root operations
-- Reduced redundant calculations
-
-### 3. Numerical Stability
-
-- Protected division operations
-- Bounded smoothing factor
-- Proper initialization of all variables
-
-## Parameter Selection
-
-Three key parameters control DSMA behavior:
-
-### 1. Period
-
-Controls the lookback window and filter characteristics:
-
-- Smaller values (10-20): More responsive, less stable
-- Larger values (25-50): More stable, less responsive
-- Typical range: 20-30 for most applications
-
-### 2. Scale Factor
-
-Determines the intensity of volatility adaptation:
-
-- Lower values (0.01-0.3): Subtle adaptation
-- Higher values (0.5-0.9): Aggressive adaptation
-- Typical range: 0.4-0.7 for balanced response
-
-### 3. Source
-
-Input data selection affects filter behavior:
-
-- Close price: Most common, balanced
-- High/Low: More volatile response
-- HL2/HLC3: Reduced noise input
-
-## Performance Considerations
-
-### Advantages
-
-1. **Adaptive Response**:
-   - Automatically adjusts to market conditions
-   - No manual intervention needed
-   - Balance between speed and stability
-
-2. **Noise Handling**:
-   - Effective filtering during stable periods
-   - Intelligent noise reduction
-   - Maintains signal clarity
-
-3. **Performance**:
-   - Efficient execution
-   - Memory efficient
-   - Reasonable computational requirements
-
-### Limitations
-
-1. **Complexity**:
-   - More complex than simple moving averages
-   - Multiple parameters to tune
-   - Higher computational requirements
-
-2. **Parameter Sensitivity**:
-   - Results vary with parameter selection
-   - Requires careful optimization
-   - Potential for overfitting
-
-3. **Statistical Considerations**:
-   - Assumes normal distribution
-   - May lag in extremely volatile conditions
-   - Requires sufficient data for accurate deviation calculation
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Volatile Markets**: DSMA excels in markets with varying volatility regimes
-- **Breakout Trading**: Automatically increases responsiveness during breakouts
-- **Adaptive Systems**: Ideal for systems that need to adjust to changing market conditions
-- **Risk Management**: Provides better signals during high-volatility periods
-
-### Parameters Selection
-
-- **Period (10-20)**: More responsive, suitable for shorter-term trading
-- **Period (20-30)**: Balanced approach for most market conditions
-- **Period (30+)**: More stable baseline with adaptive response to volatility
-- **Scale Factor (0.3-0.5)**: Subtle adaptation for conservative strategies
-- **Scale Factor (0.5-0.7)**: Balanced performance in most conditions
-- **Scale Factor (0.7-0.9)**: Aggressive adaptation for maximum responsiveness
-
-### Complementary Indicators
-
-DSMA performs best when combined with:
-
-- **Volatility Indicators**: ATR or Bollinger Bands to confirm volatility conditions
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Analysis**: Volume confirmation for breakout validation
-- **Market Regime Filters**: Trend strength indicators to identify suitable market conditions
+1. Ehlers, J. (2001). *Rocket Science for Traders*. John Wiley & Sons.
+2. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
+3. Zirilli, A. (2001). *Financial Prediction Using Neural Networks*. International Thomson Computer Press.

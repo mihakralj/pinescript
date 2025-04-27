@@ -1,79 +1,67 @@
-# Triangular Moving Average (TRIMA)
-
-The Triangular Moving Average implements an optimized symmetric weight distribution architecture achieving 76% noise reduction through innovative double-smoothing process and triangular coefficient optimization. Originating in the early 1970s as technical analysts sought more effective noise filtering methods, the TRIMA was first popularized through the work of market technician Arthur Merrill. Its formal mathematical properties were established in the 1980s, and the indicator gained widespread adoption in the 1990s as computerized charting became standard. TRIMA's mathematically optimal center-weighted algorithm delivers -18dB/octave frequency roll-off with 96% signal preservation during trend transitions, achieving 71% reduction in whipsaw signals while maintaining 99.7% waveform fidelity through its symmetrical FIR implementation and perfect linear phase response, executing complete filter passes in under 0.4 microseconds on standard hardware.
+# TRIMA: Triangular Moving Average
 
 [Pine Script Implementation of TRIMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/trima.pine)
 
+## Overview and Purpose
+
+The Triangular Moving Average (TRIMA) is a technical indicator that applies a triangular weighting scheme to price data, providing enhanced smoothing compared to simpler moving averages. Originating in the early 1970s as technical analysts sought more effective noise filtering methods, the TRIMA was first popularized through the work of market technician Arthur Merrill. Its formal mathematical properties were established in the 1980s, and the indicator gained widespread adoption in the 1990s as computerized charting became standard. TRIMA effectively filters out market noise while maintaining important trends through its unique center-weighted calculation method.
+
 ## Core Concepts
 
-The TRIMA was designed to address several limitations in traditional moving averages through:
+* **Double-smoothing process:** TRIMA can be viewed as applying a simple moving average twice, creating more effective noise filtering
+* **Triangular weighting:** Uses a symmetrical weight distribution that emphasizes central data points and reduces emphasis toward both ends
+* **Market application:** Particularly effective for identifying the underlying trend in noisy market conditions where standard moving averages generate too many false signals
+* **Timeframe flexibility:** Works across multiple timeframes, with longer periods providing cleaner trend signals in higher timeframes
 
-- Double-smoothing process for enhanced noise filtering
-- Triangular weighting that emphasizes central data points
-- Balanced distribution of influence across the window
-- Symmetrical design for zero phase distortion
-- Optimal compromise between responsiveness and smoothing
+The core innovation of TRIMA is its unique triangular weighting scheme, which can be viewed either as a specialized weight distribution or as a twice-applied simple moving average with adjusted period. This creates more effective noise filtering without the excessive lag penalty typically associated with longer-period averages. The symmetrical nature of the weight distribution ensures zero phase distortion, preserving the timing of important market turning points.
 
-TRIMA achieves this balance through its unique triangular weighting scheme, which can be viewed either as a specialized weight distribution or as a twice-applied simple moving average with adjusted period, creating more effective noise filtering without the lag penalty typically associated with longer-period averages.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-The TRIMA calculation applies a triangular weighting pattern to each data point:
+**Pro Tip:** For a good balance between smoothing and responsiveness, try using a TRIMA with period N instead of an SMA with period 2N - you'll get similar smoothing characteristics but with less lag.
 
-TRIMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
+## Calculation and Mathematical Foundation
 
-Where:
+**Simplified explanation:**
+TRIMA calculates a weighted average of prices where the weights form a triangle shape. The middle prices get the most weight, and weights gradually decrease toward both the recent and older ends. This creates a smooth filter that effectively removes random price fluctuations while preserving the underlying trend.
 
-- P₁, P₂, ..., Pₙ are data values in the lookback window
-- w₁, w₂, ..., wₙ are the triangular weights
-- n is the number of periods (window size)
+**Technical formula:**
+TRIMA = Σ(Price[i] × Weight[i]) / Σ(Weight[i])
 
-### Triangular Weighting Scheme
+Where the triangular weights form a symmetric pattern:
+- Weight[i] = min(i, n-1-i) + 1
+- Example for n=5: weights = [1,2,3,2,1]
+- Example for n=4: weights = [1,2,2,1]
 
-The weights form a symmetric triangular pattern:
-
-| Position | Weight Formula | Example (n=5) | Example (n=4) |
-|----------|---------------|---------------|---------------|
-| i | min(i, n-1-i) + 1 | [1,2,3,2,1] | [1,2,2,1] |
-
-The weight at position i increases linearly until the middle of the window, then decreases linearly to the end, creating a perfect triangle shape.
-
-### Alternative Calculation
-
-A TRIMA can also be expressed as a double application of SMA with adjusted period:
-
+Alternatively, TRIMA can be calculated as:
 TRIMA(source, p) = SMA(SMA(source, (p+1)/2), (p+1)/2)
 
-This relationship demonstrates why TRIMA provides better smoothing than a single SMA or WMA, as it effectively applies smoothing twice with optimal period adjustment.
+> 🔍 **Technical Note:** The double application of SMA explains why TRIMA provides better smoothing than a single SMA or WMA. This approach effectively applies smoothing twice with optimal period adjustment, creating a -18dB/octave roll-off in the frequency domain compared to -6dB/octave for a simple moving average.
 
-## Initialization Properties
+## Interpretation Details
 
-### Full Window Requirement
+TRIMA can be used in various trading strategies:
 
-TRIMA requires a minimum of n data points for a complete calculation. For a period of n, the implementation handles the first n-1 values by:
+* **Trend identification:** The direction of TRIMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and TRIMA generate trade signals with fewer false alarms than SMA
+* **Support/resistance levels:** TRIMA can act as dynamic support during uptrends and resistance during downtrends
+* **Trend strength assessment:** Distance between price and TRIMA can indicate trend strength
+* **Multiple timeframe analysis:** Using TRIMAs with different periods can confirm trends across different timeframes
 
-1. Using available data points with adjusted (smaller) triangular weights
-2. Normalizing weights based on available valid (non-NA) values
+## Limitations and Considerations
 
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Superior Smoothing**: Better noise reduction than SMA or WMA
-- **Symmetric Weighting**: No bias towards either recent or old data
-- **Reduced Whipsaws**: Less prone to false signals than simpler averages
-- **Linear Phase Response**: Preserves signal shape in the passband
-- **Better Roll-off**: Steeper frequency response than linear weighting
-
-### Disadvantages
-
-- **Increased Lag**: More lag than WMA or EMA due to middle-weighted emphasis
-- **Limited Adaptability**: Fixed weighting scheme cannot adapt to changing volatility
-- **Slower Response**: Takes longer to reflect sudden signal changes
-- **Complex Parameters**: Harder to optimize period length due to double-smoothing effect
+* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
+* **Lag factor:** More lag than WMA or EMA due to center-weighted emphasis
+* **Limited adaptability:** Fixed weighting scheme cannot adapt to changing market volatility
+* **Response time:** Takes longer to reflect sudden price changes than directionally-weighted averages
+* **Complementary tools:** Best used with momentum oscillators or volume indicators for confirmation
 
 ## References
 
-1. Ehlers, John F. "Cycle Analytics for Traders." Wiley, 2013.
-2. Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013.
-3. Colby, Robert W. "The Encyclopedia of Technical Market Indicators." McGraw-Hill, 2002.
+* Ehlers, John F. "Cycle Analytics for Traders." Wiley, 2013
+* Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013
+* Colby, Robert W. "The Encyclopedia of Technical Market Indicators." McGraw-Hill, 2002

@@ -3,19 +3,18 @@
 //@version=6
 indicator("Accumulation/Distribution Line", "ADL", overlay=false)
 
-//@function Computes the Accumulation/Distribution (AD) line without using built-in cumulative functions
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/adl.md
-//@returns The cumulative Accumulation/Distribution value for the current bar
-adl() =>
-    money_flow = high != low ? ((2*close - high - low) / (high - low)) * volume : 0.0
+// @function Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow
+// @param src (series float) Source price series to use in calculations (default: close price)
+// @param vol (series float) Volume series to use (default: built-in volume)
+// @returns (float) The ADL value for the current bar
+adl(src = close, vol = volume) =>
+    money_flow = na(vol) or na(src) or high == low ? 0.0 : ((2*src - high - low) / (high - low)) * vol
     var float cumAD = 0.0
     cumAD := bar_index == 0 ? money_flow : cumAD + money_flow
     cumAD
 
-// ---------- Main Loop ----------
+// ---------- Calculations ----------
+adl_value = adl()
 
-// Calculation
-adl = adl()
-
-// Plot
-plot(adl, "AD", color.new(color.yellow, 0), linewidth=2)
+// ---------- Plotting ----------
+plot(adl_value, "ADL", color.new(color.yellow, 0), linewidth=2)

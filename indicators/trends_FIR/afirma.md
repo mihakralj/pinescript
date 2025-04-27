@@ -1,123 +1,72 @@
-# Autoregressive Finite Impulse Response Moving Average (AFIRMA)
-
-The Autoregressive Finite Impulse Response Moving Average implements multiple digital filter windows (Hanning, Hamming, Blackman, and Blackman-Harris) for enhanced signal processing. Developed in the early 2000s through the convergence of digital signal processing theory and financial market analysis, AFIRMA emerged from research into optimal filter design for non-stationary time series. The concept gained prominence through academic papers on spectral analysis of financial data between 2003-2007, before being formalized as a trading indicator around 2010. By 2015, AFIRMA had been incorporated into advanced trading platforms, offering traders unprecedented flexibility in signal filtering through its multi-window approach. These windowing functions provide excellent noise reduction while maintaining sensitivity to market changes, with robust handling of missing or invalid data points, executing complex window calculations in under 0.5 microseconds on standard hardware.
+# AFIRMA: Adaptive Finite Impulse Response Moving Average
 
 [Pine Script Implementation of AFIRMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/afirma.pine)
 
+## Overview and Purpose
+
+The Adaptive Finite Impulse Response Moving Average (AFIRMA) is a sophisticated moving average that implements multiple digital filter windows borrowed from signal processing theory. It was developed as an application of digital signal processing techniques to financial markets, providing traders with enhanced noise filtering capabilities while preserving important price action signals. AFIRMA offers multiple windowing functions (Hanning, Hamming, Blackman, and Blackman-Harris) that can be selected based on specific market conditions and analysis requirements.
+
 ## Core Concepts
 
-AFIRMA was designed to address several limitations in traditional moving averages through:
+* **Multiple window options:** AFIRMA provides four different windowing functions, each with specific spectral characteristics suitable for various market conditions
+* **Enhanced noise filtering:** The windowing functions offer superior noise reduction compared to traditional moving averages while preserving important price signals
+* **Timeframe adaptability:** Functions effectively across all timeframes, with longer periods providing cleaner signals in higher timeframes
 
-- **Multiple Window Options**: Providing different spectral characteristics for various market conditions
-- **Optimal Frequency Response**: Minimizing side-lobe leakage in the frequency domain
-- **Selective Filtering**: Tailoring noise reduction to specific signal characteristics
-- **Robust Data Handling**: Maintaining accuracy despite missing or invalid data points
-- **Computational Efficiency**: Optimizing calculations for real-time applications
+The core innovation of AFIRMA is its implementation of established windowing functions from digital signal processing. These functions shape the frequency response of the filter, allowing for precise control over which price movements are preserved and which are filtered out as noise. Each window type offers unique filtering properties that traders can select based on their analytical needs and market conditions.
 
-The core innovation of AFIRMA is its implementation of multiple well-established windowing functions from digital signal processing, each offering unique filtering properties that can be selected based on market conditions and trading objectives.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness in trending markets |
+| Source | close | Price data used for calculation | Typically left at default; can be changed to hlc3 for more balanced price representation |
+| Window Type | Hanning | Determines filter characteristics | Change based on market conditions and desired balance between smoothness and responsiveness |
 
-AFIRMA applies specialized windowing functions to price data. These functions shape the frequency response of the filter:
+**Pro Tip:** The Blackman window tends to provide the best balance between noise reduction and signal preservation for most market conditions, while Hanning is preferred for faster response to developing trends.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+AFIRMA applies carefully designed weighting patterns (windows) to price data. These windows give different importance to different prices in the lookback period, with the weights determined by mathematical functions that optimize signal processing characteristics.
+
+**Technical formula:**
+AFIRMA applies specialized windowing functions to price data:
 
 1. **Hanning Window**: w(k) = 0.50 - 0.50 × cos(2π × k / n)
-   - Good frequency resolution with moderate side lobe suppression
-   - Balances smoothness and responsiveness
-
 2. **Hamming Window**: w(k) = 0.54 - 0.46 × cos(2π × k / n)
-   - Optimized to minimize the maximum side lobe
-   - Improved frequency selectivity
-
 3. **Blackman Window**: w(k) = 0.42 - 0.50 × cos(2π × k / n) + 0.08 × cos(4π × k / n)
-   - Better side lobe suppression than Hanning and Hamming
-   - Excellent for separating closely spaced frequency components
-
 4. **Blackman-Harris Window**: w(k) = 0.35875 - 0.48829 × cos(2π × k / n) + 0.14128 × cos(4π × k / n) - 0.01168 × cos(6π × k / n)
-   - Provides excellent side lobe suppression
-   - Best for identifying weak signals in presence of strong ones
 
 Where:
-
 - k is the position in the window (0 to n-1)
 - n is the window size (period)
-- w(k) is the weight at position k
 
-The final AFIRMA calculation applies the selected window weights to price data:
+The final AFIRMA calculation: AFIRMA = Σ(Price[i] × Window_Weight[i]) / Σ(Window_Weight[i])
 
-AFIRMA = Σ(Price[i] × Window_Weight[i]) / Σ(Window_Weight[i])
+> 🔍 **Technical Note:** The key advantage of these windowing functions is their ability to minimize "spectral leakage" - a phenomenon in signal processing that can distort the extracted signal.
 
-## Implementation Details
+## Interpretation Details
 
-The AFIRMA implementation:
+AFIRMA can be used in various trading strategies:
 
-1. Dynamically calculates window coefficients based on selected window type
-2. Optimizes memory usage by caching coefficients across calculations
-3. Applies windowing function to signal data with robust NA handling
-4. Normalizes output based on valid data points only
-5. Employs additional optimizations for computational efficiency
+* **Trend identification:** The direction of AFIRMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and AFIRMA can generate trade signals
+* **Trend strength assessment:** The distance between price and AFIRMA can indicate trend strength
+* **Filter selection:** Different window types can be used for different market conditions:
+  - Hanning for general trend following
+  - Hamming for markets with sharp transitions
+  - Blackman for noisy markets requiring more smoothing
+  - Blackman-Harris for extracting weak trends in choppy conditions
 
-### Dirty Data Handling
+## Limitations and Considerations
 
-AFIRMA implements robust handling of missing or invalid data points:
-
-1. Tracks valid data points during calculation
-2. Normalizes weights based only on valid data points
-3. Gracefully handles initial bars when available data is less than the period
-4. Falls back to source values when insufficient valid data is available
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- Superior noise reduction compared to simple moving averages
-- Flexible selection of windowing functions for different market conditions
-- Excellent frequency response characteristics with minimal distortion
-- Robust handling of missing or invalid data points
-- Optimized for performance with minimal computational overhead
-
-### Disadvantages
-
-- More complex calculation than standard moving averages
-- Requires selection of appropriate windowing function for specific use cases
-- Different window types have different trade-offs between smoothness and responsiveness
-- Higher parameter complexity may lead to over-optimization
-- Less intuitive behavior than traditional moving averages
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Noisy Markets**: AFIRMA excels in markets with high noise-to-signal ratios
-- **Specific Filtering Needs**: Select window type based on filtering requirements
-- **Signal Extraction**: Identifying true price movements in volatile conditions
-- **Multi-Resolution Analysis**: Comparing different window types for confirmation
-- **Data Quality Issues**: Markets with gaps, spikes, or missing data points
-
-### Window Type Selection
-
-- **Hanning Window**: Best for general-purpose trend following with balanced characteristics
-- **Hamming Window**: Ideal for markets with sharp transitions between trends
-- **Blackman Window**: Superior for noisy markets requiring maximum smoothing
-- **Blackman-Harris Window**: Optimal for detecting weak trends in choppy conditions
-
-### Period Selection
-
-- **Short Periods (10-20)**: More responsive, suitable for short-term trading
-- **Medium Periods (20-50)**: Balanced approach for most market conditions
-- **Long Periods (50+)**: Maximum smoothing for long-term trend identification
-
-### Complementary Indicators
-
-AFIRMA performs best when combined with:
-
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Indicators**: Volume confirmation adds validity to signals
-- **Multiple AFIRMA Settings**: Different windows and periods for confirmation
-- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
+* **Market conditions:** Like all moving averages, less effective in ranging or highly volatile markets
+* **Lag factor:** All moving averages introduce some lag; AFIRMA's lag varies by window type
+* **Complexity:** More parameters to optimize compared to simple moving averages
+* **Complementary tools:** Best used with momentum oscillators and volatility measures for confirmation
 
 ## References
 
-1. Harris, F.J. "On the Use of Windows for Harmonic Analysis with the Discrete Fourier Transform", Proceedings of the IEEE, 1978
-2. Ehlers, John F. "Cycle Analytics for Traders", Wiley, 2013
-3. Kaufman, Perry J. "Trading Systems and Methods", 5th Edition, Wiley, 2013
+* Harris, F.J. "On the Use of Windows for Harmonic Analysis with the Discrete Fourier Transform", Proceedings of the IEEE, 1978
+* Ehlers, John F. "Cycle Analytics for Traders", Wiley, 2013
 

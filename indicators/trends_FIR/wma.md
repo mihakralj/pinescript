@@ -1,104 +1,63 @@
-# Weighted Moving Average (WMA)
-
-The Weighted Moving Average implements a linear-progressive FIR architecture delivering 52% faster signal response and 83% noise reduction through precise arithmetic weight distribution. Emerging in the early 1950s during the formative years of technical analysis, WMA gained significant adoption among professional traders through the 1970s as computational methods became more accessible. The approach was formalized in Robert Colby's 1988 "Encyclopedia of Technical Market Indicators," establishing it as a staple in technical analysis software. WMA's deterministic coefficient allocation achieves -20dB/octave frequency roll-off and 72% enhanced trend detection compared to simple averages, while maintaining perfect linear phase characteristics and 99.9% initialization accuracy from first complete window through its mathematically optimal linear weight progression, executing complete filter passes in under 0.3 microseconds on standard hardware.
+# WMA: Weighted Moving Average
 
 [Pine Script Implementation of WMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/wma.pine)
 
+## Overview and Purpose
+
+The Weighted Moving Average (WMA) is a technical indicator that applies progressively increasing weights to more recent price data. Emerging in the early 1950s during the formative years of technical analysis, WMA gained significant adoption among professional traders through the 1970s as computational methods became more accessible. The approach was formalized in Robert Colby's 1988 "Encyclopedia of Technical Market Indicators," establishing it as a staple in technical analysis software. Unlike the Simple Moving Average (SMA) which gives equal weight to all prices, WMA assigns greater importance to recent prices, creating a more responsive indicator that reacts faster to price changes while still providing effective noise filtering.
+
 ## Core Concepts
 
-The WMA was designed to address the fundamental limitations of the Simple Moving Average by:
+* **Linear weighting:** WMA applies progressively increasing weights to more recent price data, creating a recency bias that improves responsiveness
+* **Market application:** Particularly effective for identifying trend changes earlier than SMA while maintaining better noise filtering than faster-responding averages like EMA
+* **Timeframe flexibility:** Works effectively across all timeframes, with appropriate period adjustments for different trading horizons
 
-- Prioritizing recent data over older information
-- Creating a predictable, graduated influence decay
-- Maintaining computational simplicity
-- Preserving important trend signals
-- Reducing lag while maintaining effective noise filtering
+The core innovation of WMA is its linear weighting scheme, which strikes a balance between the equal-weight approach of SMA and the exponential decay of EMA. This creates an intuitive and effective compromise that prioritizes recent data while maintaining a finite lookback period, making it particularly valuable for traders seeking to reduce lag without excessive sensitivity to price fluctuations.
 
-The linear weighting scheme strikes a balance between the equal-weight approach of SMA and the exponential decay of EMA, creating an intuitive and effective compromise that has stood the test of time in technical analysis.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-The WMA calculation applies a linearly decreasing weight to each data point:
+**Pro Tip:** For most trading applications, using a WMA with period N provides better responsiveness than an SMA with the same period, while generating fewer whipsaws than an EMA with comparable responsiveness.
 
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+WMA calculates a weighted average of prices where the most recent price receives the highest weight, and each progressively older price receives one unit less weight. For example, in a 5-period WMA, the most recent price gets a weight of 5, the next most recent a weight of 4, and so on, with the oldest price getting a weight of 1.
+
+**Technical formula:**
 WMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
 
 Where:
+- Linear weights: most recent value has weight = n, second most recent has weight = n-1, etc.
+- The sum of weights for a period n is calculated as: n(n+1)/2
+- For example, for a 5-period WMA, the sum of weights is 5(5+1)/2 = 15
 
-- P₁, P₂, ..., Pₙ are signal values in the lookback window (P₁ being the oldest)
-- w₁, w₂, ..., wₙ are the weights assigned to each signal (w₁ being the smallest weight)
-- n is the number of periods (window size)
+> 🔍 **Technical Note:** Unlike EMA which theoretically considers all historical data (with diminishing influence), WMA has a finite memory, completely dropping prices that fall outside its lookback window. This creates a cleaner break from outdated market conditions.
 
-### Linear Weighting Scheme
+## Interpretation Details
 
-In the standard implementation of WMA, weights are assigned in a linear progression:
+WMA can be used in various trading strategies:
 
-| Price Point | Weight |
-|------------|--------|
-| Most recent (Pₙ) | n |
-| Second most recent (Pₙ₋₁) | n-1 |
-| Third most recent (Pₙ₋₂) | n-2 |
-| ... | ... |
-| Oldest (P₁) | 1 |
+* **Trend identification:** The direction of WMA indicates the prevailing trend with greater responsiveness than SMA
+* **Signal generation:** Crossovers between price and WMA generate trade signals earlier than with SMA
+* **Support/resistance levels:** WMA can act as dynamic support during uptrends and resistance during downtrends
+* **Moving average crossovers:** When a shorter-period WMA crosses above a longer-period WMA, it signals a potential uptrend (and vice versa)
+* **Trend strength assessment:** Distance between price and WMA can indicate trend strength
 
-### Denominator Formula
+## Limitations and Considerations
 
-The sum of weights for a period n is calculated as:
-
-Sum of weights = n(n+1)/2
-
-For example, for a 5-period WMA, the sum of weights is 5(5+1)/2 = 15.
-
-## Initialization Properties
-
-Similar to the SMA, the WMA has straightforward initialization characteristics:
-
-### Full Window Requirement
-
-WMA requires a minimum of p data points for a complete calculation. For a period of n, the handling of the first n-1 values can be:
-
-1. **Partial Window Calculation**: Calculate weighted averages with available data points until the window is filled
-2. **NA Values**: Return "not available" until enough data points exist
-
-### No Convergence Issue
-
-As a FIR filter, WMA does not suffer from the convergence issues of IIR filters like EMA. Once the initial window is filled, WMA immediately produces correctly weighted outputs without bias.
-
-## Window Size Considerations
-
-The window size (period) directly impacts:
-
-1. **Smoothness**: Larger windows produce smoother outputs with more lag
-2. **Responsiveness**: Smaller windows respond faster to signal changes
-3. **Weight Distribution**: The relative difference between highest and lowest weights becomes less significant with larger periods
-
-Common window sizes include:
-
-| Period | Common Applications |
-|--------|---------------------|
-| 5-10   | Short-term signal movements, quick transitions |
-| 14-21  | Medium-term trend identification |
-| 50-100 | Long-term trend identification |
-
-## Advantages and Disadvantages of SMA
-
-## Advantages of WMA
-
-- **Balanced Responsiveness**: More responsive to recent signal changes than SMA, but less prone to whipsaws than EMA
-- **Linear Decay**: Predictable and intuitive degradation of influence for older signals
-- **No Initialization Bias**: Produces valid outputs as soon as window is filled
-- **Simple Weighting Logic**: Easier to understand than exponential weighting
-- **Finite Memory**: Guaranteed to "forget" old signal data after p periods
-
-## Disadvantages of WMA
-
-- **Still Has Lag**: Though less than SMA, still lags behind signal action
-- **Abrupt Ending**: The oldest value suddenly drops out of calculation when leaving the window
-- **Step Changes**: Linear weighting creates discrete steps in influence
-- **Computational Overhead**: More calculations than SMA (though less than some other averages)
-- **Less Smooth**: Shows more "ripples" in response to signal changes than higher-order averages
+* **Market conditions:** Still suboptimal in highly volatile or sideways markets where enhanced responsiveness may generate false signals
+* **Lag factor:** While less than SMA, still introduces some lag in signal generation
+* **Abrupt window exit:** The oldest price suddenly drops out of calculation when leaving the window, potentially causing small jumps
+* **Step changes:** Linear weighting creates discrete steps in influence rather than a smooth decay
+* **Complementary tools:** Best used with volume indicators and momentum oscillators for confirmation
 
 ## References
 
-1. Colby, Robert W. "The Encyclopedia of Technical Market Indicators." McGraw-Hill, 2002.
-2. Murphy, John J. "Technical Analysis of the Financial Markets." New York Institute of Finance, 1999.
-3. Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013.
+* Colby, Robert W. "The Encyclopedia of Technical Market Indicators." McGraw-Hill, 2002
+* Murphy, John J. "Technical Analysis of the Financial Markets." New York Institute of Finance, 1999
+* Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013

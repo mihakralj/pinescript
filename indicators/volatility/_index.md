@@ -6,8 +6,9 @@
 | ACCBANDS | Acceleration Bands |
 | ADR | Average Daily Range |
 | AP | Andrew's Pitchfork |
-| ATR | Average True Range |
-| ATRP | Average True Range Percent |
+| [ATR](/indicators/volatility/atr.md) | Average True Range |
+| [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] |
+| [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent |
 | ATRS | ATR Trailing Stop |
 | BBAND | Bollinger Bands® |
 | BBWP | Bollinger Band Width Percentile |
@@ -24,10 +25,9 @@
 | HV | Historical Volatility |
 | ICH | Ichimoku Cloud |
 | [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility |
-| [JVOLTYN](/indicators/volatility/jvoltyn.md) | Normalized Jurik Volatility [0,1] |
+| [JVOLTYN](/indicators/volatility/jvoltyn.md) | Jurik Volatility Normalized [0,1] |
 | KC | Keltner Channels |
 | MASSI | Mass Index |
-| NATR | Normalized Average True Range |
 | PCH | Price Channel Indicator |
 | PSAR | Parabolic Stop and Reverse |
 | PV | Parkinson Volatility |
@@ -35,7 +35,7 @@
 | RV | Realized Volatility |
 | RVI | Relative Volatility Index |
 | STARC | Starc Bands |
-| SV | Stochastic Volatility |
+| STOCH | Stochastic Volatility |
 | TR | True Range |
 | UI | Ulcer Index |
 | VC | Volatility Cone |

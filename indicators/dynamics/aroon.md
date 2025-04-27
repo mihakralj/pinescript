@@ -1,110 +1,62 @@
-# Aroon Indicator
+# AROON: Aroon Indicator
 
-The Aroon Indicator implements an advanced trend timing detection system delivering 92% accuracy in trend identification and 95% reliability in trend reversal prediction through optimized high-low timing analysis. Aroon's sophisticated algorithm provides 96% accuracy in trend direction measurement and 0.28 bar average reversal detection latency, while achieving 94% noise reduction in consolidation phases through mathematically optimized time-based calculations and precise numerical stability control, executing complete calculations in under 0.4 microseconds on standard hardware.
+[Pine Script Implementation of AROON](https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/aroon.pine)
 
-[Pine Script Implementation of Aroon](https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/aroon.pine)
+## Overview and Purpose
 
-## Mathematical Foundation
+The Aroon indicator is a technical analysis tool designed to identify trend changes and determine the strength of a trend by measuring the time between highs and lows. Developed by Tushar Chande in 1995, the name "Aroon" comes from the Sanskrit word meaning "dawn's early light," reflecting its purpose of detecting the early light of new trends. Unlike momentum oscillators that focus on price, Aroon measures time, providing a unique perspective on market dynamics. The indicator consists of two lines - Aroon Up and Aroon Down - which help traders identify when new trends are emerging, when trends are strengthening, and when markets are consolidating.
 
-Aroon is calculated by measuring the time elapsed since the last high and low within a specified period:
+## Core Concepts
 
-Aroon Up = ((period - bars since high) ÷ period) × 100
-Aroon Down = ((period - bars since low) ÷ period) × 100
+* **Time-based analysis:** Measures the elapsed time since the last high and low rather than price movements, providing insight into the timing of market extremes
+* **Trend detection:** Identifies emerging trends earlier than many price-based indicators by focusing on when highs and lows occur within a period
+* **Timeframe flexibility:** Functions effectively across multiple timeframes, with 25-period being traditional but adjustable based on trading horizons
+
+The distinctive feature of Aroon is its focus on when price extremes occur rather than their magnitude. This time-based approach provides a different analytical perspective from most indicators. When recent highs occur, Aroon Up approaches 100; when recent lows occur, Aroon Down approaches 100. By analyzing the relationship between these two lines, traders can identify trend beginnings, trend strength, and consolidation periods more effectively than with many traditional indicators.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 25 | Controls the lookback period | Increase for longer-term analysis and fewer signals, decrease for shorter-term sensitivity |
+| Source | Close | Price data used for high/low detection | Typically left at default; high/low sources are used internally |
+
+**Pro Tip:** Watch for parallel movement of both Aroon lines in the middle range (30-70) - this often indicates a consolidation phase before a significant breakout, providing potential early entry points when one line finally begins to move toward 100.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+Aroon measures how long it's been since a high or low was recorded within a specific time period. If the highest price of the last 25 days occurred today, Aroon Up would be 100. If it occurred 12.5 days ago, Aroon Up would be 50. This approach spotlights when trend-defining moves occur, not just how big they are.
+
+**Technical formula:**
+Aroon Up = ((Period - Bars since Highest High) ÷ Period) × 100
+Aroon Down = ((Period - Bars since Lowest Low) ÷ Period) × 100
 
 Where:
+- Period is the lookback window (typically 25)
+- "Bars since" refers to how many periods have passed since the event
 
-- period is the calculation timeframe (typically 25 bars)
-- bars since high is the number of bars since the highest price
-- bars since low is the number of bars since the lowest price
-- Values are normalized to percentage (0-100)
+> 🔍 **Technical Note:** Aroon's value diminishes linearly over time if no new extremes are recorded. This creates a natural decay that helps identify aging trends and consolidation periods better than many oscillators that can remain at extreme values indefinitely.
 
-### Detailed Breakdown
+## Interpretation Details
 
-1. **High Location:**
+Aroon can be used in various trading strategies:
 
-    bars_since_high = bars since price reached highest value in period
-    highest_value = highest price in last period bars
+* **Trend identification:** When Aroon Up crosses above Aroon Down, an uptrend may be emerging; when Aroon Down crosses above Aroon Up, a downtrend may be forming
+* **Trend strength assessment:** When either line moves above 70, especially reaching toward 100, it indicates a strong trend in that direction
+* **Consolidation detection:** When both lines move parallel to each other in the middle range (30-70), the market is likely consolidating
+* **Early breakout signals:** When one line begins rising toward 100 after a period of consolidation, it often signals the beginning of a new trend
+* **Trend exhaustion:** When a line that has been near 100 begins falling, it may indicate the trend is weakening
 
-2. **Low Location:**
+## Limitations and Considerations
 
-    bars_since_low = bars since price reached lowest value in period
-    lowest_value = lowest price in last period bars
+* **Time focus limitations:** By focusing solely on time, Aroon may miss significant price movements that don't create new extremes
+* **Period sensitivity:** Results vary significantly with different period settings
+* **False signals:** Can generate misleading signals in choppy or ranging markets
+* **Complementary analysis needed:** Best used alongside price action analysis and other indicators for confirmation
+* **Lag factor:** Requires a complete period worth of data before generating reliable signals
 
-3. **Aroon Calculations:**
+## References
 
-    Aroon Up = ((period - bars_since_high) ÷ period) × 100
-    Aroon Down = ((period - bars_since_low) ÷ period) × 100
-
-## Implementation Optimization
-
-The implementation uses several optimization techniques:
-
-1. **Efficient Time Tracking:**
-   - Optimized bar counting
-   - Streamlined high/low detection
-   - Minimal state maintenance
-
-2. **Memory Management:**
-   - Single-pass calculations
-   - Efficient data structure usage
-   - Minimal variable storage
-
-3. **Numerical Stability:**
-   - Integer-based bar counting
-   - Protected division operations
-   - Bounded output range
-
-## Technical Characteristics
-
-### Signal Properties
-
-1. **Range Characteristics:**
-   - Output bounded between 0 and 100
-   - Key levels at 0, 50, and 100
-   - Parallel line analysis
-
-2. **Response Properties:**
-   - Immediate trend detection
-   - Clear reversal signals
-   - Consolidation identification
-
-3. **Timing Properties:**
-   - Forward-looking capability: 0.28 bars
-   - Trend confirmation: 1-2 bars
-   - Reversal detection: 1 bar
-
-### Calculation Properties
-
-1. **Time-Based Analysis:**
-   - Pure time measurement
-   - Price extrema tracking
-   - Normalized output
-
-2. **Sensitivity Parameters:**
-   - Period affects signal frequency
-   - Time window sensitivity
-   - Extrema detection impact
-
-3. **Boundary Behavior:**
-   - Clear range extremes
-   - Cross-over significance
-   - Parallel line importance
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Time-Based Analysis:** Unique perspective on trend timing
-- **Early Signals:** Quick trend reversal detection
-- **Clear Readings:** Easy to interpret 0-100 scale
-- **Dual Confirmation:** Up and Down line crossovers
-- **Range Identification:** Clear consolidation signals
-- **Numerical Stability:** Protected calculations
-
-### Disadvantages
-
-- **Time Sensitivity:** Can miss price magnitude
-- **Period Dependency:** Results vary with timeframe
-- **False Signals:** Possible in choppy markets
-- **Calculation Delay:** Requires full period for accuracy
-- **Range Limitations:** Less effective in strong trends
+* Chande, Tushar. "The New Technical Trader," Wiley, 1994
+* Pring, Martin J. "Technical Analysis Explained," McGraw-Hill, 2014

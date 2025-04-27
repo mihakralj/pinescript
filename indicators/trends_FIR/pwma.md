@@ -1,65 +1,62 @@
-# Pascal Weighted Moving Average (PWMA)
-
-The Pascal Weighted Moving Average implements a mathematically optimal FIR architecture delivering 84% noise reduction and 93% trend identification accuracy through binomial coefficient distribution derived from Pascal's triangle. Developed in the early 2000s as mathematicians explored natural weighting schemes for financial time series, PWMA emerged from research into binomial distributions and their applications to market data. The concept gained recognition through academic papers between 2005-2010 before being formalized as a trading indicator around 2012. PWMA's sophisticated binomial weighting algorithm provides perfect linear phase response and 88% noise reduction in volatile conditions through statistically optimal signal processing and natural probability distributions, executing complete filter passes in under 0.45 microseconds on standard hardware.
+# PWMA: Pascal Weighted Moving Average
 
 [Pine Script Implementation of PWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/pwma.pine)
 
+## Overview and Purpose
+
+The Pascal Weighted Moving Average (PWMA) is a technical indicator that applies binomial coefficients from Pascal's triangle as a weighting scheme for price data. Developed in the early 2000s as mathematicians explored natural weighting schemes for financial time series, PWMA emerged from research into binomial distributions and their applications to market data. The indicator uses the mathematical properties of Pascal's triangle to create a bell-shaped weighting distribution that emphasizes central price points while naturally tapering weight toward both older and more recent data points, creating an effective filter with excellent noise reduction properties.
+
 ## Core Concepts
 
-The PWMA leverages Pascal's triangle, a triangular array of binomial coefficients first studied by Blaise Pascal in the 17th century, to address several limitations in traditional moving averages:
+* **Binomial coefficient weighting:** PWMA uses Pascal's triangle to assign weights to price points, providing a mathematically optimal weighting scheme
+* **Bell-shaped distribution:** The natural distribution of binomial coefficients creates a symmetrical bell-shaped curve that emphasizes central price data
+* **Timeframe flexibility:** Works effectively across all timeframes with appropriate period adjustments
 
-- Mathematically optimal weight distribution based on binomial theorem
-- Natural bell-shaped weighting that follows statistical principles
-- Balanced emphasis on central price points
-- Perfect symmetry for zero phase distortion
-- Computational efficiency through recursive calculation
+The core innovation of PWMA is its application of the binomial theorem to create a weight distribution that follows natural statistical principles. Unlike simple or linear weighted moving averages, PWMA's weighting scheme based on Pascal's triangle creates a symmetrical bell-shaped curve that provides balanced emphasis on central data points with perfect symmetry for zero phase distortion.
 
-While Pascal's triangle has been used in various mathematical applications for centuries, its application to financial time series analysis offers a natural weighting scheme that emphasizes the middle portion of the data window, creates a symmetrical bell-shaped distribution of weights, and provides better statistical properties than linear weighting.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-The PWMA calculation uses binomial coefficients from Pascal's triangle:
+**Pro Tip:** When using PWMA for trend identification, consider using even numbers for the length parameter, as this creates a perfectly symmetrical weighting distribution with no single central point.
 
-PWMA = ∑(Price₍ᵢ₎ × C(n-1,i)) / ∑(C(n-1,i))
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+PWMA calculates a weighted average of prices where the weights follow the same pattern as the numbers in Pascal's triangle. This creates a bell-shaped weighting scheme that gives most importance to prices in the middle of the lookback period and gradually less importance to prices at the beginning and end of the period.
+
+**Technical formula:**
+PWMA = Σ(Price[i] × C(n-1,i)) / Σ(C(n-1,i))
 
 Where:
-
-- Price₍ᵢ₎ is the price at position i in the lookback window
-- C(n-1,i) is the binomial coefficient "n-1 choose i"
+- C(n-1,i) is the binomial coefficient "n-1 choose i" 
 - n is the period length
+- The binomial coefficient represents the number of ways to choose i items from n-1 items
 
-### Binomial Coefficient Calculation
+> 🔍 **Technical Note:** For computational stability, especially with larger period values, the implementation uses a recurrence relation to calculate binomial coefficients: C(n,k) = C(n,k-1) × (n-k+1) / k, rather than using the factorial formula which can cause overflow issues.
 
-The binomial coefficient C(n,k) represents the number of ways to choose k items from n items without regard to order: C(n,k) = n! / (k! × (n-k)!)
+## Interpretation Details
 
-For computational stability and precision, the implementation:
+PWMA can be used in various trading strategies:
 
-1. Uses a stable recurrence relation: C(n,k) = C(n,k-1) × (n-k+1) / k
-2. Pre-generates and stores the entire weight array for efficient access
-3. Dynamically adjusts the calculation window based on available bars
+* **Trend identification:** The direction of PWMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and PWMA generate trade signals
+* **Support/resistance levels:** PWMA can act as dynamic support during uptrends and resistance during downtrends
+* **Trend strength assessment:** Distance between price and PWMA can indicate trend strength
+* **Noise filtering:** Using PWMA to filter noisy price data before applying other indicators
 
-This approach ensures numerical stability even with larger period values, avoiding the potential overflow and precision issues that can occur when calculating large binomial coefficients directly from the factorial formula.
+## Limitations and Considerations
 
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Natural Distribution**: Bell-shaped weighting matches many statistical distributions
-- **Balanced Response**: Good compromise between smoothness and responsiveness
-- **No Initialization Bias**: Valid from first bar with no warm-up artifacts
-- **Zero Phase Distortion**: No phase lag issues common in IIR filters
-- **Statistical Optimality**: Theoretically optimal for certain types of data
-
-### Disadvantages
-
-- **Computational Complexity**: Requires calculation of binomial coefficients
-- **Fixed Memory**: Cannot adapt to changing market conditions
-- **Limited Customization**: Weight distribution is fixed by Pascal's triangle
-- **Lag on Fast Moves**: Can still lag during rapid price movements
-- **Memory Requirements**: Must store full lookback period
+* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
+* **Computational complexity:** Requires calculation of binomial coefficients, which is more complex than simpler averaging methods
+* **Fixed weighting scheme:** Cannot adapt to changing market conditions like adaptive moving averages
+* **Moderate lag:** While balanced, still introduces some lag during rapid price movements
+* **Complementary tools:** Best used with momentum oscillators or volume indicators for confirmation
 
 ## References
 
-1. Kaufman, P.J. "Trading Systems and Methods." Wiley, 2013.
-2. Mulloy, P. "Smoothing Techniques for More Accurate Signals." Technical Analysis of Stocks & Commodities, 1994.
-3. Edwards, R.D. and Magee, J. "Technical Analysis of Stock Trends." CRC Press, 2007.
+* Kaufman, P.J. "Trading Systems and Methods." Wiley, 2013
+* Mulloy, P. "Smoothing Techniques for More Accurate Signals." Technical Analysis of Stocks & Commodities, 1994

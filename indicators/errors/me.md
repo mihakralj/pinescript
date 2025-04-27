@@ -1,62 +1,62 @@
-# Mean Error (ME)
-
-The Mean Error implements a basic signal comparison metric that calculates the average difference between two sources without taking the absolute value. Unlike MAE, it accounts for the direction of error, allowing positive and negative errors to cancel each other out. This provides insight into systematic bias in predictions rather than just error magnitude.
+# ME: Mean Error
 
 [Pine Script Implementation of ME](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/me.pine)
 
-## Mathematical Foundation
+## Overview and Purpose
 
-The ME is calculated by taking the average of all differences between two signals: ME = (1/p) * Σ(Y₁ - Y₂)
+The Mean Error (ME) is a fundamental statistical measure that calculates the average difference between two data series, preserving the sign of each difference. Unlike error metrics that focus on magnitude alone, ME specifically measures directional bias in predictions or indicators. This makes it particularly valuable for detecting systematic over-prediction or under-prediction in financial models and technical indicators. While simple in calculation, ME provides critical information about directional bias that more complex error metrics often obscure, helping traders identify and correct systematic tendencies in their forecasting approaches.
 
-ME₍ₙ₎ = SMA(Y₁₍ₙ₎ - Y₂₍ₙ₎, p)
+## Core Concepts
+
+* **Bias detection:** Reveals systematic tendencies to over-predict or under-predict by preserving error direction
+* **Directional sensitivity:** Distinguishes between positive and negative errors, with positive values indicating under-prediction and negative values indicating over-prediction
+* **Market application:** Particularly useful for identifying and correcting bias in trading systems and forecasting models
+
+The core principle of ME is its preservation of error direction. By allowing positive and negative errors to cancel each other out, ME creates a measure of systematic bias rather than overall accuracy. A value near zero might indicate either high accuracy or balanced errors, but significant non-zero values reveal a consistent directional bias that may require correction even when other error metrics appear acceptable.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the window for error averaging | Increase for more stable bias assessment, decrease for detecting shifting bias patterns |
+| Source 1 | close | First signal for comparison | Typically the actual or target value |
+| Source 2 | sma(close,20) | Second signal for comparison | Typically the predicted or model value |
+
+**Pro Tip:** When ME persists significantly above or below zero across different market conditions, this indicates a systemic bias in your model that should be addressed, even if other error metrics like MAE or RMSE appear acceptable.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+ME simply calculates the average difference between predicted and actual values, keeping the positive and negative signs intact. If predictions are consistently too high, ME will be negative; if they're consistently too low, ME will be positive.
+
+**Technical formula:**
+ME = (1/p) * Σ(Y₁ - Y₂)
 
 Where:
+- Y₁, Y₂ are the values being compared
+- p is the number of periods
 
-- ME₍ₙ₎ is the current ME value
-- Y₁₍ₙ₎, Y₂₍ₙ₎ are the current signal values
-- p is the averaging period
+> 🔍 **Technical Note:** While a ME of zero might seem ideal, it can mask large offsetting errors. Always examine ME alongside magnitude-based metrics like MAE or RMSE to get a complete picture of prediction performance.
 
-## Error Characteristics
+## Interpretation Details
 
-### Statistical Properties
+ME can be applied in various financial contexts:
 
-1. **Sign-sensitive**: ME can be positive, negative, or zero
-2. **Zero-centered**: Perfect balance of positive and negative errors results in ME = 0
-3. **Cancellation Effect**: Positive and negative errors can offset each other
-4. **Scale Dependence**: Value depends on the scale of input signals
+* **Bias identification:** Detect systematic tendencies to over-predict or under-predict
+* **Model calibration:** Adjust forecasting models to correct for consistent bias
+* **Indicator optimization:** Fine-tune technical indicators to reduce directional bias
+* **Trend confirmation:** Assess whether prediction errors show a pattern related to market direction
+* **System evaluation:** Determine if trading systems have directional bias that could be exploited
 
-### Response Properties
+## Limitations and Considerations
 
-1. **Directional Sensitivity**:
-   - Distinguishes between overestimation and underestimation
-   - Reveals systematic bias in prediction models
-   - Can be zero even with substantial errors if they balance out
+* **Error cancellation:** Positive and negative errors can offset each other, potentially masking large errors
+* **Scale dependency:** Values depend on the scale of the data, making comparisons across different instruments challenging
+* **Incomplete assessment:** Does not measure error magnitude, only directional bias
+* **Outlier vulnerability:** Can be heavily influenced by extreme values
+* **Complementary metrics:** Should always be used alongside magnitude-based error measures like MAE or RMSE
 
-2. **Temporal Behavior**:
-   - Moving window provides dynamic error tracking
-   - Indicates shifting bias over time
-   - Can cross zero when prediction bias changes direction
+## References
 
-### Window Considerations
-
-1. **Error Smoothing**: Longer periods provide more stable bias assessment
-2. **Bias Detection**: Shows persistent directional errors over the window
-3. **Memory Usage**: O(p) space complexity for the averaging window
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Bias Detection**: Reveals systematic over/under estimation
-- **Direction Awareness**: Distinguishes positive from negative errors
-- **Zero-Centering**: Indicates balance point between over/under prediction
-- **Statistical Foundation**: Simple, direct error metric
-- **Computational Efficiency**: Minimal calculation requirements
-
-### Disadvantages
-
-- **Error Cancellation**: Can mask large errors if they balance out
-- **Scale Dependency**: Not suitable for comparing different scales
-- **Outlier Sensitivity**: Extreme values can heavily influence the result
-- **Ambiguous Interpretation**: Small ME can result from either small errors or cancelling large errors
-- **Limited Error Magnitude**: Doesn't directly measure prediction accuracy
+* Makridakis, S. "Accuracy measures: theoretical and practical concerns," International Journal of Forecasting, 1993
+* Armstrong, J.S. "Evaluating forecasting methods," in Principles of Forecasting: A Handbook for Researchers and Practitioners, 2001

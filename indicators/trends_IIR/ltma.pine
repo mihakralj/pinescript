@@ -3,11 +3,11 @@
 //@version=6
 indicator("Linear Time Moving Average", "LTMA", overlay=true)
 
-//@function Calculates LTMA using linear time-weighted values
+//@function Calculates LTMA using linear time-weighted values (not linear regression)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/ltma.md
 //@param source Series to calculate LTMA from
 //@param period Lookback period for calculation
-//@returns LTMA value with linearly increasing weights for recent values
+//@returns LTMA value with linearly increasing weights based on recency (weight = period - i)
 //@optimized for performance and dirty data
 ltma(series float source, simple int period) =>
     if period <= 0

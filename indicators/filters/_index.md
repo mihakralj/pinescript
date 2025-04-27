@@ -1,25 +1,41 @@
 # Signal Filters
 
-| Indicator                                       | Name                      | Description                                                                                           |
-|-------------------------------------------------|---------------------------|-------------------------------------------------------------------------------------------------------|
-| [BILATERAL](/indicators/filters/bilateral.md)   | Bilateral Filter          | Non-linear filter combining time and value weighting—smooths noise while preserving sharp moves.      |
-| [BESSEL](/indicators/filters/bessel.md)         | Bessel Filter             | Maximally flat group delay filter, preserving waveform shape.                                         |
-| [BUTTER](/indicators/filters/butter.md)         | Butterworth Filter        | Maximally flat magnitude response filter in the passband.                                             |
-| [CHEBY1](/indicators/filters/cheby1.md)         | Chebyshev Type I Filter   | Steeper roll-off than Butterworth, allows passband ripple.                                            |
-| [CHEBY2](/indicators/filters/cheby2.md)         | Chebyshev Type II Filter  | Steeper roll-off, allows stopband ripple, flat passband.                                              |
-| [ELLIPTIC](/indicators/filters/elliptic.md)     | Elliptic (Cauer) Filter   | Steepest roll-off, allows ripple in both passband and stopband.                                       |
-| [EHBPF](/indicators/filters/ehbpf.md)           | Ehlers Bandpass Filter    | Cascaded highpass and lowpass filter combination to isolate frequency components within a specific range. |
-| [EHHPF](/indicators/filters/ehhpf.md)           | Ehlers Highpass Filter    | Removes low-frequency components (trend) while preserving high-frequency signals, using optimized coefficients. |
-| [EHLP](/indicators/filters/ehlp.md)             | Ehlers Lowpass Filter     | Removes high-frequency components (noise) while preserving low-frequency signals (trend).             |
-| [EHSSF](/indicators/filters/ehssf.md)           | Ehlers Supersmooth Filter | Optimized lowpass filter providing superior noise reduction with minimal lag using cascaded pole pairs. |
-| [EHUSF](/indicators/filters/ehusf.md)           | Ehlers Ultrasmooth Filter | Advanced smoothing algorithm providing exceptional noise reduction with minimal lag using optimized coefficients. |
-| GAUSS                                 | Gaussian Filter           | Symmetric FIR filter using a Gaussian kernel—provides smooth, edge-preserving low-pass behavior with no ripples in the passband. |
-| HP                                    | Hodrick-Prescott Filter   | Decomposes a time series into trend and cyclical components.                                          |
-| KF                                    | Kalman Filter             | Optimal recursive algorithm for estimating system state from noisy measurements.                      |
-| KFS                                   | Kalman Filter Slope       | Estimates the slope (rate of change) using a Kalman filter variant.                                   |
-| LOESS                                 | LOESS/LOWESS Smoothing    | Locally weighted polynomial regression smoothing that adapts to short-term trends.                    |
-| MAAF                                  | MA Adaptive Filter        | Moving average filter whose parameters adapt based on input signal characteristics.                   |
-| MEDIAN                                | Median Filter             | Non-linear filter replacing each point with the median of its neighbors—excellent for removing spikes. |
-| NOTCH                                 | Notch Filter              | Narrow band-stop filter to remove periodic market-microstructure noise without disturbing trend.      |
-| SGF                                   | Savitzky-Golay Filter     | Smoothing filter based on local polynomial regression. Preserves higher moments.                     |
-| WIENER                                | Wiener Filter             | Optimal MSE linear filter that adapts to local signal/noise levels for noise reduction.               |
+This collection provides advanced signal filtering techniques adapted for financial market analysis. These filters offer superior noise reduction and signal extraction capabilities compared to traditional moving averages, with various specialized characteristics for different analytical needs.
+
+## Ehlers Filters
+
+| Indicator | Name | Key Characteristics |
+|-----------|------|---------------------|
+| [EHSSF](/indicators/filters/ehssf.md) | Ehlers Super Smooth Filter | Exceptional noise reduction with minimal lag using optimized pole placement |
+| [EHUSF](/indicators/filters/ehusf.md) | Ehlers Ultra Smooth Filter | Maximum noise suppression for major trend identification in volatile markets |
+| [EHBPF](/indicators/filters/ehbpf.md) | Ehlers Bandpass Filter | Isolates specific frequency ranges to detect cycles and rhythmic patterns |
+| [EHHPF](/indicators/filters/ehhpf.md) | Ehlers Highpass Filter | Removes trends while preserving shorter-term movements for mean reversion strategies |
+
+## Classic Digital Filters
+
+| Indicator | Name | Key Characteristics |
+|-----------|------|---------------------|
+| [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Preserves signal shape with maximally flat group delay and minimal waveform distortion |
+| [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Maximally flat magnitude response in passband with good roll-off characteristics |
+| [CHEBY1](/indicators/filters/cheby1.md) | Chebyshev Type I Filter | Steeper roll-off than Butterworth with controlled passband ripple |
+| [CHEBY2](/indicators/filters/cheby2.md) | Chebyshev Type II Filter | Maximally flat passband with ripples in stopband for efficient noise reduction |
+| [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Steepest possible roll-off with controlled ripples in both bands |
+
+## Adaptive and Non-Linear Filters
+
+| Indicator | Name | Key Characteristics |
+|-----------|------|---------------------|
+| [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Edge-preserving non-linear filter that maintains significant price transitions |
+| MEDIAN | Median Filter | Non-linear filter that removes spikes and outliers while preserving edges |
+| KF | Kalman Filter | Optimal recursive estimator that adapts to changing market dynamics |
+| WIENER | Wiener Filter | Optimizes signal-to-noise ratio based on statistical characteristics |
+
+## Specialized Analysis Filters  
+
+| Indicator | Name | Key Characteristics |
+|-----------|------|---------------------|
+| HP | Hodrick-Prescott Filter | Decomposes price into trend and cyclical components |
+| LOESS | LOESS/LOWESS Smoothing | Locally weighted regression that adapts to non-linear patterns |
+| SGF | Savitzky-Golay Filter | Polynomial regression-based filter that preserves higher moments |
+| GAUSS | Gaussian Filter | Provides smooth, edge-preserving low-pass filtering with bell-shaped weights |
+| NOTCH | Notch Filter | Removes specific frequency components while leaving others intact |

@@ -1,80 +1,62 @@
-# Arnaud Legoux Moving Average (ALMA)
-
-The Arnaud Legoux Moving Average implements a Gaussian-optimized FIR architecture delivering 76% lag reduction and 93% noise suppression through advanced statistical weight distribution. Developed by Arnaud Legoux and Jean-Charles Doux in 2009, ALMA was introduced to the financial community in a groundbreaking paper titled "Moving Average: A Gaussian Approach for Financial Applications" at the 2009 International Conference on Financial Engineering. The indicator quickly gained recognition for its innovative approach to the perpetual struggle between lag reduction and noise filtering in technical analysis. By 2012, ALMA had been implemented in most major trading platforms, and by 2015 it had become a standard tool in algorithmic trading systems. Legoux applied principles from signal processing and Gaussian statistics to create a more balanced approach. Unlike conventional moving averages that use linear or exponential weighting schemes, ALMA implements a Gaussian distribution curve to weight price data, placing the curve's peak near the most recent prices. This significantly reduces lag while maintaining effective noise filtering, addressing a fundamental challenge that had plagued technical analysts for decades.
+# ALMA: Arnaud Legoux Moving Average
 
 [Pine Script Implementation of ALMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/alma.pine)
 
+## Overview and Purpose
+
+The Arnaud Legoux Moving Average (ALMA) is a technical indicator that uses Gaussian distribution principles to reduce lag while maintaining effective noise filtering. Developed by Arnaud Legoux and Jean-Charles Doux in 2009, ALMA was introduced in their paper "Moving Average: A Gaussian Approach for Financial Applications." The indicator addresses a fundamental challenge in technical analysis: balancing smoothness with responsiveness. Unlike conventional moving averages, ALMA applies a Gaussian distribution curve to weight price data, with the ability to position this curve asymmetrically to emphasize more recent prices.
+
 ## Core Concepts
 
-ALMA was designed to solve the fundamental trade-off between lag and noise in moving averages through several innovative principles:
+* **Gaussian weighting:** ALMA uses a bell curve to assign weights to price points, providing natural filtering properties that reduce noise while preserving important price signals
+* **Asymmetric window placement:** The Gaussian curve can be positioned off-center within the data window to reduce lag, with the peak typically placed toward recent prices
+* **Parameter flexibility:** Offers independent control of smoothness (sigma) and lag reduction (offset), allowing customization for different market conditions
 
-- **Gaussian Weighting**: Using the normal distribution's natural filtering properties
-- **Asymmetric Window Placement**: Positioning the bell curve off-center within the data window
-- **Adjustable Filtering**: Independent control of smoothness and lag reduction
-- **Maximum Information Preservation**: Retention of important price action features
-- **Statistical Optimization**: Leveraging probability theory for optimal signal processing
+The core innovation of ALMA is its application of signal processing principles to financial data. By implementing a Gaussian distribution with adjustable positioning, ALMA achieves better noise reduction with less lag than traditional moving averages of similar length. The shape and position of the weighting curve can be fine-tuned through two key parameters that work independently.
 
-The indicator achieves this balance through two key parameters that can be adjusted independently: offset (controlling lag) and sigma (controlling smoothness).
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 9 | Controls the lookback period | Increase for smoother signals, decrease for more responsiveness |
+| Offset | 0.85 | Positions the Gaussian curve peak (0-1) | Higher values (closer to 1) reduce lag but may increase noise |
+| Sigma | 6 | Controls the width of the Gaussian curve | Lower values create sharper filters, higher values create smoother curves |
 
-ALMA calculates a weighted moving average using a Gaussian (normal) distribution curve to assign weights to price data points:
+**Pro Tip:** Start with the default parameters (9, 0.85, 6) and then adjust offset first - values above 0.85 emphasize recent price action, while lower values provide more smoothing with increased lag.
 
-ALMA = Σ(Price[i] × Weight[i]) / Σ(Weight[i])
+## Calculation and Mathematical Foundation
 
-Where:
+**Simplified explanation:**
+ALMA creates a weighted average of prices where the weights follow a bell curve shape. This curve can be shifted toward recent prices and made narrower or wider. By controlling the curve's position and width, ALMA can reduce lag while still filtering out market noise effectively.
 
-- Weight[i] = exp(-(i - m)² / (2 × s²))
-- m = offset × (period - 1)
-- s = period / sigma
+**Technical formula:**
+1. Weight[i] = exp(-(i - m)² / (2 × s²))
+2. m = offset × (period - 1)
+3. s = period / sigma
+4. ALMA = Σ(Price[i] × Weight[i]) / Σ(Weight[i])
 
-### Detailed Breakdown
+> 🔍 **Technical Note:** The offset parameter determines where the Gaussian peak is positioned. An offset of 1.0 places maximum weight on the most recent price, while 0.0 places it on the oldest price. The default 0.85 balances responsiveness with smoothness.
 
-1. **Gaussian Weight Distribution:**
-   - Apply bell curve weighting to price points
-   - Center the curve at position determined by offset
-   - Control curve width with sigma parameter
+## Interpretation Details
 
-2. **Offset Parameter:**
-   - Determines the position of the Gaussian peak within the data window
-   - Controls the trade-off between lag reduction and noise filtering
-   - Typical value of 0.85 places the peak toward recent prices
+ALMA can be used in various ways:
 
-3. **Sigma Parameter:**
-   - Controls the width of the Gaussian distribution
-   - Smaller values create sharper, more defined peaks
-   - Larger values produce smoother, wider distributions
-   - Default value of 6.0 provides balanced filtering
+* **Trend identification:** The direction of ALMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and ALMA generate trade signals similar to other moving averages
+* **Support/resistance levels:** ALMA can act as dynamic support in uptrends and resistance in downtrends
+* **Trend strength assessment:** The angle of the ALMA line and its distance from price can indicate trend strength
+* **Filter optimization:** Adjusting offset and sigma allows for customization to specific trading styles and market conditions
 
-4. **Normalization:**
-   - Weights are normalized by dividing by their sum
-   - Ensures consistent amplitude response regardless of parameters
-   - Adapts to available data at chart edges
+## Limitations and Considerations
 
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Superior Lag Reduction:** Reduced lag compared to traditional moving averages of similar smoothness
-- **Exceptional Noise Filtering:** Gaussian distribution efficiently removes market noise while preserving trends
-- **Highly Configurable:** Separate parameters for smoothing and lag control
-- **No Warm-up Required:** Works effectively from the first available bar
-- **Minimal Distortion:** Preserves price action characteristics better than recursive filters
-- **Mathematically Elegant:** Based on proven Gaussian statistics principles
-- **Computational Efficiency:** Optimized algorithm maintains performance even with larger periods
-
-### Disadvantages
-
-- **Parameter Sensitivity:** Requires proper tuning of both offset and sigma
-- **Increased Complexity:** More complex implementation than simple moving averages
-- **Edge Effects:** Like all finite-window methods, has reduced accuracy at chart edges
-- **Memory Usage:** Requires storing period-length price history
-- **Non-Adaptive:** Unlike KAMA or JMA, doesn't automatically adjust to changing market conditions
-- **Optimization Challenges:** Finding optimal parameters may require extensive testing
+* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
+* **Parameter sensitivity:** Performance highly dependent on parameter selection
+* **Complexity:** More complex to understand and optimize than simple moving averages
+* **Computational demands:** More intensive calculations than traditional moving averages
+* **Complementary tools:** Best used alongside momentum indicators and volume analysis for confirmation
 
 ## References
 
-1. Legoux, A. and Doux, J. (2009). "Moving Average: A Gaussian Approach for Financial Applications." International Conference on Financial Engineering
-2. Legoux, A. (2010). "The Gaussian Approach to Moving Averages." Technical Analysis of Stocks & Commodities
-3. Leland, G. (2012). "ALMA: An Improved Alternative to Trend Following Indicators." Journal of Technical Analysis
+* Legoux, A. and Doux, J. (2009). "Moving Average: A Gaussian Approach for Financial Applications." International Conference on Financial Engineering
+* [TradingView - ALMA Indicator](https://www.tradingview.com/script/vStKO5HK-ALMA-Arnaud-Legoux-Moving-Average/)
 

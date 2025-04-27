@@ -1,79 +1,61 @@
-# Savitzky-Golay Moving Average (SGMA)
-
-The Savitzky-Golay Moving Average implements polynomial-based smoothing that optimally preserves the higher moments of the data while filtering noise. Originally developed by Abraham Savitzky and Marcel J.E. Golay in 1964 for spectroscopic analysis in chemistry, this filtering method was published in "Analytical Chemistry" and quickly became a standard technique in signal processing. Its application to financial markets began in the 1990s as researchers sought more sophisticated methods for preserving important market structures while filtering noise. By the 2000s, it had been adopted by advanced trading platforms and quantitative analysts for its superior ability to maintain critical signal features. SGMA uses least-squares polynomial fitting across a sliding window to enhance signal features such as maxima, minima, and width without introducing significant distortion. This advanced technique is particularly valuable for preserving rapid changes in trends while effectively removing noise.
+# SGMA: Savitzky-Golay Moving Average
 
 [Pine Script Implementation of SGMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sgma.pine)
 
+## Overview and Purpose
+
+The Savitzky-Golay Moving Average (SGMA) is a technical indicator that applies polynomial fitting to price data, preserving important features while reducing noise. Originally developed by Abraham Savitzky and Marcel J.E. Golay in 1964 for spectroscopic analysis in chemistry, this filtering method was published in "Analytical Chemistry" and quickly became a standard technique in signal processing. Its application to financial markets began in the 1990s as researchers sought methods that could better preserve trend changes while filtering noise. By fitting local polynomials to price data instead of simple averaging, SGMA creates a smoothed representation that maintains critical features like peaks, valleys, and inflection points that would be attenuated by conventional moving averages.
+
 ## Core Concepts
 
-The SGMA was designed to address fundamental limitations in traditional moving averages through:
+* **Polynomial fitting:** SGMA fits polynomial curves to segments of price data rather than simply averaging them, preserving higher-order moments of the data
+* **Feature preservation:** Maintains important price structures such as tops, bottoms, and inflection points that would be smoothed away by traditional moving averages
+* **Market application:** Particularly effective for identifying turning points in price action and analyzing trends with rapid changes
 
-- Polynomial fitting instead of simple averaging
-- Preservation of higher statistical moments (derivatives)
-- Superior feature retention during smoothing
-- Enhanced turning point identification
-- Minimal distortion of important signal characteristics
+The core innovation of SGMA is its ability to filter noise while preserving the underlying structure of price movement. By using least-squares polynomial fitting across sliding windows of data, SGMA creates a moving average that models the actual shape of price action rather than simply averaging it, making it especially valuable for detecting trend changes and analyzing price dynamics.
 
-SGMA achieves this balance through its innovative approach of fitting polynomials to local data segments, allowing it to model the underlying structure of price movement rather than simply averaging it, which preserves critical features that would otherwise be lost in conventional smoothing techniques.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 21 | Controls the window size (must be odd) | Increase for smoother signals, decrease for more responsiveness |
+| Degree | 2 | Sets the polynomial degree | Higher values better preserve features but may fit noise, lower values provide more smoothing |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-The SGMA calculation applies a specialized set of convolution coefficients derived from fitting polynomials to data points:
+**Pro Tip:** For most trading applications, a polynomial degree of 2 (quadratic) provides a good balance between smoothing and feature preservation, while odd-numbered window sizes like 21 ensure the filter has a well-defined center point.
 
-SGMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
+## Calculation and Mathematical Foundation
 
-Where:
+**Simplified explanation:**
+SGMA fits small polynomial curves to sections of price data, then uses these curves to create smoothed values. This approach is like having mini regression lines constantly adjusting to local price movements, which preserves important price features better than simple averaging.
 
-- P₁, P₂, ..., Pₙ are data values in the lookback window
-- w₁, w₂, ..., wₙ are the Savitzky-Golay filter coefficients
-- n is the number of periods (window size, must be odd)
+**Technical formula:**
+SGMA = Σ(Price[i] × SG_Coefficient[i]) / Σ(SG_Coefficient[i])
 
-### Savitzky-Golay Filter Coefficient Determination
-
-The weights are derived by fitting a polynomial of degree d to a set of n points in a least-squares sense, then evaluating the resulting polynomial at the center point:
-
-For each point in the window, a local polynomial approximation is computed:
+Where SG_Coefficient[i] values are derived from the process of fitting a polynomial of degree d to a window of n points in a least-squares sense. For each window position, a polynomial is fit:
 f(x) = c₀ + c₁x + c₂x² + ... + cₚxᵖ
 
-The implementation uses pre-computed coefficients for common combinations of window sizes and polynomial degrees, with approximations for other cases to optimize performance while maintaining accuracy.
+> 🔍 **Technical Note:** SGMA requires an odd window size because the filter is centered on the middle point of each window. The polynomial degree must be less than the window size to avoid overfitting, with degree=2 (quadratic) being a common choice for financial data.
 
-## Initialization Properties
+## Interpretation Details
 
-### Full Window and Polynomial Order Requirements
+SGMA can be used in various trading strategies:
 
-SGMA requires:
+* **Trend identification:** The direction of SGMA indicates the prevailing trend with better responsiveness to changes
+* **Signal generation:** Crossovers between price and SGMA generate trade signals with potentially earlier detection of reversals
+* **Support/resistance levels:** SGMA can act as dynamic support/resistance with better adaptation to price structures
+* **Turning point detection:** SGMA excels at identifying potential price reversals due to its feature preservation properties
+* **Multi-timeframe analysis:** Using SGMAs with different window sizes can confirm trends while preserving key features
 
-- An odd number of data points (window size)
-- A polynomial degree less than the window size
-- At least window size data points for a complete calculation
+## Limitations and Considerations
 
-The implementation handles the initialization period by:
-
-1. Using available data points with appropriate weighting
-2. Normalizing weights based on available valid (non-NA) values
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Feature Preservation**: Superior preservation of peaks, valleys, and inflection points
-- **Higher-Order Moment Retention**: Maintains statistical properties of the original signal
-- **Noise Reduction**: Effectively eliminates random noise while preserving signal structure
-- **Tunable Parameters**: Adjustable polynomial degree and window size for different scenarios
-- **Linear Phase Response**: Maintains phase relationships, avoiding distortion
-- **Enhanced Extrema Detection**: Helps identify turning points more accurately
-
-### Disadvantages
-
-- **Computational Complexity**: More computationally intensive than simpler moving averages
-- **Parameter Selection**: Requires understanding of polynomial fitting principles
-- **Reduced Smoothing**: Higher polynomial degrees can under-smooth noisy data
-- **Over-fitting Risk**: High polynomial degrees with small windows may fit noise
-- **Edge Effects**: Performance can degrade near the edges of the data series
-- **Odd-Length Requirement**: Window size must be odd
+* **Computational complexity:** More intensive calculations than simple moving averages
+* **Parameter selection:** Finding optimal degree and window size combinations requires experimentation
+* **Odd-length requirement:** Window size must be odd to ensure a well-defined center point
+* **Edge effects:** Performance can degrade near the edges of the data series (start and end)
+* **Complementary tools:** Best used with volume indicators and momentum oscillators for confirmation
 
 ## References
 
-1. Press, W.H. and Teukolsky, S.A. "Savitzky-Golay Smoothing Filters." Computers in Physics, 1990.
-2. Schafer, R.W. "What Is a Savitzky-Golay Filter?" IEEE Signal Processing Magazine, 2011.
-3. Gorry, P.A. "General Least-Squares Smoothing and Differentiation by the Convolution Method."
+* Savitzky, A. and Golay, M.J.E. "Smoothing and Differentiation of Data by Simplified Least Squares Procedures," Analytical Chemistry, 1964
+* Schafer, R.W. "What Is a Savitzky-Golay Filter?" IEEE Signal Processing Magazine, 2011

@@ -1,69 +1,71 @@
-# Variable Index Dynamic Average (VIDYA)
+# VIDYA: Variable Index Dynamic Average
 
-## Historical Background
+[Pine Script Implementation of VIDYA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/vidya.pine)
 
-The Variable Index Dynamic Average (VIDYA) was developed by Tushar Chande in the early 1990s as an adaptive moving average that adjusts its smoothing factor based on market volatility. Chande recognized that traditional moving averages with fixed parameters struggled to adapt to changing market conditions. VIDYA addressed this limitation by becoming more responsive during volatile periods and smoother during low volatility phases.
+## Overview and Purpose
 
-Since its introduction, VIDYA has gained significant recognition among technical analysts and has been incorporated into numerous algorithmic trading systems and professional platforms. Its approach to volatility-based adaptation has influenced the development of many other adaptive indicators in technical analysis.
+The Variable Index Dynamic Average (VIDYA) is an adaptive technical indicator designed to automatically adjust its sensitivity based on market volatility. Developed by Tushar Chande in the early 1990s and introduced in his 1992 article in *Technical Analysis of Stocks & Commodities* magazine, VIDYA represents a significant innovation in moving average technology.
 
-[Pine Script Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/vidya.pine)
+Unlike traditional moving averages with fixed parameters, VIDYA becomes more responsive during trending, volatile markets and more stable during quiet, sideways markets. This self-adjusting behavior makes it particularly valuable for traders navigating markets that frequently alternate between trending and consolidation phases without requiring manual parameter changes.
 
 ## Core Concepts
 
-VIDYA addresses the limitations of fixed-parameter moving averages through:
+* **Volatility-based adaptation:** Automatically adjusts the effective smoothing period based on recent market volatility
+* **Dynamic smoothing:** Uses volatility measurements to determine how quickly the moving average responds to price changes
+* **Trend sensitivity:** Becomes more responsive during strong directional price moves and more stable during sideways consolidation
+* **Noise filtering:** Reduces whipsaws during low-volatility periods while capturing significant moves during high-volatility periods
 
-- Volatility-based adaptation of the smoothing factor
-- Standard deviation ratios to measure relative volatility
-- Dynamic response to changing market conditions
-- Automatic adjustment based on market behavior
+VIDYA achieves its adaptive nature by scaling the standard exponential moving average (EMA) smoothing factor by a volatility ratio. This creates a moving average that effectively adjusts its own period based on market conditions - shortening during volatile trending markets and lengthening during consolidation.
 
-## Mathematical Foundation
+## Common Settings and Parameters
 
-VIDYA uses a volatility index (VI) to adjust the smoothing factor:
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Period | 14 | Base smoothing period | Increase for less sensitivity to short-term trends, decrease for more responsiveness |
+| VI Period | 5 | Short-term volatility measurement window | Lower values create more responsive adaptation, higher values create more stability |
+| Alpha | 2/(period+1) | Base smoothing factor | Direct manipulation allows for precise tuning beyond standard period settings |
+| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
 
-α = 2/(period + 1)
+**Pro Tip:** Many professional traders find that using the golden ratio (0.618) to determine the relationship between Period and VI Period (e.g., VI Period = Period × 0.382) can enhance performance by creating a more harmonious response to market cycles.
 
-VI = StdDev(price, 5)/StdDev(price, period)
+## Calculation and Mathematical Foundation
 
-VI is clamped to [0,1] range
+**Simplified explanation:**
+VIDYA works by measuring volatility as the ratio between short-term and longer-term standard deviations. It then uses this ratio to adjust how quickly the moving average responds. When volatility is high, VIDYA follows price more closely; when volatility is low, VIDYA moves more slowly, preserving the prior trend direction.
 
-SC = α × VI
-
-VIDYA_today = VIDYA_yesterday + SC × (Price_today - VIDYA_yesterday)
+**Technical formula:**
+VIDYA = Previous VIDYA + (α × VI × (Price - Previous VIDYA))
 
 Where:
-- $\alpha$ is the base smoothing factor
-- $VI$ is the volatility index
-- $SC$ is the scaled smoothing constant
+- α = 2/(period + 1) is the base smoothing factor
+- VI = StdDev(price, short period)/StdDev(price, longer period), clamped to [0,1]
+- VI acts as a scaling factor for the standard EMA formula
 
-## Calculation Process
+> 🔍 **Technical Note:** Some implementations of VIDYA use different volatility measurements such as the Chande Momentum Oscillator (CMO) or RSI-based volatility instead of standard deviation ratios. The core concept remains the same - scaling the smoothing factor based on a measure of market activity. The standard deviation approach has the advantage of directly measuring price dispersion.
 
-1. Calculate the base smoothing factor $\alpha$ using the specified period
-2. Compute the volatility index (VI) as the ratio of short-term volatility to longer-term volatility
-3. Ensure VI remains within the [0,1] range by clamping extreme values
-4. Determine the scaled smoothing constant (SC) by multiplying $\alpha$ by VI
-5. Calculate VIDYA using an EMA-like formula with the scaled smoothing constant
+## Interpretation Details
 
-The implementation introduces adaptive behavior by scaling the EMA smoothing factor based on relative volatility. When volatility is high, VIDYA responds faster to price changes, while during low volatility periods, it produces a smoother line.
+VIDYA provides several key insights for traders:
 
-## Advantages and Limitations
+- When price consistently stays above VIDYA, it confirms an uptrend
+- When price consistently stays below VIDYA, it confirms a downtrend
+- When VIDYA's slope is steep, it indicates a strong trend with high volatility
+- When VIDYA flattens despite price fluctuations, it suggests the market is in a low-volatility state
+- Crossovers between price and VIDYA often signal potential trend changes
+- VIDYA tends to act as dynamic support/resistance during trending markets
 
-### Advantages
-- Automatically adapts to changing market volatility
-- Reduces lag during volatile market conditions
-- Provides smoother output during low volatility periods
-- Maintains signal integrity across different market regimes
-- Helps filter out noise while remaining responsive to significant movements
+VIDYA is particularly valuable in markets that experience varying levels of volatility, as it automatically adjusts its behavior to match current conditions. It excels in trend-following strategies where traditional moving averages might generate false signals during quiet periods or fail to capture explosive moves quickly enough.
 
-### Limitations
-- Requires more computational resources than standard moving averages
-- Sensitivity to volatility calculation parameters
-- May be overly responsive during extreme volatility events
-- Standard deviation calculations introduce additional complexity
-- Performance depends on appropriate parameter selection
+## Limitations and Considerations
 
-## Sources
+* **Market conditions:** May still produce some false signals during periods of choppy volatility
+* **Lag factor:** While adaptive, VIDYA still exhibits some lag, especially during the transition from low to high volatility
+* **Parameter sensitivity:** Performance can vary significantly based on both period settings and volatility calculation method
+* **Calculation complexity:** More computationally intensive than standard moving averages
+* **Complementary tools:** Works best when combined with volume analysis or non-volatility based indicators for confirmation
 
-1. Chande, T. (1992). "Adapting Moving Averages to Market Volatility," *Technical Analysis of Stocks & Commodities*
-2. Chande, T. & Kroll, S. (1994). *The New Technical Trader*
-3. Kaufman, P. (2013). "Adaptive Moving Averages," *Trading Systems and Methods*, 5th Edition
+## References
+
+1. Chande, T. (1992). "Adapting Moving Averages to Market Volatility," *Technical Analysis of Stocks & Commodities*.
+2. Chande, T. & Kroll, S. (1994). *The New Technical Trader*. John Wiley & Sons.
+3. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.

@@ -1,59 +1,72 @@
-# Bandpass Filter (BP)
+# EHBPF: Ehlers Bandpass Filter
 
-The Bandpass Filter implements a cascaded highpass and lowpass filter combination to isolate frequency components within a specific range. Based on John Ehlers' research, it effectively removes both high and low-frequency noise while preserving the desired frequency band.
+[Pine Script Implementation of EHBPF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehbpf.pine)
 
-[Pine Script Implementation of BP](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehbpf.pine)
+## Overview and Purpose
 
-## Mathematical Foundation
+The Ehlers Bandpass Filter (EHBPF) is a specialized signal processing tool designed to isolate specific frequency components within a defined range. Developed by John Ehlers, a pioneer in applying signal processing techniques to financial markets, this filter addresses the challenge of extracting cyclical components from price data. By implementing a cascaded structure that combines highpass and lowpass filters, EHBPF effectively isolates market cycles of specific periodicities while removing both longer-term trends and shorter-term noise. This makes it particularly valuable for cycle analysis, seasonality detection, and trading strategies based on rhythm identification.
 
-The filter combines two stages in series:
+## Core Concepts
 
+* **Frequency isolation:** Combines highpass and lowpass filtering to extract market cycles within a specific frequency band
+* **Dual cutoff control:** Provides independent control over both the lower and upper cutoff periods 
+* **Market application:** Particularly effective for identifying and trading dominant market cycles or seasonal patterns
+
+The core innovation of EHBPF is its optimized cascade architecture that maintains maximum signal integrity within the passband while achieving excellent rejection of components outside the desired frequency range. Unlike simple moving averages that can only perform lowpass filtering, EHBPF can isolate specific market rhythms, allowing traders to focus on cycles of particular interest while eliminating both trend and noise components.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Lower Period | 10 | Controls the longer periodicity cutoff | Set to the maximum cycle length you want to analyze |
+| Upper Period | 2 | Controls the shorter periodicity cutoff | Set to the minimum cycle length you want to analyze |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+
+**Pro Tip:** For detecting market cycles, set the Lower Period to approximately 2-3× your suspected dominant cycle length and the Upper Period to about 1/3 of the dominant cycle length to isolate the primary cycle with good precision.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+The bandpass filter works by first removing long-term trends using a highpass filter (which blocks low frequencies), then removing short-term noise using a lowpass filter (which blocks high frequencies). What remains are the medium-term cycles that fall between these two cutoffs.
+
+**Technical formula:**
 BP = Lowpass(Highpass(X))
 
-Where:
+Highpass coefficients:
+- a1 = exp(-1.414π/lp)
+- b1 = 2a1 × cos(1.414 × 180/lp)
+- c1 = (1 + c2 - c3)/4
+- c2 = b1
+- c3 = -a1²
 
-- Highpass coefficients:
-  - a1 = exp(-1.414π/lp)
-  - b1 = 2a1 × cos(1.414 × 180/lp)
-  - c1 = (1 + c2 - c3)/4
-  - c2 = b1
-  - c3 = -a1²
+Lowpass coefficients:
+- a2 = exp(-1.414π/up)
+- b2 = 2a2 × cos(1.414 × 180/up)
+- k1 = 1 - k2 - k3
+- k2 = b2
+- k3 = -a2²
 
-- Lowpass coefficients:
-  - a2 = exp(-1.414π/up)
-  - b2 = 2a2 × cos(1.414 × 180/up)
-  - k1 = 1 - k2 - k3
-  - k2 = b2
-  - k3 = -a2²
+> 🔍 **Technical Note:** The 1.414 (√2) factor in the coefficient calculations optimizes the filter response for maximally flat passband with minimal ringing, providing cleaner cycle extraction than simpler designs.
 
-### Implementation Details
+## Interpretation Details
 
-1. **Coefficient Calculation**:
-   - Optimized pole placement
-   - Independent period controls
-   - Automatic stability enforcement
-   - Efficient coefficient updates
+The Ehlers Bandpass Filter can be used in various trading contexts:
 
-2. **Signal Processing**:
-   - Two-stage cascade structure
-   - Recursive implementation
-   - Memory-efficient design
-   - Real-time processing capability
+* **Cycle identification:** Reveals dominant market cycles by isolating specific frequency bands
+* **Signal generation:** Zero-line crossings and peaks/troughs of the filtered output generate potential trade signals
+* **Market regime detection:** Changes in cycle amplitude indicate shifts between trending and ranging market conditions
+* **Seasonal analysis:** Isolate known seasonal patterns by setting period boundaries around the seasonal timeframe
+* **Multiple bandpass analysis:** Apply several bandpass filters with different period ranges to identify multiple cycle influences
 
-## Advantages and Disadvantages
+## Limitations and Considerations
 
-### Advantages
+* **Parameter sensitivity:** Performance highly dependent on appropriate period settings
+* **Initialization period:** Requires several bars to stabilize after the start of data
+* **Phase shifts:** Some phase shift (timing delay) is unavoidable in the filtered output
+* **Amplitude variations:** Output amplitude varies based on the energy present in the selected frequency band
+* **Complementary tools:** Best used with phase analysis tools and amplitude-based indicators for confirmation
 
-- **Frequency Selectivity**: Precise control over passband
-- **Noise Rejection**: Effective removal of unwanted frequencies
-- **Phase Response**: Minimal distortion in passband
-- **Computational Efficiency**: Optimized two-stage design
-- **Flexibility**: Independent control of cutoff frequencies
+## References
 
-### Disadvantages
-
-- **Initialization Period**: Requires several bars for startup
-- **Parameter Sensitivity**: Performance depends on cutoff selection
-- **Complexity**: More complex than single-stage filters
-- **Memory Usage**: Requires storing multiple previous values
-- **Group Delay**: Higher than single-stage filters
+* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013
+* Ehlers, J.F. "Rocket Science for Traders," Wiley, 2001

@@ -1,66 +1,62 @@
-# Mean Absolute Percentage Difference (MAPD)
-
-The Mean Absolute Percentage Difference implements a signal comparison metric that quantifies the average percentage difference between two sources, providing a scale-independent measure of prediction accuracy and signal similarity. MAPD's percentage-based nature ensures relative error measurement, making it suitable for comparing signals of different magnitudes.
+# MAPD: Mean Absolute Percentage Difference
 
 [Pine Script Implementation of MAPD](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mapd.pine)
 
-## Mathematical Foundation
+## Overview and Purpose
 
-The MAPD is calculated by taking the average of absolute percentage differences between two signals: MAPD = (100/p) * Σ|Y₁ - Y₂|/((Y₁ + Y₂)/2)
+The Mean Absolute Percentage Difference (MAPD) is a symmetric, scale-independent metric that quantifies the relative difference between two data series. Unlike MAPE which treats one series as the "actual" reference value, MAPD treats both series equally by using their average as the denominator. This approach provides a more balanced measure of relative difference, making it particularly valuable for comparing signals of equal importance, such as different indicators or price series. For traders and analysts, MAPD offers a percentage-based metric for measuring similarity between different instruments, timeframes, or technical indicators without introducing a reference bias.
 
-MAPD₍ₙ₎ = SMA(|Y₁₍ₙ₎ - Y₂₍ₙ₎|/((Y₁₍ₙ₎ + Y₂₍ₙ₎)/2) * 100, p)
+## Core Concepts
+
+* **Symmetric comparison:** Treats both signals equally without assuming one is the reference "truth"
+* **Scale independence:** Expresses differences in percentage terms, allowing comparison across different price ranges
+* **Market application:** Particularly useful for measuring similarity between different indicators, instruments, or timeframes
+
+The core innovation of MAPD is its symmetric approach to percentage differences. By using the average of both values in the denominator rather than designating one as the reference, MAPD creates a more balanced measure of relative difference. This makes it especially valuable when comparing signals where neither has clear precedence as the "correct" value, such as when assessing correlation between different instruments or evaluating how closely two indicators track each other.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the averaging period | Increase for more stable comparison, decrease for more responsive measurement |
+| Source 1 | close | First signal for comparison | Any signal you want to compare |
+| Source 2 | sma(close,20) | Second signal for comparison | Any signal you want to compare against the first |
+
+**Pro Tip:** When using MAPD to compare different instruments, consider applying it to normalized or z-scored versions of the price series to focus on relative movements rather than absolute differences.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+MAPD calculates the percentage difference between two values, but instead of using just one value as the reference point, it uses the average of both. This creates a balanced measure that treats both signals equally and avoids problems when values get close to zero.
+
+**Technical formula:**
+MAPD = (100/p) * Σ|Y₁ - Y₂|/((Y₁ + Y₂)/2)
 
 Where:
-
-- MAPD₍ₙ₎ is the current MAPD value
-- Y₁₍ₙ₎, Y₂₍ₙ₎ are the current signal values
+- Y₁, Y₂ are the signals being compared
 - p is the averaging period
 
-## Error Characteristics
+> 🔍 **Technical Note:** Using the average of both values in the denominator ensures symmetry - swapping Y₁ and Y₂ produces the exact same result. This property makes MAPD ideal for correlation and similarity studies.
 
-### Statistical Properties
+## Interpretation Details
 
-1. **Non-negativity**: MAPD is always ≥ 0, with 0 indicating perfect match
-2. **Symmetry**: Equal weight to positive and negative deviations
-3. **Scale Independence**: Percentage-based measurement
-4. **Bounded Range**: Values typically between 0% and 100%
+MAPD can be applied in various financial contexts:
 
-### Response Properties
+* **Correlation analysis:** Measure how closely different instruments or indicators track each other
+* **Pair trading:** Quantify the relationship between paired securities
+* **Indicator comparison:** Evaluate similarity between different technical indicators
+* **Market regime detection:** Identify when relationships between securities change
+* **Divergence identification:** Detect when normally correlated instruments begin to separate
 
-The error measurement demonstrates:
+## Limitations and Considerations
 
-1. **Sensitivity**:
-   - Proportional to relative differences
-   - Equal weighting of percentage deviations
-   - Robust across different signal magnitudes
+* **Zero handling:** Undefined when both signals are zero
+* **Extreme values:** Can produce very large percentages when values have opposite signs
+* **Interpretability range:** Typically interpreted in the 0-100% range, but can exceed 100% in extreme cases
+* **Directional blindness:** Does not distinguish between positive and negative differences
+* **Complementary metrics:** Best used alongside correlation measures for comprehensive relationship analysis
 
-2. **Temporal Behavior**:
-   - Moving window provides dynamic error tracking
-   - Responds to changing signal relationships
-   - Maintains historical context through averaging
+## References
 
-### Window Considerations
-
-The averaging period affects several aspects:
-
-1. **Error Smoothing**: Longer periods provide more stable error metrics
-2. **Response Time**: Shorter periods track changes more quickly
-3. **Memory Usage**: O(p) space complexity for the averaging window
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Scale Independence**: Suitable for comparing different scales
-- **Intuitive Interpretation**: Results in percentage values
-- **Symmetric**: Treats both signals equally
-- **Statistical Foundation**: Well-established relative error metric
-- **Computational Efficiency**: Simple calculation using existing functions
-
-### Disadvantages
-
-- **Zero Handling**: Undefined when both signals are zero
-- **Outlier Sensitivity**: Can be affected by very small values
-- **Averaging Delay**: Moving average introduces some lag
-- **Non-directional**: Cannot distinguish positive from negative errors
-- **Range Limitation**: May exceed 100% in extreme cases
+* Törnqvist, L., Vartia, P., and Vartia, Y. "How Should Relative Changes Be Measured?" The American Statistician, 1985
+* Armstrong, J.S. "Long-range Forecasting: From Crystal Ball to Computer," Wiley, 1985

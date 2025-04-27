@@ -1,126 +1,69 @@
-# Average Directional Movement Index (ADX)
-
-The Average Directional Movement Index implements a sophisticated trend strength detection system delivering 94% accuracy in trend identification and 96% reliability in non-trending market detection through optimized directional movement calculations. ADX's advanced algorithm provides 97% accuracy in trend strength measurement and 0.35 bar average strength detection latency, while achieving 93% noise reduction in sideways conditions through mathematically optimized smoothing and precise numerical stability control, executing complete calculations in under 0.6 microseconds on standard hardware.
+# ADX: Average Directional Movement Index
 
 [Pine Script Implementation of ADX](https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/adx.pine)
 
-## Mathematical Foundation
+## Overview and Purpose
 
-ADX is calculated through a multi-stage process that measures both the strength and direction of a trend:
+The Average Directional Movement Index (ADX) is a technical indicator designed to measure the strength of a trend, regardless of its direction. Developed by J. Welles Wilder Jr. and introduced in his 1978 book "New Concepts in Technical Trading Systems," ADX helps traders determine whether a market is trending or trading sideways. Unlike directional indicators that focus on price direction, ADX specifically quantifies trend strength on a scale from 0 to 100, providing traders with a clear measure of when a trend is gaining or losing momentum. This makes it particularly valuable for deciding when trend-following strategies are appropriate versus when range-bound approaches might be more effective.
 
-ADX = RMA(DX, period)
-where DX = 100 × |+DI - -DI|/(+DI + -DI)
+## Core Concepts
 
-Where:
+* **Trend strength measurement:** Quantifies the strength of a price trend independent of its direction, helping traders distinguish between trending and non-trending market conditions
+* **Directional movement analysis:** Incorporates Positive Directional Indicator (+DI) and Negative Directional Indicator (-DI) to provide additional insight into trend direction
+* **Timeframe flexibility:** Works effectively across various timeframes, though traditionally applied to daily charts where trends tend to develop more clearly
 
-- DX is the Directional Index
-- +DI and -DI are Positive and Negative Directional Indicators
-- RMA is the Rolling Moving Average (Wilder's smoothing)
-- period is the calculation timeframe (typically 14)
+The core principle of ADX is its focus on measuring trend strength rather than direction. By analyzing the relationship between price movement and range, ADX creates a normalized measurement of how strongly price is moving in any direction. This focus on strength rather than direction makes it an excellent filter for determining when trend-following strategies are appropriate versus when mean-reversion approaches might work better.
 
-### Detailed Breakdown
+## Common Settings and Parameters
 
-1. **True Range Calculation:**
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the smoothing period | Increase for less sensitivity and fewer signals, decrease for more responsiveness |
+| Source | Close | Price data used for calculation | Rarely needs adjustment as ADX relies on high/low ranges |
+| DI Length | 14 | Period for directional indicators | Typically kept the same as the main length parameter |
 
-    TR = max(high - low, |high - close₁|, |low - close₁|)
-    where close₁ is the previous period's closing price
+**Pro Tip:** The 25 level is widely considered the threshold for identifying meaningful trends - when ADX rises above 25, trend-following strategies tend to perform better, while readings below 20 often indicate range-bound conditions where mean-reversion strategies may be more effective.
 
-2. **Directional Movement:**
+## Calculation and Mathematical Foundation
 
-    +DM = if (high - high₁ > low₁ - low) and (high - high₁ > 0)
-          then high - high₁
-          else 0
+**Simplified explanation:**
+ADX first measures price movement in both up and down directions, then compares these movements to the total range to determine how much of the price action is directional versus random. These calculations are smoothed over time to create a consistent measure of trend strength regardless of direction.
 
-    -DM = if (low₁ - low > high - high₁) and (low₁ - low > 0)
-          then low₁ - low
-          else 0
+**Technical formula:**
+ADX is calculated through a multi-stage process:
 
-3. **Smoothed Calculations:**
+1. True Range (TR) = max(high - low, |high - previous close|, |low - previous close|)
+2. +DM (Directional Movement) = if (high - previous high > previous low - low) and (high - previous high > 0) then high - previous high else 0
+3. -DM = if (previous low - low > high - previous high) and (previous low - low > 0) then previous low - low else 0
+4. +DI = 100 × RMA(+DM, length) / RMA(TR, length)
+5. -DI = 100 × RMA(-DM, length) / RMA(TR, length)
+6. DX = 100 × |+DI - -DI| / (+DI + -DI)
+7. ADX = RMA(DX, length)
 
-    TR₁₄ = RMA(TR, 14)
-    +DM₁₄ = RMA(+DM, 14)
-    -DM₁₄ = RMA(-DM, 14)
+Where RMA is Wilder's smoothing method, equivalent to an EMA with alpha = 1/length
 
-4. **Directional Indicators:**
+> 🔍 **Technical Note:** ADX is particularly effective at identifying the beginning and end of trends. Rising ADX indicates increasing trend strength, while falling ADX suggests the trend is weakening, regardless of whether prices are moving up or down.
 
-    +DI₁₄ = 100 × (+DM₁₄/TR₁₄)
-    -DI₁₄ = 100 × (-DM₁₄/TR₁₄)
+## Interpretation Details
 
-5. **Final ADX Value:**
+ADX can be used in various trading strategies:
 
-    DX = 100 × |+DI₁₄ - -DI₁₄|/(+DI₁₄ + -DI₁₄)
-    ADX = RMA(DX, 14)
+* **Trend identification:** ADX values above 25 generally indicate a trending market, while values below 20 suggest a ranging market
+* **Trend strength assessment:** Higher ADX values indicate stronger trends, with readings above 50 signaling extremely strong trending conditions
+* **Trend exhaustion:** When ADX reaches extreme levels (above 50) and then begins to decline, it may signal potential trend exhaustion
+* **Entry filter:** Using ADX as a filter to only take trend-following trades when ADX is above 25
+* **Strategic approach selection:** Switching between trend-following strategies (when ADX is high) and range-bound strategies (when ADX is low)
+* **Directional bias:** When used with +DI and -DI, crossovers can suggest potential trend direction changes
 
-## Implementation Optimization
+## Limitations and Considerations
 
-The implementation uses several optimization techniques:
+* **Lagging indicator:** ADX responds after trends have already established, potentially missing early trend development
+* **False signals:** Can occasionally produce false signals during volatile market conditions
+* **Smoothing effect:** The extensive smoothing creates significant lag in identifying trend changes
+* **No directional indication:** By itself, ADX doesn't indicate trend direction, only strength
+* **Complementary tools:** Best used alongside price action analysis and other indicators for confirmation
 
-1. **Efficient Calculations:**
-   - Single-pass TR calculation
-   - Optimized directional movement logic
-   - Streamlined smoothing process
+## References
 
-2. **Memory Management:**
-   - Minimal state variable usage
-   - Efficient data structure utilization
-   - Optimized calculation chain
-
-3. **Numerical Stability:**
-   - Division protection
-   - Boundary condition handling
-   - Precision maintenance
-
-## Technical Characteristics
-
-### Signal Properties
-
-1. **Range Characteristics:**
-   - Output bounded between 0 and 100
-   - Typical significant range: 20-60
-   - Key threshold at 25 (trend strength)
-
-2. **Response Properties:**
-   - Gradual strength build-up
-   - Smooth trend decay
-   - Non-linear strength mapping
-
-3. **Timing Properties:**
-   - Forward-looking capability: 0.35 bars
-   - Trend confirmation delay: 2-3 bars
-   - Strength change detection: 1-2 bars
-
-### Calculation Properties
-
-1. **Smoothing Characteristics:**
-   - Wilder's smoothing for stability
-   - Multi-stage noise reduction
-   - Trend persistence verification
-
-2. **Sensitivity Parameters:**
-   - Period affects smoothing degree
-   - DI spread impacts strength reading
-   - TR normalization effect
-
-3. **Boundary Behavior:**
-   - Stable at extremes
-   - Non-trending state detection
-   - Trend exhaustion identification
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Trend Strength Focus:** Measures trend strength independent of direction
-- **Normalized Output:** Values always between 0 and 100
-- **Stable Signals:** Minimal false signals through smoothing
-- **Direction Independent:** Works equally well in up and down trends
-- **Market Phase Detection:** Clearly identifies trending vs ranging markets
-- **Numerical Stability:** Robust calculations with boundary protection
-
-### Disadvantages
-
-- **Lagging Nature:** Delayed reaction to trend changes
-- **Smoothing Impact:** Can miss short-term strength changes
-- **Calculation Complexity:** More intensive than simple momentum indicators
-- **Period Sensitivity:** Results vary significantly with period changes
-- **Initialization Period:** Requires several bars for accurate readings
+* Wilder, J. Welles. "New Concepts in Technical Trading Systems," Trend Research, 1978
+* Murphy, John J. "Technical Analysis of the Financial Markets," New York Institute of Finance, 1999

@@ -1,55 +1,64 @@
-# Bilateral Filter
+# BILATERAL: Bilateral Filter
 
-The Bilateral Filter is an edge-preserving smoothing filter. It replaces the intensity of each bar with a weighted average of intensity values from nearby bars. Crucially, the weight depends not only on Euclidean distance of bars (spatial domain) but also on the radiometric differences (range domain, e.g., intensity difference). This preserves sharp edges by systematically limiting the averaging process across large intensity variations.
+[Pine Script Implementation of BILATERAL](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/bilateral.pine)
 
-[Pine Script Implementation of Bilateral Filter](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/bilateral.pine)
+## Overview and Purpose
 
-## Mathematical Foundation
+The Bilateral Filter is an edge-preserving smoothing technique that combines spatial filtering with intensity filtering to achieve noise reduction while maintaining significant price structure. Originally developed in computer vision for image processing, this adaptive filter has been adapted for financial time series analysis to provide superior smoothing that preserves important market transitions. The filter intelligently reduces noise in stable price regions while preserving sharp transitions like breakouts, reversals, and other significant market structures that would be blurred by conventional filters.
 
-The Bilateral Filter output for a value at position `p` is calculated as:
+## Core Concepts
 
+* **Dual-domain filtering:** Combines traditional time-based (spatial) filtering with value-based (range) filtering for adaptive smoothing
+* **Edge preservation:** Maintains important price transitions while aggressively smoothing areas of minor fluctuation
+* **Adaptive processing:** Automatically adjusts filtering strength based on local price characteristics
+
+The core innovation of the Bilateral Filter is its ability to distinguish between random noise and significant price movements. Unlike conventional filters that smooth everything equally, Bilateral filtering preserves major price transitions by reducing the influence of price points that differ significantly from the current price, effectively preserving market structure while still eliminating noise.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback window size | Increase for more context in filtering decisions, decrease for quicker response |
+| Sigma_S_Ratio | 0.3 | Controls spatial (time) weighting | Lower values emphasize recent bars, higher values distribute influence more evenly |
+| Sigma_R_Mult | 2.0 | Controls range (price) sensitivity | Lower values increase edge preservation, higher values increase smoothing |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+
+**Pro Tip:** For breakout trading strategies, try reducing Sigma_R_Mult to 1.0-1.5 to make the filter more sensitive to significant price moves, allowing it to preserve breakout signals while still filtering noise.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+The Bilateral Filter calculates a weighted average of nearby prices, where the weights depend on two factors: how far away in time the price point is (spatial weight) and how different the price value is (range weight). Points that are close in time AND similar in value get the highest weight. This means stable price regions get smoothed while significant changes are preserved.
+
+**Technical formula:**
 BF[p] = (1 / Wp) × Σ_{q ∈ S} G_s(||p - q||) × G_r(|I[p] - I[q]|) × I[q]
 
 Where:
+- G_s is the spatial Gaussian kernel: exp(-||p - q||² / (2 × σ_s²))
+- G_r is the range Gaussian kernel: exp(-|I[p] - I[q]|² / (2 × σ_r²))
+- Wp is the normalization factor (sum of all weights)
 
-- `I[p]` is the input value at position `p`.
-- `S` is the spatial neighborhood of `p` (defined by `length`).
-- `G_s` is the spatial Gaussian kernel: `exp(-||p - q||² / (2 × σ_s²))`
-- `G_r` is the range Gaussian kernel: `exp(-|I[p] - I[q]|² / (2 × σ_r²))`
-- `σ_s` is the spatial standard deviation (controls spatial influence).
-- `σ_r` is the range standard deviation (controls intensity influence).
-- `Wp` is the normalization factor: `Σ_{q ∈ S} G_s(||p - q||) × G_r(|I[p] - I[q]|)`
+> 🔍 **Technical Note:** The sigma_r parameter is typically calculated dynamically based on local price volatility (standard deviation) to provide adaptive filtering - this automatically adjusts filtering strength based on market conditions.
 
-## Implementation Details
+## Interpretation Details
 
-1. **Parameterization**:
-    - `length`: Defines the size of the spatial neighborhood (number of past bars).
-    - `sigma_s_ratio`: Controls the spatial standard deviation (`σ_s = length × sigma_s_ratio`). A smaller ratio gives more weight to closer bars.
-    - `sigma_r_mult`: Controls the range standard deviation (`σ_r = stdev(src, length) × sigma_r_mult`). A smaller multiplier makes the filter more sensitive to intensity differences, thus preserving edges better.
+The Bilateral Filter can be applied in various trading contexts:
 
-2. **Weight Calculation**:
-    - Iterates through the `length` bars preceding the current bar.
-    - Calculates spatial weight based on distance (bar index difference).
-    - Calculates range weight based on the difference between the current bar's value and the neighbor's value.
-    - Combines spatial and range weights multiplicatively.
+* **Trend identification:** Reveals cleaner underlying price direction by removing noise while preserving trend changes
+* **Support/resistance identification:** Provides clearer price levels by preserving significant turning points
+* **Pattern recognition:** Maintains critical chart patterns while eliminating distracting minor fluctuations
+* **Breakout trading:** Preserves sharp price transitions for more reliable breakout signals
+* **Pre-processing:** Can be used as an initial filter before applying other technical indicators to reduce false signals
 
-3. **Normalization**:
-    - Sums all calculated weights (`Wp`).
-    - Sums the product of each neighbor's value and its combined weight.
-    - Divides the weighted sum of values by the sum of weights to get the filtered output.
+## Limitations and Considerations
 
-## Advantages and Disadvantages
+* **Computational complexity:** More intensive calculations than traditional linear filters
+* **Parameter sensitivity:** Performance highly dependent on proper parameter selection
+* **Non-linearity:** Non-linear behavior may produce unexpected results in certain market conditions
+* **Interpretation adjustment:** Requires different interpretation than conventional moving averages
+* **Complementary tools:** Best used alongside volume analysis and traditional indicators for confirmation
 
-### Advantages
+## References
 
-- **Edge Preservation**: Excellent at smoothing while keeping significant changes (edges) sharp.
-- **Noise Reduction**: Effectively reduces noise in flat regions.
-- **Parameter Control**: Offers separate control over spatial and range smoothing.
-- **Non-linear**: Adapts smoothing based on local value differences.
-
-### Disadvantages
-
-- **Computational Cost**: More intensive than simple linear filters (like SMA or EMA) due to the loop and per-neighbor calculations.
-- **Parameter Tuning**: Finding optimal `sigma_s` and `sigma_r` can be data-dependent and require experimentation.
-- **Potential Artifacts**: Can sometimes introduce minor gradient reversal artifacts near edges.
-- **Lag**: While edge-preserving, it still introduces some lag compared to the raw signal.
+* Tomasi, C. and Manduchi, R. "Bilateral Filtering for Gray and Color Images," Proceedings of IEEE ICCV, 1998
+* Paris, S. et al. "A Gentle Introduction to Bilateral Filtering and its Applications," ACM SIGGRAPH, 2008

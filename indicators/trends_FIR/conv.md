@@ -1,71 +1,62 @@
-# Convolution Moving Average (CONV)
-
-The Convolution Moving Average implements a flexible, user-customizable filter that can apply any arbitrary kernel to price data. Emerging from fundamental signal processing principles established in the 1950-60s, convolution filtering became a cornerstone of digital signal processing. Its specific application to financial markets developed in the late 1990s as digital signal processing techniques were increasingly adopted for technical analysis. By the mid-2000s, generalized convolution frameworks began appearing in advanced trading platforms, allowing traders to experiment with custom filter designs. This generalized FIR filter allows traders to create specialized moving averages with unique frequency-domain characteristics by designing their own weight distributions or using predefined kernels. CONV enables superior control over noise reduction and signal preservation characteristics through direct kernel manipulation.
+# CONV: Convolution
 
 [Pine Script Implementation of CONV](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/conv.pine)
 
+## Overview and Purpose
+
+The Convolution (CONV) is a flexible technical indicator that allows traders to apply any arbitrary weighting scheme (kernel) to price data. Rooted in signal processing principles developed in the 1950-60s, convolution filtering was later adapted to financial markets in the 1990s as digital signal processing techniques gained popularity in technical analysis. Convolution provides a generalized framework that enables traders to create customized moving averages with specific filtering characteristics, either by designing their own weight distributions or using predefined kernels.
+
 ## Core Concepts
 
-The CONV framework was designed to address the limitations of fixed moving average formulas through:
+* **Customizable weighting:** Convolution allows any sequence of weights to be applied to price data, enabling precise control over filtering behavior
+* **Kernel flexibility:** Supports both simple weight distributions (like those used in SMA) and complex multi-lobe designs with specialized filtering properties
+* **Market application:** Particularly valuable for traders who need to design specialized filters for specific market conditions or trading strategies
 
-- Generalized filtering architecture supporting arbitrary kernels
-- Complete customization of frequency response characteristics
-- Flexible weight distribution for specialized signal processing
-- Unified implementation of various window functions
-- Direct control over filtering behavior
+The core innovation of convolution is its implementation of the fundamental convolution operation from signal processing. This provides a unified framework that can replicate many standard moving averages through appropriate kernel selection, while also allowing for experimentation with novel weight distributions that aren't available in standard indicators.
 
-CONV achieves this flexibility through its implementation of the fundamental convolution operation, allowing any sequence of weights to be applied to market data, from simple rectangular kernels equivalent to SMA through sophisticated multi-lobe designs with highly specialized filtering properties.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | Varies | Controls the kernel size | Increase for smoother signals, decrease for responsiveness |
+| Kernel | Custom | Defines the weight distribution | Change based on desired filtering characteristics |
+| Source | close | Price data used for calculation | Typically left at default; can be changed based on analysis focus |
 
-The CONV calculation applies a custom kernel as the weight distribution across a sliding window:
+**Pro Tip:** Start with established kernels like Gaussian or Blackman, then gradually modify weights to achieve your specific filtering needs. Keep a record of kernel configurations that work well in different market conditions.
 
-CONV = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+Convolution calculates a weighted average of prices where you can specify exactly how much importance to give each price in the lookback period. The weights can follow any pattern you design, giving complete control over how the moving average behaves.
+
+**Technical formula:**
+CONV = Σ(Price[i] × Kernel_Weight[i]) / Σ(Kernel_Weight[i])
 
 Where:
+- Kernel_Weight[i] is the user-defined weight for position i in the lookback window
+- All weights are normalized to ensure they sum to 1.0, maintaining proper scaling
 
-- P₁, P₂, ..., Pₙ are data values in the lookback window
-- w₁, w₂, ..., wₙ are the kernel weights (user-defined or from built-in presets)
-- n is the kernel size
+> 🔍 **Technical Note:** Kernel normalization ensures that the resulting moving average maintains consistent amplitude regardless of the absolute values of the kernel weights, making it easier to compare results across different kernel designs.
 
-### Kernel Definition and Normalization
+## Interpretation Details
 
-The kernel is an array of weights that defines the relative importance of each data point in the convolution. All kernels are automatically normalized to ensure their weights sum to 1.0, maintaining the scale of the original data:
+Convolution can be used in various ways depending on the kernel design:
 
-w'ᵢ = wᵢ / Σwⱼ
+* **Trend identification:** With appropriate kernels, convolution can identify trends while filtering out noise
+* **Specialized filtering:** Custom kernels can be designed to target specific price patterns or cycles
+* **Moving average replication:** Convolution can replicate virtually any other moving average by using the appropriate kernel
+* **Educational tool:** Helps understand how different weight distributions affect moving average behavior
+* **Experimental strategies:** Enables testing of novel filtering approaches not available in standard indicators
 
-This normalization ensures that the resulting moving average maintains proper scaling regardless of the magnitude of the original kernel weights.
+## Limitations and Considerations
 
-## Initialization Properties
-
-### Full Window Requirement
-
-CONV requires a minimum of kernel_size data points for a complete calculation. For periods with insufficient data, the implementation handles the initialization by:
-
-1. Using available data points with the corresponding kernel weights
-2. Normalizing weights based on available valid (non-NA) values
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Ultimate Flexibility**: Create any weight distribution to achieve specific filtering requirements
-- **Customizable Frequency Response**: Direct control over spectral properties
-- **Adaptable to Different Markets**: Design specialized kernels for different market conditions
-- **Educational Value**: Helps understand how different weight distributions affect moving average behavior
-- **Unified Implementation**: Can replicate many standard moving averages through appropriate kernel selection
-- **Experimental Capabilities**: Enables testing novel weight distributions not available in standard indicators
-
-### Disadvantages
-
-- **Parameter Complexity**: Requires understanding of convolution and filter design principles
-- **Higher Cognitive Load**: More parameters to consider compared to standard moving averages
-- **Potential Over-optimization**: Easy to create kernels that fit historical data but don't generalize well
-- **Performance Cost**: Slightly higher computational requirements than hardcoded implementations
-- **Validation Needs**: Custom kernels require validation to ensure desired filtering characteristics
+* **Knowledge requirement:** Requires understanding of convolution and filter design principles
+* **Parameter complexity:** More parameters to optimize compared to standard moving averages
+* **Potential overfitting:** Easy to create kernels that work well on historical data but fail on future data
+* **Computational demands:** Slightly higher computational requirements than hardcoded implementations
+* **Validation necessity:** Custom kernels require thorough testing to ensure desired filtering characteristics
 
 ## References
 
-1. Gorry, P.A. "General Least-Squares Smoothing and Differentiation by the Convolution Method."
-2. Mulloy, P. (2003). "Customizable Filters for Technical Analysis," Technical Analysis of Stocks & Commodities
-3. Ehlers, J.F. (2013). "Cycle Analytics for Traders," Wiley, Chapter 7: "Advanced Filtering Techniques."
+* Smith, S.W. "The Scientist and Engineer's Guide to Digital Signal Processing," Chapter 7: Properties of Convolution
+* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013

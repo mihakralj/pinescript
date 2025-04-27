@@ -1,64 +1,63 @@
-# Huber Loss
+# HUBER: Huber Loss
 
-The Huber Loss implements a hybrid signal comparison metric that combines the best properties of Mean Squared Error (MSE) and Mean Absolute Error (MAE). It behaves quadratically for small errors and linearly for large errors, providing robustness against outliers while maintaining sensitivity to small deviations. This adaptive behavior makes it particularly effective for financial signal analysis across varying market conditions.
+[Pine Script Implementation of HUBER](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/huber.pine)
 
-[Pine Script Implementation of Huber Loss](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/huber.pine)
+## Overview and Purpose
 
-## Mathematical Foundation
+The Huber Loss is a hybrid error metric that combines the best properties of Mean Squared Error (MSE) and Mean Absolute Error (MAE). Developed by statistician Peter J. Huber in 1964, this metric addresses the need for robust regression that remains sensitive to small errors while reducing the influence of outliers. In financial analysis, Huber Loss provides a balanced approach to error measurement that adapts to varying market conditions, making it particularly valuable when analyzing signals that contain both subtle patterns and occasional extreme movements.
 
-The Huber Loss uses a threshold (δ) to switch between quadratic and linear behavior:
+## Core Concepts
 
-For |Y₁ - Y₂| ≤ δ: Loss = 0.5(Y₁ - Y₂)² = MSE
-For |Y₁ - Y₂| > δ: Loss = δ|Y₁ - Y₂| - 0.5δ² = MAE
+* **Adaptive behavior:** Transitions smoothly between quadratic treatment of small errors and linear treatment of large errors
+* **Outlier resilience:** Reduces the influence of extreme values while maintaining sensitivity to smaller deviations
+* **Market application:** Particularly effective for model evaluation in volatile markets where both precision and robustness are required
 
-Where:
+The core innovation of Huber Loss is its threshold parameter (delta) that determines when the function switches from quadratic to linear behavior. This creates an error metric that behaves like MSE for errors smaller than delta (preserving sensitivity to small deviations) but switches to MAE-like behavior for larger errors (providing robustness against outliers).
 
-- Y₁, Y₂ are the signal values being compared
-- δ (delta) is the threshold parameter
-- The final value is averaged over period p using SMA
+## Common Settings and Parameters
 
-The delta parameter (δ) has a widely accepted default value in statistics:
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the averaging period | Increase for smoother error measurements, decrease for more responsiveness |
+| Delta | 1.345 | Threshold between quadratic and linear regions | Lower values increase robustness against outliers, higher values improve sensitivity to small errors |
+| Source 1 | close | First signal for comparison | Typically your actual or predicted value |
+| Source 2 | sma(close,20) | Second signal for comparison | Typically your model or another signal to compare against |
 
-- δ = 1.345 is the standard choice in statistical applications
-- This value provides 95% statistical efficiency for normally distributed data
-- Makes Huber loss behave like MSE for errors ≤ 1.345 and like MAE for larger errors
+**Pro Tip:** The default delta value of 1.345 provides 95% statistical efficiency for normally distributed data, but in financial markets with fat-tailed distributions, consider using lower values (0.8-1.0) to better handle unexpected price movements.
 
-## Error Characteristics
+## Calculation and Mathematical Foundation
 
-### Statistical Properties
+**Simplified explanation:**
+Huber Loss measures the difference between two signals, treating small differences like MSE (squaring them) and large differences like MAE (using absolute values). This gives you the best of both worlds - sensitivity to small errors and resistance to outliers.
 
-1. **Non-negativity**: Always ≥ 0, with 0 indicating perfect match
-2. **Symmetry**: Equal weight to positive and negative deviations
-3. **Adaptive Scaling**: Quadratic for small errors, linear for large ones
-4. **Scale Dependence**: Value depends on the scale of input signals
-5. **Differentiability**: Smooth transition between regimes
+**Technical formula:**
+For each pair of values (Y₁, Y₂):
+- If |Y₁ - Y₂| ≤ δ: Loss = 0.5(Y₁ - Y₂)²
+- If |Y₁ - Y₂| > δ: Loss = δ|Y₁ - Y₂| - 0.5δ²
 
-### Response Properties
+Final Huber Loss is the average of these values over the specified period.
 
-1. **Sensitivity**:
-   - Quadratic response to small deviations for precision
-   - Linear response to large deviations for robustness
-   - Adaptive behavior based on error magnitude
-  
-2. **Temporal Behavior**:
-   - Moving window provides dynamic error tracking
-   - Responds to changing signal relationships
-   - Maintains historical context through averaging
+> 🔍 **Technical Note:** The subtraction of 0.5δ² in the linear region ensures continuity at the transition point, making Huber Loss differentiable everywhere - a valuable property for optimization algorithms.
 
-## Advantages and Disadvantages
+## Interpretation Details
 
-### Advantages
+Huber Loss can be applied in various financial contexts:
 
-- **Robustness**: Less sensitive to outliers than MSE
-- **Precision**: More sensitive to small errors than MAE
-- **Adaptivity**: Combines benefits of both MSE and MAE
-- **Differentiability**: Smooth transition between regimes
-- **Flexibility**: Adjustable threshold parameter
+* **Model evaluation:** Compare prediction accuracy between different forecasting models
+* **Signal comparison:** Measure how closely two indicators track each other while accounting for occasional divergences
+* **Anomaly detection:** Identify unusual market behavior by measuring deviation from expected patterns
+* **Optimization criteria:** Use as a robust loss function when developing trading algorithms
+* **Regime detection:** Track changes in error characteristics to identify shifts in market conditions
 
-### Disadvantages
+## Limitations and Considerations
 
-- **Scale Dependency**: Not suitable for comparing different scales
-- **Parameter Tuning**: Requires appropriate delta selection
-- **Averaging Delay**: Moving average introduces some lag
-- **Non-directional**: Cannot distinguish positive from negative errors
-- **Complexity**: More complex computation than MSE or MAE
+* **Scale dependency:** Values depend on the scale of input signals, making comparisons across different instruments challenging
+* **Parameter sensitivity:** Performance depends on appropriate delta selection for the specific market conditions
+* **Additional complexity:** More computationally intensive than simple error metrics
+* **Non-directional:** Cannot distinguish between positive and negative errors without modification
+* **Complementary metrics:** Best used alongside other error measures for comprehensive evaluation
+
+## References
+
+* Huber, P.J. "Robust Estimation of a Location Parameter," Annals of Mathematical Statistics, 1964
+* Hastie, T., Tibshirani, R., and Friedman, J. "The Elements of Statistical Learning," Springer, 2009

@@ -1,66 +1,62 @@
-# Mean Squared Error (MSE)
-
-The Mean Squared Error implements a signal comparison metric that quantifies the average squared difference between two sources, providing a robust statistical measure of prediction accuracy and signal similarity. MSE's squared nature ensures all differences are positive, weighing larger errors more heavily while achieving 99.9% error detection accuracy across varying market conditions.
+# MSE: Mean Squared Error
 
 [Pine Script Implementation of MSE](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mse.pine)
 
-## Mathematical Foundation
+## Overview and Purpose
 
-The MSE is calculated by taking the average of squared differences between two signals: MSE = (1/p) * Σ(Y₁ - Y₂)²
+The Mean Squared Error (MSE) is a fundamental statistical measure that quantifies the average squared difference between predicted and actual values. As one of the most widely used error metrics in statistics and machine learning, MSE provides a robust measure of prediction accuracy that emphasizes larger errors. First formally established in statistical theory in the early 20th century, MSE has become a cornerstone of error measurement across multiple disciplines. In financial analysis, MSE offers traders a powerful tool for evaluating prediction models, comparing indicators, and optimizing trading systems, with its squared term making it particularly sensitive to occasional large prediction errors that might have significant financial implications.
 
-MSE₍ₙ₎ = SMA((Y₁₍ₙ₎ - Y₂₍ₙ₎)², p)
+## Core Concepts
+
+* **Quadratic error weighting:** Penalizes larger errors more heavily than smaller ones due to the squaring operation
+* **Outlier sensitivity:** Responds strongly to occasional large errors, making it useful when large deviations are particularly concerning
+* **Market application:** Especially valuable for evaluating prediction models where large errors may have disproportionate financial consequences
+
+The distinguishing characteristic of MSE is its quadratic nature - by squaring errors before averaging, it disproportionately penalizes large deviations compared to small ones. This aligns well with many financial applications where the cost of errors often increases non-linearly with their magnitude, such as in risk management, option pricing, or volatility prediction.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the averaging period | Increase for more stable error measurement, decrease for more responsive feedback |
+| Source 1 | close | First signal for comparison | Typically the actual or target value |
+| Source 2 | sma(close,20) | Second signal for comparison | Typically the predicted or modeled value |
+
+**Pro Tip:** When optimizing trading models, compare MSE alongside MAE - a much larger MSE relative to MAE indicates your model is making occasional large errors that could significantly impact trading performance.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+MSE squares the difference between each pair of values, then averages these squared differences. This squaring step ensures all values are positive and gives much more weight to large errors than to small ones.
+
+**Technical formula:**
+MSE = (1/p) * Σ(Y₁ - Y₂)²
 
 Where:
+- Y₁, Y₂ are the values being compared
+- p is the number of periods
 
-- MSE₍ₙ₎ is the current MSE value
-- Y₁₍ₙ₎, Y₂₍ₙ₎ are the current signal values
-- p is the averaging period
+> 🔍 **Technical Note:** MSE has attractive mathematical properties for optimization, including convexity and differentiability. These make it particularly suitable as a loss function in machine learning models where gradient-based optimization is used.
 
-## Error Characteristics
+## Interpretation Details
 
-### Statistical Properties
+MSE can be applied in various financial contexts:
 
-1. **Non-negativity**: MSE is always ≥ 0, with 0 indicating perfect match
-2. **Symmetry**: Equal weight to positive and negative deviations
-3. **Quadratic Scaling**: Larger errors are penalized more heavily
-4. **Scale Dependence**: Value depends on the scale of input signals
+* **Model evaluation:** Compare the accuracy of different predictive models
+* **Indicator tuning:** Optimize parameters by minimizing prediction error
+* **Signal comparison:** Measure how closely two indicators track each other
+* **System optimization:** Minimize the squared difference between actual and ideal entries/exits
+* **Volatility analysis:** Higher MSE in certain market regimes can indicate increased prediction difficulty
 
-### Response Properties
+## Limitations and Considerations
 
-The error measurement demonstrates:
+* **Unit interpretation:** Results are in squared units, making them less directly interpretable than metrics like MAE or RMSE
+* **Scale dependency:** Values depend on the scale of the data, making comparisons across different instruments challenging
+* **Outlier sensitivity:** Can be disproportionately influenced by a few large errors
+* **Directional blindness:** Does not distinguish between positive and negative errors
+* **Complementary metrics:** Best used alongside other error measures like MAE or MAPE for comprehensive evaluation
 
-1. **Sensitivity**:
-   - Highly sensitive to outliers due to squared differences
-   - Emphasizes large deviations between signals
-   - Detects both systematic and random variations
+## References
 
-2. **Temporal Behavior**:
-   - Moving window provides dynamic error tracking
-   - Responds to changing signal relationships
-   - Maintains historical context through averaging
-
-### Window Considerations
-
-The averaging period affects several aspects:
-
-1. **Error Smoothing**: Longer periods provide more stable error metrics
-2. **Response Time**: Shorter periods track changes more quickly
-3. **Memory Usage**: O(p) space complexity for the averaging window
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Intuitive Interpretation**: Square of the units of original signals
-- **Mathematical Properties**: Differentiable and convex
-- **Outlier Sensitivity**: Effectively detects significant deviations
-- **Statistical Foundation**: Well-established error metric
-- **Computational Efficiency**: Simple calculation using existing SMA
-
-### Disadvantages
-
-- **Scale Dependency**: Not suitable for comparing different scales
-- **Outlier Impact**: Can be overly sensitive to large deviations
-- **Squared Units**: Result not in same units as input signals
-- **Averaging Delay**: Moving average introduces some lag
-- **Non-directional**: Cannot distinguish positive from negative errors
+* Chai, T. and Draxler, R.R. "Root mean square error (RMSE) or mean absolute error (MAE)?", Geoscientific Model Development, 2014
+* Lehmann, E.L. and Casella, G. "Theory of Point Estimation," Springer, 1998

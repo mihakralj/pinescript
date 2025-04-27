@@ -1,113 +1,76 @@
-# Fractal Adaptive Moving Average (FRAMA)
-
-The Fractal Adaptive Moving Average represents a breakthrough in fractal-based adaptive filtering, achieving 92% noise reduction and 1.8 bar average lag through dynamic fractal dimension analysis and exponential coefficient optimization. FRAMA's sophisticated algorithm, developed by John Ehlers, synthesizes Hurst exponent principles with adaptive smoothing, enabling 89% reduction in false signals while maintaining 98.5% correlation with price trends during both trending and consolidating conditions. Introduced by John Ehlers in 2005, FRAMA quickly gained recognition among advanced technical analysts for its ability to adapt to changing market conditions. Its adoption has grown significantly in algorithmic trading systems and professional trading platforms, particularly in markets with varying volatility regimes. FRAMA's unique approach to measuring market fractality has influenced the development of numerous adaptive indicators in the technical analysis field.
+# FRAMA: Fractal Adaptive Moving Average
 
 [Pine Script Implementation of FRAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/frama.pine)
 
+## Overview and Purpose
+
+The Fractal Adaptive Moving Average (FRAMA) is an advanced technical indicator that automatically adjusts its smoothing factor based on the fractal dimension of price action. Developed by John Ehlers and introduced in 2005, FRAMA utilizes concepts from fractal geometry to identify market states and adapt accordingly.
+
+Unlike traditional moving averages with fixed parameters, FRAMA becomes more responsive during trending markets and more stable during sideways or choppy conditions. This is achieved by measuring the "fractal dimension" of the price series - a mathematical concept that quantifies how "jagged" or "smooth" the market is behaving. This approach creates a moving average that effectively filters market noise while maintaining responsiveness to genuine trend changes.
+
 ## Core Concepts
 
-As Ehlers explains in his original paper, market prices exhibit fractal properties - they are self-similar across different timeframes. This characteristic allows FRAMA to:
+* **Fractal dimension analysis:** Measures the complexity of price movement to determine market state (trending vs. choppy)
+* **Dynamic alpha adjustment:** Automatically modifies the smoothing factor based on the calculated fractal dimension
+* **Self-adapting behavior:** Becomes faster in trending markets and slower in consolidating markets without manual intervention
+* **Market structure recognition:** Identifies and adapts to different market conditions through mathematical principles
 
-- Automatically adapt to changing market conditions
-- Minimize lag during trending periods
-- Maximize smoothing during consolidation
-- Recognize market structure through fractal analysis
+FRAMA achieves its adaptive nature by analyzing how price occupies space across different timeframes - a fundamental concept in fractal geometry. By calculating normalized price ranges at different scales, it determines a fractal dimension that ranges from 1 (smooth, trending markets) to 2 (noisy, choppy markets). This dimension then controls how quickly the moving average responds to price changes.
 
-## Mathematical Foundation
+## Common Settings and Parameters
 
-1. **Price Range Analysis:**
-   The algorithm divides the observation period into segments and calculates normalized ranges:
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Period | 16 | Base calculation period (should be divisible by 4) | Increase for longer-term analysis, decrease for shorter-term signals |
+| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
 
-   N₁ = [H(n/4) - L(n/4)] × 4/n
-   N₂ = [H(n/2) - L(n/2)] × 2/n
-   N₃ = [H(n) - L(n)] × 1/n
+**Pro Tip:** Many professional traders find that setting the period to a multiple of 4 between 16-32 provides the optimal balance of responsiveness and stability across most market conditions. The 16-period setting is often ideal for swing trading timeframes.
 
-   Where:
-   - H(k) is the highest high over k periods
-   - L(k) is the lowest low over k periods
-   - n is the period length
+## Calculation and Mathematical Foundation
 
-2. **Fractal Dimension Calculation:**
+**Simplified explanation:**
+FRAMA works by measuring how "fractal" (complex or jagged) the recent price action has been. When prices are moving in a clean trend, FRAMA responds quickly to price changes. When prices are choppy and directionless, FRAMA slows down dramatically to filter out the noise.
 
-   D = [ln(N₁ + N₂) - ln(N₂ + N₃)] / ln(2)
+**Technical formula:**
+1. Divide the observation period into segments and calculate normalized price ranges:
+   - N₁ = [H(n/4) - L(n/4)] × 4/n (smallest segment)
+   - N₂ = [H(n/2) - L(n/2)] × 2/n (medium segment)
+   - N₃ = [H(n) - L(n)] × 1/n (full period segment)
+   Where H and L are highest and lowest prices in the segment
 
-   The dimension D varies from:
-   - D → 1: Indicates trending market (smooth line)
-   - D → 2: Indicates choppy market (space-filling noise)
+2. Calculate the fractal dimension:
+   - D = [ln(N₁ + N₂) - ln(N₂ + N₃)] / ln(2)
 
-3. **Adaptive Alpha Determination:**
+3. Determine the adaptive alpha:
+   - α = e^(-4.6(D-1)), constrained to [0.01, 1]
 
-   α = e^(-4.6(D-1)), constrained to [0.01, 1]
+4. Apply to standard EMA formula:
+   - FRAMA = α × Price + (1-α) × Previous FRAMA
 
-   Where:
-   - α → 1: Fast adaptation in trending markets
-   - α → 0.01: Slow adaptation in choppy markets
+> 🔍 **Technical Note:** The fractal dimension calculation is based on concepts from the Hurst exponent, which measures the self-similarity of time series data. When D approaches 1, the market is trending smoothly; when D approaches 2, the market is random and choppy. The exponential function applied to D creates a non-linear response that emphasizes the difference between trending and non-trending states.
 
-4. **FRAMA Calculation:**
+## Interpretation Details
 
-   FRAMAₜ = α × Pₜ + (1 - α) × FRAMAₜ₋₁
+FRAMA provides several key insights for traders:
 
-## Implementation Notes
+- When price crosses above FRAMA, it often signals the beginning of an uptrend
+- When price crosses below FRAMA, it often signals the beginning of a downtrend
+- The slope of FRAMA provides insight into trend strength and momentum
+- FRAMA's smoothness/jaggedness itself indicates market conditions - smooth FRAMA suggests a clean trend
+- Multiple FRAMA lines with different periods can identify potential reversal zones
 
-1. **Period Requirements**:
-   - Must be divisible by 4 for proper segmentation
-   - Affects quality of fractal analysis
-   - Influences adaptation speed
+FRAMA is particularly valuable in markets that alternate between trending and consolidation phases. Its ability to automatically slow down during choppy conditions helps filter out false signals, while its increased responsiveness during trends helps capture more of the significant price moves.
 
-2. **Initialization**:
-   - Uses average during warmup period
-   - Requires sufficient historical data
-   - Includes epsilon protection for calculations
+## Limitations and Considerations
 
-3. **Optimization**:
-   - Efficient array-based calculations
-   - Optimized high/low determination
-   - Memory-efficient circular buffer implementation
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Market Adaptation**: Automatically adjusts to trending and choppy conditions
-- **Reduced Lag**: Faster response during clear trends
-- **Noise Suppression**: Enhanced filtering during consolidation
-- **Smooth Transitions**: Gradual parameter adaptation prevents sudden changes
-- **Fractal Analysis**: Captures market structure across multiple timeframes
-
-### Disadvantages
-
-- **Parameter Sensitivity**: Period selection affects fractal analysis quality
-- **Calculation Complexity**: More intensive than simple moving averages
-- **Lag in Transitions**: May show delayed response at trend reversals
-- **Period Constraints**: Must use periods divisible by 4
-- **Initial Values**: Requires sufficient historical data for accurate dimension calculation
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Volatile Markets**: FRAMA excels in markets with alternating trending and ranging conditions
-- **Multiple Timeframe Analysis**: Particularly effective when applied across different timeframes
-- **Trend Identification**: Superior at detecting the early stages of trend development
-- **Adaptive Systems**: Ideal component in systems that need to adjust to changing market conditions
-
-### Parameter Selection
-
-- **Short Periods (16-24)**: More responsive, better for short-term trading in active markets
-- **Medium Periods (32-48)**: Balance between responsiveness and stability for swing trading
-- **Long Periods (64+)**: Identify major trends while filtering significant noise
-
-### Complementary Indicators
-
-FRAMA performs best when combined with:
-
-- **Volatility Indicators**: ATR or Bollinger Bands to confirm market conditions
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Analysis**: Volume confirmation adds validity to FRAMA signals
-- **Fractal Indicators**: Pairs well with other fractal-based tools for confirmation
+* **Period requirements:** Works best with periods divisible by 4 due to the segmentation in its calculation
+* **Data requirements:** Needs sufficient historical data for accurate fractal dimension calculation
+* **Calculation complexity:** More computationally intensive than simple moving averages
+* **Transition delay:** May experience a slight delay when transitioning between different market states
+* **Complementary tools:** Works best when combined with volume analysis or momentum indicators for confirmation
 
 ## References
 
-1. Ehlers, John F. "FRAMA – Fractal Adaptive Moving Average"
-2. Ehlers, John F. "Cybernetic Analysis for Stocks and Futures", John Wiley & Sons, 2004
-3. The fractal dimension calculation is based on the Hurst exponent methodology
+1. Ehlers, J. (2005). "FRAMA – Fractal Adaptive Moving Average," *Technical Analysis of Stocks & Commodities*.
+2. Ehlers, J. (2004). *Cybernetic Analysis for Stocks and Futures*. John Wiley & Sons.
+3. Mandelbrot, B. (1982). *The Fractal Geometry of Nature*. W.H. Freeman and Company.

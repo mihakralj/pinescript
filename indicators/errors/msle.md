@@ -1,65 +1,63 @@
-# Mean Squared Logarithmic Error (MSLE)
-
-The Mean Squared Logarithmic Error implements a specialized error metric that calculates the squared difference of logarithmic values. MSLE emphasizes relative errors rather than absolute magnitudes, making it particularly suitable for data with exponential growth patterns or cases where proportional differences are more important than absolute ones.
+# MSLE: Mean Squared Logarithmic Error
 
 [Pine Script Implementation of MSLE](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/msle.pine)
 
-## Mathematical Foundation
+## Overview and Purpose
 
-The MSLE is calculated by taking the average of squared differences between the logarithms of two signals plus 1:
+The Mean Squared Logarithmic Error (MSLE) is a specialized error metric that measures differences between predicted and actual values in logarithmic space. By calculating the squared difference between logarithms rather than raw values, MSLE effectively emphasizes relative errors over absolute ones. This approach makes it particularly valuable for financial data with exponential growth patterns or when percentage differences are more significant than absolute differences. For traders and analysts, MSLE provides a way to evaluate models where proportional accuracy matters more than absolute precision, especially useful when working with rapidly growing metrics or when small values deserve similar attention to large ones.
 
+## Core Concepts
+
+* **Proportional accuracy focus:** Measures relative differences between values rather than absolute errors
+* **Logarithmic transformation:** Compresses large values and expands smaller ones, giving more balanced attention across different scales
+* **Market application:** Particularly valuable for evaluating predictions of metrics with exponential growth or when percentage accuracy is more important than absolute precision
+
+The core innovation of MSLE is its logarithmic transformation, which effectively converts absolute differences into relative ones. By working in logarithmic space, a prediction that's off by a factor of 2 produces the same error whether the actual value is 10 or 1000. This creates a more appropriate error metric for many financial applications where relative performance often matters more than absolute differences.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the averaging period | Increase for more stable error evaluation, decrease for more responsive tracking |
+| Source 1 | close | First signal (typically actual values) | The target or reference values being compared |
+| Source 2 | sma(close,20) | Second signal (typically predictions) | The output of your model or the comparison signal |
+
+**Pro Tip:** When evaluating models for percentage-based trading decisions, MSLE often provides more relevant error assessment than standard MSE - a low MSLE suggests your model captures relative movements effectively even if absolute errors seem large.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+MSLE transforms your data using logarithms before calculating the squared error, which effectively changes absolute differences into relative ones. This makes it care more about percentage differences than absolute magnitude, so being off by 10% is treated the same whether you're predicting small or large values.
+
+**Technical formula:**
 MSLE = (1/p) * Σ(log(1 + Y₁) - log(1 + Y₂))²
 
-MSLE₍ₙ₎ = SMA((log(1 + Y₁₍ₙ₎) - log(1 + Y₂₍ₙ₎))², p)
-
 Where:
-
-- MSLE₍ₙ₎ is the current MSLE value
-- Y₁₍ₙ₎, Y₂₍ₙ₎ are the current signal values
-- p is the averaging period
+- Y₁, Y₂ are the values being compared
+- p is the number of periods
 - log is the natural logarithm
 
-## Error Characteristics
+> 🔍 **Technical Note:** Adding 1 before taking the logarithm (log(1+Y) rather than log(Y)) serves two purposes: it allows MSLE to handle zero values, and it reduces the penalty for errors on very small values while maintaining the desired proportional error property for larger values.
 
-### Statistical Properties
+## Interpretation Details
 
-1. **Non-negativity**: MSLE is always ≥ 0, with 0 indicating perfect match
-2. **Relative Scale**: Measures relative differences rather than absolute ones
-3. **Logarithmic Transformation**: Compresses large values and expands smaller ones
-4. **Penalty Asymmetry**: Penalizes underestimation more heavily than overestimation
+MSLE can be applied in various financial contexts:
 
-### Response Properties
+* **Growth prediction:** Evaluate models forecasting metrics with exponential growth patterns
+* **Small value importance:** Ensure models pay attention to smaller values rather than focusing only on large ones
+* **Percentage accuracy:** Focus on proportional accuracy rather than absolute error magnitude
+* **Scale-free comparison:** Compare prediction accuracy across different instruments regardless of price scale
+* **Risk assessment:** Penalize underestimation more heavily than overestimation when it carries greater risk
 
-1. **Sensitivity**:
-   - Higher sensitivity to relative differences than absolute ones
-   - Penalizes underprediction more heavily than overprediction
-   - Reduces the impact of large absolute errors on high-value signals
+## Limitations and Considerations
 
-2. **Temporal Behavior**:
-   - Moving window provides dynamic relative error tracking
-   - Well-suited for signals with exponential or multiplicative growth
-   - Less affected by sudden large values than squared errors
+* **Interpretation difficulty:** Less intuitive than direct error metrics as it measures error in log space
+* **Asymmetric penalties:** Penalizes underprediction more heavily than overprediction of the same magnitude
+* **Computational overhead:** More intensive calculation due to logarithm operations
+* **Positive data requirement:** Works best with strictly positive data; requires adjustment for zero values
+* **Complementary metrics:** Best used alongside other error measures for comprehensive evaluation
 
-### Window Considerations
+## References
 
-1. **Error Smoothing**: Longer periods provide more stable relative error metrics
-2. **Response Time**: Shorter periods track proportional changes more quickly
-3. **Memory Usage**: O(p) space complexity for the averaging window
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Scale Invariance**: Better for comparing proportional accuracy
-- **Growth Pattern Handling**: Suitable for exponentially growing data
-- **Relative Error Focus**: Emphasizes percentage-like differences
-- **Reduced Dominance**: Prevents large values from dominating the error
-- **Underestimation Penalty**: Stronger penalty for underpredicting values
-
-### Disadvantages
-
-- **Unintuitive Units**: Error isn't in the same units as the original data
-- **Undefined for Negatives**: Requires positive values in both signals
-- **Log Computation**: Higher computational cost than simple error metrics
-- **Parameter Sensitivity**: Adding 1 affects the error scale differently at different magnitudes
-- **Not Suitable for Zero Values**: Cannot handle true zero values without the +1 adjustment
+* Chai, T. and Draxler, R.R. "Root mean square error (RMSE) or mean absolute error (MAE)?", Geoscientific Model Development, 2014
+* Hyndman, R.J. and Koehler, A.B. "Another look at measures of forecast accuracy," International Journal of Forecasting, 2006

@@ -1,87 +1,70 @@
-# Modified Moving Average (MMA)
-
-The Modified Moving Average combines a simple moving average with a weighted component to provide a balanced smoothing effect. The weighting scheme emphasizes central values while maintaining overall data representation, delivering improved responsiveness compared to traditional moving averages while preserving stability through its dual-component approach. Developed as an enhancement to simple moving averages, MMA has gained popularity among traders seeking a balance between the simplicity of SMA and the responsiveness of weighted averages. Its adoption has grown particularly in systematic trading systems where balanced smoothing is desired. The MMA's unique approach to combining simple and weighted components has influenced the development of other hybrid moving averages in technical analysis.
+# MMA: Modified Moving Average
 
 [Pine Script Implementation of MMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/mma.pine)
 
+## Overview and Purpose
+
+The Modified Moving Average (MMA) is a hybrid technical indicator that combines a simple moving average with a weighted component to provide a balanced approach to price smoothing. MMA was developed as an enhancement to traditional moving averages, offering an intelligent compromise between the stability of simple averages and the responsiveness of weighted methods.
+
+Unlike standard moving averages that either weight all prices equally (SMA) or emphasize only the most recent prices (EMA), MMA employs a unique central-weighted approach that gives more importance to prices in the middle of the lookback period while still considering the full range of data. This creates an indicator that responds more quickly to significant price changes while filtering out minor fluctuations more effectively than a simple moving average.
+
 ## Core Concepts
 
-MMA was designed to address limitations in traditional moving averages through:
+* **Hybrid calculation:** Combines a standard SMA with a specially weighted component for balanced smoothing characteristics
+* **Central weighting:** Places greater emphasis on central values in the data window, creating more stable trend identification
+* **Improved responsiveness:** Reacts more quickly to meaningful price changes than SMA while maintaining good noise filtering
+* **Dual-component approach:** Uses both averaging and weighting techniques to achieve superior balance between stability and sensitivity
 
-- Combining simple and weighted moving average components
-- Emphasizing central values while maintaining data representation
-- Balanced approach between responsiveness and stability
-- Improved trend detection compared to simple moving averages
+MMA achieves its unique performance by adding a weighted component to a standard simple moving average. The weighting scheme employs a symmetric distribution that emphasizes central values while maintaining representation from the entire lookback period. This creates a moving average that effectively balances stability with appropriate responsiveness.
 
-## Mathematical Foundation
+## Common Settings and Parameters
 
-The MMA is calculated by combining two components:
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Period | 10 | Controls smoothing window length | Increase for longer-term trends, decrease for shorter-term signals |
+| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
+| Minimum Period | 2 | Minimum required period | Should be left at default for proper calculation |
 
-1. Simple Moving Average (SMA) component
-2. Weighted component with symmetric weights around the center
+**Pro Tip:** Many professional traders find that MMA works particularly well with periods between 15-20 for swing trading setups, as this range provides an optimal balance between noise reduction and timely signals.
 
-MMA = SMA + 6*WeightedSum/((period+1)*period)
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+MMA works by calculating a regular simple moving average, then adding a weighted component that gives more importance to prices in the middle of the data window. This combination creates a smoother result than SMA alone while responding more quickly to genuine price changes.
+
+**Technical formula:**
+MMA = SMA + 6 × WeightedSum/((period+1) × period)
 
 Where:
-
-- SMA = (P₁ + P₂ + ... + Pₙ) / n
-- WeightedSum = Σ(wᵢ * Pᵢ), where wᵢ = (n - (2i + 1))/2
+- SMA = (P₁ + P₂ + ... + Pₙ) / n is the standard simple moving average
+- WeightedSum = Σ(wᵢ × Pᵢ), with weights wᵢ = (n - (2i + 1))/2
 - n is the number of periods
-- Pᵢ are the signal values in the lookback window
+- Pᵢ are the price values in the lookback window
 
-### Optimized Implementation
+> 🔍 **Technical Note:** The implementation uses a circular buffer for efficient data management, allowing it to handle both complete and partial data sets. The calculation automatically adjusts for missing values (NAs) and maintains numerical stability. The weight distribution creates a symmetric pattern that emphasizes central values, which helps identify the underlying trend while reducing the impact of outliers.
 
-1. Maintains a circular buffer for efficient data management
-2. Calculates the simple moving average component (T/period)
-3. Computes a weighted sum with symmetric weights around the center
-4. Combines both components using the formula above
+## Interpretation Details
 
-## Initialization Properties
+MMA provides several key insights for traders:
 
-The MMA requires a minimum of 2 periods before producing its first output. Several initialization characteristics:
+- When price crosses above MMA, it often signals the beginning of an uptrend
+- When price crosses below MMA, it often signals the beginning of a downtrend
+- The slope of MMA provides insight into trend strength and momentum
+- MMA creates smoother support and resistance levels than simple moving averages
+- Multiple MMA lines with different periods create a "ribbon" effect that helps visualize trend strength
 
-1. **Minimum Period**: Must be at least 2 periods
-2. **Initial Values**: Uses simple average until enough data points are available
-3. **Transition**: Smoothly transitions from simple average to full MMA calculation
+MMA is particularly valuable for trend following and swing trading strategies, where its balanced approach helps identify genuine trends while filtering out random price fluctuations. The indicator excels at providing cleaner crossover signals compared to SMA, with fewer whipsaws during consolidation phases.
 
-## Advantages and Disadvantages of MMA
+## Limitations and Considerations
 
-### Advantages
+* **Market conditions:** Like all moving averages, less effective during extended sideways or choppy markets
+* **Computational requirements:** More complex calculations than simple moving average, requiring more processing resources
+* **Period sensitivity:** Performance depends on appropriate period selection for the specific instrument and timeframe
+* **Initialization requirement:** Needs at least 2 periods of data before providing meaningful output
+* **Complementary tools:** Works best when combined with volume analysis or momentum indicators for confirmation
 
-- **Balanced Smoothing**: Better balance between smoothing and responsiveness
-- **Reduced Lag**: More responsive than simple moving average
-- **Stability**: Maintains stability through dual-component approach
-- **Central Emphasis**: Emphasizes central values while maintaining data representation
-- **Smooth Transition**: Gradual transition from simple to weighted calculation
+## References
 
-### Disadvantages
-
-- **Computational Overhead**: More complex calculations than simple moving average
-- **Parameter Sensitivity**: Performance depends on appropriate period selection
-- **Memory Requirements**: Requires storing full period of values
-- **Complexity**: More difficult to understand than simple moving averages
-- **Initial Values**: Requires minimum of 2 periods for proper calculation
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Trend Following**: MMA provides a balanced approach to trend identification
-- **Signal Generation**: Effective in crossover systems with reduced whipsaws
-- **Chart Smoothing**: Excellent for smoothing price data while maintaining important features
-- **Intermediate Trading**: Ideal for swing trading and medium-term analysis
-
-### Parameter Selection
-
-- **Short Periods (5-15)**: More responsive, suitable for shorter-term trading
-- **Medium Periods (15-30)**: Balanced approach for swing trading
-- **Long Periods (30+)**: Identifies major trends with good noise filtering
-
-### Complementary Indicators
-
-MMA performs best when combined with:
-
-- **Momentum Oscillators**: RSI or MACD to confirm trend strength
-- **Volume Indicators**: Volume analysis to validate price movements
-- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
-- **Support/Resistance Tools**: Trendlines or horizontal levels for entry/exit points
+1. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
+2. Murphy, J.J. (1999). *Technical Analysis of the Financial Markets*. New York Institute of Finance.
+3. Pring, M.J. (2002). *Technical Analysis Explained*, 4th Edition. McGraw-Hill.

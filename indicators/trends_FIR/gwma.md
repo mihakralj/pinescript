@@ -1,77 +1,67 @@
-# Gaussian-Weighted Moving Average (GWMA)
-
-The Gaussian-Weighted Moving Average implements an optimized bell-shaped weight distribution architecture using the Gaussian (normal) distribution to achieve noise reduction through frequency domain optimization. Inspired by the fundamental Gaussian distribution first formalized by Carl Friedrich Gauss in the early 19th century, the GWMA emerged in financial markets during the 1990s as researchers explored statistically optimal smoothing methods. The approach gained widespread adoption in the early 2000s after several influential papers demonstrated its superior filtering characteristics compared to traditional moving averages. GWMA's exponential weighting algorithm delivers excellent frequency roll-off with minimal side-lobes while maintaining signal integrity during trend transitions, reducing whipsaw signals while preserving waveform fidelity through its symmetrical FIR implementation and linear phase response.
+# GWMA: Gaussian-Weighted Moving Average
 
 [Pine Script Implementation of GWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/gwma.pine)
 
+## Overview and Purpose
+
+The Gaussian-Weighted Moving Average (GWMA) is a technical indicator that applies the Gaussian (normal) distribution as a weighting function to price data. Inspired by the mathematical principles formalized by Carl Friedrich Gauss in the early 19th century, GWMA was adapted for financial markets in the 1990s as researchers explored statistically optimal smoothing methods. The indicator applies a bell-shaped weighting scheme that gives maximum weight to the center of the lookback period and gradually reduces weight toward both ends, creating a smooth filter with excellent noise reduction properties.
+
 ## Core Concepts
 
-The GWMA was designed to address several limitations in traditional moving averages through:
+* **Bell-curve weighting:** GWMA applies a Gaussian distribution to assign weights to price points, providing statistically optimal smoothing
+* **Sigma parameter flexibility:** The width of the bell curve can be adjusted through the sigma parameter to fine-tune filtering characteristics
+* **Symmetrical filtering:** The bell-shaped weighting provides balanced filtering with no bias toward recent or older data
 
-- Statistically optimal weight distribution based on the normal curve
-- Infinitely differentiable smooth weighting function
-- Tunable bell curve width via sigma parameter
-- Superior spectral characteristics with minimal leakage
-- Natural decay of influence from central point
+The core innovation of GWMA is its implementation of the Gaussian window, which creates a weight distribution with theoretically optimal time-bandwidth product. This makes it particularly effective at separating meaningful price movements from market noise while preserving important trend characteristics. By applying weights that follow the normal distribution, GWMA creates a smooth filter that minimizes both time-domain ripple and frequency-domain side lobes.
 
-GWMA achieves this balance through its implementation of the Gaussian window, which creates a weight distribution with theoretically optimal time-bandwidth product, making it particularly effective at separating market signals from noise while preserving important trend characteristics.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
+| Sigma | 2.0 | Controls the width of the Gaussian bell curve | Lower values create narrower bell curves with more center emphasis, higher values create wider, flatter distributions |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-The GWMA calculation applies a Gaussian window weighting pattern to each data point:
+**Pro Tip:** For most trading applications, start with a sigma value between 1.5 and 2.5 - lower values in this range emphasize the center of the window more heavily, while higher values create a more balanced distribution of weights.
 
-GWMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
+## Calculation and Mathematical Foundation
 
-Where:
+**Simplified explanation:**
+GWMA calculates a weighted average of prices where the weights follow a bell curve shape. The center of the lookback period receives the highest weight, and weights gradually decrease toward both the recent and older ends, creating a smooth filter that effectively removes random price fluctuations.
 
-- P₁, P₂, ..., Pₙ are data values in the lookback window
-- w₁, w₂, ..., wₙ are the Gaussian window weights
-- n is the number of periods (window size)
-
-### Gaussian Window Weighting Scheme
-
-The weights follow the Gaussian window function:
-
+**Technical formula:**
+The Gaussian window weights are calculated as:
 w(n) = exp(-0.5 × ((n - c) / (σ × N))²)
 
 Where:
-
-- n is the position in the window
-- c is the center of the window
+- n is the position in the window (0 to N-1)
+- c is the center of the window (N-1)/2
 - σ (sigma) is the parameter controlling the width of the Gaussian bell curve
-- N is the window size
+- N is the window size (period)
 
-This creates a bell-shaped weighting curve that gives more weight to the center values and smoothly tapers off toward the edges, resulting in excellent frequency domain characteristics. The sigma parameter allows for fine-tuning the shape of the distribution—smaller sigma values create a narrower bell curve with greater emphasis on center values.
+The final GWMA calculation: GWMA = Σ(Price[i] × Window_Weight[i]) / Σ(Window_Weight[i])
 
-## Initialization Properties
+> 🔍 **Technical Note:** Smaller sigma values create a more peaked bell curve, emphasizing central values more heavily, while larger sigma values create a wider, flatter curve that distributes weights more evenly across the window.
 
-### Full Window Requirement
+## Interpretation Details
 
-GWMA requires a minimum of n data points for a complete calculation. For a period of n, the implementation handles the first n-1 values by:
+GWMA can be used in various trading strategies:
 
-1. Using available data points with adjusted Gaussian window weights
-2. Normalizing weights based on available valid (non-NA) values
+* **Trend identification:** The direction of GWMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and GWMA generate trade signals
+* **Support/resistance levels:** GWMA can act as dynamic support during uptrends and resistance during downtrends
+* **Trend strength assessment:** Distance between price and GWMA can indicate trend strength
+* **Sigma optimization:** Different sigma values can be used for different market conditions and trading styles
 
-## Advantages and Disadvantages
+## Limitations and Considerations
 
-### Advantages
-
-- **Excellent Frequency Response**: Superior side-lobe suppression compared to most window functions
-- **Tunable Weighting Distribution**: The sigma parameter allows customizing the bell curve shape
-- **Symmetric Weighting**: No bias towards either recent or old data
-- **Reduced Whipsaws**: Less prone to false signals than simpler averages
-- **Linear Phase Response**: Preserves signal shape in the passband
-- **Smooth Transitions**: Bell-shaped weighting provides natural smoothing
-
-### Disadvantages
-
-- **Increased Lag**: More lag than linear weighting due to center-weighted emphasis
-- **Limited Adaptability**: Fixed weighting scheme cannot adapt to changing volatility
-- **Additional Complexity**: The sigma parameter adds complexity but offers greater control
-- **Computational Overhead**: Slightly higher computational requirements due to exponential calculations
+* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
+* **Lag factor:** More lag than linear-weighted averages due to center-weighted emphasis
+* **Limited adaptability:** Fixed weighting scheme cannot adapt to changing market volatility
+* **Parameter sensitivity:** Finding optimal sigma values may require experimentation for different markets
+* **Complementary tools:** Best used with momentum oscillators or volume indicators for confirmation
 
 ## References
 
-1. Harris, F.J. (1978). "On the Use of Windows for Harmonic Analysis with the Discrete Fourier Transform." Proceedings of the IEEE.
-2. Oppenheim, A.V. and Schafer, R.W. (2009). "Discrete-Time Signal Processing." Prentice Hall.
-3. Ehlers, J.F. (2013). "Cycle Analytics for Traders." Wiley.
+* Harris, F.J. "On the Use of Windows for Harmonic Analysis with the Discrete Fourier Transform", Proceedings of the IEEE, 1978
+* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013

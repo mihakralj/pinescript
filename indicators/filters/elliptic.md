@@ -1,57 +1,64 @@
-# Elliptic (Cauer) Filter (2nd Order, Rp=1dB, Rs=40dB)
+# ELLIPTIC: Elliptic (Cauer) Filter
 
-The Elliptic Filter, also known as the Cauer filter, provides the steepest roll-off characteristic for a given filter order compared to Butterworth, Chebyshev, and Bessel filters. This steep transition comes at the cost of ripples in both the passband and the stopband (equiripple behavior in both bands).
+[Pine Script Implementation of ELLIPTIC](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/elliptic.pine)
 
-Due to the complexity of calculating Elliptic filter coefficients (requiring elliptic functions), this implementation uses **pre-calculated coefficients** for a specific 2nd-order low-pass filter design:
+## Overview and Purpose
 
-* Passband Ripple (Rp): **1 dB**
-* Stopband Attenuation (Rs): **40 dB**
+The Elliptic Filter, also known as the Cauer filter, represents the optimal solution for achieving the steepest possible transition between passed and rejected frequencies. Developed by Wilhelm Cauer in the 1930s, this filter type offers the sharpest roll-off characteristics among all linear filters of the same order. This implementation provides a 2nd-order low-pass filter with fixed characteristics (1dB passband ripple, 40dB stopband attenuation) and adjustable cutoff frequency. The Elliptic filter is particularly valuable when maximum separation between trend and noise components is required, making it effective for identifying clean trend signals in highly volatile market conditions.
 
-The cutoff frequency is adjustable via the `length` parameter.
+## Core Concepts
 
-[Pine Script Implementation of Elliptic Filter](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/elliptic.pine)
+* **Optimal roll-off:** Provides the steepest possible transition between passed and rejected frequencies for any filter of the same order
+* **Dual ripple design:** Achieves its superior performance by allowing controlled ripples in both passband and stopband
+* **Market application:** Particularly effective for clear trend identification with maximum noise rejection when signal distortion is acceptable
 
-## Mathematical Foundation
+The core innovation of the Elliptic filter is its mathematically optimal design that achieves the sharpest possible frequency separation with a given filter order. By allowing controlled ripples in both passed and rejected frequency bands, it provides dramatically better filtering efficiency than other designs. This creates exceptionally clean trend signals by maximizing the rejection of market noise components, though at the cost of some waveform distortion.
 
-The filter is implemented as a 2nd-order Infinite Impulse Response (IIR) filter using the difference equation:
+## Common Settings and Parameters
 
-`y[n] = b0 × x[n] + b1 × x[n-1] + b2 × x[n-2] - a1 × y[n-1] - a2 × y[n-2]`
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 20 | Controls the cutoff period | Increase for smoother signals, decrease for more responsiveness |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-Where `x[n]` is the input (`src`), `y[n]` is the output (`filt`), and the coefficients `b0, b1, b2, a1, a2` are derived from a pre-calculated continuous-time Elliptic prototype (Rp=1dB, Rs=40dB) via the Bilinear Transform.
+**Pro Tip:** Due to its fixed 1dB passband ripple design, the Elliptic filter works best with length settings 20% longer than you would use for a Butterworth filter to ensure adequate smoothing of important trend components.
 
-The derivation involves:
+## Calculation and Mathematical Foundation
 
-1. **Defining the Analog Prototype**: Using pre-calculated pole locations (`C_sigma`, `C_omega_d`), zero locations (`C_wz`), and gain (`C_k`) for the normalized (Wc=1) analog filter with Rp=1dB, Rs=40dB.
-2. **Pre-warping** the desired digital cutoff frequency (`wc = π / length`) to the analog domain: `Wc = tan(wc)`. (Note: `wc` here is half the typical `2π/length` because `tan` pre-warping uses `ω/2`).
-3. **Scaling** the prototype poles (`sigma_scaled`), zeros (`omega_z_scaled`), and pole magnitude squared (`Kp_scaled`) by the pre-warped frequency `Wc`.
-4. Applying the **Bilinear Transform** formulas to map the scaled analog poles and zeros to the discrete-time coefficients (`a0_denom`, `a1`, `a2`, `b0_raw`, `b1_raw`, `b2_raw`).
-5. **Normalizing for Unity DC Gain**: Calculating a `norm_factor` based on the DC gain of the analog prototype and applying it to the `b` coefficients to ensure the final digital filter has a gain of 1 at frequency zero.
-6. **Final Coefficients**: Calculating the final `b0, b1, b2, a1, a2` used in the difference equation, where `a` coefficients are normalized by `a0_denom` and `b` coefficients are normalized by `a0_denom` and the `norm_factor`.
+**Simplified explanation:**
+The Elliptic filter creates a smoothed output by combining the current price with previous prices and previous filter outputs using carefully designed mathematical relationships. This creates an extremely efficient filter that maximizes the separation between trend and noise components, though with some ripple in both passed and rejected frequencies.
 
-The `length` parameter adjusts the cutoff frequency of this fixed-characteristic (Rp=1dB, Rs=40dB) filter.
+**Technical formula:**
+Implemented as a 2nd-order IIR filter using the difference equation:
 
-## Implementation Details
+y[n] = b0 × x[n] + b1 × x[n-1] + b2 × x[n-2] - a1 × y[n-1] - a2 × y[n-2]
 
-1. **Coefficient Calculation**:
-    - Uses hardcoded constants (`C_wz`, `C_sigma`, `C_omega_d`, `C_Kp_norm`, `C_k`) for the specific analog prototype.
-    - Calculates the digital filter coefficients based on the input `length` by scaling the prototype and applying the Bilinear Transform and DC gain normalization.
-    - Input validation ensures `length >= 2`. Includes checks to prevent division by very small numbers.
+Where coefficients are derived from pre-calculated prototype values (for 1dB passband ripple, 40dB stopband attenuation):
+- Uses bilinear transform to map analog prototype to digital domain
+- Scales prototype based on desired cutoff frequency
+- Normalizes for unity DC gain
 
-2. **Filtering Process**:
-    - Implemented as a recursive IIR filter using the calculated difference equation coefficients.
-    - The current output `filt` depends on the current input `src`, the two previous inputs (`src[1]`, `src[2]`), and the two previous filter outputs (`filt[1]`, `filt[2]`).
-    - Initialization handles the first few bars.
+> 🔍 **Technical Note:** Due to the complexity of calculating elliptic functions, this implementation uses pre-calculated coefficients for the specified ripple characteristics. The elliptic design achieves its optimal performance through precisely placed zeros and poles in the complex plane.
 
-## Advantages and Disadvantages
+## Interpretation Details
 
-### Advantages
+The Elliptic filter can be used in various trading strategies:
 
-- **Steepest Roll-off**: Provides the sharpest transition between the passband and stopband for a given filter order, offering the best frequency selectivity.
-- **Efficiency**: Achieves a given filtering requirement (passband ripple, stopband attenuation, cutoff frequency) with the lowest possible filter order compared to other types.
+* **Trend identification:** Reveals underlying price direction with maximum noise rejection
+* **Signal generation:** Crossovers between price and filtered output generate trade signals with minimal false positives
+* **Support/resistance levels:** Creates clean dynamic support and resistance levels
+* **Trend strength assessment:** The slope and behavior of the filtered line can indicate trend strength
+* **Multiple timeframe analysis:** Apply filters with different cutoff periods to identify trends across various time horizons
 
-### Disadvantages
+## Limitations and Considerations
 
-- **Passband and Stopband Ripple**: Exhibits ripples in both the passband and stopband, which may be undesirable.
-- **Highly Non-linear Phase Response**: The phase response is significantly non-linear, causing substantial waveform distortion (poor transient response, significant ringing/overshoot). This is generally the worst among common filter types.
-- **Implementation Complexity**: Calculating coefficients for arbitrary Rp and Rs is very complex. This implementation uses fixed Rp/Rs.
-- **Sensitivity**: Coefficients can be sensitive to quantization, although less critical in Pine Script's floating-point environment.
+* **Signal distortion:** Significant non-linear phase response causes waveform distortion
+* **Ringing/overshoot:** Exhibits substantial ringing in response to sharp price changes
+* **Initialization period:** Requires several bars to stabilize after the start of data
+* **Fixed ripple characteristics:** This implementation uses fixed 1dB passband ripple and 40dB stopband attenuation
+* **Complementary tools:** Best used alongside phase-corrected filters or zero-lag indicators for precise timing
+
+## References
+
+* Cauer, W. "Synthesis of Linear Communication Networks," McGraw-Hill, 1958
+* Daniels, R.W. "Approximation Methods for Electronic Filter Design," McGraw-Hill, 1974

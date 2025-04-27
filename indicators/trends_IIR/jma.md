@@ -1,108 +1,81 @@
-# Jurik Moving Average (JMA)
-
-The Jurik Moving Average represents a breakthrough in adaptive filtering technology, achieving 97% noise reduction and sub-2.1 bar phase delay through multi-stage volatility normalization and dynamic parameter optimization. JMA's proprietary algorithm synthesizes adaptive volatility-based smoothing, intelligent phase compensation, and dynamic coefficient optimization, enabling 86% reduction in false signals while maintaining 99.7% correlation with price trends during volatile conditions and executing complete filter passes in under 10 microseconds on standard hardware. Developed by Mark Jurik in the late 1990s, JMA quickly gained recognition among professional traders for its superior smoothing capabilities. Its adoption has grown particularly in institutional trading systems and hedge funds. While the exact algorithm remains proprietary, JMA has influenced the development of numerous advanced adaptive indicators in technical analysis.
+# JMA: Jurik Moving Average
 
 [Pine Script Implementation of JMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/jma.pine)
 
+## Overview and Purpose
+
+The Jurik Moving Average (JMA) is an advanced technical indicator designed to provide superior smoothing with minimal lag through adaptive volatility-based adjustments. Developed by Mark Jurik in the late 1990s, JMA quickly gained recognition among professional traders for its ability to filter market noise while maintaining responsiveness to genuine price movements.
+
+It's important to note that the original JMA algorithm is proprietary, and Mark Jurik never published the exact calculations. All implementations available in trading platforms and programming languages (including this Pine Script version) are reverse-engineered approximations based on observed behavior. While these approximations often perform similarly to the original, they may differ in certain aspects from Jurik's implementation.
+
+This approximation uses a multi-stage filtering process that adjusts dynamically to market conditions, creating a moving average that effectively balances smoothness and responsiveness across different market environments.
+
 ## Core Concepts
 
-JMA represents a significant advancement in moving average technology through:
+* **Adaptive volatility response:** Automatically adjusts smoothing parameters based on recent market volatility measurements
+* **Phase parameter control:** Provides a user-adjustable setting to balance between lag reduction and smoothness
+* **Multi-stage filtering:** Employs multiple calculation stages with dynamic coefficient adjustments for optimized performance
+* **Power factor customization:** Allows fine-tuning of the adaptive response to match specific market characteristics
 
-- Multi-stage volatility normalization for adaptive response
-- Dynamic parameter optimization based on market conditions
-- Intelligent phase compensation to minimize lag
-- Proprietary smoothing algorithms for superior noise reduction
+JMA achieves its performance through a complex volatility normalization process that measures price movements relative to recent volatility trends. This creates a moving average that can quickly adjust its responsiveness during different market conditions - becoming more sensitive during genuine trend movements while filtering out random fluctuations more effectively than standard moving averages.
 
-## Mathematical Foundation
+## Common Settings and Parameters
 
-1. **Volatility-Adjusted Smoothing:**
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Period | 10 | Controls base smoothing length | Increase for longer-term trends, decrease for shorter-term signals |
+| Phase | 0 | Adjusts lag/smoothness balance (-100 to 100) | Negative values reduce lag but may increase overshoot, positive values increase smoothness |
+| Power | 0.45 | Controls adaptivity sensitivity (0.1-1.0) | Lower values create smoother output, higher values increase responsiveness to volatility changes |
+| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
 
-   Δ₁ = Pₜ - Uₜ
+**Pro Tip:** Many professional traders find that using negative phase values between -50 and -30 with slightly reduced power (0.3-0.4) provides an optimal balance of responsiveness and signal quality across most market conditions.
 
-   Δ₂ = Pₜ - Lₜ
+## Calculation and Mathematical Foundation
 
-   Vₜ = max(|Δ₁|, |Δ₂|)
+**Simplified explanation:**
+JMA works by first measuring price volatility using a  sampling method. It then uses this volatility measurement to adjust how quickly the moving average responds to price changes. A complex multi-stage filtering process applies these adaptive parameters to create a smooth output that adjusts automatically to changing market conditions.
 
-2. **Adaptive Parameter Calculation:**
+**Technical formula:**
+Our approximation implements these key calculation stages:
 
-   rᵥ = min(max(Vₜ/Vₐᵥᵧ, 1.0), len₁^(1/pow₁))
+1. Volatility measurement using adaptive upper/lower bands:
+   - Calculate price deviations from previous bands
+   - Maintain a rolling 10-bar volatility measurement
+   - Normalize current volatility relative to average volatility
 
-   pow₂ = rᵥ^pow₁
+2. Dynamic parameter adjustment:
+   - Adjust smoothing factors based on normalized volatility
+   - Apply power function to create non-linear response
+   - Scale response based on user parameters
 
-   Kᵥ = (len₂/(len₂+1))^√pow₂
+3. Multi-stage filtering with phase adjustment:
+   - Apply primary smoothing with adaptive alpha
+   - Calculate momentum component with beta coefficient
+   - Apply phase shift to create phase-adjusted value
+   - Calculate final JMA using squared-alpha smoothing
 
-3. **Final JMA Value:**
+> 🔍 **Technical Note:** This implementation is an approximation of the proprietary JMA algorithm. While it captures the essential adaptive behavior, the exact calculations used in Jurik's original formula remain unpublished. Our implementation focuses on recreating the practical performance characteristics rather than reverse-engineering the exact proprietary method.
 
-   ma₁ = Pₜ + α(ma₁ - Pₜ)
+## Interpretation Details
 
-   det₀ = (Pₜ - ma₁)(1 - β) + β det₀
+JMA provides several key insights for traders:
 
-   ma₂ = ma₁ + (phase × det₀)
+- When price crosses above JMA, it often signals the beginning of an uptrend
+- When price crosses below JMA, it often signals the beginning of a downtrend
+- The slope of JMA provides insight into trend strength and momentum
+- JMA creates smooth, reliable support and resistance levels during trending markets
+- Multiple JMA lines with different periods create a "ribbon" effect that helps visualize trend strength
 
-   det₁ = (ma₂ - JMAₜ)(1 - α)² + α² det₁
+JMA is particularly valuable in volatile markets, where its adaptive nature helps distinguish between genuine trend changes and market noise. Its balance of smoothness and responsiveness makes it effective for both trend identification and dynamic support/resistance levels.
 
-   JMAₜ₊₁ = JMAₜ + det₁
+## Limitations and Considerations
 
-Where:
+* **Approximation accuracy:** Being a reverse-engineered approximation of a proprietary algorithm, exact behavior may differ from Jurik's original implementation
+* **Computational complexity:** More resource-intensive than simple moving averages due to multi-stage calculations
+* **Parameter sensitivity:** Performance highly dependent on phase and power settings, requiring careful optimization
+* **Learning curve:** More complex behavior than standard moving averages, requiring time to understand fully
+* **Complementary tools:** Works best when combined with volume analysis or momentum indicators for confirmation
 
-- α is the adaptive smoothing factor
-- β is derived from the period and power factor
-- phase is a user-defined shift parameter
-- len1, len2 are derived length parameters
+## References
 
-### Key Components
-
-1. **Volatility Estimation:**
-   - Rolling volatility calculation using 10-bar sampling
-   - Adaptive volatility normalization
-   - Dynamic range adjustment based on period
-
-2. **Dynamic Smoothing:**
-   - Power-law based smoothing factor adaptation
-   - Multi-stage filtering process
-   - Phase-shifted intermediate calculations
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Superior Noise Reduction**: Advanced filtering provides excellent noise reduction
-- **Adaptive Behavior**: Automatically adjusts to market conditions
-- **Configurable Response**: Multiple parameters for fine-tuning
-- **Reduced Lag**: Phase shifting capability helps minimize delay
-- **Volatility Awareness**: Adapts to changing market volatility
-
-### Disadvantages
-
-- **Computational Complexity**: More resource-intensive than simple averages
-- **Parameter Sensitivity**: Multiple parameters require careful optimization
-- **Learning Curve**: Complex behavior can be challenging to master
-- **Memory Requirements**: Maintains multiple state variables
-- **Proprietary**: Calculation of JMA was never published and all known algorithms are only approximation
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Trend Following**: JMA excels in identifying and following established trends
-- **Noise Filtering**: Superior at filtering market noise while maintaining responsiveness
-- **Signal Generation**: Highly effective in crossover systems with minimal false signals
-- **Volatile Markets**: Performs exceptionally well in markets with varying volatility
-
-### Parameter Selection
-
-- **Period (7-15)**: More responsive, suitable for shorter-term trading
-- **Period (15-30)**: Balanced approach for swing trading
-- **Period (30+)**: Identifies major trends with excellent noise filtering
-- **Phase (-100 to 0)**: Negative values reduce lag but may increase overshooting
-- **Phase (0 to 100)**: Positive values increase smoothing but add lag
-- **Power (1-2)**: Controls the adaptivity, higher values increase response to volatility changes
-
-### Complementary Indicators
-
-JMA performs best when combined with:
-
-- **Momentum Oscillators**: RSI or Stochastic to confirm trend strength
-- **Volume Indicators**: OBV or Volume Profile to validate price movements
-- **Volatility Measures**: ATR or Bollinger Bands to assess market conditions
-- **Support/Resistance Tools**: Key price levels for entry/exit confirmation
+1. Jurik, M. "The Jurik Moving Average," (proprietary documentation).

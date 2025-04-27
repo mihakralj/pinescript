@@ -1,0 +1,134 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Stochastic Volatility", "STOCH", overlay=false)
+
+//@function Calculates the Simple Moving Average (SMA) from scratch using a circular buffer.
+//@param source The series to calculate the SMA for.
+//@param period The period length for the SMA calculation.
+//@returns The SMA value.
+_sma(series float source, simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    var int p = math.min(math.max(1, period), 4000)
+    var array<float> buffer = array.new_float(p, na)
+    var int head = 0
+    var float sum = 0.0
+    var int valid_count = 0
+    float oldest = array.get(buffer, head)
+    if not na(oldest)
+        sum -= oldest
+        valid_count -= 1
+    if not na(source)
+        sum += source
+        valid_count += 1
+    array.set(buffer, head, source)
+    head := (head + 1) % p
+    nz(sum / valid_count, source)
+
+//@function Calculates the Standard Deviation (StDev) from scratch using Welford's online algorithm.
+//@param x The series to calculate the StDev for.
+//@param length The period length for the StDev calculation.
+//@returns The StDev value.
+_stdev(series float x, simple int length) =>
+    if length <= 0
+        na
+    var float mean = 0.0
+    var float M2 = 0.0
+    var int count = 0
+    var array<float> buffer = array.new_float(length, na)
+    var int head = 0
+
+    float oldest_x = array.get(buffer, head)
+    float new_x = nz(x)
+    if count == length and not na(oldest_x)
+        float delta_old = oldest_x - mean
+        count -= 1
+        if count > 0
+            mean -= delta_old / count
+            M2 -= delta_old * (oldest_x - mean) 
+        else
+            mean := 0.0
+            M2 := 0.0
+    if not na(new_x)
+        count += 1
+        float delta = new_x - mean
+        mean += delta / count
+        float delta2 = new_x - mean
+        M2 += delta * delta2
+    array.set(buffer, head, new_x)
+    head := (head + 1) % length
+    float variance = count < 2 ? 0.0 : M2 / count
+    math.sqrt(variance)
+
+//@function Finds the highest value in a series over a given period using a deque.
+//@param series The series to find the highest value in.
+//@param length The period length.
+//@returns The highest value.
+_highest(series float series, simple int length) =>
+    var array<int> deque = array.new_int()
+    // Remove indices outside the window
+    if array.size(deque) > 0 and array.get(deque, 0) <= bar_index - length
+        array.shift(deque)
+    // Remove indices with values lower than the current value
+    while array.size(deque) > 0 and nz(series[array.get(deque, array.size(deque) - 1)]) <= nz(series)
+        array.pop(deque)
+    array.push(deque, bar_index)
+    nz(series[array.get(deque, 0)])
+
+//@function Finds the lowest value in a series over a given period using a deque.
+//@param series The series to find the lowest value in.
+//@param length The period length.
+//@returns The lowest value.
+_lowest(series float series, simple int length) =>
+    var array<int> deque = array.new_int()
+    // Remove indices outside the window
+    if array.size(deque) > 0 and array.get(deque, 0) <= bar_index - length
+        array.shift(deque)
+    // Remove indices with values higher than the current value
+    while array.size(deque) > 0 and nz(series[array.get(deque, array.size(deque) - 1)]) >= nz(series)
+        array.pop(deque)
+    array.push(deque, bar_index)
+    nz(series[array.get(deque, 0)])
+
+//@function Calculates the Stochastic Volatility (STOCH) from scratch.
+//@doc Calculates Stochastic Volatility (STOCH) using standard deviation, highest, lowest, and SMA implemented from scratch.
+//@param length The period length for the STOCH calculation.
+//@param smooth The smoothing length for the %D calculation.
+//@returns A tuple containing [%K, %D].
+//@optimized for performance
+stoch(simple int length, simple int smooth) =>
+    if length <= 0
+        runtime.error("Period must be greater than 0")
+    if smooth <= 0
+        runtime.error("Smooth must be greater than 0")
+
+    // Calculate raw volatility (standard deviation of close)
+    volatility = _stdev(close, length)
+
+    // Calculate highest and lowest volatility over the length period
+    highestVolatility = _highest(volatility, length)
+    lowestVolatility = _lowest(volatility, length)
+
+    // Calculate %K
+    percentK = 0.0
+    if highestVolatility > lowestVolatility // Avoid division by zero
+        percentK := (volatility - lowestVolatility) / (highestVolatility - lowestVolatility) * 100
+
+    // Smooth %K to get %D
+    percentD = _sma(percentK, smooth)
+
+    [percentK, percentD]
+
+// ---------- Main loop ----------
+
+// Inputs
+i_length = input.int(14, "Length", minval=1, tooltip="Number of bars used for the STOCH calculation")
+i_smooth = input.int(3, "Smooth", minval=1, tooltip="Number of bars used for the %D smoothing")
+
+// Calculation
+[percentK, percentD] = stoch(i_length, i_smooth) // Call the custom stoch function
+
+// Plot
+plot(percentK, "%K", color.new(color.yellow, 0), 2)
+plot(percentD, "%D", color.new(color.red, 0), 2)

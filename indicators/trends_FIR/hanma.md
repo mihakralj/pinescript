@@ -1,69 +1,64 @@
-# Hanning Moving Average (HANMA)
-
-The Hanning Moving Average implements an optimized bell-shaped weight distribution architecture using the Hanning window function to achieve noise reduction through frequency domain optimization. Developed in the 1960s by Julius von Hann for spectral analysis in signal processing, the Hanning window gained prominence in financial markets during the 1990s as digital signal processing techniques were increasingly applied to market data. The approach became widely available in professional trading platforms by the early 2000s, providing traders with superior noise filtering characteristics. HANMA's cosinusoidal weighting algorithm delivers excellent frequency roll-off with minimal side-lobes while maintaining signal integrity during trend transitions, reducing whipsaw signals while preserving waveform fidelity through its symmetrical FIR implementation and linear phase response.
+# HANMA: Hanning Moving Average
 
 [Pine Script Implementation of HANMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hanma.pine)
 
+## Overview and Purpose
+
+The Hanning Moving Average (HANMA) is a technical indicator that applies the Hanning window function from digital signal processing to price data. Developed in the 1960s by Julius von Hann for spectral analysis in signal processing, the Hanning window was later adapted for financial market analysis in the 1990s as digital signal processing techniques gained traction in technical analysis. HANMA uses a cosine-based weighting scheme to create an effective filter that reduces market noise while preserving important price movements.
+
 ## Core Concepts
 
-The HANMA was designed to address limitations in traditional moving averages through:
+* **Cosine-based weighting:** HANMA uses a raised cosine function that creates a bell-shaped weight distribution with excellent frequency domain characteristics
+* **Side-lobe suppression:** The Hanning window provides effective attenuation of side lobes, reducing false signals from market noise
+* **Timeframe flexibility:** Works across multiple timeframes with appropriate period adjustments
 
-- Optimized spectral characteristics for financial time series
-- Bell-shaped weighting that emphasizes central data points
-- Minimal side-lobe leakage in the frequency domain
-- Symmetrical design for zero phase distortion
-- Superior noise rejection while preserving important market signals
+The core innovation of HANMA is its ability to separate meaningful price movements from market noise. Unlike simpler moving averages, the Hanning window's cosine-based weighting creates a bell-shaped curve that gradually tapers to zero at both ends, minimizing distortion while effectively filtering out random price fluctuations. This makes it particularly valuable in choppy or consolidating markets.
 
-HANMA achieves this balance through a specialized cosine-based window function that creates a weight distribution optimized for separating market signals from noise, particularly valuable in choppy or consolidating markets.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-The HANMA calculation applies a Hanning window weighting pattern to each data point:
+**Pro Tip:** For trend following, use a length of 20-30 to maximize the Hanning window's noise reduction capabilities without introducing excessive lag.
 
-HANMA = (P₁ × w₁ + P₂ × w₂ + ... + Pₙ × wₙ) / (w₁ + w₂ + ... + wₙ)
+## Calculation and Mathematical Foundation
 
-Where:
+**Simplified explanation:**
+HANMA calculates a weighted average of prices where the weights follow a bell-shaped pattern. The weights are highest in the middle and gradually decrease to zero at both ends, creating a smooth filter that effectively removes random price fluctuations.
 
-- P₁, P₂, ..., Pₙ are data values in the lookback window
-- w₁, w₂, ..., wₙ are the Hanning window weights
-- n is the number of periods (window size)
-
-### Hanning Window Weighting Scheme
-
-The weights follow the Hanning window function:
-
+**Technical formula:**
+The Hanning window weights are calculated as:
 w(n) = 0.5 × (1 - cos(2π × n / (N - 1)))
 
-This creates a bell-shaped weighting curve that gives more weight to the center values and smoothly tapers off toward the edges, resulting in excellent frequency domain characteristics.
+Where:
+- n is the position in the window (0 to N-1)
+- N is the window size (period)
 
-## Initialization Properties
+The final HANMA calculation: HANMA = Σ(Price[i] × Window_Weight[i]) / Σ(Window_Weight[i])
 
-### Full Window Requirement
+> 🔍 **Technical Note:** The Hanning window provides approximately -32dB of side-lobe attenuation, making it effective at filtering market noise while maintaining signal integrity. It offers a good balance between main-lobe width and side-lobe suppression.
 
-HANMA requires a minimum of n data points for a complete calculation. For a period of n, the implementation handles the first n-1 values by:
+## Interpretation Details
 
-1. Using available data points with adjusted Hanning window weights
-2. Normalizing weights based on available valid (non-NA) values
+HANMA can be used in various trading strategies:
 
-## Advantages and Disadvantages
+* **Trend identification:** The direction of HANMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and HANMA generate trade signals
+* **Support/resistance levels:** HANMA can act as dynamic support during uptrends and resistance during downtrends
+* **Trend strength assessment:** Distance between price and HANMA can indicate trend strength
+* **Noise filtering:** Using HANMA to filter noisy price data before applying other indicators
 
-### Advantages
+## Limitations and Considerations
 
-- **Excellent Frequency Response**: Better side-lobe suppression than rectangular or triangular windows
-- **Symmetric Weighting**: No bias towards either recent or old data
-- **Reduced Whipsaws**: Less prone to false signals than simpler averages
-- **Linear Phase Response**: Preserves signal shape in the passband
-- **Smooth Transitions**: Bell-shaped weighting provides natural smoothing
-
-### Disadvantages
-
-- **Increased Lag**: More lag than linear weighting due to center-weighted emphasis
-- **Limited Adaptability**: Fixed weighting scheme cannot adapt to changing volatility
-- **Moderate Main-lobe Width**: Slightly wider main lobe than some other windows
-- **Complex Parameters**: Single period parameter belies sophisticated frequency characteristics
+* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
+* **Lag factor:** More lag than linear-weighted averages due to center-weighted emphasis
+* **Limited adaptability:** Fixed weighting scheme cannot adapt to changing market volatility
+* **Main-lobe width:** Moderate main-lobe width affects frequency resolution
+* **Complementary tools:** Best used with momentum oscillators or volume indicators for confirmation
 
 ## References
 
-1. Ehlers, John F. "Cycle Analytics for Traders." Wiley, 2013.
-2. Blackledge, J.M. "Digital Signal Processing: Mathematical and Computational Methods, Software Development and Applications." Horwood Publishing, 2003.
-3. Mulloy, P. "Smoothing Techniques for More Accurate Signals." Technical Analysis of Stocks & Commodities, 1994.
+* Harris, F.J. "On the Use of Windows for Harmonic Analysis with the Discrete Fourier Transform", Proceedings of the IEEE, 1978
+* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013

@@ -1,66 +1,63 @@
-# R-squared (Coefficient of Determination)
+# RSQUARED: R-squared (Coefficient of Determination)
 
-The R-squared (Coefficient of Determination) implements a statistical measure that represents the proportion of variance in the dependent variable that is predictable from the independent variable(s). Unlike other error metrics that focus on absolute errors, R² quantifies the goodness of fit of a model, providing a scale from 0 to 1 where higher values indicate better predictive performance.
+[Pine Script Implementation of RSQUARED](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rsquared.pine)
 
-[Pine Script Implementation of R-squared](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rsquared.pine)
+## Overview and Purpose
 
-## Mathematical Foundation
+R-squared (Coefficient of Determination) is a statistical measure that quantifies how well one variable explains or predicts another. Unlike error metrics that focus on absolute deviations, R² expresses the proportion of variance in a dependent variable that is predictable from an independent variable or set of variables. Originating in regression analysis, R² has become a standard tool for evaluating model performance across statistics and financial analysis. For traders, it provides a normalized measure (typically 0-1) of how closely two signals track each other, making it particularly valuable for assessing how well indicators, price predictions, or trading systems capture market movements.
 
-The R-squared is calculated by comparing the residual sum of squares to the total sum of squares:
+## Core Concepts
 
+* **Variance explanation:** Quantifies the percentage of variance in one signal that is explained by another, providing a measure of explanatory power
+* **Goodness-of-fit:** Offers a scale-free metric where values closer to 1 indicate stronger relationships between signals
+* **Market application:** Particularly useful for evaluating how well technical indicators or prediction models capture overall market trends rather than point-by-point accuracy
+
+The core principle of R² is its focus on explained variance rather than error magnitude. While metrics like MSE or MAE measure absolute differences between signals, R² measures relative predictive power by comparing prediction errors to the baseline variance of the target signal. This makes it especially valuable for understanding how much additional information a model or indicator provides beyond simply knowing the average value.
+
+## Common Settings and Parameters
+
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 20 | Controls the window for variance calculation | Increase for more stable evaluation of long-term relationships, decrease for detecting changing relationships |
+| Source 1 | close | Target signal (actual values) | Typically the value you're trying to predict or explain |
+| Source 2 | sma(close,20) | Predicting signal (model values) | The indicator, model output, or comparative signal |
+
+**Pro Tip:** When evaluating trading indicators, compare their R² values during different market regimes (trending vs. ranging) to identify which indicators provide more explanatory power in specific conditions.
+
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**
+R² compares how much error remains when using your model versus how much variation existed in the first place. If your model explains 80% of the original variation in the data, the R² is 0.80.
+
+**Technical formula:**
 R² = 1 - (Σ(Y₁ - Y₂)² / Σ(Y₁ - Y̅₁)²)
 
-R²₍ₙ₎ = 1 - (SMA((Y₁₍ₙ₎ - Y₂₍ₙ₎)², p) / SMA((Y₁₍ₙ₎ - Y̅₁₍ₙ₎)², p))
-
 Where:
+- Y₁ represents actual values
+- Y₂ represents predicted values
+- Y̅₁ represents the mean of actual values over the period
 
-- R²₍ₙ₎ is the current R-squared value
-- Y₁₍ₙ₎ represents the actual values
-- Y₂₍ₙ₎ represents the predicted values
-- Y̅₁₍ₙ₎ represents the mean of actual values over the period
-- p is the averaging period
+> 🔍 **Technical Note:** While R² typically ranges from 0 to 1, it can become negative when models perform worse than simply using the mean as a prediction, indicating a fundamentally flawed model.
 
-## Error Characteristics
+## Interpretation Details
 
-### Statistical Properties
+R² can be applied in various financial contexts:
 
-1. **Bounded Range**: R² typically ranges from 0 to 1 (can be negative for poorly fitting models)
-2. **Proportional Interpretation**: Directly represents the proportion of explained variance
-3. **Scale Independence**: Dimensionless metric allowing cross-dataset comparison
-4. **Model Comparison**: Facilitates direct comparison between different predictive models
+* **Indicator evaluation:** Measure how much market movement is captured by technical indicators
+* **System validation:** Quantify how well trading systems track the intended market behavior
+* **Correlation strength:** Assess the relationship strength between different financial instruments
+* **Model selection:** Compare different predictive models to select the one with highest explanatory power
+* **Regime identification:** Track changes in R² to detect shifts in relationships between market variables
 
-### Response Properties
+## Limitations and Considerations
 
-1. **Sensitivity**:
-   - Values near 1 indicate the model explains most of the variance
-   - Values near 0 indicate the model explains little of the variance
-   - Can detect how well a model captures the overall pattern rather than just point-by-point accuracy
+* **Insensitivity to bias:** High R² can occur even with systematically biased predictions
+* **Over-optimization risk:** Adding variables almost always increases R², even with irrelevant predictors
+* **Non-linear relationships:** May not fully capture complex non-linear dependencies
+* **Outlier sensitivity:** Can be heavily influenced by a few extreme values
+* **Correlation vs. causation:** High R² doesn't necessarily imply causal relationships
 
-2. **Temporal Behavior**:
-   - Moving window updates both the error and baseline calculations
-   - Provides continuous assessment of model fit over time
-   - Reflects changing relationships between signals in different market conditions
+## References
 
-### Window Considerations
-
-1. **Fit Assessment**: Longer periods provide more stable assessment of model fit
-2. **Adaptability**: Shorter periods track changing relationships more quickly
-3. **Memory Usage**: O(2p) space complexity due to tracking both residuals and total variance
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Intuitive Interpretation**: Easy to understand as a percentage of explained variance
-- **Bounded Range**: Fixed scale makes interpretation straightforward
-- **Comparative Analysis**: Ideal for comparing different models on the same data
-- **Statistical Foundation**: Well-established in statistical modeling
-- **Dimensionless**: Not affected by the scale of the original measurements
-
-### Disadvantages
-
-- **Insensitivity to Bias**: High R² can occur even with systematically biased predictions
-- **Improvement Assessment**: Adding variables almost always increases R², even with irrelevant predictors
-- **Non-linear Relationships**: May not fully capture non-linear dependencies
-- **Outlier Sensitivity**: Can be heavily influenced by a few extreme values
-- **No Information on Prediction Direction**: Doesn't indicate if predictions are consistently high or low
+* Draper, N.R. and Smith, H. "Applied Regression Analysis," Wiley, 1998
+* Alexander, C. "Market Models: A Guide to Financial Data Analysis," Wiley, 2001

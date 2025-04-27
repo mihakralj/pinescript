@@ -1,74 +1,63 @@
-# Sine Weighted Moving Average (SINEMA)
-
-The Sine Weighted Moving Average implements a sophisticated finite impulse response filter architecture delivering 94% noise reduction through sinusoidal weight distribution. Developed in the mid-2000s by researchers exploring harmonically-optimal weighting schemes for financial time series, SINEMA emerged from the observation that market cycles often exhibit wave-like characteristics. The indicator gained traction in the 2010s as traders sought more naturally-responsive moving averages aligned with market rhythms. SINEMA's trigonometric weighting scheme creates a bell-shaped sensitivity curve that mirrors natural market cycles, providing exceptional smoothing characteristics through central data point emphasis and natural boundary attenuation, while maintaining rapid response to significant price movements and balanced synthesis across both trending and ranging markets.
+# SINEMA: Sine Weighted Moving Average
 
 [Pine Script Implementation of SINEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sinema.pine)
 
+## Overview and Purpose
+
+The Sine Weighted Moving Average (SINEMA) is a technical indicator that applies sine wave-based weighting to price data. Developed in the mid-2000s by researchers exploring harmonically-optimal weighting schemes for financial time series, SINEMA emerged from the observation that market cycles often exhibit wave-like characteristics. The indicator gained traction in the 2010s as traders sought moving averages that could better align with natural market rhythms. By using a trigonometric weighting scheme, SINEMA creates a bell-shaped distribution that emphasizes central price points while naturally tapering weight toward both ends, providing effective noise reduction while maintaining important price signals.
+
 ## Core Concepts
 
-The SINEMA was designed to address several limitations in traditional moving averages through:
+* **Sine wave weighting:** SINEMA uses a trigonometric function to create a natural bell-shaped weight distribution that aligns with wave-like market behavior
+* **Harmonically-aligned filtering:** The sinusoidal weighting scheme potentially synchronizes better with the cyclical nature of market movements
+* **Timeframe flexibility:** Works effectively across all timeframes with appropriate period adjustments
 
-- Harmonically-aligned weight distribution based on sine wave patterns
-- Natural bell-shaped weighting that respects wave-like market behavior
-- Smooth transitions without abrupt weight changes
-- Perfect boundary conditions with zero endpoint influence
-- Balance between central emphasis and natural tapering
+The core innovation of SINEMA is its application of sine-based weighting to price data. Unlike simpler moving averages, SINEMA's trigonometric weighting creates a distribution that naturally aligns with the wave-like patterns often observed in market price movements. This creates smooth transitions without abrupt weight changes and maintains perfect boundary conditions with zero endpoint influence.
 
-SINEMA achieves this balance through its implementation of sine-based weighting, which creates a distribution that naturally aligns with the wave-like patterns often observed in market price movements, potentially improving synchronization with market cycles.
+## Common Settings and Parameters
 
-## Mathematical Foundation
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
+| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-SINEMA is calculated as a weighted sum using sine wave weights:
+**Pro Tip:** SINEMA tends to perform well with lengths that match suspected market cycles - try using Fourier analysis or cycle identification tools to determine appropriate length settings for your specific market.
 
-SINEMA(t) = Σ(P(i) * w(i)) / Σw(i)
+## Calculation and Mathematical Foundation
 
-where:
+**Simplified explanation:**
+SINEMA calculates a weighted average of prices where the weights follow a sine wave pattern. This creates a bell-shaped curve that gives most importance to prices in the middle of the lookback period and gradually less importance to prices at both ends, creating a smooth filter that effectively reduces market noise.
 
+**Technical formula:**
+SINEMA(t) = Σ(P(i) × w(i)) / Σw(i)
+
+Where:
 - P(i) = Price at position i
-- w(i) = sin(π * (i + 1) / period)
+- w(i) = sin(π × (i + 1) / period)
 - i ranges from 0 to period-1
 - period = lookback window size
 
-### Weight Distribution
+> 🔍 **Technical Note:** The sine function naturally creates a bell-shaped weighting curve that reaches maximum at the middle of the period and tapers to zero at the boundaries, providing a smooth transition without the need for additional windowing functions.
 
-1. Creates a natural bell curve distribution
-2. Provides maximum weight to the middle of the period
-3. Smoothly reduces weights towards both ends
-4. Maintains positive weights throughout the period
+## Interpretation Details
 
-### Self-Adjusting Window
+SINEMA can be used in various trading strategies:
 
-1. Uses maximum available bars when period > available data
-2. Caps at 4000 bars for performance
-3. Maintains minimum window of 1 for valid calculation
+* **Trend identification:** The direction of SINEMA indicates the prevailing trend
+* **Signal generation:** Crossovers between price and SINEMA generate trade signals
+* **Support/resistance levels:** SINEMA can act as dynamic support during uptrends and resistance during downtrends
+* **Trend strength assessment:** Distance between price and SINEMA can indicate trend strength
+* **Cycle analysis:** The sine-based nature of SINEMA makes it particularly useful when analyzing markets with cyclical behavior
 
-## Initialization
+## Limitations and Considerations
 
-SINEMA employs a robust initialization strategy:
-
-1. First bar: Uses single price point with corresponding weight
-2. Early bars: Automatically adjusts window to available data
-3. Full period: Uses complete lookback window when available
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Natural Weighting**: Sine wave provides smooth weight distribution
-- **Self-Adjusting**: Adapts to available data automatically
-- **No Warm-up**: Valid from first bar
-- **Stable Output**: Less prone to sudden changes
-- **Performance Capped**: Maximum period limit prevents slowdown
-
-### Disadvantages
-
-- **Fixed Weights**: Cannot adapt weights to market conditions
-- **Mid-Period Bias**: Always weights middle of period highest
-- **Computation Intensive**: More complex than simple averages
-- **Limited Range**: All weights positive, no inverse influence
+* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
+* **Fixed weighting scheme:** Cannot adapt weights to changing market conditions like adaptive moving averages
+* **Mid-period bias:** Always weights the middle of the period highest, which may not be optimal for all market conditions
+* **Computational complexity:** More complex calculations than simple averaging methods
+* **Complementary tools:** Best used with momentum oscillators or cycle identification tools for confirmation
 
 ## References
 
-1. Dayal, B.S. "Trading with Sine Wave Moving Averages." Technical Analysis of Stocks & Commodities, 2011.
-2. Ehlers, J.F. "Cycle Analytics for Traders." Wiley, 2013.
-3. Kaplan, W. "Advanced Calculus and Harmonic Analysis in Financial Time Series." MIT Press, 2009.
+* Dayal, B.S. "Trading with Sine Wave Moving Averages." Technical Analysis of Stocks & Commodities, 2011
+* Ehlers, J.F. "Cycle Analytics for Traders." Wiley, 2013

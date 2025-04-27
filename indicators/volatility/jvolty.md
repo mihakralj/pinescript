@@ -1,32 +1,66 @@
-# Jurik Volatility (JVOLTY)
-
-The Jurik Volatility (JVOLTY) indicator is a volatility measure that uses adaptive techniques to adjust to market volatility. It employs Jurik's smoothing techniques to provide a less noisy and more responsive volatility estimate.
+# JVOLTY: Jurik Volatility
 
 [Pine Script Implementation of JVOLTY](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/jvolty.pine)
 
-## Mathematical Foundation
+## Overview and Purpose
 
-The JVOLTY calculation involves several steps:
+Jurik Volatility (JVOLTY) adapts Mark Jurik’s proprietary smoothing techniques to generate a fast yet low‑noise volatility gauge. By expanding and contracting adaptive envelopes around price, it extracts instantaneous volatility while filtering market micro‑structure noise. JVOLTY is favored for scalping systems, dynamic band construction, and volatility‑conditioned position sizing across all markets.
 
-1. **Adaptive Volatility Calculation:** Calculates an initial volatility estimate based on the difference between the source series and upper/lower bands.
-2. **Jurik Smoothing:** Applies Jurik smoothing to the volatility estimate to reduce noise and improve responsiveness.
-3. **Normalization:** Normalizes the smoothed volatility to provide a relative measure of volatility.
+## Core Concepts
 
-## Key Components
+* **Adaptive envelope spread** — measures max deviation of price from rolling bands to capture bar‑level volatility  
+* **Jurik smoothing** — non‑linear filter provides lag‑minimized noise suppression  
+* **Relative scaling** — current spread divided by smoothed average reveals volatility spikes
 
-1. **Adaptive Smoothing:** Employs Jurik's smoothing algorithm to reduce noise and improve responsiveness.
-2. **Volatility Bands:** Uses upper and lower bands to estimate volatility based on price deviations.
-3. **Normalization:** Normalizes the volatility estimate for comparison across different assets and time periods.
+Market application:  
+* **Band trading:** drive adaptive Keltner/Jurik bands  
+* **Vol filter:** disable signals when JVOLTY < threshold  
+* **Risk model:** expand stop distance as JVOLTY rises
 
-## Advantages and Disadvantages
+Timeframe suitability:  
+* **Intraday (1 m – H1)** for high‑frequency context; works on daily charts for swing as well.
 
-### Advantages
+## Common Settings and Parameters
 
-* **Reduced Noise:** Jurik smoothing helps to reduce noise and improve the accuracy of the volatility estimate.
-* **Responsiveness:** Adaptive techniques allow the indicator to respond quickly to changes in market volatility.
-* **Relative Measure:** Normalization provides a relative measure of volatility that can be compared across different assets and time periods.
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|---------------|
+| Period | 10 | Look‑back for adaptive envelope & smoothing | Shorten for faster spikes, lengthen for stability |
+| Source | Close | Price series for calculation | Use HL2 for range‑sensitive assets |
+| Offset Divisor | 10 (implicit) | Determines decay of historical vol sum | Rarely changed; lower for more reactivity |
 
-### Disadvantages
+**Pro Tip:** Pair JVOLTY with a 50‑bar SMA of itself; trade breakouts only when JVOLTY exceeds 1.2 × its average to avoid low‑energy moves.
 
-* **Complexity:** The JVOLTY calculation is more complex than simple volatility measures.
-* **Parameter Sensitivity:** The indicator's performance can be sensitive to the choice of parameters.
+## Calculation and Mathematical Foundation
+
+**Simplified explanation:**  
+Compute the widest gap between price and adaptive upper/lower bands, smooth this volatility trace with Jurik’s filter, then express current spread as a ratio of its average.
+
+**Technical formula (abridged):**
+
+1. Kv = (LEN₂ / (LEN₂ + 1))^{√(rv^{POW₁})} with rv = vol / avgVol  
+2. UpperBand = src − Kv·Δ₊ ; LowerBand = src − Kv·Δ₋  
+3. JVOLTY = vol / avgVol , clipped to [1 , LEN₁^{1/POW₁}]
+
+where LEN₁, LEN₂, POW₁ derive from `period` (see code); vol = max(|src−UB|, |src−LB|).
+
+> 🔍 **Technical Note:** Jurik smoothing is similar to an EMA with dynamic α driven by volatility itself, yielding lower phase lag than standard filters of equal noise reduction.
+
+## Interpretation Details
+
+* **JVOLTY = 1** — volatility equals recent average; neutral backdrop  
+* **JVOLTY > 1.5** — volatility surge; favor momentum tactics and wider stops  
+* **JVOLTY falling toward 1** — compression phase; anticipate breakout after squeeze  
+* **Persistent low JVOLTY (< 1.1)** — range trading conditions dominate
+
+## Limitations and Considerations
+
+* **Opacity of Jurik math:** proprietary filter parameters hinder strict replication  
+* **Parameter sensitivity:** very small periods (< 5) can over‑fit noise  
+* **High‑tick spreads:** illiquid symbols may distort adaptive bands
+
+Complementary tools: Jurik Moving Average (JMA), ADX for trend strength, Bollinger Band Width.
+
+## References
+
+1. Jurik, M. “JMA and JMA‑Based Indicators.” Jurik Research, 1998.  
+2. Harris, L. *Trading and Exchanges*, Oxford UP, 2003.
