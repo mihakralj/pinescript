@@ -4,9 +4,9 @@
 | ------------ | --------------------------------------- |
 | ABBER | Aberration |
 | ACCBANDS | Acceleration Bands |
-| BB | Bollinger Bands |
+| [BB](/indicators/channels/bb.md) | Bollinger Bands |
 | CKSP | Chande Kroll Stop |
-| DC | Donchian Channel |
+| [DC](/indicators/channels/dc.md) | Donchian Channel |
 | FCB | Fractal Chaos Bands |
 | ICH | Ichimoku Cloud |
 | KC | Keltner Channel |

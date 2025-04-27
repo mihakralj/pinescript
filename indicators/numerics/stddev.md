@@ -34,10 +34,11 @@ The formula for Standard Deviation is:
 StdDev = √[Σ(x - μ)² / n]
 
 Where:
-- x is each individual price
-- μ is the mean price over the period
-- n is the number of prices in the period
-- Σ represents the sum
+
+* x is each individual price
+* μ is the mean price over the period
+* n is the number of prices in the period
+* Σ represents the sum
 
 > 🔍 **Technical Note:** The implementation uses a single-pass algorithm with a circular buffer for efficiency, avoiding the need to recalculate the entire sum for each new bar.
 
@@ -45,10 +46,10 @@ Where:
 
 Standard Deviation excels at quantifying volatility objectively. Traders can use StdDev to:
 
-- Identify potential market reversals when volatility spikes
-- Recognize consolidation phases when StdDev decreases
-- Set more precise stop-loss levels based on current volatility conditions
-- Adjust position sizes according to market volatility (smaller positions in higher volatility conditions)
+* Identify potential market reversals when volatility spikes
+* Recognize consolidation phases when StdDev decreases
+* Set more precise stop-loss levels based on current volatility conditions
+* Adjust position sizes according to market volatility (smaller positions in higher volatility conditions)
 
 Rising StdDev values often precede significant price movements, while falling values typically indicate diminishing volatility and potential consolidation.
 
@@ -61,5 +62,5 @@ Rising StdDev values often precede significant price movements, while falling va
 
 ## References
 
-- Pring, M. J. (2002). Technical Analysis Explained. McGraw-Hill Education.
-- Bollinger, J. (2002). Bollinger on Bollinger Bands. McGraw-Hill Education.
+* Pring, M. J. (2002). Technical Analysis Explained. McGraw-Hill Education.
+* Bollinger, J. (2002). Bollinger on Bollinger Bands. McGraw-Hill Education.

@@ -34,10 +34,11 @@ The formula for Variance is:
 Var = Σ(x - μ)² / n
 
 Where:
-- x is each individual price
-- μ is the mean price over the period
-- n is the number of prices in the period
-- Σ represents the sum
+
+* x is each individual price
+* μ is the mean price over the period
+* n is the number of prices in the period
+* Σ represents the sum
 
 > 🔍 **Technical Note:** The implementation uses a single-pass algorithm with a circular buffer for efficiency, avoiding the need to recalculate the entire sum for each new bar. This optimization is particularly important for variance calculation with longer lookback periods.
 
@@ -45,11 +46,11 @@ Where:
 
 Variance provides valuable insights into market behavior that traders can use to:
 
-- Assess current market volatility compared to historical levels
-- Identify potential turning points when variance spikes significantly
-- Recognize consolidation phases when variance decreases over time
-- Adjust position sizing according to market volatility (smaller positions during high variance periods)
-- Set more informed stop-loss levels based on the current market's statistical behavior
+* Assess current market volatility compared to historical levels
+* Identify potential turning points when variance spikes significantly
+* Recognize consolidation phases when variance decreases over time
+* Adjust position sizing according to market volatility (smaller positions during high variance periods)
+* Set more informed stop-loss levels based on the current market's statistical behavior
 
 Unlike Standard Deviation, Variance uses squared values, which means it gives more weight to outliers and extreme price movements. This can make it particularly useful for detecting exceptional market conditions.
 

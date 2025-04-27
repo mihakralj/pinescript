@@ -11,6 +11,7 @@
 | ENTROPY | Entropy |
 | EXP | Exponential Transformation |
 | GRANGER | Granger |
+| [HIGHEST]((/indicators/numerics/highest.md) | Highest value |
 | HURST | Hurst |
 | JARQUE_BERA | Jarque-Bera |
 | JERK | Jerk/Smoothness |
@@ -18,6 +19,7 @@
 | KURTOSIS | Kurtosis |
 | LINEAR | Linear Transformation |
 | LOG | Logarithmic Transformation |
+| [LOWEST]((/indicators/numerics/highlowest.md) | Lowest value |
 | MAX | Max |
 | MEDIAN | Median |
 | MIN | Min |
@@ -37,7 +39,7 @@
 | TANH | Hyperbolic Tangent |
 | THEIL | Theil |
 | TSF | Tsf |
-| VAR | Variance |
+| [VAR]((/indicators/numerics/var.md) | Variance |
 | ZSCORE | Z-score standardization |
 | CWT | Continuous Wavelet Transform |
 | DWT | Discrete Wavelet Transform |
