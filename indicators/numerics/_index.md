@@ -16,7 +16,7 @@
 | JARQUE_BERA | Jarque-Bera |
 | [JOLT](/indicators/numerics/jolt.md) | Rate of acceleration; 3rd derivative |
 | KENDALL | Kendall |
-| KURTOSIS | Kurtosis |
+| [KURTOSIS](/indicators/numerics/kurtosis.md) | Kurtosis |
 | [LINREG](/indicators/numerics/linreg.md) | Linear Regression Curve |
 | LINEAR | Linear Transformation |
 | LOG | Logarithmic Transformation |
@@ -39,6 +39,6 @@
 | THEIL | Theil |
 | TSF | Tsf |
 | [VAR](/indicators/numerics/var.md) | Variance |
-| ZSCORE | Z-score standardization |
+| [ZSCORE](/indicators/numerics/zscore.md) | Z-score standardization |
 | CWT | Continuous Wavelet Transform |
 | DWT | Discrete Wavelet Transform |

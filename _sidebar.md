@@ -32,6 +32,9 @@
   * [JMA: Jurik MA](indicators/trends_IIR/jma.md)
   * [KAMA: Kaufman Adaptive MA](indicators/trends_IIR/kama.md)
   * [LTMA: Linear Time MA](indicators/trends_IIR/ltma.md)
+  * [MAMA: MESA Adaptive MA](indicators/trends_IIR/mama.md)
+  * [MGDI: McGinley Dynamic Indicator](indicators/trends_IIR/mgdi.md)
+  * [MMA: Modified MA](indicators/trends_IIR/mma.md)
   * [QEMA: Quadruple Exponential MA](indicators/trends_IIR/qema.md)
   * [REMA: Regularized Exponential MA](indicators/trends_IIR/rema.md)
   * [RGMA: Recursive Gaussian MA](indicators/trends_IIR/rgma.md)
@@ -41,8 +44,6 @@
   * [ZLDEMA: Zero-Lag Double Exponential MA](indicators/trends_IIR/zldema.md)
   * [ZLEMA: Zero-Lag Exponential MA](indicators/trends_IIR/zlema.md)
   * [ZLTEMA: Zero-Lag Triple Exponential MA](indicators/trends_IIR/zltema.md)
-  * [MAMA: MESA Adaptive MA](indicators/trends_IIR/mama.md)
-  * [MGDI: McGinley Dynamic Indicator](indicators/trends_IIR/mgdi.md)
   * [VIDYA: Variable Index Dynamic Average](indicators/trends_IIR/vidya.md)
 
 * [Cycles Indicators](./indicators/cycles/_index.md)
@@ -69,10 +70,22 @@
 * [Momentum Indicators](./indicators/momentum/_index.md)
 
 * [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
+  * [ACCEL: Acceleration](indicators/numerics/accel.md)
+  * [HIGHEST: Highest Value](indicators/numerics/highest.md)
+  * [JOLT: Jolt](indicators/numerics/jolt.md)
+  * [KURTOSIS: Kurtosis](indicators/numerics/kurtosis.md)
+  * [LINREG: Linear Regression Curve](indicators/numerics/linreg.md)
+  * [LOWEST: Lowest Value](indicators/numerics/highlowest.md)
+  * [SLOPE: Slope](indicators/numerics/slope.md)
+  * [STDDEV: Standard Deviation](indicators/numerics/stddev.md)
+  * [VAR: Variance](indicators/numerics/var.md)
+  * [ZSCORE: Z-Score](indicators/numerics/zscore.md)
 
 * [Oscillators](./indicators/oscillators/_index.md)
 
 * [Price Channels and Bands](./indicators/channels/_index.md)
+  * [BB: Bollinger Bands](indicators/channels/bb.md)
+  * [DC: Donchian Channel](indicators/channels/dc.md)
 
 * [Signal Filters](./indicators/filters/_index.md)
   * [Bilateral Filter](indicators/filters/bilateral.md)
@@ -93,7 +106,11 @@
   * [AROON: Aroon](indicators/dynamics/aroon.md)
 
 * [Volatility Indicators](./indicators/volatility/_index.md)
+  * [ATR: Average True Range](indicators/volatility/atr.md)
+  * [ATRN: Average True Range Normalized](indicators/volatility/atrn.md)
+  * [ATRP: Average True Range Percent](indicators/volatility/atrp.md)
   * [JVOLTY: Jurik Volatility](indicators/volatility/jvolty.md)
   * [JVOLTYN: Normalized Jurik Volatility](indicators/volatility/jvoltyn.md)
+  * [STOCH: Stochastic Volatility](indicators/volatility/stoch.md)
 
 * [Volume Indicators](./indicators/volume/_index.md)
