@@ -35,7 +35,7 @@
 | RV | Realized Volatility |
 | RVI | Relative Volatility Index |
 | STARC | Starc Bands |
-| STOCH | Stochastic Volatility |
+| [STOCH](/indicators/volatility/stoch.md) | Stochastic Volatility |
 | TR | True Range |
 | UI | Ulcer Index |
 | VC | Volatility Cone |

@@ -13,11 +13,13 @@ Normalized Jurik Volatility (JVOLTYN) compresses the raw Jurik Volatility (JVO
 * **Volatility oscillator** — behaves like an RSI of volatility, enabling overbought/oversold‑style thresholds  
 
 Market application:  
+
 * **Breakout filter:** act only when JVOLTYN > 0.7 (high energy)  
 * **Risk dial:** scale leverage linearly to JVOLTYN; cap risk when > 0.9  
 * **Mean‑reversion:** seek fades when JVOLTYN < 0.3
 
 Timeframe suitability:  
+
 * **All frames**—intraday scalps to multi‑day swing; normalization keeps values consistent.
 
 ## Common Settings and Parameters

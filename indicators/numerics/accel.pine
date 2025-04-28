@@ -1,0 +1,72 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Acceleration (Slope of Slope)", "Accel", overlay=false, precision=8)
+
+
+//@function Calculates acceleration (slope of slope)
+//@param src Source series to calculate slope from
+//@param len Lookback period for calculation
+//@returns acceleration
+accel(series float src, simple int len) =>
+    if len <= 2
+        runtime.error("Period must be greater than 2 for acceleration calculation")
+    var array<float> slopeValues = array.new_float(len, 0.0)
+    var int slopeIndex = 0
+    var float primarySumX = 0.0, var float primarySumY = 0.0
+    var float primarySumXY = 0.0, var float primarySumX2 = 0.0
+    var int validCount = 0
+    var array<float> values = array.new_float(len, 0.0)
+    var array<int> indices = array.new_int(len, 0)
+    var int nextIndex = 0
+    float accelValue = na
+    if not na(src)
+        array.set(values, nextIndex, src)
+        array.set(indices, nextIndex, bar_index)
+        validCount := math.min(validCount + 1, len)
+        nextIndex := (nextIndex + 1) % len
+        if validCount >= 2
+            float srcSumX = 0.0, float srcSumY = 0.0
+            float srcSumXY = 0.0, float srcSumX2 = 0.0
+            for priceIteration = 0 to validCount - 1
+                float priceX = array.get(indices, priceIteration)
+                float priceY = array.get(values, priceIteration)
+                srcSumX += priceX, srcSumY += priceY
+                srcSumXY += priceX * priceY
+                srcSumX2 += priceX * priceX
+            float priceCount = validCount
+            float priceDivisor = priceCount * srcSumX2 - srcSumX * srcSumX
+            float currentSlope = priceDivisor != 0.0 ? (priceCount * srcSumXY - srcSumX * srcSumY) / priceDivisor : na
+            array.set(slopeValues, slopeIndex, currentSlope)
+            slopeIndex := (slopeIndex + 1) % len
+            if validCount >= len
+                float accelSumX = 0.0, float accelSumY = 0.0
+                float accelSumXY = 0.0, float accelSumX2 = 0.0
+                int validSlopeCount = 0
+                for slopeIteration = 0 to len - 1
+                    float slopeVal = array.get(slopeValues, slopeIteration)
+                    if not na(slopeVal)
+                        validSlopeCount += 1
+                        int slopePosition = slopeIteration
+                        accelSumX += slopePosition
+                        accelSumY += slopeVal
+                        accelSumXY += slopePosition * slopeVal
+                        accelSumX2 += slopePosition * slopePosition
+                if validSlopeCount >= 2
+                    float slopeCount = validSlopeCount
+                    float slopeDivisor = slopeCount * accelSumX2 - accelSumX * accelSumX
+                    if slopeDivisor != 0.0
+                        accelValue := (slopeCount * accelSumXY - accelSumX * accelSumY) / slopeDivisor
+    accelValue
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(14, "Accel Period", minval=2)
+i_source = input.source(close, "Source")
+
+// Calculation
+a = accel(i_source, i_period)
+
+// Plot
+plot(a, "Accel", color.new(color.yellow, 0), 2)

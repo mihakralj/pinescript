@@ -1,134 +1,73 @@
-// The MIT License (MIT)
-// © mihakralj
 //@version=6
-indicator("Stochastic Volatility", "STOCH", overlay=false)
+indicator("Stochastic Oscillator", "Stoch", overlay=false)
 
-//@function Calculates the Simple Moving Average (SMA) from scratch using a circular buffer.
-//@param source The series to calculate the SMA for.
-//@param period The period length for the SMA calculation.
-//@returns The SMA value.
-_sma(series float source, simple int period) =>
-    if period <= 0
-        runtime.error("Period must be greater than 0")
-    var int p = math.min(math.max(1, period), 4000)
-    var array<float> buffer = array.new_float(p, na)
-    var int head = 0
-    var float sum = 0.0
-    var int valid_count = 0
-    float oldest = array.get(buffer, head)
-    if not na(oldest)
-        sum -= oldest
-        valid_count -= 1
-    if not na(source)
-        sum += source
-        valid_count += 1
-    array.set(buffer, head, source)
-    head := (head + 1) % p
-    nz(sum / valid_count, source)
-
-//@function Calculates the Standard Deviation (StDev) from scratch using Welford's online algorithm.
-//@param x The series to calculate the StDev for.
-//@param length The period length for the StDev calculation.
-//@returns The StDev value.
-_stdev(series float x, simple int length) =>
-    if length <= 0
-        na
-    var float mean = 0.0
-    var float M2 = 0.0
-    var int count = 0
-    var array<float> buffer = array.new_float(length, na)
-    var int head = 0
-
-    float oldest_x = array.get(buffer, head)
-    float new_x = nz(x)
-    if count == length and not na(oldest_x)
-        float delta_old = oldest_x - mean
-        count -= 1
-        if count > 0
-            mean -= delta_old / count
-            M2 -= delta_old * (oldest_x - mean) 
+//@function Calculates the Stochastic Oscillator (%K and %D). %K = 100 * (close - lowest_low(kLength)) / (highest_high(kLength) - lowest_low(kLength)). %D = SMA(%K, dPeriod). Uses efficient deque implementation for min/max and buffer-based SMA.
+//@param kLength `simple int` The lookback period for calculating highest high and lowest low.
+//@param dPeriod `simple int` The smoothing period for the %D line (SMA of %K).
+//@returns `[float, float]` A tuple containing the %K value and the %D value.
+stoch(simple int kLength,simple int dPeriod)=>
+    if kLength<=0 or dPeriod<=0
+        runtime.error("Both periods must be positive")
+    var float kVal=0.0, var float dVal=0.0
+    var int dHead=0, var float dSum=0.0
+    var array<int>lowestDeque=array.new_int(0)
+    var array<float>lowestBuffer=array.new_float(kLength,na)
+    var array<int>highestDeque=array.new_int(0)
+    var array<float>highestBuffer=array.new_float(kLength,na)
+    var array<float>dBuffer=array.new_float(dPeriod,0.0)
+    int idx=bar_index%kLength
+    float lv=nz(low), float hv=nz(high)
+    array.set(lowestBuffer,idx,lv)
+    array.set(highestBuffer,idx,hv)
+    while array.size(lowestDeque)>0
+        if array.get(lowestDeque,0)<=bar_index-kLength
+            array.shift(lowestDeque)
         else
-            mean := 0.0
-            M2 := 0.0
-    if not na(new_x)
-        count += 1
-        float delta = new_x - mean
-        mean += delta / count
-        float delta2 = new_x - mean
-        M2 += delta * delta2
-    array.set(buffer, head, new_x)
-    head := (head + 1) % length
-    float variance = count < 2 ? 0.0 : M2 / count
-    math.sqrt(variance)
+            break
+    while array.size(lowestDeque)>0
+        if array.get(lowestBuffer,array.get(lowestDeque,array.size(lowestDeque)-1)%kLength)>=lv
+            array.pop(lowestDeque)
+        else
+            break
+    array.push(lowestDeque,bar_index)
+    while array.size(highestDeque)>0
+        if array.get(highestDeque,0)<=bar_index-kLength
+            array.shift(highestDeque)
+        else
+            break
+    while array.size(highestDeque)>0
+        if array.get(highestBuffer,array.get(highestDeque,array.size(highestDeque)-1)%kLength)<=hv
+            array.pop(highestDeque)
+        else
+            break
+    array.push(highestDeque,bar_index)
+    int li=array.get(lowestDeque,0)
+    int hi=array.get(highestDeque,0)
+    float lowestLow=array.get(lowestBuffer,li%kLength)
+    float highestHigh=array.get(highestBuffer,hi%kLength)
+    float rnge=highestHigh-lowestLow
+    kVal:=rnge>0?100*(close-lowestLow)/rnge:0.0
+    if bar_index==0
+        dSum:=kVal*dPeriod
+        array.fill(dBuffer,kVal)
+    else
+        float oldVal=array.get(dBuffer,dHead)
+        dSum:=dSum-oldVal+kVal
+        array.set(dBuffer,dHead,kVal)
+        dHead:=(dHead+1)%dPeriod
+    dVal:=dSum/dPeriod
+    [kVal,dVal]
 
-//@function Finds the highest value in a series over a given period using a deque.
-//@param series The series to find the highest value in.
-//@param length The period length.
-//@returns The highest value.
-_highest(series float series, simple int length) =>
-    var array<int> deque = array.new_int()
-    // Remove indices outside the window
-    if array.size(deque) > 0 and array.get(deque, 0) <= bar_index - length
-        array.shift(deque)
-    // Remove indices with values lower than the current value
-    while array.size(deque) > 0 and nz(series[array.get(deque, array.size(deque) - 1)]) <= nz(series)
-        array.pop(deque)
-    array.push(deque, bar_index)
-    nz(series[array.get(deque, 0)])
-
-//@function Finds the lowest value in a series over a given period using a deque.
-//@param series The series to find the lowest value in.
-//@param length The period length.
-//@returns The lowest value.
-_lowest(series float series, simple int length) =>
-    var array<int> deque = array.new_int()
-    // Remove indices outside the window
-    if array.size(deque) > 0 and array.get(deque, 0) <= bar_index - length
-        array.shift(deque)
-    // Remove indices with values higher than the current value
-    while array.size(deque) > 0 and nz(series[array.get(deque, array.size(deque) - 1)]) >= nz(series)
-        array.pop(deque)
-    array.push(deque, bar_index)
-    nz(series[array.get(deque, 0)])
-
-//@function Calculates the Stochastic Volatility (STOCH) from scratch.
-//@doc Calculates Stochastic Volatility (STOCH) using standard deviation, highest, lowest, and SMA implemented from scratch.
-//@param length The period length for the STOCH calculation.
-//@param smooth The smoothing length for the %D calculation.
-//@returns A tuple containing [%K, %D].
-//@optimized for performance
-stoch(simple int length, simple int smooth) =>
-    if length <= 0
-        runtime.error("Period must be greater than 0")
-    if smooth <= 0
-        runtime.error("Smooth must be greater than 0")
-
-    // Calculate raw volatility (standard deviation of close)
-    volatility = _stdev(close, length)
-
-    // Calculate highest and lowest volatility over the length period
-    highestVolatility = _highest(volatility, length)
-    lowestVolatility = _lowest(volatility, length)
-
-    // Calculate %K
-    percentK = 0.0
-    if highestVolatility > lowestVolatility // Avoid division by zero
-        percentK := (volatility - lowestVolatility) / (highestVolatility - lowestVolatility) * 100
-
-    // Smooth %K to get %D
-    percentD = _sma(percentK, smooth)
-
-    [percentK, percentD]
 
 // ---------- Main loop ----------
 
 // Inputs
-i_length = input.int(14, "Length", minval=1, tooltip="Number of bars used for the STOCH calculation")
-i_smooth = input.int(3, "Smooth", minval=1, tooltip="Number of bars used for the %D smoothing")
+kPeriod = input.int(14, "K Length", minval=1)
+dPeriod = input.int(3, "D Smooth", minval=1)
 
 // Calculation
-[percentK, percentD] = stoch(i_length, i_smooth) // Call the custom stoch function
+[kValue, dValue] = stoch(kPeriod, dPeriod)
 
 // Plot
-plot(percentK, "%K", color.new(color.yellow, 0), 2)
-plot(percentD, "%D", color.new(color.red, 0), 2)
+plot(kValue, "Stochastic %K", color.new(color.green, 0), 2)
+plot(dValue, "Stochastic %D", color.new(color.red, 0), 2)

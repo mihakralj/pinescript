@@ -12,12 +12,14 @@ Normalized Average True Range (ATRN) converts ATR into a percentage of price, 
 * **Comparability across assets** — enables screening of diverse markets for high or low volatility  
 * **Regime detection** — shifts in ATRN identify transitions between quiet and explosive phases  
 
-Market application:  
+Market application:
+
 * **Portfolio allocation** — weight positions inversely to ATRN for volatility parity  
 * **Strategy optimization** — adjust breakout thresholds when ATRN rises/falls  
 * **Risk alerts** — spike in ATRN signals unusual market stress
 
-Timeframe suitability:  
+Timeframe suitability:
+
 * **Any timeframe** — normalization offsets absolute‑price bias; intraday for scalping, daily for swing.
 
 ## Common Settings and Parameters

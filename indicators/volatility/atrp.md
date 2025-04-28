@@ -13,11 +13,13 @@ Average True Range Percent (ATRP) scales Wilder’s ATR by the instrument’s
 * **Volatility regime shifts** — rising/falling ATRP flags transitions between quiet and explosive phases  
 
 Market application:  
+
 * **Asset selection** — trade high‑ATRP symbols for breakout systems  
 * **Risk scaling** — size positions inversely to ATRP for equal‑volatility weighting  
 * **Stop setting** — trail price by *k × ATRP %* of price
 
 Timeframe suitability:  
+
 * **All frames** — from 1‑minute scalps to weekly swing, normalization adapts automatically.
 
 ## Common Settings and Parameters

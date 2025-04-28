@@ -13,11 +13,13 @@ Jurik Volatility (JVOLTY) adapts Mark Jurik’s proprietary smoothing techniqu
 * **Relative scaling** — current spread divided by smoothed average reveals volatility spikes
 
 Market application:  
+
 * **Band trading:** drive adaptive Keltner/Jurik bands  
 * **Vol filter:** disable signals when JVOLTY < threshold  
 * **Risk model:** expand stop distance as JVOLTY rises
 
 Timeframe suitability:  
+
 * **Intraday (1 m – H1)** for high‑frequency context; works on daily charts for swing as well.
 
 ## Common Settings and Parameters

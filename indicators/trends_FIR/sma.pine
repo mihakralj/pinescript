@@ -12,7 +12,7 @@ indicator("Simple Moving Average", "SMA", overlay=true)
 sma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    var int p = math.min(math.max(1, period), 4000)
+    var int p = period
     var array<float> buffer = array.new_float(p, na)
     var int head = 0
     var float sum = 0.0
@@ -39,6 +39,3 @@ sma_value = sma(i_source, i_period)
 
 // Plot
 plot(sma_value, "Custom SMA", color.new(color.yellow, 0), 2)
-
-// Alert
-alertcondition(ta.cross(i_source, sma_value), "Price Crosses SMA", "Price crossed SMA on {{ticker}}")

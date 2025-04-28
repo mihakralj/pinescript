@@ -23,7 +23,7 @@ highest(series float src, int len) =>
     while array.size(deque) > 0
         int last_index_in_deque = array.get(deque, array.size(deque) - 1)
         int buffer_lookup_index = last_index_in_deque % len
-        if array.get(src_buffer, buffer_lookup_index) <= current_val // Compare with <= for highest
+        if array.get(src_buffer, buffer_lookup_index) <= current_val
             array.pop(deque)
         else
             break
@@ -32,7 +32,7 @@ highest(series float src, int len) =>
     int highest_buffer_index = highest_index % len
     float result = array.get(src_buffer, highest_buffer_index)
     current_index := (current_index + 1) % len
-    result // Return the highest value found so far, even during initial bars
+    result 
 
 // ---------- Main loop ----------
 
