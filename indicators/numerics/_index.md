@@ -2,10 +2,11 @@
 
 | Code | Name |
 | --------------- | --------------------------------- |
-| BETA | Beta |
+| [BETA](/indicators/numerics/beta.md) | Beta Coefficient |
 | CHANGE | Percentage Change |
 | COINTEGRATION | Cointegration |
-| CORRELATION | Correlation (Pearson's) |
+| [CORRELATION](/indicators/numerics/correlation.md) | Correlation (Pearson's) |
+| [COVARIANCE](/indicators/numerics/covariance.md) | Covariance |
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative |
 | DIFF | Difference |
 | ENTROPY | Entropy |
@@ -38,7 +39,7 @@
 | TANH | Hyperbolic Tangent |
 | THEIL | Theil |
 | TSF | Tsf |
-| [VAR](/indicators/numerics/var.md) | Variance |
+| [VARIANCE](/indicators/numerics/variance.md) | Variance |
 | [ZSCORE](/indicators/numerics/zscore.md) | Z-score standardization |
 | CWT | Continuous Wavelet Transform |
 | DWT | Discrete Wavelet Transform |

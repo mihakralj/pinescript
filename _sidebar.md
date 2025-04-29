@@ -71,6 +71,9 @@
 
 * [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
   * [ACCEL: Acceleration](indicators/numerics/accel.md)
+  * [BETA: Beta Coefficient](/indicators/numerics/beta.md)
+  * [COVARIANCE: Covariance](indicators/numerics/covariance.md)
+  | [CORRELATION: Pearson's Correlation](/indicators/numerics/correlation.md)
   * [HIGHEST: Highest Value](indicators/numerics/highest.md)
   * [JOLT: Jolt](indicators/numerics/jolt.md)
   * [KURTOSIS: Kurtosis](indicators/numerics/kurtosis.md)
@@ -78,7 +81,7 @@
   * [LOWEST: Lowest Value](indicators/numerics/lowest.md)
   * [SLOPE: Slope](indicators/numerics/slope.md)
   * [STDDEV: Standard Deviation](indicators/numerics/stddev.md)
-  * [VAR: Variance](indicators/numerics/var.md)
+  * [VARIANCE: Variance](indicators/numerics/variance.md)
   * [ZSCORE: Z-Score](indicators/numerics/zscore.md)
 
 * [Oscillators](./indicators/oscillators/_index.md)

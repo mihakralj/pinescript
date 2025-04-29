@@ -1,7 +1,7 @@
 # PineScript Technical Indicators Library
 
 ![Pine Script v6.0](https://img.shields.io/badge/Pine%20Script-v6.0-blue?style=flat&logo=tradingview&logoColor=white)
-![Indicators Done](https://img.shields.io/badge/indicators-84%2F258-orange)
+![Indicators Done](https://img.shields.io/badge/indicators-91%2F258-orange)
 
 *A begrudgingly assembled pile of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI — because apparently, suffering builds character.*
 
