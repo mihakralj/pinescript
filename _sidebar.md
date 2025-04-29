@@ -116,3 +116,5 @@
 * [Volume Indicators](./indicators/volume/_index.md)
   * [ADL: Accumulation/Distribution Line](indicators/volume/adl.md)
   * [AOBV: Archer On-Balance Volume](indicators/volume/aobv.md)
+  * [CMF: Chaikin Money Flow](/indicators/volume/cmf.md)
+  * [EFI: Elder's Force Index](/indicators/volume/efi.md)

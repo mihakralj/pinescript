@@ -5,8 +5,8 @@
 | [ADL](/indicators/volume/adl.md) | Accumulation/Distribution Line |
 | [ADOSC](/indicators/volume/adosc.md) | Chaikin A/D Oscillator |
 | [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume |
-| CMF | Chaikin Money Flow |
-| EFI | Elder's Force Index |
+| [CMF](/indicators/volume/cmf.md) | Chaikin Money Flow |
+| [EFI](/indicators/volume/efi.md) | Elder's Force Index |
 | EOM | Ease of Movement |
 | KVO | Klinger Volume Oscillator |
 | MFI | Money Flow Index |
