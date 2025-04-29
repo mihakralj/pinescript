@@ -29,6 +29,7 @@ The ADOSC's core principle builds on the foundation that volume precedes price m
 ADOSC first calculates the Accumulation/Distribution Line, which measures money flow by considering where prices close within their range and weighting by volume. It then calculates the difference between a fast EMA and a slow EMA of this line to determine momentum.
 
 **Technical formula:**
+
 1. Money Flow Multiplier = ((Close - Low) - (High - Close)) / (High - Low)
 2. Money Flow Volume = Money Flow Multiplier × Volume
 3. ADL = Previous ADL + Current Money Flow Volume

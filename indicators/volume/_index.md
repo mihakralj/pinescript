@@ -2,16 +2,15 @@
 
 | Code | Name |
 | ------------ | --------------------------------------- |
-| ADL | Accumulation/Distribution Line |
-| ADOSC | Chaikin A/D Oscillator |
-| AOBV | Archer On-Balance Volume |
+| [ADL](/indicators/volume/adl.md) | Accumulation/Distribution Line |
+| [ADOSC](/indicators/volume/adosc.md) | Chaikin A/D Oscillator |
+| [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume |
 | CMF | Chaikin Money Flow |
 | EFI | Elder's Force Index |
 | EOM | Ease of Movement |
 | KVO | Klinger Volume Oscillator |
 | MFI | Money Flow Index |
 | NVI | Negative Volume Index |
-| OBV | On-Balance Volume |
 | PVI | Positive Volume Index |
 | PVOL | Price-Volume |
 | PVO | Percentage Volume Oscillator |

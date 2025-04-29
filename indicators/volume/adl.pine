@@ -3,18 +3,26 @@
 //@version=6
 indicator("Accumulation/Distribution Line", "ADL", overlay=false)
 
-// @function Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow
-// @param src (series float) Source price series to use in calculations (default: close price)
-// @param vol (series float) Volume series to use (default: built-in volume)
-// @returns (float) The ADL value for the current bar
-adl(src = close, vol = volume) =>
-    money_flow = na(vol) or na(src) or high == low ? 0.0 : ((2*src - high - low) / (high - low)) * vol
-    var float cumAD = 0.0
-    cumAD := bar_index == 0 ? money_flow : cumAD + money_flow
-    cumAD
+// @function Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow into and out of a security
+// @param src_high The high price (default: built-in high)
+// @param src_low The low price (default: built-in low)
+// @param src_close The close price (default: built-in close)
+// @param src_vol The volume (default: built-in volume)
+// @returns The cumulative ADL value representing buying/selling pressure
+adl(src_high = high, src_low = low, src_close = close, src_vol = volume) =>
+    float mfm = 0.0
+    if not na(src_high) and not na(src_low) and not na(src_close)
+        mfm := (src_close - src_low) - (src_high - src_close)
+        mfm := src_high != src_low ? mfm / (src_high - src_low) : 0.0
+    float mfv = na(src_vol) ? 0.0 : src_vol * mfm
+    var float cumulativeSum = 0.0
+    cumulativeSum := na(mfv) ? cumulativeSum : cumulativeSum + mfv
+    cumulativeSum
+
+// ---------- Inputs ----------
 
 // ---------- Calculations ----------
-adl_value = adl()
+adl_val = adl(high, low, close, volume)
 
 // ---------- Plotting ----------
-plot(adl_value, "ADL", color.new(color.yellow, 0), linewidth=2)
+plot(adl_val, "ADL", color.new(color.yellow, 0), 2)

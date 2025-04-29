@@ -6,8 +6,9 @@
 | ABBER                                       | Volatility   | Aberration                                         |
 | AC                                          | Oscillators  | Acceleration Oscillator                            |
 | ACCBANDS                                    | Volatility   | Acceleration Bands                                 |
-| ADL                                         | Volume       | Accumulation/Distribution Line                     |
-| ADOSC                                       | Volume       | Chaikin A/D Oscillator                             |
+| [ACCEL](/indicators/numerics/accel.md)      | Numerics     | Second Derivative of Price Trend                    |
+| [ADL](/indicators/volume/adl.md)            | Volume       | Accumulation/Distribution Line                     |
+| [ADOSC](/indicators/volume/adosc.md)        | Volume       | Chaikin A/D Oscillator                             |
 | ADR                                         | Volatility   | Average Daily Range                                |
 | ADXR                                        | Dynamics     | Average Directional Movement Rating                |
 | [AFIRMA](/indicators/trends_FIR/afirma.md)  | Trends_FIR   | Adaptive Finite Impulse Response MA                |
@@ -15,17 +16,17 @@
 | [ALMA](/indicators/trends_FIR/alma.md)      | Trends_FIR   | Arnaud Legoux MA                                   |
 | AMAT                                        | Dynamics     | Archer MAs Trends                                  |
 | AO                                          | Oscillators  | Awesome Oscillator                                 |
-| AOBV                                        | Volume       | Archer On-Balance Volume                           |
+| [AOBV](/indicators/volume/aobv.md)          | Volume       | Archer On-Balance Volume                           |
 | AP                                          | Volatility   | Andrew's Pitchfork                                 |
 | APO                                         | Momentum     | Absolute Price Oscillator                          |
 | [AROON](/indicators/dynamics/aroon.md)      | Dynamics     | Aroon                                              |
 | AROONOSC                                    | Dynamics     | Aroon Oscillator                                   |
-| ATR                                         | Volatility   | Average True Range                                 |
+| [ATR](/indicators/volatility/atr.md)        | Volatility   | Average True Range                                 |
 | ATRB                                        | Channels     | ATR Bands                                          |
-| ATRP                                        | Volatility   | Average True Range Percent                         |
+| [ATRN](/indicators/volatility/atrn.md)      | Volatility   | Average True Range Normalized                      |
+| [ATRP](/indicators/volatility/atr.md)       | Volatility   | Average True Range Percent                         |
 | ATRS                                        | Volatility   | ATR Trailing Stop                                  |
-| BB                                          | Channels     | Bollinger Bands                                    |
-| BBAND                                       | Volatility   | Bollinger Bands®                                   |
+| [BB](/indicators/channels/bb.md)            | Channels     | Bollinger Bands®                                   |
 | BBI                                         | Oscillators  | Bulls Bears Index                                  |
 | BBW                                         | Volatility   | Bollinger Band Width                               |
 | BBWP                                        | Volatility   | Bollinger Band Width Percentile                    |
@@ -61,8 +62,7 @@
 | CV                                          | Volatility   | Conditional Volatility                             |
 | CVI                                         | Volatility   | Chaikin's Volatility                               |
 | CWT                                         | Numerics     | Continuous Wavelet Transform                       |
-| DC                                          | Channels     | Donchian Channel                                   |
-| DCHN                                        | Volatility   | Donchian Channels                                  |
+| [DC](/indicators/channels/dc.md)            | Channels     | Donchian Channel                                   |
 | [DEMA](/indicators/trends_IIR/dema.md)      | Trends_IIR   | Double Exponential MA                              |
 | DIFF                                        | Numerics     | Difference                                         |
 | [DIRTY](/indicators/errors/dirty.md)        | Errors       | Dirty Data Injection                               |
@@ -123,6 +123,7 @@
 | INERTIA                                     | Oscillators  | Inertia                                            |
 | JARQUE_BERA                                 | Numerics     | Jarque-Bera                                        |
 | JERK                                        | Numerics     | Jerk/Smoothness                                    |
+| [JOLT](/indicators/numerics/jolt.md)        | Numerics     | Third Derivative of Price Trend                    |
 | [JMA](/indicators/trends_IIR/jma.md)        | Trends_IIR   | Jurik MA                                           |
 | [JVOLTY](/indicators/volatility/jvolty.md)  | Volatility   | Jurik Volatility                                   |
 | [JVOLTYN](/indicators/volatility/jvoltyn.md) | Volatility   | Normalized Jurik Volatility [0,1]                 |
@@ -134,7 +135,7 @@
 | KFS                                         | Filters      | Kalman Filter Slope                                |
 | KRI                                         | Oscillators  | Kairi Relative Index                               |
 | KST                                         | Oscillators  | KST Oscillator                                     |
-| KURTOSIS                                    | Numerics     | Kurtosis                                           |
+| [KURTOSIS](/indicators/numerics/kurtosis.md) | Numerics     | Kurtosis                                          |
 | KVO                                         | Volume       | Klinger Volume Oscillator                          |
 | LF                                          | Filters      | Laguerre Filter                                    |
 | LINEAR                                      | Numerics     | Linear Transformation                              |
@@ -228,7 +229,7 @@
 | SINE                                        | Cycles       | Sine Wave                                          |
 | [SINEMA](/indicators/trends_FIR/sinema.md)  | Trends_FIR   | Sine-weighted MA                                   |
 | SKEW                                        | Numerics     | Skew                                               |
-| SLOPE                                       | Numerics     | Direction/Magnitude                                |
+| [SLOPE](/indicators/numerics/slope.md)      | Numerics     | Linear Regression Trend Measure  |
 | [SMA](/indicators/trends_FIR/sma.md)        | Trends_FIR   | Simple MA                                          |
 | [SMAPE](/indicators/errors/smape.md)        | Errors       | Symmetric Mean Absolute Percentage Error           |
 | SMI                                         | Oscillators  | Stochastic Momentum Index                          |
@@ -242,7 +243,7 @@
 | STARC                                       | Volatility   | Starc Bands                                        |
 | STB                                         | Channels     | Super Trend Bands                                  |
 | STDDEV                                      | Numerics     | Standard Deviation                                 |
-| STOCH                                       | Momentum     | Stochastic Oscillator                              |
+| [STOCH](/indicators/volatility/stoch.md)    | Volatility   | Stochastic Oscillator                              |
 | STOCHF                                      | Momentum     | Stochastic Fast                                    |
 | STOCHRSI                                    | Momentum     | Stochastic RSI                                     |
 | SUPER                                       | Dynamics     | SuperTrend                                         |
@@ -284,4 +285,4 @@
 | [ZLDEMA](/indicators/trends_IIR/zldema.md)  | Trends_IIR   | Zero-Lag Double Exponential MA                     |
 | [ZLEMA](/indicators/trends_IIR/zlema.md)    | Trends_IIR   | Zero-Lag Exponential MA                            |
 | [ZLTEMA](/indicators/trends_IIR/zltema.md)  | Trends_IIR   | Zero-Lag Triple Exponential MA                     |
-| ZSCORE                                      | Numerics     | Z-score standardization                            |
+| [ZSCORE](/indicators/numerics/zscore.md)    | Numerics     | Z-score standardization                            |

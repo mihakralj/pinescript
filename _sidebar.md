@@ -75,7 +75,7 @@
   * [JOLT: Jolt](indicators/numerics/jolt.md)
   * [KURTOSIS: Kurtosis](indicators/numerics/kurtosis.md)
   * [LINREG: Linear Regression Curve](indicators/numerics/linreg.md)
-  * [LOWEST: Lowest Value](indicators/numerics/highlowest.md)
+  * [LOWEST: Lowest Value](indicators/numerics/lowest.md)
   * [SLOPE: Slope](indicators/numerics/slope.md)
   * [STDDEV: Standard Deviation](indicators/numerics/stddev.md)
   * [VAR: Variance](indicators/numerics/var.md)
@@ -114,3 +114,5 @@
   * [STOCH: Stochastic Volatility](indicators/volatility/stoch.md)
 
 * [Volume Indicators](./indicators/volume/_index.md)
+  * [ADL: Accumulation/Distribution Line](indicators/volume/adl.md)
+  * [AOBV: Archer On-Balance Volume](indicators/volume/aobv.md)
