@@ -4,7 +4,7 @@
 indicator("Average True Range Normalized", "ATRN", overlay=false, format=format.percent, precision=2)
 
 //@function Calculates the Average True Range Normalized (ATRN) relative to its maximum value over a longer period.
-//@doc Calculates ATRN = ATR / ta.highest(ATR, 10 * length) using Wilder's Smoothing (RMA) for ATR, all within one function.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/atrn.md
 //@param length The period length for the ATR calculation. The highest uses a length of 10 * length.
 //@returns The ATRN value, normalized relative to its maximum over the longer period.
 //@optimized for performance
@@ -40,4 +40,4 @@ i_length = input.int(14, "Length", minval=1, tooltip="Number of bars used for th
 atrnValue = atrn(i_length) // Call the custom atrn function
 
 // Plot
-plot(atrnValue, "ATRN", color.new(color.aqua, 0), 2)
+plot(atrnValue, "ATRN", color.new(color.yellow, 0), 2)

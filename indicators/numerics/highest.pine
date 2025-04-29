@@ -4,6 +4,7 @@
 indicator("Highest Value", "Highest", overlay=true)
 
 /// Highest value over a specified period using a monotonic deque.
+/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/highest.md
 /// This implementation provides an efficient way to calculate the highest value
 /// within a sliding window.
 /// @function highest

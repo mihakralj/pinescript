@@ -4,6 +4,7 @@
 indicator("Lowest Value", "Lowest", overlay=true)
 
 /// Lowest value over a specified period using a monotonic deque.
+/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/lowest.md
 /// This implementation provides an efficient way to calculate the lowest value
 /// within a sliding window.
 /// @function lowest

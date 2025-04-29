@@ -4,6 +4,7 @@
 indicator("AOBV - Archer On-Balance Volume", "AOBV", overlay=false)
 
 // @function Computes AOBV Fast and Slow from OBV using custom EMA calculations without helper functions.
+// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/aobv.md
 // It avoids direct src[1] references by using a persistent previous source variable and handles na values in src and vol.
 // @param src (series float) Price source.
 // @param vol (series float) Volume data.

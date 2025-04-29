@@ -4,6 +4,7 @@
 indicator("Ehlers Bandpass Filter", "EHBPF", overlay=false)
 
 //@function Optimized Ehlers Bandpass Filter combining highpass and lowpass filters
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehbpf.md
 //@param source Series to calculate bandpass from
 //@param lp Lower cutoff period for highpass filter
 //@param up Upper cutoff period for lowpass filter

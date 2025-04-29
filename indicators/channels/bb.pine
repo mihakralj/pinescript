@@ -3,6 +3,12 @@
 //@version=6
 indicator("Bollinger Bands", "BB", overlay=true)
 
+//@function Calculates Bollinger Bands with adjustable period and multiplier
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/bb.md
+//@param source Series to calculate Bollinger Bands from
+//@param period Lookback period for calculations
+//@param multiplier Standard deviation multiplier for band width
+//@returns tuple with [middle, upper, lower] band values
 bb(series float source, simple int period, simple float multiplier) =>
     if period <= 0 or multiplier <= 0.0
         runtime.error("Period and multiplier must be greater than 0")

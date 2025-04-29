@@ -104,4 +104,4 @@ i_source = input.source(close, "Source")
 sgma_value = sgma(i_source, i_period, i_degree)
 
 // Plot
-plot(sgma_value, "SGMA", color.new(color.green, 0), 2)
+plot(sgma_value, "SGMA", color.new(color.yellow, 0), 2)

@@ -4,6 +4,7 @@
 indicator("Ehlers Highpass Filter (2-Pole)", "EHHPF", overlay=false, timeframe="", timeframe_gaps=true)
 
 //@function Calculates Ehlers 2-Pole Highpass Filter
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehhpf.md
 //@param src Series to calculate EHHPF from
 //@param length Cutoff period (determines alpha)
 //@returns EHHPF value

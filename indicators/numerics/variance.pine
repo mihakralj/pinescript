@@ -4,6 +4,7 @@
 indicator("Variance", "Var", overlay=false)
 
 /// Variance.
+/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/variance.md
 /// Calculates the variance using a single pass with a circular buffer.
 /// @function variance
 /// @param src {series float} Source series.

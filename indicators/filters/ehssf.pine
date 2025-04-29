@@ -5,6 +5,7 @@
 indicator("Ehlers Supersmooth Lowpass Filter", "EHSSF", overlay=true)
 
 //@function Calculates Ehlers Supersmooth Lowpass Filter
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehssf.md
 //@param source Series to calculate EHLP from
 //@param length Number of bars used in the calculation
 //@returns EHSSF value with optimized smoothing

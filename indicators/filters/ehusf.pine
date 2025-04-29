@@ -4,6 +4,7 @@
 indicator("Ehlers Ultrasmooth Filter", "EHUltra", overlay=true)
 
 //@function Calculates Ehlers Ultrasmooth Filter
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehusf.md
 //@param source Series to calculate EHUS from
 //@param length Number of bars used in the calculation
 //@returns EHUS value with optimized smoothing

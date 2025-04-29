@@ -4,6 +4,7 @@
 indicator("LinReg", "LinReg", overlay=false, precision=8)
 
 //@function Calculates linear regression and slope over the specified period
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/linreg.md
 //@param src Source series to calculate linear regression from
 //@param len Lookback period for the calculation
 //@returns Tuple containing [intercept, slope]
@@ -54,5 +55,5 @@ i_source = input.source(close, "Source")
 [lr, slope] = linreg(i_source, i_period)
 
 // Plot
-plot(lr, "LinReg", color.new(color.aqua, 0), 2)
+plot(lr, "LinReg", color.new(color.yellow, 0), 2)
 // plot(slope, "Slope", color.new(color.orange, 0), 1, plot.style_histogram)

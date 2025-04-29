@@ -4,6 +4,7 @@
 indicator("Kurtosis", "Kurtosis", overlay=false, precision=8)
 
 //@function Calculates the excess kurtosis of a series over a lookback period.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/kurtosis.md
 //@param src Source series.
 //@param len Lookback period. Must be greater than 1.
 //@returns The excess kurtosis value.
@@ -43,4 +44,4 @@ i_source = input.source(close, "Source")
 k = kurtosis(i_source, i_period)
 
 // Plot
-plot(k, "Kurtosis", color.new(color.orange, 0), 2)
+plot(k, "Kurtosis", color.new(color.yellow, 0), 2)

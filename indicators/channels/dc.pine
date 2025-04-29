@@ -4,6 +4,7 @@
 indicator("Donchian Channels", "DC", overlay=true)
 
 /// Calculates the Donchian Channel (DC) efficiently using monotonic deques.
+/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dc.md
 /// The Donchian Channel consists of an upper band (highest high over the period),
 /// a lower band (lowest low over the period), and a basis line (average of upper and lower).
 /// @function dc

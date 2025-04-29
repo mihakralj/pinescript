@@ -55,4 +55,4 @@ i_source = input.source(close, "Source")
 blma_value = blma(i_source, i_period)
 
 // Plot
-plot(blma_value, "BLMA", color.new(color.purple, 0), 2)
+plot(blma_value, "BLMA", color.new(color.yellow, 0), 2)

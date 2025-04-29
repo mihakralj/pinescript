@@ -54,4 +54,4 @@ i_source = input.source(close, "Source")
 lsma_value = lsma(i_source, i_period)
 
 // Plot
-plot(lsma_value, "LSMA", color.new(color.blue, 0), 2)
+plot(lsma_value, "LSMA", color.new(color.yellow, 0), 2)
