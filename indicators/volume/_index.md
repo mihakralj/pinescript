@@ -7,7 +7,7 @@
 | [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume |
 | [CMF](/indicators/volume/cmf.md) | Chaikin Money Flow |
 | [EFI](/indicators/volume/efi.md) | Elder's Force Index |
-| EOM | Ease of Movement |
+| [EOM](/indicators/volume/eom.md) | Ease of Movement |
 | KVO | Klinger Volume Oscillator |
 | MFI | Money Flow Index |
 | NVI | Negative Volume Index |

@@ -118,3 +118,4 @@
   * [AOBV: Archer On-Balance Volume](indicators/volume/aobv.md)
   * [CMF: Chaikin Money Flow](/indicators/volume/cmf.md)
   * [EFI: Elder's Force Index](/indicators/volume/efi.md)
+  * [EOM: Ease of Movement](/indicators/volume/eom.md)

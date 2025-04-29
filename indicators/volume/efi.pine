@@ -11,8 +11,9 @@ indicator("Elder's Force Index", "EFI", overlay=false)
 efi(len = 13, src = close, src_vol = volume) =>
     if len < 1
         runtime.error("Length must be >= 1")
-    float raw_force = na(src) or na(src_vol) ? 0.0 : (src - src[1]) * src_vol
-    
+    var float prev_src = src
+    float raw_force = (nz(src) - nz(prev_src)) * nz(src_vol)
+    prev_src := src
     float a = 2.0 / (len + 1.0)
     var float ema = na
     var float result = na
