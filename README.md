@@ -1,7 +1,7 @@
 # PineScript Technical Indicators Library
 
 ![Pine Script v6.0](https://img.shields.io/badge/Pine%20Script-v6.0-blue?style=flat&logo=tradingview&logoColor=white)
-![Indicators Done](https://img.shields.io/badge/indicators-91%2F258-orange)
+![Indicators Done](https://img.shields.io/badge/indicators-103%2F258-orange)
 
 *A begrudgingly assembled pile of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI — because apparently, suffering builds character.*
 
@@ -19,14 +19,6 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 - **Error Compensation**: FIR, IIR, LOL – if it can be made more accurate, I made it so. Because numbers matter. Especially when they're wrong.
 - **Reasonable Documentation**: When I felt like it, I wrote stuff down. If you're confused, it's either in the docs or your future.
 - **MIT Licensed**: Use it, abuse it, fork it, launch a coin named after it. Just don't DM asking for custom work. This is not Fiverr.
-
-## So... how do you use this?
-
-1. Navigate to the `indicators/` folder. Find your poison – sorry, your *indicator*.
-2. If you have no idea what you're doing, copy the whole script. If you *think* you do, steal the function block and use it in your masterwork.
-3. Paste it into TradingView's editor. If you don't know where that is, you may not be ready. Go back. Train more.
-4. Apply it to your chart. Watch it do math better than your last three indicators combined. That includes many built-in indicators in PineScript library
-5. Shower the dev with Github stars and fame. Not because I care, but because validation keeps me from writing Python again.
 
 ## What's in the box? (Besides existential dread)
 
@@ -47,6 +39,14 @@ For detailed information about indicator types and characteristics, see:
 - [Error Metrics](./indicators/errors/_index.md)
 
 You can also explore [The Complete Master List of All Indicators](./indicators/_index.md) (Warning: Side effects may include widened eyes, sudden trading epiphanies, and the peculiar sensation that you might actually understand what's happening on your charts. No refunds.)
+
+## So... how do you use this?
+
+1. Navigate to the `indicators/` folder. Find your poison – sorry, your *indicator*.
+2. If you have no idea what you're doing, copy the whole script. If you *think* you do, steal the function block and use it in your masterwork.
+3. Paste it into TradingView's editor. If you don't know where that is, you may not be ready. Go back. Train more.
+4. Apply it to your chart. Watch it do math better than your last three indicators combined. That includes many built-in indicators in PineScript library
+5. Shower the dev with Github stars and fame. Not because I care, but because validation keeps me from writing Python again.
 
 ## Contributing (if you dare)
 

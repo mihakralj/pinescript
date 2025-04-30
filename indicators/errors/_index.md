@@ -1,7 +1,5 @@
 # Error Metrics
 
-This collection provides specialized error metrics for evaluating and comparing predictions, indicators, and signal pairs in financial analysis. These metrics offer various approaches to quantifying differences between data series, each with specific strengths for different analytical needs.
-
 ## Absolute Error Metrics
 
 | Indicator | Name | Key Characteristics |
