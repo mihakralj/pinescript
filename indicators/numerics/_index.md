@@ -9,7 +9,7 @@
 | [COVARIANCE](/indicators/numerics/covariance.md) | Covariance |
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative |
 | DIFF | Difference |
-| ENTROPY | Entropy |
+| [ENTROPY](/indicators/numerics/entropy.md) | Normalized Shannon Entropy |
 | EXP | Exponential Transformation |
 | GRANGER | Granger |
 | [HIGHEST](/indicators/numerics/highest.md) | Highest value |

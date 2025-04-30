@@ -1,0 +1,58 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Cointegration", "Cointegration", overlay=false)
+
+//@function Calculates the cointegration of two series using the Engle-Granger method.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/cointegration.md
+//@param series_a series float The first series.
+//@param series_b series float The second series.
+//@param period int The lookback period for the regression and ADF test.
+//@returns float The Augmented Dickey-Fuller test statistic for the residuals. A more negative value suggests stronger evidence of cointegration.
+//@optimized for performance and dirty data
+cointegration(series_a, series_b, period) =>
+    // Validate parameters
+    if period <= 1
+        runtime.error("Period must be greater than 1")
+    // Linear regression: series_a = alpha + beta * series_b + residuals
+    // We need the residuals: residuals = series_a - (alpha + beta * series_b)
+    beta = ta.correlation(series_a, series_b, period) * (ta.stdev(series_a, period) / ta.stdev(series_b, period))
+    alpha = ta.sma(series_a, period) - beta * ta.sma(series_b, period)
+    residuals = series_a - (alpha + beta * series_b)
+    // Augmented Dickey-Fuller (ADF) test on residuals
+    // Simplified ADF: Regress change in residuals on lagged residuals
+    // delta_residuals = gamma * lagged_residuals + error
+    delta_residuals = residuals - nz(residuals[1])
+    lagged_residuals = nz(residuals[1])
+    // Calculate gamma using linear regression slope
+    gamma_numerator = ta.sma(delta_residuals * lagged_residuals, period - 1) - ta.sma(delta_residuals, period - 1) * ta.sma(lagged_residuals, period - 1)
+    gamma_denominator = ta.sma(lagged_residuals * lagged_residuals, period - 1) - math.pow(ta.sma(lagged_residuals, period - 1), 2)
+    gamma = gamma_denominator == 0 ? na : gamma_numerator / gamma_denominator
+    // Calculate standard error of gamma
+    regression_error = delta_residuals - gamma * lagged_residuals
+    se_gamma_sq = ta.sma(regression_error * regression_error, period - 1) / gamma_denominator
+    se_gamma = se_gamma_sq <= 0 or na(se_gamma_sq) ? na : math.sqrt(se_gamma_sq)
+    // ADF statistic = gamma / se_gamma
+    adf_statistic = se_gamma == 0 or na(se_gamma) ? na : gamma / se_gamma
+    adf_statistic
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source_a = input(high, "Source A")
+i_source_b = input(low, "Source B") // Example: Use a different source for B
+i_period = input.int(20, "Period", minval = 2)
+
+// Calculation
+coint_stat = cointegration(i_source_a, i_source_b, i_period)
+
+// Plot
+plot(coint_stat, "Cointegration ADF Stat", color.blue)
+
+// Add critical value lines for reference (example values, adjust as needed)
+// These depend on the sample size (period) and significance level (e.g., 1%, 5%, 10%)
+// For Engle-Granger test with 2 variables, common critical values are around:
+// -3.90 (1%), -3.34 (5%), -3.04 (10%) for large samples
+// You might need to adjust these based on specific tables or simulation for smaller periods
+hline(-3.34, "5% Critical Value", color.red, linestyle=hline.style_dashed)
+hline(-3.90, "1% Critical Value", color.orange, linestyle=hline.style_dotted)
