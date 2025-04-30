@@ -1,6 +1,6 @@
 * [Home](/)
 
-* [Trends - FIR](./indicators/trends_FIR/_index.md)
+* [Trends - FIR](indicators/trends_FIR/_index.md)
   * [ALMA: Arnaud Legoux MA](indicators/trends_FIR/alma.md)
   * [AFIRMA: Adaptive Finite Impulse Response MA](indicators/trends_FIR/afirma.md)
   * [BLMA: Blackman Window MA](indicators/trends_FIR/blma.md)
@@ -22,7 +22,7 @@
   * [HANMA: Hanning Window MA](indicators/trends_FIR/hanma.md)
   * [WMA: Weighted MA](indicators/trends_FIR/wma.md)
 
-* [Trends - IIR](./indicators/trends_IIR/_index.md)
+* [Trends - IIR](indicators/trends_IIR/_index.md)
   * [DEMA: Double Exponential MA](indicators/trends_IIR/dema.md)
   * [DSMA: Deviation-Scaled MA](indicators/trends_IIR/dsma.md)
   * [EMA: Exponential MA](indicators/trends_IIR/ema.md)
@@ -46,10 +46,10 @@
   * [ZLTEMA: Zero-Lag Triple Exponential MA](indicators/trends_IIR/zltema.md)
   * [VIDYA: Variable Index Dynamic Average](indicators/trends_IIR/vidya.md)
 
-* [Cycles Indicators](./indicators/cycles/_index.md)
+* [Cycles Indicators](indicators/cycles/_index.md)
   * [STC: Schaff Trend Cycle](indicators/cycles/stc.md)
 
-* [Error Metrics](./indicators/errors/_index.md)
+* [Error Metrics](indicators/errors/_index.md)
   * [DIRTY: Dirty Data Injection](indicators/errors/dirty.md)
   * [HUBER: Huber Loss](indicators/errors/huber.md)
   * [MAE: Mean Absolute Error](indicators/errors/mae.md)
@@ -67,14 +67,14 @@
   * [RSQUARED: R-Squared (Coefficient of Determination)](indicators/errors/rsquared.md)
   * [SMAPE: Symmetric Mean Absolute Percentage Error](indicators/errors/smape.md)
 
-* [Momentum Indicators](./indicators/momentum/_index.md)
+* [Momentum Indicators](indicators/momentum/_index.md)
 
-* [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
+* [Numerics & Statistical Transformations](indicators/numerics/_index.md)
   * [ACCEL: Acceleration](indicators/numerics/accel.md)
-  * [BETA: Beta Coefficient](/indicators/numerics/beta.md)
+  * [BETA: Beta Coefficient](indicators/numerics/beta.md)
   * [COVARIANCE: Covariance](indicators/numerics/covariance.md)
-  * [CORRELATION: Pearson's Correlation](/indicators/numerics/correlation.md)
-  * [ENTROPY: Normalized Shannon Entropy](/indicators/numerics/entropy.md)
+  * [CORRELATION: Pearson's Correlation](indicators/numerics/correlation.md)
+  * [ENTROPY: Normalized Shannon Entropy](indicators/numerics/entropy.md)
   * [HIGHEST: Highest Value](indicators/numerics/highest.md)
   * [JOLT: Jolt](indicators/numerics/jolt.md)
   * [KURTOSIS: Kurtosis](indicators/numerics/kurtosis.md)
@@ -85,13 +85,13 @@
   * [VARIANCE: Variance](indicators/numerics/variance.md)
   * [ZSCORE: Z-Score](indicators/numerics/zscore.md)
 
-* [Oscillators](./indicators/oscillators/_index.md)
+* [Oscillators](indicators/oscillators/_index.md)
 
-* [Price Channels and Bands](./indicators/channels/_index.md)
+* [Price Channels and Bands](indicators/channels/_index.md)
   * [BB: Bollinger Bands](indicators/channels/bb.md)
   * [DC: Donchian Channel](indicators/channels/dc.md)
 
-* [Signal Filters](./indicators/filters/_index.md)
+* [Signal Filters](indicators/filters/_index.md)
   * [Bilateral Filter](indicators/filters/bilateral.md)
   * [Bessel Filter](indicators/filters/bessel.md)
   * [Butterworth Filter](indicators/filters/butter.md)
@@ -103,13 +103,13 @@
   * [EHUSF: Ehlers Ultra Smoother Filter](indicators/filters/ehusf.md)
   * [Elliptic (Cauer) Filter](indicators/filters/elliptic.md)
 
-* [Stop and Reverse Indicators](./indicators/reversals/_index.md)
+* [Stop and Reverse Indicators](indicators/reversals/_index.md)
 
-* [Trend Dynamics](./indicators/dynamics/_index.md)
+* [Trend Dynamics](indicators/dynamics/_index.md)
   * [ADX: Average Directional Movement Index](indicators/dynamics/adx.md)
   * [AROON: Aroon](indicators/dynamics/aroon.md)
 
-* [Volatility Indicators](./indicators/volatility/_index.md)
+* [Volatility Indicators](indicators/volatility/_index.md)
   * [ATR: Average True Range](indicators/volatility/atr.md)
   * [ATRN: Average True Range Normalized](indicators/volatility/atrn.md)
   * [ATRP: Average True Range Percent](indicators/volatility/atrp.md)
@@ -117,9 +117,9 @@
   * [JVOLTYN: Normalized Jurik Volatility](indicators/volatility/jvoltyn.md)
   * [STOCH: Stochastic Volatility](indicators/volatility/stoch.md)
 
-* [Volume Indicators](./indicators/volume/_index.md)
+* [Volume Indicators](indicators/volume/_index.md)
   * [ADL: Accumulation/Distribution Line](indicators/volume/adl.md)
   * [AOBV: Archer On-Balance Volume](indicators/volume/aobv.md)
-  * [CMF: Chaikin Money Flow](/indicators/volume/cmf.md)
-  * [EFI: Elder's Force Index](/indicators/volume/efi.md)
-  * [EOM: Ease of Movement](/indicators/volume/eom.md)
+  * [CMF: Chaikin Money Flow](indicators/volume/cmf.md)
+  * [EFI: Elder's Force Index](indicators/volume/efi.md)
+  * [EOM: Ease of Movement](indicators/volume/eom.md)
