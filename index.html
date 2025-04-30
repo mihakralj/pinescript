@@ -36,22 +36,53 @@
       background-color: var(--background-primary);
       color: var(--text-color-primary);
       font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
-      font-feature-settings: "tnum" on, "lnum" on;
-      font-style: normal;
       font-size: var(--ui-lib-typography-font-size);
-      font-weight: 400;
-      font-variant-numeric: lining-nums tabular-nums;
       line-height: var(--ui-lib-typography-line-height);
       overflow-wrap: break-word;
+    }
+
+    .markdown-section h1,
+    .markdown-section h2,
+    .markdown-section h3,
+    .markdown-section h4,
+    .markdown-section strong {
+      color: var(--theme-color);
+      font-weight: 600;
+    }
+
+    .sidebar > h1 a {
+        color: var(--heading-color);
+        font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
+
+    }
+
+    .pagination-item-title {
+      font-size: 1em !important; 
+    }
+
+    .markdown-section {
+      background-color: var(--background-primary);
+      color: var(--text-color-primary);
+      max-width: 100%;
+      padding: 2rem 1rem;
+      font-family: inherit;
+    }
+
+    .markdown-section code {
+      background-color: var(--code-bg);
+      color: var(--text-color-primary);
+      padding: 0.2em 0.4em;
+      border-radius: 4px;
+    }
+
+    .markdown-section pre {
+      background-color: var(--code-bg);
+      padding: 1em;
     }
 
     .sidebar {
       background-color: var(--sidebar-bg);
       border-right: 1px solid var(--border-color);
-    }
-
-    .sidebar-toggle {
-      background-color: var(--background-primary);
     }
 
     .sidebar ul li.active > a {
@@ -61,56 +92,84 @@
 
     .sidebar ul li a {
       color: var(--sidebar-nav-link-color);
-      position: relative;
+       font-size: 20px;
     }
 
+    .sidebar ul li ul li a {
+      font-size: 14px; /* Adjust font size */
+      padding-left: 20px; /* Indentation */
+      margin-bottom: 5px; /* Vertical spacing between items */
+    }
+
+    /* Optional: Reduce line height for tighter spacing */
+    .sidebar ul li ul li a {
+      line-height: 1.2;
+    } 
     .sidebar-nav ul:not(.app-sub-sidebar) > li:not(.file)::before {
       content: "▶";
-      display: block;
       position: absolute;
       left: 0;
       top: 4px;
       font-size: 8px;
-      transform: rotate(0);
-      transition: transform 0.2s;
       color: var(--text-color-secondary);
+      transition: transform 0.2s;
     }
 
     .sidebar-nav ul:not(.app-sub-sidebar) > li:not(.file).open::before {
       transform: rotate(90deg);
     }
 
-    .sidebar-nav > ul > li > ul > li {
-      margin: 0;
+    .markdown-section table {
+      width: 100%;
+      table-layout: fixed;
+      border-collapse: collapse;
     }
 
-    .sidebar-nav > ul > li > ul > li > a {
-      padding: 2px 0 2px 2px;
+    .markdown-section th,
+    .markdown-section td {
+      border: 1px solid var(--border-color);
+      padding: 8px;
+      word-wrap: break-word;
     }
 
-    .markdown-section {
-      background-color: var(--background-primary);
-      color: var(--text-color-primary);
-      max-width: 100%; /* Modified: Changed from default fixed width */
-      padding: 2rem 1rem; /* Modified: Reduced horizontal padding */
-      font-family: -apple-system, BlinkMacSystemFont, "Trebuchet MS", Roboto, Ubuntu, sans-serif;
-      font-feature-settings: "tnum" on, "lnum" on;
-      font-size: var(--ui-lib-typography-font-size);
-      line-height: var(--ui-lib-typography-line-height);
+    .markdown-section tr:nth-child(2n) {
+      background: var(--background-secondary);
+    }
+
+    .docTable {
+      background-color: var(--background-secondary);
+      border-radius: 6px;
+      margin: 1em 0;
       width: 100%;
     }
 
-    .markdown-section code {
-      background-color: var(--code-bg);
+    .docTable thead tr {
+      background-color: var(--background-primary);
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .search input:focus {
+      box-shadow: 0 0 5px var(--theme-color);
+    }
+
+    .search input {
+      background-color: var(--background-secondary);
       color: var(--text-color-primary);
+      border: 1px solid var(--border-color);
+      padding: 0.5em;
+      border-radius: 4px;
     }
 
-    .markdown-section pre {
-      background-color: var(--code-bg);
+    .search input::placeholder {
+      color: var(--text-color-secondary);
     }
 
-    .markdown-section pre > code {
-      background-color: var(--code-bg);
+    .search input:hover {
+      border-color: var(--theme-color);
+    }
+
+    .search input:focus {
+      outline: none;
     }
 
     .markdown-section h1,
@@ -121,148 +180,18 @@
     .markdown-section h6 {
       color: var(--heading-color);
     }
-
-    .markdown-section h1, .markdown-section h2, .markdown-section h3, .markdown-section h4, .markdown-section strong {
-    color: var(--highlight-color);
-    }
     
-    .markdown-section a {
-      color: var(--link-color);
-    }
-
-    .markdown-section blockquote {
-      border-left: 4px solid var(--border-color);
-      background: var(--background-secondary);
-      color: var(--text-color-secondary);
-    }
-
-    .app-name,
-    .sidebar > h1 {
-      display: none;
-    }
-
-    .sidebar .sidebar-nav{
-      line-height: 1.2;
-    }
-
-    .search {
-      border-bottom: 1px solid var(--border-color);
-    }
-
-    .search input {
-      background: var(--background-secondary);
-      color: var(--text-color-primary);
-    }
-
-    .search input:focus {
-      box-shadow: 0 0 5px var(--theme-color);
-    }
-
-    .markdown-section table {
-      border-collapse: collapse;
-      width: 100%; /* Modified: Make tables use full width */
-      table-layout: fixed; /* Modified: Fixed table layout */
-    }
-
-    .markdown-section tr {
-      border-top: 1px solid var(--border-color);
-      background: var(--background-primary);
-    }
-
-    .markdown-section tr:nth-child(2n) {
-      background: var(--background-secondary);
-    }
-
-    .markdown-section th,
-    .markdown-section td {
-      border: 1px solid var(--border-color);
-      padding: 8px; /* Modified: Consistent padding */
-      word-wrap: break-word; /* Modified: Allow word wrapping in cells */
-    }
-
-    /* Target strong elements within tables */
-    table strong {
-      font-size: 120%;
-      display: inline-block;
-      padding: 4px 0;
-      color: var(--text-color-primary);
-    }
-
-    /* Section headers in tables */
-    table tr:first-child strong,
-    table tr strong:first-child {
-      font-size: 120%;
-      color: var(--theme-color);
-    }
-
-    .docTable {
-      background-color: var(--background-secondary);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      margin: 1em 0;
-      width: 100%; /* Modified: Full width tables */
-    }
-
-    .docTable thead tr {
-      background-color: var(--background-primary) !important;
-      border-bottom: 2px solid var(--border-color);
-    }
-
-    .docTable th {
-      font-weight: 600;
-      padding: 12px;
-    }
-
-    .docTable td {
-      padding: 12px;
-      line-height: 1.4;
-    }
-
-    /* Fix anchor link colors */
     .anchor span {
       color: var(--heading-color) !important;
     }
 
-    /* Hide github corner */
     .github-corner {
       display: none !important;
     }
-    .github-corner svg {
-      display: none !important;
-    }
 
-    /* Modified: Container width for content area */
     .content {
       max-width: 100%;
       padding: 0 20px;
-    }
-
-    /* Modified: Adjustments for specific columns in the indicator table */
-    .markdown-section table td:first-child,
-    .markdown-section table th:first-child {
-      width: 15%;
-    }
-    
-    .markdown-section table td:nth-child(2),
-    .markdown-section table th:nth-child(2) {
-      width: 25%;
-    }
-    
-    .markdown-section table td:nth-child(3),
-    .markdown-section table th:nth-child(3) {
-      width: 10%;
-      text-align: center;
-    }
-    
-    .markdown-section table td:nth-child(4),
-    .markdown-section table th:nth-child(4) {
-      width: 50%;
-    }
-
-    /* Modified: Keep container centered but use more width */
-    #app {
-      width: 100%;
-      margin: 0 auto;
     }
 
   </style>
@@ -271,13 +200,17 @@
   <div id="app"></div>
 
   <!-- Docsify Configuration -->
-  <script>    window.$docsify = {
+  <script>
+    window.$docsify = {
       // Basic settings
       name: 'PineScript',
       homepage: 'README.md',
       noCorner: true,
-      basePath: './',      // Navigation settings
+      basePath: './',
+      
+      // Navigation settings
       loadSidebar: true,
+      loadNested: true,
       auto2top: true,
       mergeNavbar: true,
       sidebarDisplayLevel: 0, // Start with all sections collapsed
@@ -287,15 +220,15 @@
         '/indicators/(.*)': '/indicators/$1'
       },
 
-      // Performance settings
-      maxAge: 86400000,
-      paths: 'auto',
-
-      // Search settings
-      placeholder: 'Type to search',
-      noData: 'No Results!',
-      depth: 6,
-      hideOtherSidebarContent: false,
+      // Search settings - properly configured
+      search: {
+        maxAge: 86400000, // Expiration time, the default one day
+        paths: ['auto'],
+        placeholder: 'Type to search',
+        noData: 'No Results!',
+        depth: 6,
+        hideOtherSidebarContent: false
+      },
 
       // Theme settings
       themeable: {
@@ -329,11 +262,9 @@
       // Table of Contents settings
       toc: {
         scope: '.markdown-section',
-        headings: 'h1, h2, h3, h4, h5, h6',
+        headings: 'h1, h2, h3',
         title: 'Table of Contents'
-      },
-
-      plugins: []
+      }
     };
   </script>
 
@@ -341,18 +272,17 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/docsify.min.js"
           integrity="sha384-KaHhgnx/OTLoJ4J33SSJsF4x1pk4I7q3s5ZOfIDHJYl6IG7Oyn2vNDsHiWJe46fD"
           crossorigin="anonymous"></script>
-
-  <!-- Added marked.js for better markdown parsing -->
   <script src="//cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <!-- Plugins -->
+  <!-- Standard search plugin -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"></script>
+  
   <script src="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/js/docsify-themeable.min.js"
           integrity="sha384-ibjVZCUwWPrRrNc9BNkbbJvtYmTh8GYDNQgj+2jQVNDudOFgSQWs+Es6JhdoTIvf"
           crossorigin="anonymous"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/docsify/lib/plugins/search.min.js"
-          integrity="sha384-LthJPBJ4RGco78kBY+EmKz5rmISZ5vrtAu3+l2ALQ2mrZHOe6Wyf6knyKjeC4cL6"
-          crossorigin="anonymous"></script>
+
   <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code/dist/docsify-copy-code.min.js"
           integrity="sha384-Vu4LjJ210wltbg1I3zl1f5n8qLSDr9GE7ij2JfiMbV64UCFP2RgFtG8W2Gh6Khwe"
           crossorigin="anonymous"></script>
@@ -364,7 +294,8 @@
           crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-tabs/dist/docsify-tabs.min.js"
           integrity="sha384-QA3IVKzXq6xcKR8yQJHgDbI1FcJiQ137Cuetl1VWzUxJ6BQ7ew0MMq5fg2HbFK1o"
-          crossorigin="anonymous"></script>  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@1.4.3/dist/docsify-katex.js"
+          crossorigin="anonymous"></script>  
+  <script src="https://cdn.jsdelivr.net/npm/docsify-katex@1.4.3/dist/docsify-katex.js"
           integrity="sha384-M76M/x5vGyeoej1covQQifl7T945mY+qgzNVrM/urHMCYjP8tnMsx5WCdeLZ74UE"
           crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/docsify-plugin-toc@1.3.1/dist/docsify-plugin-toc.min.js"></script>

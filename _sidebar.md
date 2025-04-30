@@ -1,5 +1,3 @@
-* [Home](/)
-
 * [Trends - FIR](/indicators/trends_FIR/_index.md)
   * [ALMA: Arnaud Legoux MA](/indicators/trends_FIR/alma.md)
   * [AFIRMA: Adaptive Finite Impulse Response MA](/indicators/trends_FIR/afirma.md)
