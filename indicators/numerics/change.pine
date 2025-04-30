@@ -16,7 +16,7 @@ change(float source, int length) =>
     if na(oldValue) or oldValue == 0
         na
     else
-        (source / oldValue - 1)
+        (source / oldValue - 1) // Already a percentage, Pine handles plotting format
 
 // ---------- Main loop ----------
 
@@ -28,5 +28,4 @@ i_length = input.int(1, "Length", minval = 1)
 result = change(i_source, i_length)
 
 // Plot
-plot(result, "Change %", color.yellow)
-
+plot(result, "Change %", color.blue)

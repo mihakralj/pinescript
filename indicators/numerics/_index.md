@@ -2,12 +2,12 @@
 
 | Code | Name |
 | --------------- | --------------------------------- |
+| [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative |
 | [BETA](/indicators/numerics/beta.md) | Beta Coefficient |
-| CHANGE | Percentage Change |
-| COINTEGRATION | Cointegration |
+| [CHANGE](/indicators/numerics/change.md) | Percentage Change |
+| [COINTEGRATION](/indicators/numerics/cointegration.md) | Cointegration |
 | [CORRELATION](/indicators/numerics/correlation.md) | Correlation (Pearson's) |
 | [COVARIANCE](/indicators/numerics/covariance.md) | Covariance |
-| [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative |
 | DIFF | Difference |
 | [ENTROPY](/indicators/numerics/entropy.md) | Normalized Shannon Entropy |
 | EXP | Exponential Transformation |
@@ -18,9 +18,9 @@
 | [JOLT](/indicators/numerics/jolt.md) | Rate of acceleration; 3rd derivative |
 | KENDALL | Kendall |
 | [KURTOSIS](/indicators/numerics/kurtosis.md) | Kurtosis |
+| [LIN](/indicators/numerics/li.md) | Linear Transformation |
 | [LINREG](/indicators/numerics/linreg.md) | Linear Regression Curve |
-| LINEAR | Linear Transformation |
-| LOG | Logarithmic Transformation |
+| [LOG](/indicators/numerics/log.md) | Logarithmic Transformation |
 | [LOWEST](/indicators/numerics/highlowest.md) | Lowest value |
 | MEDIAN | Median |
 | MINMAX_SCALE | Min-Max Scaling (Normalization) |
