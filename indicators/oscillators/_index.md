@@ -5,10 +5,7 @@
 | AC | Acceleration Oscillator | Measures acceleration/deceleration of the current market driving force (Awesome Oscillator) |
 | AO | Awesome Oscillator | Measures market momentum by comparing recent momentum to overall momentum |
 | APO | Absolute Price Oscillator | Shows difference between two exponential moving averages of price |
-| AROON | Aroon | Identifies trend direction and strength by measuring time since price recorded new highs/lows |
-| AROONOSC | Aroon Oscillator | Subtracts Aroon Down from Aroon Up, measures trend strength |
 | BBI | Bulls Bears Index | Measures the relative strength of bulls and bears based on price action |
-| BIAS | Bias | Measures the percentage deviation of price from its moving average |
 | BOP | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
 | BRAR | BRAR | Combines AR (sentiment) and BR (momentum) indicators to gauge market mood |
 | CCI | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
@@ -44,6 +41,7 @@
 | SLOPE | Slope | Measures the slope of a linear regression line fitted to price data |
 | SMI | Stochastic Momentum Index | Measures distance of current close relative to the midpoint of the high/low range |
 | SQUEEZE | Squeeze | Identifies periods of low volatility (Bollinger Bands inside Keltner Channels) for potential breakouts |
+| [STOCH](/indicators/osctillators/stoch.md) | Stochastic Volatility | Models volatility as a random process, often used in options pricing |
 | STOCH | Stochastic Oscillator | Shows location of the close relative to the high-low range over a set number of periods |
 | STOCHF | Stochastic Fast | Non-smoothed version of the Stochastic Oscillator (%K and %D) |
 | STOCHRSI | Stochastic RSI | Applies the Stochastic formula to RSI values, providing more sensitive signals |

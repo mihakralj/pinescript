@@ -88,10 +88,15 @@
   * [ZSCORE: Z-Score](/indicators/numerics/zscore.md)
 
 * [Oscillators](/indicators/oscillators/_index.md)
+  * [STOCH: Stochastic Volatility](/indicators/oscillators/stoch.md)
 
 * [Price Channels and Bands](/indicators/channels/_index.md)
+  * [ACCBANDS: Acceleration Bands](/indicators/channels/accbands.md)
+  * [AP: Andrews' Pitchfork](/indicators/channels/ap.md)
+  * [ATRB: ATR Bands](/indicators/channels/atrb.md)
   * [BB: Bollinger Bands](/indicators/channels/bb.md)
   * [DC: Donchian Channel](/indicators/channels/dc.md)
+  * [KC: Keltner Channel](/indicators/channels/kc.md)
 
 * [Signal Filters](/indicators/filters/_index.md)
   * [Bilateral Filter](/indicators/filters/bilateral.md)
@@ -121,8 +126,7 @@
   * [ATRP: Average True Range Percent](/indicators/volatility/atrp.md)
   * [JVOLTY: Jurik Volatility](/indicators/volatility/jvolty.md)
   * [JVOLTYN: Normalized Jurik Volatility](/indicators/volatility/jvoltyn.md)
-  * [STOCH: Stochastic Volatility](/indicators/volatility/stoch.md)
-
+  
 * [Volume Indicators](/indicators/volume/_index.md)
   * [ADL: Accumulation/Distribution Line](/indicators/volume/adl.md)
   * [ADOSC: Chaikin A/D Oscillator](/indicators/volume/adosc.md)

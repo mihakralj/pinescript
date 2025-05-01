@@ -1,6 +1,6 @@
-# BB: Bollinger Bands
+# BBANDS: Bollinger Bands
 
-[Pine Script Implementation of BB](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/bb.pine)
+[Pine Script Implementation of BBANDS](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/bbands.pine)
 
 ## Overview and Purpose
 

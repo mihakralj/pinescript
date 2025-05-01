@@ -4,6 +4,7 @@
 | --------------- | --------------------------------- | --------------------------------------------------------------------------------------- |
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative | Measures the rate of change of momentum (second derivative of price) |
 | [BETA](/indicators/numerics/beta.md) | Beta Coefficient | Measures the volatility of an asset relative to the overall market |
+| BIAS | Bias | Measures the percentage deviation of signal from its moving average |
 | [CHANGE](/indicators/numerics/change.md) | Percentage Change | Calculates the percentage difference between current and previous values |
 | [COINTEGRATION](/indicators/numerics/cointegration.md) | Cointegration | Tests if two or more time series share a long-term equilibrium relationship |
 | [CORRELATION](/indicators/numerics/correlation.md) | Correlation (Pearson's) | Measures the linear relationship between two variables (-1 to +1) |
