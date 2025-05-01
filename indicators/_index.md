@@ -116,9 +116,9 @@
 | HV | Historical Volatility | Volatility |
 | HWC | Holt-Winters Channel | Cycles |
 | [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA | Trends (FIR) |
-| ICH | Ichimoku Cloud | Volatility/Channels |
 | INERTIA | Inertia | Oscillators |
 | JARQUE_BERA | Jarque-Bera | Numerics |
+| [JBANDS](/indicators/channels/jbands.md) | Jurik Volatility Bands | Channels |
 | [JMA](/indicators/trends_IIR/jma.md) | Jurik MA | Trends (IIR) |
 | [JOLT](/indicators/numerics/jolt.md) | Rate of acceleration; 3rd derivative | Numerics |
 | [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility | Volatility |
@@ -143,7 +143,7 @@
 | MACDEXT | MACD with controllable MA type | Dynamics |
 | MACDFIX | MA Convergence/Divergence Fix 12/26 | Dynamics |
 | [MAE](/indicators/errors/mae.md) | Mean Absolute Error | Errors |
-| MAE | MA Envelope | Channels |
+| [MAE](/indicators/channels/mae.md) | Moving Average Envelope | Channels |
 | [MAMA](/indicators/trends_IIR/mama.md) | MESA Adaptive MA | Trends (IIR) |
 | [MAPD](/indicators/errors/mapd.md) | Mean Absolute Percentage Difference | Errors |
 | [MAPE](/indicators/errors/mape.md) | Mean Absolute Percentage Error | Errors |
@@ -177,11 +177,11 @@
 | PPB | Pivot Points Bands | Channels |
 | PPO | Percentage Price Oscillator | Momentum |
 | PRS | Price Relative Strength | Momentum |
-| PSAR | Parabolic SAR | Reversals/Volatility |
+| PSAR | Parabolic SAR | Reversals |
 | PSL | Psychological Line | Oscillators |
 | PV | Parkinson Volatility | Volatility |
 | PVI | Positive Volume Index | Volume |
-| PVO | Percentage Volume Oscillator | Oscillators/Volume |
+| PVO | Percentage Volume Oscillator | Volume |
 | PVOL | Price-Volume | Volume |
 | PVR | Price Volume Rank | Volume |
 | PVT | Price Volume Trend | Volume |
@@ -209,8 +209,8 @@
 | RSV | Rogers-Satchell Volatility | Volatility |
 | RSX | Relative Strength Xtra | Oscillators |
 | RV | Realized Volatility | Volatility |
-| RVI | Relative Vigor Index | Oscillators/Volatility |
-| RVGI | Relative Vigor Index | Oscillators/Volatility |
+| RVI | Relative Vigor Index | Volatility |
+| RVGI | Relative Vigor Index | Volatility |
 | SAREXT | Parabolic SAR - Extended | Reversals |
 | SDC | Standard Deviation Channel | Channels |
 | SGF | Savitzky-Golay Filter | Filters |
@@ -219,7 +219,7 @@
 | SINE | Sine Wave | Cycles |
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Trends (FIR) |
 | SKEW | Skew | Numerics |
-| [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics/Oscillators |
+| [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Trends (FIR) |
 | [SMAPE](/indicators/errors/smape.md) | Symmetric Mean Absolute Percentage Error | Errors |
 | SMI | Stochastic Momentum Index | Oscillators |
@@ -227,11 +227,11 @@
 | SQRT | Square Root Transformation | Numerics |
 | SQUEEZE | Squeeze | Oscillators |
 | STANDARDIZE | Standardization | Numerics |
-| [STARC](/indicators/volatility/starc.md) | Starc Bands | Volatility/Channels |
+| [STARC](/indicators/volatility/starc.md) | Starc Bands | Volatility |
 | STB | Super Trend Bands | Channels |
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Cycles |
 | [STDDEV](/indicators/numerics/stddev.md) | Standard Deviation | Numerics |
-| [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Volatility/Momentum |
+| [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
 | STOCHF | Stochastic Fast | Momentum |
 | STOCHRSI | Stochastic RSI | Momentum |
 | SUPER | SuperTrend | Reversals/Dynamics |
@@ -261,7 +261,7 @@
 | VWAD | Volume Weighted Accumulation/Distribution | Volume |
 | VWAP | Volume Weighted Average Price | Volume/Trends (IIR) |
 | VWAPB | VWAP Bands | Channels |
-| [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR)/Volume |
+| [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |
 | WAD | Williams Accumulation/Distribution | Volume |
 | WIENER | Wiener Filter | Filters |
 | WILLR | Williams %R | Momentum |

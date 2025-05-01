@@ -97,6 +97,9 @@
   * [BB: Bollinger Bands](/indicators/channels/bb.md)
   * [DC: Donchian Channel](/indicators/channels/dc.md)
   * [KC: Keltner Channel](/indicators/channels/kc.md)
+  * [MAE: Moving Average Envelope](/indicators/channels/mae.md)
+  * [JBANDS: Jurik Volatility Bands](/indicators/channels/jbands.md)
+
 
 * [Signal Filters](/indicators/filters/_index.md)
   * [Bilateral Filter](/indicators/filters/bilateral.md)
