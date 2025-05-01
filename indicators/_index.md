@@ -40,7 +40,9 @@
 | [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
 | [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
 | CCI | Commodity Channel Index | Momentum |
-| [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Volatility |
+| CCV | Close-to-Close Volatility | Volatility |
+| [CV](/indicators/volatility/cv.md) | Conditional Volatility | Volatility |
+| [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Volatility |
 | CE | Chandelier Exit | Reversals/Volatility |
 | CFO | Chande Forecast Oscillator | Oscillators |
 | CG | Center of Gravity | Oscillators |
@@ -59,7 +61,7 @@
 | CRSI | Connors RSI | Oscillators |
 | CTI | Correlation Trend Indicator | Oscillators |
 | CV | Conditional Volatility | Volatility |
-| CVI | Chaikin's Volatility | Volatility |
+| [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Volatility |
 | CWT | Continuous Wavelet Transform | Numerics |
 | DCHN | Donchian Channels | Volatility |
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |

@@ -7,8 +7,8 @@
 | [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | ATR normalized to a 0-1 scale for comparative analysis |
 | [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent | ATR expressed as a percentage of the closing price |
 | [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Measures annualized volatility using log returns of closing prices |
-| CV | Conditional Volatility | Models volatility that changes over time, often using GARCH-type models |
-| CVI | Chaikin's Volatility | Measures volatility by analyzing the range between high and low prices |
+| [CV](/indicators/volatility/cv.md) | Conditional Volatility | Implements GARCH(1,1) model to capture time-varying volatility |
+| [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Measures volatility as the rate of change in smoothed high-low range using EMA and ROC |
 | EWMA | Exponential Weighted MA Volatility | Volatility calculated using an exponentially weighted moving average of squared returns |
 | GKV | Garman-Klass Volatility | Volatility estimator using high, low, open, and close prices for improved efficiency |
 | HLV | High-Low Volatility | Volatility measure based solely on the range between high and low prices |
