@@ -8,7 +8,7 @@
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative | Numerics |
 | [ADL](/indicators/volume/adl.md) | Accumulation/Distribution Line | Volume |
 | [ADOSC](/indicators/volume/adosc.md) | Chaikin A/D Oscillator | Volume |
-| ADR | Average Daily Range | Volatility |
+| [ADR](/indicators/volatility/adr.md) | Average Daily Range | Volatility |
 | [ADX](/indicators/dynamics/adx.md) | Average Directional Movement Index | Dynamics |
 | ADXR | Average Directional Movement Rating | Dynamics |
 | [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
@@ -40,7 +40,7 @@
 | [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
 | [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
 | CCI | Commodity Channel Index | Momentum |
-| CCV | Close-to-Close Volatility | Volatility |
+| [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Volatility |
 | CE | Chandelier Exit | Reversals/Volatility |
 | CFO | Chande Forecast Oscillator | Oscillators |
 | CG | Center of Gravity | Oscillators |

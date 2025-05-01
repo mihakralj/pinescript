@@ -2,11 +2,11 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
-| ADR | Average Daily Range | Measures the average daily price movement range over a specified period |
+| [ADR](/indicators/volatility/adr.md) | Average Daily Range | Measures the average daily price movement range over a specified period |
 | [ATR](/indicators/volatility/atr.md) | Average True Range | Measures market volatility by averaging the true range over a period |
 | [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | ATR normalized to a 0-1 scale for comparative analysis |
 | [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent | ATR expressed as a percentage of the closing price |
-| CCV | Close-to-Close Volatility | Simple volatility measure based on the standard deviation of closing price returns |
+| [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Measures annualized volatility using log returns of closing prices |
 | CV | Conditional Volatility | Models volatility that changes over time, often using GARCH-type models |
 | CVI | Chaikin's Volatility | Measures volatility by analyzing the range between high and low prices |
 | EWMA | Exponential Weighted MA Volatility | Volatility calculated using an exponentially weighted moving average of squared returns |

@@ -1,4 +1,4 @@
-* [Trends - FIR](/indicators/trends_FIR/_index.md)
+ccv (c* [Trends - FIR](/indicators/trends_FIR/_index.md)
   * [ALMA: Arnaud Legoux MA](/indicators/trends_FIR/alma.md)
   * [AFIRMA: Adaptive Finite Impulse Response MA](/indicators/trends_FIR/afirma.md)
   * [BLMA: Blackman Window MA](/indicators/trends_FIR/blma.md)
@@ -124,9 +124,11 @@
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
 
 * [Volatility Indicators](/indicators/volatility/_index.md)
+  * [ADR: Average Daily Range](/indicators/volatility/adr.md)
   * [ATR: Average True Range](/indicators/volatility/atr.md)
   * [ATRN: Average True Range Normalized](/indicators/volatility/atrn.md)
   * [ATRP: Average True Range Percent](/indicators/volatility/atrp.md)
+  * [CCV: Close-to-Close Volatility](/indicators/volatility/ccv.md)
   * [JVOLTY: Jurik Volatility](/indicators/volatility/jvolty.md)
   * [JVOLTYN: Normalized Jurik Volatility](/indicators/volatility/jvoltyn.md)
   
