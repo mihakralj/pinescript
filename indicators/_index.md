@@ -157,6 +157,7 @@
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
 | MINMAX | Lowest and highest values | Channels |
 | MINMAX_SCALE | Min-Max Scaling (Normalization) | Numerics |
+| [MOON](/indicators/cycles/moon.md) | Moon Phase | Cycles |
 | MINUS_DI | Minus Directional Indicator | Dynamics |
 | MINUS_DM | Minus Directional Movement | Dynamics |
 | [MMA](/indicators/trends_IIR/mma.md) | Modified MA | Trends (IIR) |

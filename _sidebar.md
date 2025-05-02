@@ -45,6 +45,7 @@
   * [VIDYA: Variable Index Dynamic Average](/indicators/trends_IIR/vidya.md)
 
 * [Cycles Indicators](/indicators/cycles/_index.md)
+  * [MOON: Moon Phase](/indicators/cycles/moon.md)
   * [STC: Schaff Trend Cycle](/indicators/cycles/stc.md)
 
 * [Error Metrics](/indicators/errors/_index.md)
