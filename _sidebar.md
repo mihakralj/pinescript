@@ -127,6 +127,7 @@
 
 * [Trend Dynamics](/indicators/dynamics/_index.md)
   * [ADX: Average Directional Movement Index](/indicators/dynamics/adx.md)
+  * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
 
 * [Volatility Indicators](/indicators/volatility/_index.md)

@@ -10,7 +10,7 @@
 | [ADOSC](/indicators/volume/adosc.md) | Chaikin A/D Oscillator | Volume |
 | [ADR](/indicators/volatility/adr.md) | Average Daily Range | Volatility |
 | [ADX](/indicators/dynamics/adx.md) | Average Directional Movement Index | Dynamics |
-| ADXR | Average Directional Movement Rating | Dynamics |
+| [ADXR](/indicators/dynamics/adxr.md)  | Average Directional Movement Rating | Dynamics |
 | [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
 | ALLIGATOR | Williams Alligator | Dynamics |
 | [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
