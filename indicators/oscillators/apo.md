@@ -1,6 +1,6 @@
 # APO: Absolute Price Oscillator
 
-[Pine Script Implementation of APO](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/apo.pine)
+[Pine Script Implementation of APO](https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/apo.pine)
 
 ## Overview and Purpose
 

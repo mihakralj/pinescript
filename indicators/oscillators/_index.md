@@ -2,9 +2,9 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
-| AC | Acceleration Oscillator | Measures acceleration/deceleration of the current market driving force (Awesome Oscillator) |
-| AO | Awesome Oscillator | Measures market momentum by comparing recent momentum to overall momentum |
-| APO | Absolute Price Oscillator | Shows difference between two exponential moving averages of price |
+| [AC](/indicators/oscillators/ac.md) | Acceleration Oscillator | Measures acceleration/deceleration of the current market driving force (Awesome Oscillator) |
+| [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Measures market momentum by comparing recent momentum to overall momentum |
+| [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Shows difference between two exponential moving averages of price |
 | BBI | Bulls Bears Index | Measures the relative strength of bulls and bears based on price action |
 | BOP | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
 | BRAR | BRAR | Combines AR (sentiment) and BR (momentum) indicators to gauge market mood |
@@ -42,7 +42,6 @@
 | SMI | Stochastic Momentum Index | Measures distance of current close relative to the midpoint of the high/low range |
 | SQUEEZE | Squeeze | Identifies periods of low volatility (Bollinger Bands inside Keltner Channels) for potential breakouts |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Volatility | Models volatility as a random process, often used in options pricing |
-| STOCH | Stochastic Oscillator | Shows location of the close relative to the high-low range over a set number of periods |
 | STOCHF | Stochastic Fast | Non-smoothed version of the Stochastic Oscillator (%K and %D) |
 | STOCHRSI | Stochastic RSI | Applies the Stochastic formula to RSI values, providing more sensitive signals |
 | TD_SEQ | TD Sequential | Identifies potential price exhaustion points and reversals based on price bar counting |

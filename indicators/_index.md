@@ -3,7 +3,7 @@
 | Code | Name | Category |
 | ---- | ---- | -------- |
 | ABBER | Aberration | Channels |
-| AC | Acceleration Oscillator | Oscillators |
+| [AC](/indicators/oscillators/ac.md) | Acceleration Oscillator | Oscillators |
 | [ACCBANDS](/indicators/channels/accbands.md) | Acceleration Bands | Channels |
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative | Numerics |
 | [ADL](/indicators/volume/adl.md) | Accumulation/Distribution Line | Volume |
@@ -15,10 +15,10 @@
 | ALLIGATOR | Williams Alligator | Dynamics |
 | [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
 | AMAT | Archer MAs Trends | Dynamics |
-| AO | Awesome Oscillator | Oscillators |
+| [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Oscillators |
 | [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume | Volume |
 | [AP](/indicators/channels/ap.md) | Andrews' Pitchfork | Channels |
-| [APO](/indicators/momentum/apo.md) | Absolute Price Oscillator | Momentum |
+| [APO](/indicators/oscillator/apo.md) | Absolute Price Oscillator | Momentum |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
 | AROONOSC | Aroon Oscillator | Dynamics |
 | [ATR](/indicators/volatility/atr.md) | Average True Range | Volatility |

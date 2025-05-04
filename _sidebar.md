@@ -67,7 +67,6 @@
   * [SMAPE: Symmetric Mean Absolute Percentage Error](/indicators/errors/smape.md)
 
 * [Momentum Indicators](/indicators/momentum/_index.md)
-  * [APO: Absolute Price Oscillator](/indicators/momentum/apo.md)
   * [BOP: Balance of Power](/indicators/momentum/bop.md)
   * [CCI: Commodity Channel Index](/indicators/momentum/cci.md)
 
@@ -93,6 +92,9 @@
   * [ZSCORE: Z-Score](/indicators/numerics/zscore.md)
 
 * [Oscillators](/indicators/oscillators/_index.md)
+  * [AC: Acceleration Oscillator](/indicators/momentum/ac.md)
+  * [AO: Awesome Oscillator](/indicators/momentum/ao.md)
+  * [APO: Absolute Price Oscillator](/indicators/momentum/apo.md)
   * [STOCH: Stochastic Volatility](/indicators/oscillators/stoch.md)
 
 * [Price Channels and Bands](/indicators/channels/_index.md)

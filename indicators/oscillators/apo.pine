@@ -4,21 +4,20 @@
 indicator("Absolute Price Oscillator (APO)", "APO", overlay=false)
 
 //@function Calculates Absolute Price Oscillator (APO) as difference between fast and slow EMAs
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/apo.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/apo.md
 //@param source Series to calculate APO from
 //@param fastLength Period for fast EMA
 //@param slowLength Period for slow EMA
 //@returns APO value (fast EMA - slow EMA)
 apo(series float source, simple int fastLength, simple int slowLength) =>
     if fastLength <= 0 or slowLength <= 0
-        runtime.error("Periods must be greater than 0")
+        runtime.error("Lengths must be greater than 0")
     if fastLength >= slowLength
         runtime.error("Fast length must be less than slow length")
-
     float alphaFast = 2.0 / (fastLength + 1.0)
     float alphaSlow = 2.0 / (slowLength + 1.0)
-    var float emaFast = na, var float emaSlow = na
-    var float e = 1.0, var bool warmup = true, var float result = na
+    var float emaFast = na var float emaSlow = na, var float e = 1.0
+    var bool warmup = true, var float result = na
     if not na(source)
         if na(emaFast)
             emaFast := source, emaSlow := source, result := 0
