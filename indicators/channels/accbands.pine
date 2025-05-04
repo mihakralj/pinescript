@@ -1,10 +1,10 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Acceleration Bands (AccBands)", "AccBands", overlay=true)
+indicator("Acceleration Bands (ACCBANDS)", "ACCBANDS", overlay=true)
 
 //@function Calculates Acceleration Bands using SMAs of high, low, close prices
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/accbands.md // Placeholder link
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/accbands.md
 //@param high Series of high prices
 //@param low Series of low prices
 //@param close Series of close prices
@@ -46,7 +46,7 @@ accbands(series float high, series float low, series float close, simple int per
     float bandWidth = (smaHigh - smaLow) * factor
     [smaClose, smaHigh + bandWidth, smaLow - bandWidth]
 
-    
+
 // ---------- Main loop ----------
 
 // Inputs

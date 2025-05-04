@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Mean Absolute Percentage Error (MAPE)", "MAPE")
+indicator("Mean Absolute %Error (MAPE)", "MAPE")
 
 //@function Calculates Mean Absolute Percentage Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mape.md

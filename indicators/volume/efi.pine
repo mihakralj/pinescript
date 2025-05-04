@@ -4,6 +4,7 @@
 indicator("Elder's Force Index (EFI)", "EFI", overlay=false)
 
 //@function Calculates Elder's Force Index (EFI), measuring buying and selling pressure through price change and volume
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/efi.md
 //@param len Lookback period for EMA smoothing (default: 13)
 //@param src Source price for calculation (default: built-in close)
 //@param src_vol The volume (default: built-in volume)
@@ -17,7 +18,7 @@ efi(len = 13, src = close, src_vol = volume) =>
     float a = 2.0 / (len + 1.0)
     var float ema = na
     var float result = na
-    var float e = 1.0 
+    var float e = 1.0
     var bool warmup = true
     if na(ema)
         ema := 0

@@ -1,15 +1,13 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Variance (VAR)", "Var", overlay=false)
+indicator("Variance, Dispersion or Spread (VARIANCE)", "VARIANCE", overlay=false)
 
-/// Variance.
-/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/variance.md
-/// Calculates the variance using a single pass with a circular buffer.
-/// @function variance
-/// @param src {series float} Source series.
-/// @param len {int} Lookback length. `len` > 0.
-/// @returns {series float} Variance of `src` for `len` bars back. Returns 0 if not enough data.
+//@function variance
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/variance.md
+//@param src {series float} Source series.
+//@param len {int} Lookback length. `len` > 0.
+//@returns {series float} Variance of `src` for `len` bars back. Returns 0 if not enough data.
 variance(series float src, int len) =>
     if len <= 0
         runtime.error("Period must be greater than 0")

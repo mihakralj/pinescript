@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Percentage Change (CHANGE)", "Change", overlay=false, format=format.percent)
+indicator("Percentage Change (CHANGE)", "CHANGE", overlay=false, format=format.percent)
 
 //@function Calculates the percentage change of a source series over a specified length using the history referencing operator for efficiency.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/change.md

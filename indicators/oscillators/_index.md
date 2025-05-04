@@ -41,7 +41,7 @@
 | SLOPE | Slope | Measures the slope of a linear regression line fitted to price data |
 | SMI | Stochastic Momentum Index | Measures distance of current close relative to the midpoint of the high/low range |
 | SQUEEZE | Squeeze | Identifies periods of low volatility (Bollinger Bands inside Keltner Channels) for potential breakouts |
-| [STOCH](/indicators/osctillators/stoch.md) | Stochastic Volatility | Models volatility as a random process, often used in options pricing |
+| [STOCH](/indicators/oscillators/stoch.md) | Stochastic Volatility | Models volatility as a random process, often used in options pricing |
 | STOCH | Stochastic Oscillator | Shows location of the close relative to the high-low range over a set number of periods |
 | STOCHF | Stochastic Fast | Non-smoothed version of the Stochastic Oscillator (%K and %D) |
 | STOCHRSI | Stochastic RSI | Applies the Stochastic formula to RSI values, providing more sensitive signals |

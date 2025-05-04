@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Symmetric Mean Absolute Percentage Error (SMAPE)", "SMAPE")
+indicator("Symmetric Mean Absolute %Error (SMAPE)", "SMAPE")
 
 //@function Calculates Symmetric Mean Absolute Percentage Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/smape.md

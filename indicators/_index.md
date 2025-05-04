@@ -134,7 +134,7 @@
 | KST | KST Oscillator | Oscillators |
 | [KURTOSIS](/indicators/numerics/kurtosis.md) | Kurtosis | Numerics |
 | KVO | Klinger Volume Oscillator | Volume |
-| [LIN](/indicators/numerics/lin.md) | Linear Transformation | Numerics |
+| [LINEAR](/indicators/numerics/linear.md) | Linear Transformation | Numerics |
 | [LINREG](/indicators/numerics/linreg.md) | Linear Regression Curve | Numerics |
 | [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Filters |
 | [LOG](/indicators/numerics/log.md) | Logarithmic Transformation | Numerics |
@@ -145,7 +145,7 @@
 | MACDEXT | MACD with controllable MA type | Dynamics |
 | MACDFIX | MA Convergence/Divergence Fix 12/26 | Dynamics |
 | [MAE](/indicators/errors/mae.md) | Mean Absolute Error | Errors |
-| [MAE](/indicators/channels/mae.md) | Moving Average Envelope | Channels |
+| [MAENV](/indicators/channels/maenv.md) | Moving Average Envelope | Channels |
 | [MAMA](/indicators/trends_IIR/mama.md) | MESA Adaptive MA | Trends (IIR) |
 | [MAPD](/indicators/errors/mapd.md) | Mean Absolute Percentage Difference | Errors |
 | [MAPE](/indicators/errors/mape.md) | Mean Absolute Percentage Error | Errors |

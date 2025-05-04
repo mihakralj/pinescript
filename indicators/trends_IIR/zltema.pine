@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Zero-Lag Triple Exponential Moving Average (ZLTEMA)", "ZLTEMA", overlay=true)
+indicator("Zero-Lag Triple EMA (ZLTEMA)", "ZLTEMA", overlay=true)
 
 //@function Calculates ZLTEMA using zero-lag price and triple exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zltema.md
@@ -45,7 +45,7 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculations
-zltema = zltema(i_source, i_period) 
+zltema = zltema(i_source, i_period)
 
 // Plots
 plot(zltema, "ZLTEMA", color.new(color.yellow, 0), 2)

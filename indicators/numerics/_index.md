@@ -19,7 +19,7 @@
 | [JOLT](/indicators/numerics/jolt.md) | Rate of acceleration; 3rd derivative | Measures the rate of change of acceleration (third derivative of price) |
 | KENDALL | Kendall | Measures the ordinal association between two measured quantities (rank correlation) |
 | [KURTOSIS](/indicators/numerics/kurtosis.md) | Kurtosis | Measures the "tailedness" or peakedness of a probability distribution |
-| [LIN](/indicators/numerics/lin.md) | Linear Transformation | Applies a linear function (ax + b) to data |
+| [LINEAR](/indicators/numerics/linear.md) | Linear Transformation | Applies a linear function (ax + b) to data |
 | [LINREG](/indicators/numerics/linreg.md) | Linear Regression Curve | Fits a straight line through price data points using least squares |
 | [LOG](/indicators/numerics/log.md) | Logarithmic Transformation | Applies the natural logarithm (ln(x)) to data, often used for stabilizing variance |
 | [LOWEST](/indicators/numerics/lowest.md) | Lowest value | Finds the minimum value over a specified lookback period |

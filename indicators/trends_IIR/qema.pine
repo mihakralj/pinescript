@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Quadruple Exponential Moving Average (QEMA)", "QEMA", overlay=true)
+indicator("Quadruple EMA (QEMA)", "QEMA", overlay=true)
 
 //@function Calculates QEMA using quadruple exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/qema.md
@@ -14,7 +14,7 @@ qema(series float source, int period = 0, float alpha = 0.0) =>
     float a1 = alpha > 0 ? alpha : (period > 0 ? 2.0/(period+1) : 0.1)
     float r = math.pow(1/a1, 1/3)
     float a2 = a1*r, float a3 = a2*r, float a4 = a3*r
-    float d1 = 1-a1, float d2 = 1-a2, float d3 = 1-a3, float d4 = 1-a4, 
+    float d1 = 1-a1, float d2 = 1-a2, float d3 = 1-a3, float d4 = 1-a4,
     var float ema1 = na, var float ema2 = na, var float ema3 = na, var float ema4 = na
     var float e1 = 1.0, var float e2 = 1.0, var float e3 = 1.0, var float e4 = 1.0
     var bool warmup = true, float result = na
@@ -22,7 +22,7 @@ qema(series float source, int period = 0, float alpha = 0.0) =>
         if na(ema1)
             ema1 := 0, ema2 := 0, ema3 := 0, ema4 := 0, result := source
         else
-            ema1 := a1*(source - ema1) + ema1 
+            ema1 := a1*(source - ema1) + ema1
             if warmup
                 e1 *= d1, e2 *= d2, e3 *= d3, e4 *= d4
                 c1 = 1.0/(1.0-e1), c2 = 1.0/(1.0-e2), c3 = 1.0/(1.0-e3), c4 = 1.0/(1.0-e4)
@@ -48,7 +48,7 @@ i_period = input.int(20, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-qema = qema(i_source, i_period) 
+qema = qema(i_source, i_period)
 
 // Plot
 plot(qema, "Custom QEMA", color.new(color.yellow, 0), 2)

@@ -1,17 +1,17 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Linear Transformation (LIN)", "Lin", overlay=false)
+indicator("Linear Transformation (LINEAR)", "LINEAR", overlay=false)
 
 //@function Applies a linear transformation (y = a*(x - sma) + sma + b) relative to the source's SMA, calculated internally.
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/lin.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/linear.md
 //@param source series float The input series to transform.
 //@param period simple int The lookback period for the internal SMA calculation.
 //@param a float The scaling factor (slope).
 //@param b float The offset (intercept).
 //@returns series float The linearly transformed series relative to its internally calculated SMA.
 //@optimized for performance and dirty data
-lin(series float source, float a, float b) =>
+linear(series float source, float a, float b) =>
     if na(source) or na(a) or na(b)
         runtime.error("Parameters 'source', 'a', 'b' cannot be na and 'period' must be > 0.")
     var int p = 200
@@ -31,7 +31,7 @@ lin(series float source, float a, float b) =>
     smaValue = nz(sum / valid_count, source)
     a * (source - smaValue) + smaValue + b
 
-    
+
 // ---------- Main loop ----------
 
 // Inputs

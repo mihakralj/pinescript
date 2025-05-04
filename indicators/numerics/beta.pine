@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Beta Function (BETA)", "Beta", overlay=false)
+indicator("Beta Function (BETA)", "BETA", overlay=false)
 
 //@function Calculates the financial Beta indicator comparing src1 volatility to src2
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/beta.md
@@ -54,12 +54,12 @@ beta(series float src1, series float src2, simple int period) =>
     else
         na
 
-        
+
 // ---------- Main loop ----------
 
 // Inputs
 i_symbol = input.symbol("SPY", "src2 Symbol")
-i_period = input.int(14, "Period", minval=1) 
+i_period = input.int(14, "Period", minval=1)
 i_src1 = input.source(close, "src1")
 
 // Get src2 data

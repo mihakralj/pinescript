@@ -3,15 +3,12 @@
 //@version=6
 indicator("Donchian Channels (DC)", "DC", overlay=true)
 
-/// Calculates the Donchian Channel (DC) efficiently using monotonic deques.
-/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dc.md
-/// The Donchian Channel consists of an upper band (highest high over the period),
-/// a lower band (lowest low over the period), and a basis line (average of upper and lower).
-/// @function dc
-/// @param hi {series float} Source series for the highest high calculation (usually `high`).
-/// @param lo {series float} Source series for the lowest low calculation (usually `low`).
-/// @param p {simple int} Lookback period. `p` > 0.
-/// @returns {[series float, series float, series float]} A tuple containing the basis, upper band, and lower band.
+//@function Calculates the Donchian Channel (DC) efficiently using monotonic deques.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dc.md
+//@param hi {series float} Source series for the highest high calculation (usually `high`).
+//@param lo {series float} Source series for the lowest low calculation (usually `low`).
+//@param p {simple int} Lookback period. `p` > 0.
+//@returns {[series float, series float, series float]} A tuple containing the basis, upper band, and lower band.
 dc(series float hi, series float lo, simple int p) =>
     if p <= 0
         runtime.error("Period must be > 0")

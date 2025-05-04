@@ -3,13 +3,13 @@
 //@version=6
 indicator("Accumulation/Distribution Line (ADL)", "ADL", overlay=false)
 
-// @function Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow into and out of a security
-// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/adl.md
-// @param src_high The high price (default: built-in high)
-// @param src_low The low price (default: built-in low)
-// @param src_close The close price (default: built-in close)
-// @param src_vol The volume (default: built-in volume)
-// @returns The cumulative ADL value representing buying/selling pressure
+//@function Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow into and out of a security
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/adl.md
+//@param src_high The high price (default: built-in high)
+//@param src_low The low price (default: built-in low)
+//@param src_close The close price (default: built-in close)
+//@param src_vol The volume (default: built-in volume)
+//@returns The cumulative ADL value representing buying/selling pressure
 adl(src_high = high, src_low = low, src_close = close, src_vol = volume) =>
     float mfm = 0.0
     if not na(src_high) and not na(src_low) and not na(src_close)

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Cointegration (COINT)", "Cointegration", overlay=false)
+indicator("Cointegration (COINTEGRATION)", "COINTEGRATION", overlay=false)
 
 sma(series float source, simple int period) =>
     if period <= 0

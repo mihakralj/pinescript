@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Kurtosis (KURT)", "Kurtosis", overlay=false, precision=8)
+indicator("Kurtosis, tailedness (KURTOSIS)", "KURTOSIS", overlay=false, precision=8)
 
 //@function Calculates the excess kurtosis of a series over a lookback period.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/kurtosis.md

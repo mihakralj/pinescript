@@ -1,6 +1,6 @@
 # LIN: Linear Transformation
 
-[Pine Script Implementation of LIN](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/lin.pine)
+[Pine Script Implementation of LIN](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/linear.pine)
 
 ## Overview and Purpose
 

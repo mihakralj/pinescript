@@ -2,7 +2,7 @@
 // © mihakralj
 // Implementation based on standard digital filter design (Bilinear Transform)
 //@version=5
-indicator("Chebyshev Type II Filter (2nd Order) (CHEBY2)", "Cheby2", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Chebyshev Type II Filter (CHEBY2)", "CHEBY2", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Calculates 2nd Order Chebyshev Type II Lowpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/cheby2.md

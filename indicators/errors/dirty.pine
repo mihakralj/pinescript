@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Dirty Data Injection (DIRTY)", "Dirty signal", overlay=false, format=format.percent)
+indicator("Dirty Data Injection (DIRTY)", "DIRTY", overlay=false, format=format.percent)
 
 //@function Injects NA values into a data series at regular intervals
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/dirty.md

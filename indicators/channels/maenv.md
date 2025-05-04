@@ -1,5 +1,7 @@
 # Moving Average Envelope
 
+[Pine Script Implementation of MAENV](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/maenv.pine)
+
 Moving Average Envelope consists of three lines: a moving average in the middle and two lines plotted at a fixed percentage above and below it. The envelope provides a simple way to identify potential support and resistance levels based on a percentage deviation from the average price.
 
 ## Calculation

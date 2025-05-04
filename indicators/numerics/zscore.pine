@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Z-Score (ZSCORE)", "ZScore", overlay=false)
+indicator("Z-Score (ZSCORE)", "ZSCORE", overlay=false)
 
 //@function Calculates the Z-Score of a series over a lookback period.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/zscore.md

@@ -79,7 +79,7 @@
   * [HIGHEST: Highest Value](/indicators/numerics/highest.md)
   * [JOLT: Jolt](/indicators/numerics/jolt.md)
   * [KURTOSIS: Kurtosis](/indicators/numerics/kurtosis.md)
-  * [LIN: Linear Transformation](/indicators/numerics/lin.md)
+  * [LINEAR: Linear Transformation](/indicators/numerics/linear.md)
   * [LINREG: Linear Regression Curve](/indicators/numerics/linreg.md)
   * [LOG: Logarithmic Transformation](/indicators/numerics/log.md)
   * [LOWEST: Lowest Value](/indicators/numerics/lowest.md)
@@ -98,9 +98,8 @@
   * [BB: Bollinger Bands](/indicators/channels/bb.md)
   * [DC: Donchian Channel](/indicators/channels/dc.md)
   * [KC: Keltner Channel](/indicators/channels/kc.md)
-  * [MAE: Moving Average Envelope](/indicators/channels/mae.md)
+  * [MAENV: Moving Average Envelope](/indicators/channels/maenv.md)
   * [JBANDS: Jurik Volatility Bands](/indicators/channels/jbands.md)
-
 
 * [Signal Filters](/indicators/filters/_index.md)
   * [Bilateral Filter](/indicators/filters/bilateral.md)
@@ -134,7 +133,7 @@
   * [CVI: Chaikin's Volatility](/indicators/volatility/cvi.md)
   * [JVOLTY: Jurik Volatility](/indicators/volatility/jvolty.md)
   * [JVOLTYN: Normalized Jurik Volatility](/indicators/volatility/jvoltyn.md)
-  
+
 * [Volume Indicators](/indicators/volume/_index.md)
   * [ADL: Accumulation/Distribution Line](/indicators/volume/adl.md)
   * [ADOSC: Chaikin A/D Oscillator](/indicators/volume/adosc.md)

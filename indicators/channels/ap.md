@@ -1,5 +1,7 @@
 # Andrews' Pitchfork
 
+[Pine Script Implementation of AP](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/ap.pine)
+
 Andrews' Pitchfork is a technical analysis tool consisting of three parallel trendlines created by selecting three points on a chart. The tool helps identify potential support and resistance levels, as well as trend direction.
 
 ## Calculation

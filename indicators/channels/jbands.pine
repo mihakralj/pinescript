@@ -4,7 +4,7 @@
 indicator("Jurik Volatility Bands (JBANDS)", "JBANDS", overlay=true)
 
 //@function Calculates JBANDS using adaptive techniques to adjust width to market volatility
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/jvolty.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/jbands.md
 //@param source Series to calculate Jvolty from
 //@param period Number of bars used in the calculation
 //@returns JBANDS volatility bands

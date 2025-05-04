@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Logarithmic Transformation (LOG)", "Log", overlay=false)
+indicator("Logarithmic Transformation (LOG)", "LOG", overlay=false)
 
 //@function Applies a natural logarithmic transformation (y = ln(x)) to the input series.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/log.md

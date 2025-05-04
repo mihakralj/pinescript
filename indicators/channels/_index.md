@@ -9,7 +9,7 @@
 | [DC](/indicators/channels/dc.md) | Donchian Channel | Plots highest high and lowest low over a period, identifying breakouts |
 | FCB | Fractal Chaos Bands | Bands based on fractal geometry to capture market volatility and trends |
 | [KC](/indicators/channels/kc.md) | Keltner Channel | Volatility bands plotted above/below an EMA, using ATR to define width |
-| [MAE](/indicators/channels/mae.md) | MA Envelope | Bands plotted a fixed percentage above and below a moving average |
+| [MAENV](/indicators/channels/maenv.md) | MA Envelope | Bands plotted a fixed percentage above and below a moving average |
 | [JBANDS](/indicators/channels/jbands.md) | Jurik Volatility Bands | JMA-based volatility bands plotted above/below median price |
 | MASSI | Mass Index | Predicts trend reversals by analyzing the narrowing and widening of price ranges |
 | MINMAX | Lowest and highest values | Plots the highest high and lowest low over a specified lookback period (similar to Donchian) |

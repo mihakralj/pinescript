@@ -1,6 +1,6 @@
 # Stoch: Stochastic Oscillator
 
-[Pine Script Implementation of Stoch](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/stoch.pine)
+[Pine Script Implementation of Stoch](https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/stoch.pine)
 
 ## Overview and Purpose
 

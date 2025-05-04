@@ -4,7 +4,7 @@
 indicator("MA Envelope (MAE)", "MAE", overlay=true)
 
 //@function Calculates MA Envelope bands using a fixed percentage
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/mae.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/maenv.md
 //@param source Series to calculate moving average from
 //@param length Lookback period for MA calculation
 //@param percentage Distance of bands from MA as percentage

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Bilateral Filter (BILATERAL)", "Bilateral", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Bilateral Filter (BILATERAL)", "BILATERAL", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Calculates Bilateral Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/bilateral.md

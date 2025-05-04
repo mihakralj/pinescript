@@ -1,16 +1,13 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Lowest Value (LOW)", "Lowest", overlay=true)
+indicator("Lowest Value (LOWEST)", "LOWEST", overlay=true)
 
-/// Lowest value over a specified period using a monotonic deque.
-/// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/lowest.md
-/// This implementation provides an efficient way to calculate the lowest value
-/// within a sliding window.
-/// @function lowest
-/// @param src {series float} Source series.
-/// @param len {int} Lookback length. `len` > 0.
-/// @returns {series float} Lowest value of `src` for `len` bars back. Returns the lowest value seen so far during initial bars.
+//@function Lowest value over a specified period using a monotonic deque.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/lowest.md
+//@param src {series float} Source series.
+//@param len {int} Lookback length. `len` > 0.
+//@returns {series float} Lowest value of `src` for `len` bars back. Returns the lowest value seen so far during initial bars.
 lowest(series float src, int len) =>
     if len <= 0
         runtime.error("Length must be greater than 0")
