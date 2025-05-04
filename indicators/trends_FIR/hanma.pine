@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Hanning Moving Average", "HANMA", overlay=true)
+indicator("Hanning Moving Average (HANMA)", "HANMA", overlay=true)
 
 //@function Calculates HANMA using Hanning window weighting
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hanma.md

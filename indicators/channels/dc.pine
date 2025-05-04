@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Donchian Channels", "DC", overlay=true)
+indicator("Donchian Channels (DC)", "DC", overlay=true)
 
 /// Calculates the Donchian Channel (DC) efficiently using monotonic deques.
 /// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dc.md

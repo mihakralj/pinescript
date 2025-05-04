@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Holt-Winters Moving Average", "HWMA", overlay=true)
+indicator("Holt-Winters Moving Average (HWMA)", "HWMA", overlay=true)
 
 //@function Calculates HWMA using triple exponential smoothing with level, velocity, and acceleration components
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hwma.md

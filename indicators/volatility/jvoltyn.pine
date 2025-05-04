@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Normalized Jurik Volatiliy", "JVOLTYN", overlay=false)
+indicator("Normalized Jurik Volatility (JVOLTYN)", "JVOLTYN", overlay=false)
 
 //@function Calculates normalized JVOLTYN using adaptive techniques to adjust to market volatility
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/jvoltyn.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Zero-Lag Exponential Moving Average", "ZLEMA", overlay=true)
+indicator("Zero-Lag Exponential Moving Average (ZLEMA)", "ZLEMA", overlay=true)
 
 //@function Calculates ZLEMA using zero-lag price and exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.md
@@ -41,4 +41,3 @@ zlema = zlema(i_source, i_period)
 
 // Plot
 plot(zlema, "ZLEMA", color.new(color.yellow, 0), 2)
-

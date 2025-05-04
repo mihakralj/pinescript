@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Fractal Adaptive Moving Average", "FRAMA", overlay=true)
+indicator("Fractal Adaptive Moving Average (FRAMA)", "FRAMA", overlay=true)
 
 //@function Calculates FRAMA using fractal dimension to determine the optimal alpha
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/frama.md

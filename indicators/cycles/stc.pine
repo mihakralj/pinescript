@@ -1,37 +1,31 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Schaff Trend Cycle", "STC", overlay=false)
+indicator("Schaff Trend Cycle (STC)", "STC", overlay=false)
 
 ema(series float source,simple int period=0,simple float alpha=0)=>
     if alpha<=0 and period<=0
         runtime.error("Alpha or period must be provided")
     float a=alpha>0?alpha:2.0/math.max(period,1)
+    var float raw_ema=na
     var float ema=na
-    var float result=na
     var float e=1.0 
     var bool warmup=true
     if not na(source)
-        if na(ema)
-            ema:=0
-            result:=source
+        if na(raw_ema)
+            raw_ema:=0
+            ema:=source
         else
-            ema:=a*(source-ema)+ema
+            raw_ema:=a*(source-raw_ema)+raw_ema
             if warmup
                 e*=(1-a)
                 float c=1.0/(1.0-e)
-                result:=c*ema
+                ema:=c*raw_ema
                 if e<=1e-10
                     warmup:=false
             else
-                result:=ema
-    result
-
-stoch(series float src, series float hi, series float lo, simple int len) =>
-    float highest = ta.highest(hi, len)
-    float lowest = ta.lowest(lo, len)
-    float price_range = highest - lowest
-    price_range > 0 ? 100 * (src - lowest) / price_range : 0
+                ema:=raw_ema
+    ema
 
 //@function Calculates the Schaff Trend Cycle (STC) indicator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/stc.md
@@ -45,9 +39,16 @@ stc(series float source, simple int cycleLength, simple int fastLength, simple i
     float fast_ema = ema(source, fastLength)
     float slow_ema = ema(source, slowLength)
     float macdLine = fast_ema - slow_ema
-    float stoch1_raw = stoch(macdLine, macdLine, macdLine, cycleLength)
+
+    h1 = ta.highest(macdLine, cycleLength)
+    l1 = ta.lowest(macdLine, cycleLength)
+    float stoch1_raw = (h1 - l1) > 0 ? 100 * (macdLine - l1) / (h1 - l1) : 0
     float stoch1 = ema(stoch1_raw, 3)
-    float stoch2 = stoch(stoch1, stoch1, stoch1, cycleLength)
+    h2 = ta.highest(stoch1, cycleLength)
+    l2 = ta.lowest(stoch1, cycleLength)
+    float stoch2 = (h2 - l2) > 0 ? 100 * (stoch1 - l2) / (h2 - l2) : 0
+
+
     float stcValue = stoch2
     if smoothingType == 1
         stcValue := ema(stoch2, 3)
@@ -71,6 +72,3 @@ stcValue = stc(i_source, i_cycleLength, i_fastLength, i_slowLength, i_smoothingT
 
 // Plot
 plot(stcValue, "STC", color.new(color.blue, 0), 2)
-hline(75, "Upper Threshold", color.new(color.red, 50))
-hline(25, "Lower Threshold", color.new(color.green, 50))
-hline(50, "Mid Line", color.new(color.gray, 50), linestyle=hline.style_dotted)

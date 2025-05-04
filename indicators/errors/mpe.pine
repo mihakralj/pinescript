@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Mean Percentage Error", "MPE")
+indicator("Mean Percentage Error (MPE)", "MPE")
 
 //@function Calculates Mean Percentage Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mpe.md

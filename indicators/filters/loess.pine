@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("LOESS Smoothing", "LOESS", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("LOESS Smoothing (LOESS)", "LOESS", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Calculates LOESS (Locally Weighted Scatterplot Smoothing) using local linear regression.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/loess.md

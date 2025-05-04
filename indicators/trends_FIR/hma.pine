@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Hull Moving Average", "HMA", overlay=true)
+indicator("Hull Moving Average (HMA)", "HMA", overlay=true)
 
 //@function Calculates HMA in a single pass combining all WMA calculations
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hma.md

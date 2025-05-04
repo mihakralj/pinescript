@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Average Directional Movement Index", "ADX", overlay=false)
+indicator("Average Directional Movement Index (ADX)", "ADX", overlay=false)
 
 //@function Calculates ADX using Wilder's smoothing with compensated RMA
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/adx.md

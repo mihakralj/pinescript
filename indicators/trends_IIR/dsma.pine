@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Deviation-Scaled Moving Average", "DSMA", overlay=true)
+indicator("Deviation-Scaled Moving Average (DSMA)", "DSMA", overlay=true)
 
 //@function Calculates DSMA using standard deviation to scale the averaging factor
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dsma.md

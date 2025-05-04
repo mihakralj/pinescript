@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Recursive Gaussian Moving Average", "RGMA", overlay=true)
+indicator("Recursive Gaussian Moving Average (RGMA)", "RGMA", overlay=true)
 
 //@function Calculates RGMA using cascaded recursive filters to approximate Gaussian smoothing
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rgma.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("LinReg", "LinReg", overlay=false, precision=8)
+indicator("Linear Regression (LINREG)", "LinReg", overlay=false, precision=8)
 
 //@function Calculates linear regression and slope over the specified period
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/linreg.md

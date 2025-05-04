@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("ATR Bands", "ATRBANDS", overlay=true)
+indicator("ATR Bands (ATRBANDS)", "ATRBANDS", overlay=true)
 
 //@function Calculates ATR Bands using ATR for width
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/atrbands.md

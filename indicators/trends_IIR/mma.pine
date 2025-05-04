@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Modified Moving Average", "MMA", overlay=true)
+indicator("Modified Moving Average (MMA)", "MMA", overlay=true)
 
 //@function Calculates MMA using combined simple and weighted moving average components
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/mma.md
@@ -43,4 +43,3 @@ mma_value = mma(i_source, i_period)
 
 // Plot
 plot(mma_value, "MMA", color.new(color.yellow, 0), 2)
-

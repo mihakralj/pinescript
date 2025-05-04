@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Conditional Volatility", "CV", overlay=false)
+indicator("Conditional Volatility (CV)", "CV", overlay=false)
 
 //@function Calculates GARCH(1,1) conditional volatility
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/cv.md

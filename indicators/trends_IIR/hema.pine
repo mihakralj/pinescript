@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Hull Exponential Moving Average", "HEMA", overlay=true)
+indicator("Hull Exponential Moving Average (HEMA)", "HEMA", overlay=true)
 
 //@function Calculates HEMA (Hull Exponential Moving Average) combining multiple EMA calculations
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/hema.md
@@ -44,4 +44,3 @@ hema = hema(i_source, i_period)
 
 // Plot
 plot(hema, "Custom HEMA", color.new(color.yellow, 0), 2)
-

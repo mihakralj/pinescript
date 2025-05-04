@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Pearson's Correlation", "Correlation", overlay=false)
+indicator("Pearson's Correlation (CORR)", "Correlation", overlay=false)
 
 //@function Calculates Pearson correlation coefficient using single pass with circular buffer
 //@param src1 series float First series to analyze

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Andrews' Pitchfork", "AP", overlay=true)
+indicator("Andrews' Pitchfork (AP)", "AP", overlay=true)
 
 //@function Calculates Andrews' Pitchfork lines based on three pivot points
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/ap.md

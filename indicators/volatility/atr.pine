@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Average True Range", "ATR", overlay=false)
+indicator("Average True Range (ATR)", "ATR", overlay=false)
 
 //@function Calculates the Average True Range (ATR)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/atr.md

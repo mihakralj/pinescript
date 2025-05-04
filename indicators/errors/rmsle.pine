@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Root Mean Squared Logarithmic Error", "RMSLE")
+indicator("Root Mean Squared Logarithmic Error (RMSLE)", "RMSLE")
 
 //@function Calculates Root Mean Squared Logarithmic Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rmsle.md

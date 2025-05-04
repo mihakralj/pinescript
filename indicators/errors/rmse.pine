@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Root Mean Squared Error", "RMSE")
+indicator("Root Mean Squared Error (RMSE)", "RMSE")
 
 //@function Calculates Root Mean Squared Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rmse.md

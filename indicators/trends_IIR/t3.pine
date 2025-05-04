@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Tillson T3 Moving Average", "T3", overlay=true)
+indicator("Tillson T3 Moving Average (T3)", "T3", overlay=true)
 
 //@function Calculates T3 using six EMAs with volume factor optimization
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/t3.md
@@ -48,4 +48,3 @@ t3 = t3(i_source, i_period, i_vfactor)
 
 // Plots
 plot(t3, "T3", color.new(color.yellow, 0), 2)
-

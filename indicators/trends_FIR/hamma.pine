@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Hamming Moving Average", "HAMMA", overlay=true)
+indicator("Hamming Moving Average (HAMMA)", "HAMMA", overlay=true)
 
 //@function Calculates HAMMA using Hamming window weighting
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hamma.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Aroon", "AROON", overlay=false)
+indicator("Aroon (AROON)", "AROON", overlay=false)
 
 //@function Calculates Aroon Up and Down values
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/aroon.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Average True Range Normalized", "ATRN", overlay=false, format=format.percent, precision=2)
+indicator("Average True Range Normalized (ATRN)", "ATRN", overlay=false, format=format.percent, precision=2)
 
 //@function Calculates the Average True Range Normalized (ATRN) relative to its maximum value over a longer period.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/atrn.md

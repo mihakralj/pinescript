@@ -1,5 +1,5 @@
 //@version=6
-indicator("McGinley Dynamic Indicator","MGDI",overlay=true)
+indicator("McGinley Dynamic Indicator (MGDI)", "MGDI", overlay=true)
 
 //@function Calculates MGDI using dynamic factor based on price movement
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/mgdi.md

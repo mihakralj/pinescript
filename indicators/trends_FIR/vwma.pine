@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Volume Weighted Moving Average", "VWMA", overlay=true)
+indicator("Volume Weighted Moving Average (VWMA)", "VWMA", overlay=true)
 
 //@function Calculates VWMA using weighted smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/vwma.md

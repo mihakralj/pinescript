@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Keltner Channel", "KC", overlay=true)
+indicator("Keltner Channel (KC)", "KC", overlay=true)
 
 //@function Calculates Keltner Channel using EMA and ATR
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/kc.md

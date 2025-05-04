@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Average True Range Percent", "ATRP", overlay=false, format=format.percent, precision=2)
+indicator("Average True Range Percent (ATRP)", "ATRP", overlay=false, format=format.percent, precision=2)
 
 //@function Calculates the Average True Range Percent (ATRP)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/atrp.md

@@ -1,32 +1,30 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Percentage Change", "Change", overlay=false, format=format.percent)
+indicator("Dirty Data Injection (DIRTY)", "Dirty signal", overlay=false, format=format.percent)
 
-//@function Calculates the percentage change of a source series over a specified length using the history referencing operator for efficiency.
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/change.md
-//@param source The source series (e.g. close price).
-//@param length The lookback period (number of bars). Must be > 0.
-//@returns float The percentage change over the specified length. Returns `na` if the historical value is `na` or zero.
-//@optimized Uses direct history access `source[length]` instead of array manipulation.
-change(float source, int length) =>
-    if length <= 0
-        runtime.error("Length must be greater than 0")
-    float oldValue = source[length]
-    if na(oldValue) or oldValue == 0
-        na
+//@function Injects NA values into a data series at regular intervals
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/dirty.md
+//@param source Series to inject NA values into
+//@param interval Frequency of NA value injections
+//@returns Series with NA values injected at specified intervals
+dirty(float source, simple int interval = 10, simple int gap_size = 1) =>
+    result = source
+    if bar_index == 0
+        result := na
     else
-        (source / oldValue - 1)
-
-// ---------- Main loop ----------
+        cycle_position = bar_index % interval
+        if cycle_position < gap_size
+            result := na
+    result
 
 // Inputs
-i_source = input.source(close, "Source")
-i_length = input.int(1, "Length", minval = 1)
+source = input.source(close, "Source")
+interval = input.int(10, "NA Injection Interval", minval=2)
+gap_size = input.int(5, "NA Gap Size", minval=1)
 
 // Calculation
-result = change(i_source, i_length)
+dirty = dirty(source, interval, gap_size)
 
 // Plot
-plot(result, "Change %", color.yellow)
-
+plot(dirty, "Dirty Data", color=color.yellow, linewidth = 2)

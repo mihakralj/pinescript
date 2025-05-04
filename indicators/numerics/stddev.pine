@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Standard Deviation", "StdDev", overlay=false)
+indicator("Standard Deviation (STDDEV)", "StdDev", overlay=false)
 
 /// Standard Deviation (StdDev).
 /// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/stddev.md

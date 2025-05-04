@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Ehlers Ultrasmooth Filter", "EHUltra", overlay=true)
+indicator("Ehlers Ultrasmooth Filter (EHUSF)", "EHUSF", overlay=true)
 
 //@function Calculates Ehlers Ultrasmooth Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehusf.md
@@ -39,5 +39,3 @@ ehusf = ehusf(i_source, i_length)
 
 // Plot
 plot(ehusf, "Ehlers UltraSmooth", color.new(color.yellow, 0), 2)
-
-

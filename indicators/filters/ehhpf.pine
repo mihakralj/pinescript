@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Ehlers Highpass Filter (2-Pole)", "EHHPF", overlay=false, timeframe="", timeframe_gaps=true)
+indicator("Ehlers Highpass Filter (2-Pole) (EHHPF)", "EHHPF", overlay=false, timeframe="", timeframe_gaps=true)
 
 //@function Calculates Ehlers 2-Pole Highpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehhpf.md
@@ -36,4 +36,3 @@ hp_val = ehhpf(i_source, i_length)
 
 // Plot
 plot(hp_val, "EHBandpass", color.new(color.yellow, 0), 2)
-

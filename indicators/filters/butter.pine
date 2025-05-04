@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Butterworth Filter (2nd Order)", "Butter", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Butterworth Filter (2nd Order) (BUTTER)", "Butter", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Calculates 2nd Order Butterworth Lowpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/butter.md

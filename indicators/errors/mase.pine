@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Mean Absolute Scaled Error", "MASE")
+indicator("Mean Absolute Scaled Error (MASE)", "MASE")
 
 //@function Calculates Mean Absolute Scaled Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mase.md

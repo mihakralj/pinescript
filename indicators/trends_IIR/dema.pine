@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Double Exponential Moving Average", "DEMA", overlay=true)
+indicator("Double Exponential Moving Average (DEMA)", "DEMA", overlay=true)
 
 //@function Calculates DEMA using double exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.md

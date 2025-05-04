@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Relative Absolute Error", "RAE")
+indicator("Relative Absolute Error (RAE)", "RAE")
 
 //@function Calculates Relative Absolute Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rae.md

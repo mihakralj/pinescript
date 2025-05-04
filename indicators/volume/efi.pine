@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Elder's Force Index", "EFI", overlay=false)
+indicator("Elder's Force Index (EFI)", "EFI", overlay=false)
 
 //@function Calculates Elder's Force Index (EFI), measuring buying and selling pressure through price change and volume
 //@param len Lookback period for EMA smoothing (default: 13)

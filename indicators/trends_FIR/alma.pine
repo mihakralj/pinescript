@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Arnaud Legoux Moving Average", "ALMA", overlay=true)
+indicator("Arnaud Legoux Moving Average (ALMA)", "ALMA", overlay=true)
 
 //@function Calculates ALMA using Gaussian distribution weights
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/alma.md

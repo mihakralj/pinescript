@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Endpoint Moving Average", "EPMA", overlay=true)
+indicator("Endpoint Moving Average (EPMA)", "EPMA", overlay=true)
 
 //@function Calculates EPMA using exponential smoothing with endpoint emphasis
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/epma.md

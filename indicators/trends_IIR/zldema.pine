@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Zero-Lag Double Exponential Moving Average", "ZLDEMA", overlay=true)
+indicator("Zero-Lag Double Exponential Moving Average (ZLDEMA)", "ZLDEMA", overlay=true)
 
 //@function Calculates ZLEMA using zero-lag price and exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zldema.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Sine-weighted Moving Average", "SINEMA", overlay=true)
+indicator("Sine-weighted Moving Average (SINEMA)", "SINEMA", overlay=true)
 
 //@function Calculates SINEMA using sine-wave weighted smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sinema.md

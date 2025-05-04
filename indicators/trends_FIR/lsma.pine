@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Least Squares Moving Average", "LSMA", overlay=true)
+indicator("Least Squares Moving Average (LSMA)", "LSMA", overlay=true)
 
 //@function Calculates LSMA by fitting a linear regression line to price data
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/lsma.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Kaufman's Adaptive Moving Average", "KAMA", overlay=true)
+indicator("Kaufman's Adaptive Moving Average (KAMA)", "KAMA", overlay=true)
 
 //@function Calculates KAMA using adaptive smoothing based on market volatility
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/kama.md
@@ -18,6 +18,7 @@ kama(series float source, simple int period, simple float fast_alpha=0.666667, s
         runtime.error("Alpha values must be greater than 0")
     if fast_alpha <= slow_alpha
         runtime.error("Fast alpha must be greater than slow alpha")
+        
     var float kama_state = na
     float current_kama = na
     if not na(source)

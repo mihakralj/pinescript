@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Ease of Movement", "EOM", overlay=false)
+indicator("Ease of Movement (EOM)", "EOM", overlay=false)
 
 //@function Calculate Ease of Movement Volume
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volume/eom.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("R-squared (Coefficient of Determination)", "R²")
+indicator("R-squared (Coefficient of Determination) (R²)", "R²")
 
 //@function Calculates the R-squared (Coefficient of Determination) between two sources
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rsquared.md

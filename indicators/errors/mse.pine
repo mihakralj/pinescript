@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Mean Squared Error", "MSE")
+indicator("Mean Squared Error (MSE)", "MSE")
 
 
 //@function Calculates Mean Squared Error between two sources using SMA for averaging

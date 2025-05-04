@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Highest Value", "Highest", overlay=true)
+indicator("Highest Value (HIGH)", "Highest", overlay=true)
 
 /// Highest value over a specified period using a monotonic deque.
 /// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/highest.md

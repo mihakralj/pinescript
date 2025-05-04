@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Jurik Volatility Bands", "JBANDS", overlay=true)
+indicator("Jurik Volatility Bands (JBANDS)", "JBANDS", overlay=true)
 
 //@function Calculates JBANDS using adaptive techniques to adjust width to market volatility
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/jvolty.md

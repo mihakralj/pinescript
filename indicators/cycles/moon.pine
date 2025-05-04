@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Moon Phase (MOON) - [QuanTAlib Cycles]", "MOON", overlay=false)
+indicator("Moon Phase (MOON)", "MOON", overlay=false)
 
 //@function Calculates precise lunar phase using orbital mechanics
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/moon.md

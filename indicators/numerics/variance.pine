@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Variance", "Var", overlay=false)
+indicator("Variance (VAR)", "Var", overlay=false)
 
 /// Variance.
 /// @doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/variance.md

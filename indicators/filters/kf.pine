@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Kalman Filter", "KF", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Kalman Filter (KF)", "KF", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Applies a Kalman Filter to the input series.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/kf.md

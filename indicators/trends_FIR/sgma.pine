@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Savitzky-Golay Moving Average", "SGMA", overlay=true)
+indicator("Savitzky-Golay Moving Average (SGMA)", "SGMA", overlay=true)
 
 //@function Calculates SGMA using Savitzky-Golay filter with polynomial fitting
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/sgma.md

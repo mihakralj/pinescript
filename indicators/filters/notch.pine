@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Notch Filter", "Notch", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Notch Filter (NOTCH)", "Notch", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Applies a second-order IIR notch filter to remove a specific frequency component.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/notch.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Regularized Exponential Moving Average", "REMA", overlay=true)
+indicator("Regularized Exponential Moving Average (REMA)", "REMA", overlay=true)
 
 //@function Calculates REMA using exponential smoothing with regularization term
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rema.md

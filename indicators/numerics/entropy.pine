@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Entropy", "ENT", overlay=false)
+indicator("Entropy (ENT)", "ENT", overlay=false)
 
  //@function Calculate normalized Shannon entropy of a series over a lookback period.
  //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/entropy.md

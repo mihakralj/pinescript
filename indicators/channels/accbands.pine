@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Acceleration Bands", "AccBands", overlay=true)
+indicator("Acceleration Bands (AccBands)", "AccBands", overlay=true)
 
 //@function Calculates Acceleration Bands using SMAs of high, low, close prices
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/accbands.md // Placeholder link

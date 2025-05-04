@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Close-to-Close Volatility", "CCV", overlay=false)
+indicator("Close-to-Close Volatility (CCV)", "CCV", overlay=false)
 
 //@function Calculates Close-to-Close Volatility using closing price returns
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/ccv.md

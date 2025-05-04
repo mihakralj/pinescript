@@ -2,7 +2,7 @@
 // © mihakralj
 // Indicator algorithm based on John F. Ehlers' work
 //@version=5
-indicator("Bessel Filter (2nd Order)", "Bessel", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Bessel Filter (2nd Order) (BESSEL)", "Bessel", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Calculates 2nd Order Bessel Lowpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/bessel.md

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Mean Absolute Error", "MAE")
+indicator("Mean Absolute Error (MAE)", "MAE")
 
 //@function Calculates Mean Absolute Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mae.md

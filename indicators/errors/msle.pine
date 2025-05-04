@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Mean Squared Logarithmic Error", "MSLE")
+indicator("Mean Squared Logarithmic Error (MSLE)", "MSLE")
 
 //@function Calculates Mean Squared Logarithmic Error between two sources using SMA for averaging
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/errors/msle.md
