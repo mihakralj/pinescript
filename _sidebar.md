@@ -67,6 +67,10 @@
   * [SMAPE: Symmetric Mean Absolute Percentage Error](/indicators/errors/smape.md)
 
 * [Momentum Indicators](/indicators/momentum/_index.md)
+  * [APO: Absolute Price Oscillator](/indicators/momentum/apo.md)
+  * [BOP: Balance of Power](/indicators/momentum/bop.md)
+  * [CCI: Commodity Channel Index](/indicators/momentum/cci.md)
+
 
 * [Numerics & Statistical Transformations](/indicators/numerics/_index.md)
   * [ACCEL: Acceleration](/indicators/numerics/accel.md)

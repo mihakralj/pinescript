@@ -2,9 +2,9 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
-| APO | Absolute Price Oscillator | Shows difference between two exponential moving averages of price |
-| BOP | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
-| CCI | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
+| [APO](/indicators/momentum/apo.md) | Absolute Price Oscillator | Shows difference between two exponential moving averages of price |
+| [BOP](/indicators/momentum/bop.md) | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
+| [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
 | CMO | Chande Momentum Oscillator | Measures momentum using both up and down price changes, similar to RSI but unbounded |
 | MFI | Money Flow Index | Volume-weighted RSI, measures buying/selling pressure using price and volume |
 | MOM | Momentum | Measures the rate of price change over a specified period |

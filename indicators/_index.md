@@ -18,7 +18,7 @@
 | AO | Awesome Oscillator | Oscillators |
 | [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume | Volume |
 | [AP](/indicators/channels/ap.md) | Andrews' Pitchfork | Channels |
-| APO | Absolute Price Oscillator | Momentum |
+| [APO](/indicators/momentum/apo.md) | Absolute Price Oscillator | Momentum |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
 | AROONOSC | Aroon Oscillator | Dynamics |
 | [ATR](/indicators/volatility/atr.md) | Average True Range | Volatility |
@@ -35,11 +35,11 @@
 | BIAS | Bias | Numerics |
 | [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Filters |
 | [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA | Trends (FIR) |
-| BOP | Balance of Power | Momentum |
+| [BOP](/indicators/momentum/bop.md) | Balance of Power | Momentum |
 | BRAR | BRAR | Oscillators |
 | [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
 | [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
-| CCI | Commodity Channel Index | Momentum |
+| [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Momentum |
 | CCV | Close-to-Close Volatility | Volatility |
 | [CV](/indicators/volatility/cv.md) | Conditional Volatility | Volatility |
 | [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Volatility |

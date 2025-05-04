@@ -77,19 +77,19 @@ const processIndexFiles = () => {
   }
 
   // Print statistics
-  console.log('\n\nDirectory Statistics (unimplemented - implemented - total):');
+  console.log('\n\nDirectory Statistics (unimplemented + implemented = total):');
   console.log('------------------------------------------------');
   let totalImplemented = 0;
   let grandTotal = 0;
 
   for (const [dir, stat] of Object.entries(stats)) {
-    console.log(`${dir.padEnd(15)} ${stat.unimplemented} - ${stat.implemented} - ${stat.total}`);
+    console.log(`${dir.padEnd(15)} ${stat.unimplemented} + ${stat.implemented} = ${stat.total}`);
     totalImplemented += stat.implemented;
     grandTotal += stat.total;
   }
 
   console.log('------------------------------------------------');
-  console.log(`TOTAL${' '.repeat(10)} ${grandTotal - totalImplemented} - ${totalImplemented} - ${grandTotal}`);
+  console.log(`TOTAL${' '.repeat(10)} ${grandTotal - totalImplemented} + ${totalImplemented} = ${grandTotal}`);
 };
 
 processIndexFiles();
