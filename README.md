@@ -26,7 +26,8 @@ For more information about indicator types and characteristics, see:
 - [Price Channels and Bands](./indicators/channels/_index.md)
 - [Stop and Reverse Indicators](./indicators/reversals/_index.md)
 - [Signal Filters](./indicators/filters/_index.md)
-- [Numerics & Statistical Transformations](./indicators/numerics/_index.md)
+- [Numerics](./indicators/numerics/_index.md)
+- [Statistics](./indicators/statistics/_index.md)
 - [Error Metrics](./indicators/errors/_index.md)
 
 You can also explore [The Complete Master List of All Indicators](./indicators/_index.md) (Warning: Side effects may include widened eyes, sudden trading epiphanies, and the irrational confidence of someone who just discovered MACD for the first time. No refunds.)

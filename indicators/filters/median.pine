@@ -4,6 +4,7 @@
 indicator("Median Filter (MEDIAN)", "MEDIAN", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Applies median filter to input series
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/median.md
 //@param src Input series to filter
 //@param length Window size (rounded down to nearest odd number)
 //@returns Filtered series

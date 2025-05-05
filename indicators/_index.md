@@ -31,7 +31,7 @@
 | BBW | Bollinger Band Width | Volatility |
 | BBWP | Bollinger Band Width Percentile | Volatility |
 | [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Filters |
-| [BETA](/indicators/numerics/beta.md) | Beta Coefficient | Numerics |
+| [BETA](/indicators/statistics/beta.md) | Beta Coefficient | Statistics |
 | BIAS | Bias | Numerics |
 | [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Filters |
 | [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA | Trends (FIR) |
@@ -53,11 +53,11 @@
 | CKSP | Chande Kroll Stop | Reversals/Channels |
 | [CMF](/indicators/volume/cmf.md) | Chaikin Money Flow | Volume |
 | CMO | Chande Momentum Oscillator | Momentum |
-| [COINTEGRATION](/indicators/numerics/cointegration.md) | Cointegration | Numerics |
+| [COINTEGRATION](/indicators/statistics/cointegration.md) | Cointegration | Statistics |
 | [CONV](/indicators/trends_FIR/conv.md) | Convolution MA with any kernel | Trends (FIR) |
 | COPPOCK | Coppock Curve | Oscillators |
-| [CORRELATION](/indicators/numerics/correlation.md) | Correlation (Pearson's) | Numerics |
-| [COVARIANCE](/indicators/numerics/covariance.md) | Covariance | Numerics |
+| [CORRELATION](/indicators/statistics/correlation.md) | Correlation (Pearson's) | Statistics |
+| [COVARIANCE](/indicators/statistics/covariance.md) | Covariance | Statistics |
 | CRSI | Connors RSI | Oscillators |
 | CTI | Correlation Trend Indicator | Oscillators |
 | CV | Conditional Volatility | Volatility |
@@ -84,7 +84,7 @@
 | [EHUSF](/indicators/filters/ehusf.md) | Ehlers Ultra Smooth Filter | Filters |
 | [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Filters |
 | [EMA](/indicators/trends_IIR/ema.md) | Exponential MA | Trends (IIR) |
-| [ENTROPY](/indicators/numerics/entropy.md) | Normalized Shannon Entropy | Numerics |
+| [ENTROPY](/indicators/statistics/entropy.md) | Normalized Shannon Entropy | Statistics |
 | [EOM](/indicators/volume/eom.md) | Ease of Movement | Volume |
 | [EPMA](/indicators/trends_FIR/epma.md) | Endpoint MA | Trends (FIR) |
 | ER | Efficiency Ratio | Oscillators |
@@ -97,7 +97,7 @@
 | [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
 | [GAUSS](/indicators/filters/gauss.md)  | Gaussian Filter | Filters |
 | GKV | Garman-Klass Volatility | Volatility |
-| GRANGER | Granger | Numerics |
+| GRANGER | Granger | Statistics |
 | [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted MA | Trends (FIR) |
 | [HAMMA](/indicators/trends_FIR/hamma.md) | Hamming Window MA | Trends (FIR) |
 | [HANMA](/indicators/trends_FIR/hanma.md) | Hanning Window MA | Trends (FIR) |
@@ -114,12 +114,12 @@
 | HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Dynamics |
 | [HTIT](/indicators/trends_IIR/htit.md) | Hilbert Transform Instantaneous Trend | Trends (IIR) |
 | [HUBER](/indicators/errors/huber.md) | Huber Loss | Errors |
-| HURST | Hurst | Numerics |
+| HURST | Hurst | Statistics |
 | HV | Historical Volatility | Volatility |
 | HWC | Holt-Winters Channel | Cycles |
 | [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA | Trends (FIR) |
 | INERTIA | Inertia | Oscillators |
-| JARQUE_BERA | Jarque-Bera | Numerics |
+| JARQUE_BERA | Jarque-Bera | Statistics |
 | [JBANDS](/indicators/channels/jbands.md) | Jurik Volatility Bands | Channels |
 | [JMA](/indicators/trends_IIR/jma.md) | Jurik MA | Trends (IIR) |
 | [JOLT](/indicators/numerics/jolt.md) | Rate of acceleration; 3rd derivative | Numerics |
@@ -128,14 +128,14 @@
 | [KAMA](/indicators/trends_IIR/kama.md) | Kaufman Adaptive MA | Trends (IIR) |
 | [KC](/indicators/channels/kc.md) | Keltner Channel | Channels |
 | KDJ | KDJ Indicator | Oscillators |
-| KENDALL | Kendall | Numerics |
+| KENDALL | Kendall | Statistics |
 | [KF](/indicators/filters/kf.md) | Kalman Filter | Filters |
 | KRI | Kairi Relative Index | Oscillators |
 | KST | KST Oscillator | Oscillators |
-| [KURTOSIS](/indicators/numerics/kurtosis.md) | Kurtosis | Numerics |
+| [KURTOSIS](/indicators/statistics/kurtosis.md) | Kurtosis | Statistics |
 | KVO | Klinger Volume Oscillator | Volume |
 | [LINEAR](/indicators/numerics/linear.md) | Linear Transformation | Numerics |
-| [LINREG](/indicators/numerics/linreg.md) | Linear Regression Curve | Numerics |
+| [LINREG](/indicators/statistics/linreg.md) | Linear Regression Curve | Statistics |
 | [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Filters |
 | [LOG](/indicators/numerics/log.md) | Logarithmic Transformation | Numerics |
 | [LOWEST](/indicators/numerics/lowest.md) | Lowest value | Numerics |
@@ -161,7 +161,7 @@
 | MINUS_DI | Minus Directional Indicator | Dynamics |
 | MINUS_DM | Minus Directional Movement | Dynamics |
 | [MMA](/indicators/trends_IIR/mma.md) | Modified MA | Trends (IIR) |
-| MODE | Mode | Numerics |
+| MODE | Mode | Statistics |
 | MOM | Momentum | Momentum |
 | [MPE](/indicators/errors/mpe.md) | Mean Percentage Error | Errors |
 | [MSE](/indicators/errors/mse.md) | Mean Squared Error | Errors |
@@ -169,13 +169,13 @@
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Filters |
 | NVI | Negative Volume Index | Volume |
 | PCH | Price Channel Indicator | Volatility/Channels |
-| PERCENTILE | Percentile | Numerics |
+| PERCENTILE | Percentile | Statistics |
 | PGO | Pretty Good Oscillator | Oscillators |
 | PIV | Pivot Points | Reversals |
 | PLUS_DI | Plus Directional Indicator | Dynamics |
 | PLUS_DM | Plus Directional Movement | Dynamics |
 | PMO | Price Momentum Oscillator | Momentum |
-| POLYFIT | Polynomial Fitting | Numerics |
+| POLYFIT | Polynomial Fitting | Statistics |
 | PP | Price Pivots | Reversals |
 | PPB | Pivot Points Bands | Channels |
 | PPO | Percentage Price Oscillator | Momentum |
@@ -192,7 +192,7 @@
 | [QEMA](/indicators/trends_IIR/qema.md) | Quadruple Exponential MA | Trends (IIR) |
 | QQE | Quantitative Qualitative Estimation | Oscillators |
 | QSTICK | Q Stick | Dynamics |
-| QUANTILE | Quantile | Numerics |
+| QUANTILE | Quantile | Statistics |
 | [RAE](/indicators/errors/rae.md) | Relative Absolute Error | Errors |
 | REGC | Regression Channels | Channels |
 | RELU | Rectified Linear Unit | Numerics |
@@ -221,19 +221,19 @@
 | SIGMOID | Logistic Function | Numerics |
 | SINE | Sine Wave | Cycles |
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Trends (FIR) |
-| SKEW | Skew | Numerics |
+| SKEW | Skew | Statistics |
 | [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Trends (FIR) |
 | [SMAPE](/indicators/errors/smape.md) | Symmetric Mean Absolute Percentage Error | Errors |
 | SMI | Stochastic Momentum Index | Oscillators |
-| SPEARMAN | Spearman | Numerics |
+| SPEARMAN | Spearman | Statistics |
 | SQRT | Square Root Transformation | Numerics |
 | SQUEEZE | Squeeze | Oscillators |
-| STANDARDIZE | Standardization | Numerics |
+| STANDARDIZE | Standardization | Statistics |
 | [STARC](/indicators/volatility/starc.md) | Starc Bands | Volatility |
 | STB | Super Trend Bands | Channels |
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Cycles |
-| [STDDEV](/indicators/numerics/stddev.md) | Standard Deviation | Numerics |
+| [STDDEV](/indicators/statistics/stddev.md) | Standard Deviation | Statistics |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
 | STOCHF | Stochastic Fast | Momentum |
 | STOCHRSI | Stochastic RSI | Momentum |
@@ -242,17 +242,17 @@
 | TANH | Hyperbolic Tangent | Numerics |
 | TD_SEQ | TD Sequential | Oscillators |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA | Trends (IIR) |
-| THEIL | Theil | Numerics |
+| THEIL | Theil | Statistics |
 | TR | True Range | Volatility |
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | TRIX | Triple Exponential Average | Momentum |
-| TSF | Tsf | Numerics |
+| TSF | Tsf | Statistics |
 | TSI | True Strength Index | Momentum |
 | TTM | TTM Trend | Dynamics |
 | TVI | Trade Volume Index | Volume |
 | UI | Ulcer Index | Volatility |
 | ULTOSC | Ultimate Oscillator | Momentum |
-| [VARIANCE](/indicators/numerics/variance.md) | Variance | Numerics |
+| [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | VC | Volatility Cone | Volatility |
 | VF | Volume Force | Volume |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
@@ -273,4 +273,4 @@
 | [ZLDEMA](/indicators/trends_IIR/zldema.md) | Zero-Lag Double Exponential MA | Trends (IIR) |
 | [ZLEMA](/indicators/trends_IIR/zlema.md) | Zero-Lag Exponential MA | Trends (IIR) |
 | [ZLTEMA](/indicators/trends_IIR/zltema.md) | Zero-Lag Triple Exponential MA | Trends (IIR) |
-| [ZSCORE](/indicators/numerics/zscore.md) | Z-score standardization | Numerics |
+| [ZSCORE](/indicators/statistics/zscore.md) | Z-score standardization | Statistics |

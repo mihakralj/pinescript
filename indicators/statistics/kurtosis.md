@@ -1,6 +1,6 @@
 # Kurtosis: Distribution Shape Measure
 
-[Pine Script Implementation of Kurtosis](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/kurtosis.pine)
+[Pine Script Implementation of Kurtosis](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/kurtosis.pine)
 
 ## Overview and Purpose
 

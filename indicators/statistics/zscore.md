@@ -1,6 +1,6 @@
 # ZScore: Statistical Deviation Measure
 
-[Pine Script Implementation of ZScore](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/zscore.pine)
+[Pine Script Implementation of ZScore](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/zscore.pine)
 
 ## Overview and Purpose
 

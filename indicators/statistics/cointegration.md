@@ -1,6 +1,6 @@
 # COINTEGRATION: Engle-Granger Cointegration Test
 
-[Pine Script Implementation of COINTEGRATION](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/cointegration.pine)
+[Pine Script Implementation of COINTEGRATION](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/cointegration.pine)
 
 ## Overview and Purpose
 

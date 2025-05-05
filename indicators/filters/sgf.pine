@@ -4,6 +4,7 @@
 indicator("Savitzky-Golay Filter (SGF)", "SGF", overlay=true, timeframe="", timeframe_gaps=true)
 
 //@function Applies Savitzky-Golay filter to input series
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/sgf.md
 //@param src Input series to filter
 //@param window_size Window size (rounded down to nearest odd number)
 //@param poly_order Polynomial order (2 or 4 recommended)

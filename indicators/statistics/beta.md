@@ -1,6 +1,6 @@
 # BETA: Beta Coefficient
 
-[Pine Script Implementation of BETA](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/beta.pine)
+[Pine Script Implementation of BETA](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/beta.pine)
 
 ## Overview and Purpose
 

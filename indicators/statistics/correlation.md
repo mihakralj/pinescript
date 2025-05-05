@@ -1,6 +1,6 @@
 # CORRELATION: Pearson's Correlation Coefficient
 
-[Pine Script Implementation of CORRELATION](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/correlation.pine)
+[Pine Script Implementation of CORRELATION](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/correlation.pine)
 
 ## Overview and Purpose
 

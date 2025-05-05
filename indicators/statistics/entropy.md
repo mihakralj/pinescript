@@ -1,6 +1,6 @@
 # ENTROPY: Shannon Information Entropy
 
-[Pine Script Implementation of ENTROPY](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/entropy.pine)
+[Pine Script Implementation of ENTROPY](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/entropy.pine)
 
 ## Overview and Purpose
 

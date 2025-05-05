@@ -1,6 +1,6 @@
 # COVARIANCE: Covariance
 
-[Pine Script Implementation of COVAR](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/covariance.pine)
+[Pine Script Implementation of COVAR](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/covariance.pine)
 
 ## Overview and Purpose
 

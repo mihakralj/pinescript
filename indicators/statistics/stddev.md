@@ -1,6 +1,6 @@
 # StdDev: Standard Deviation
 
-[Pine Script Implementation of StdDev](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/stddev.pine)
+[Pine Script Implementation of StdDev](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/stddev.pine)
 
 ## Overview and Purpose
 

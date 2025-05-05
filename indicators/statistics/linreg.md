@@ -1,6 +1,6 @@
 # LinReg: Linear Regression Curve & Slope
 
-[Pine Script Implementation of LinReg & Slope](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/linreg.pine)
+[Pine Script Implementation of LinReg & Slope](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/linreg.pine)
 
 ## Overview and Purpose
 

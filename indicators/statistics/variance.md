@@ -1,6 +1,6 @@
 # Var: Variance
 
-[Pine Script Implementation of Var](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/variance.pine)
+[Pine Script Implementation of Var](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/variance.pine)
 
 ## Overview and Purpose
 
