@@ -12,11 +12,11 @@
 | [EHSSF](/indicators/filters/ehssf.md) | Ehlers Super Smooth Filter | Exceptional noise reduction with minimal lag using optimized pole placement |
 | [EHUSF](/indicators/filters/ehusf.md) | Ehlers Ultra Smooth Filter | Maximum noise suppression for major trend identification in volatile markets |
 | [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Steepest possible roll-off with controlled ripples in both bands |
-| GAUSS | Gaussian Filter | Provides smooth, edge-preserving low-pass filtering with bell-shaped weights |
+| [GAUSS](/indicators/filters/gauss.md)  | Gaussian Filter | Provides smooth, edge-preserving low-pass filtering with bell-shaped weights |
 | [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Decomposes price into trend and cyclical components |
 | [KF](/indicators/filters/kf.md) | Kalman Filter | Optimal recursive estimator that adapts to changing market dynamics |
 | [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Locally weighted regression that adapts to non-linear patterns |
 | MEDIAN | Median Filter | Non-linear filter that removes spikes and outliers while preserving edges |
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Removes specific frequency components while leaving others intact |
-| SGF | Savitzky-Golay Filter | Polynomial regression-based filter that preserves higher moments |
-| WIENER | Wiener Filter | Optimizes signal-to-noise ratio based on statistical characteristics |
+| [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Polynomial regression-based filter that preserves higher moments |
+| [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Optimizes signal-to-noise ratio based on statistical characteristics |

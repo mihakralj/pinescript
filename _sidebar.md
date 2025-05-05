@@ -70,7 +70,6 @@
   * [BOP: Balance of Power](/indicators/momentum/bop.md)
   * [CCI: Commodity Channel Index](/indicators/momentum/cci.md)
 
-
 * [Numerics & Statistical Transformations](/indicators/numerics/_index.md)
   * [ACCEL: Acceleration](/indicators/numerics/accel.md)
   * [BETA: Beta Coefficient](/indicators/numerics/beta.md)
@@ -108,20 +107,24 @@
   * [JBANDS: Jurik Volatility Bands](/indicators/channels/jbands.md)
 
 * [Signal Filters](/indicators/filters/_index.md)
-  * [Bilateral Filter](/indicators/filters/bilateral.md)
-  * [Bessel Filter](/indicators/filters/bessel.md)
-  * [Butterworth Filter](/indicators/filters/butter.md)
-  * [Chebyshev Type I Filter](/indicators/filters/cheby1.md)
-  * [Chebyshev Type II Filter](/indicators/filters/cheby2.md)
+  * [BILATERAL: Bilateral Filter](/indicators/filters/bilateral.md)
+  * [BESSEL: Bessel Filter](/indicators/filters/bessel.md)
+  * [BUTTER: Butterworth Filter](/indicators/filters/butter.md)
+  * [CHEBY1: Chebyshev Type I Filter](/indicators/filters/cheby1.md)
+  * [CHEBY2: Chebyshev Type II Filter](/indicators/filters/cheby2.md)
   * [EHBPF: Ehlers Bandpass Filter](/indicators/filters/ehbpf.md)
   * [EHHPF: Ehlers Highpass Filter](/indicators/filters/ehhpf.md)
   * [EHSSF: Ehlers Super Smoother Filter](/indicators/filters/ehssf.md)
   * [EHUSF: Ehlers Ultra Smoother Filter](/indicators/filters/ehusf.md)
-  * [Elliptic (Cauer) Filter](/indicators/filters/elliptic.md)
+  * [ELLIPTIC: Elliptic (Cauer) Filter](/indicators/filters/elliptic.md)
+  * [GAUSS: Gaussian Filter](/indicators/filters/gauss.md)
   * [HP: Hodrick-Prescott Filter](/indicators/filters/hp.md)
   * [KF: Kalman Filter](/indicators/filters/kf.md)
   * [LOESS: LOESS/LOWESS Smoothin](/indicators/filters/loess.md)
   * [NOTCH: Notch Filter](/indicators/filters/notch.md)
+  * [SGF: Savitzky-Golay Filter](/indicators/filters/sgf.md)
+  * [WIENER: Wiener Filter](/indicators/filters/wiener.md)
+
 
 * [Stop and Reverse Indicators](/indicators/reversals/_index.md)
 

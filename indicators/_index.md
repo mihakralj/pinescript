@@ -95,7 +95,7 @@
 | FISHER | Fisher Transform | Oscillators |
 | FOSC | Forecast Oscillator | Oscillators |
 | [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
-| GAUSS | Gaussian Filter | Filters |
+| [GAUSS](/indicators/filters/gauss.md)  | Gaussian Filter | Filters |
 | GKV | Garman-Klass Volatility | Volatility |
 | GRANGER | Granger | Numerics |
 | [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted MA | Trends (FIR) |
@@ -216,7 +216,7 @@
 | RVGI | Relative Vigor Index | Volatility |
 | SAREXT | Parabolic SAR - Extended | Reversals |
 | SDC | Standard Deviation Channel | Channels |
-| SGF | Savitzky-Golay Filter | Filters |
+| [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Filters |
 | [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Trends (FIR) |
 | SIGMOID | Logistic Function | Numerics |
 | SINE | Sine Wave | Cycles |
@@ -266,7 +266,7 @@
 | VWAPB | VWAP Bands | Channels |
 | [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |
 | WAD | Williams Accumulation/Distribution | Volume |
-| WIENER | Wiener Filter | Filters |
+| [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Filters |
 | WILLR | Williams %R | Momentum |
 | [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Trends (FIR) |
 | YZV | Yang-Zhang Volatility | Volatility |
