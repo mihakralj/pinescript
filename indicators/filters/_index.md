@@ -16,7 +16,7 @@
 | [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Decomposes price into trend and cyclical components |
 | [KF](/indicators/filters/kf.md) | Kalman Filter | Optimal recursive estimator that adapts to changing market dynamics |
 | [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Locally weighted regression that adapts to non-linear patterns |
-| MEDIAN | Median Filter | Non-linear filter that removes spikes and outliers while preserving edges |
+| [MEDIAN](/indicators/filters/median.md) | Median Filter | Non-linear filter that removes spikes and outliers while preserving edges |
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Removes specific frequency components while leaving others intact |
 | [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Polynomial regression-based filter that preserves higher moments |
 | [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Optimizes signal-to-noise ratio based on statistical characteristics |

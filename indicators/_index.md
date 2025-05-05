@@ -152,7 +152,7 @@
 | [MASE](/indicators/errors/mase.md) | Mean Absolute Scaled Error | Errors |
 | MASSI | Mass Index | Volatility |
 | [ME](/indicators/errors/me.md) | Mean Error | Errors |
-| MEDIAN | Median Filter | Numerics/Filters |
+| [MEDIAN](/indicators/filters/median.md) | Median Filter | Numerics/Filters |
 | MFI | Money Flow Index | Volume/Momentum |
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
 | MINMAX | Lowest and highest values | Channels |

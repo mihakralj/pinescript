@@ -121,6 +121,7 @@
   * [HP: Hodrick-Prescott Filter](/indicators/filters/hp.md)
   * [KF: Kalman Filter](/indicators/filters/kf.md)
   * [LOESS: LOESS/LOWESS Smoothin](/indicators/filters/loess.md)
+  * [MEDIAN: Median Filter](/indicators/filters/median.md)
   * [NOTCH: Notch Filter](/indicators/filters/notch.md)
   * [SGF: Savitzky-Golay Filter](/indicators/filters/sgf.md)
   * [WIENER: Wiener Filter](/indicators/filters/wiener.md)
