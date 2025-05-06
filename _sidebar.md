@@ -108,6 +108,8 @@
   * [AC: Acceleration Oscillator](/indicators/momentum/ac.md)
   * [AO: Awesome Oscillator](/indicators/momentum/ao.md)
   * [APO: Absolute Price Oscillator](/indicators/momentum/apo.md)
+  * [BOP: Balance of Power](/indicators/oscillators/bop.md)
+  * [CCI: Commodity Channel Index](/indicators/oscillators/cci.md)
   * [STOCH: Stochastic Volatility](/indicators/oscillators/stoch.md)
 
 * [Channels and Bands](/indicators/channels/_index.md)
