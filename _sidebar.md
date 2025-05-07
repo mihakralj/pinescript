@@ -145,10 +145,15 @@
   * [ADX: Average Directional Movement Index](/indicators/dynamics/adx.md)
   * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
+  * [DMX: Jurik Directional Movement Index](/indicators/dynamics/dmx.md)
 
 * [Momentum](/indicators/momentum/_index.md)
   * [BOP: Balance of Power](/indicators/momentum/bop.md)
   * [CCI: Commodity Channel Index](/indicators/momentum/cci.md)
+  * [CMO: Chande Momentum Oscillator](/indicators/momentum/cmo.md)
+  * [MFI: Money Flow Index](/indicators/momentum/mfi.md)
+  * [MOM: Momentum](/indicators/momentum/mom.md)
+  * [VEL: Jurik Velocity](/indicators/momentum/vel.md)
 
 * [Cycles](/indicators/cycles/_index.md)
   * [MOON: Moon Phase](/indicators/cycles/moon.md)

@@ -9,6 +9,7 @@
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Identifies trend direction and strength by measuring time since price recorded new highs/lows |
 | AROONOSC | Aroon Oscillator | Subtracts Aroon Down from Aroon Up, measures trend strength |
 | CHOP | Choppiness Index | Measures market sidewaysness or trendiness, higher values indicate choppiness |
+| [DMX](/indicators/dynamics/dmx.md) | Jurik Directional Movement Index | Smoothed Bipolar Directional Movement Index (DMI) |
 | DPO | Detrended Price Oscillator | Removes longer-term trends from price to identify shorter-term cycles |
 | HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase |
 | MACD | MA Convergence Divergence | Shows relationship between two EMAs, identifies momentum and trend direction |

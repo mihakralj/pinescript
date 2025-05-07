@@ -52,7 +52,7 @@
 | CHOP | Choppiness Index | Oscillators/Dynamics |
 | CKSP | Chande Kroll Stop | Reversals/Channels |
 | [CMF](/indicators/volume/cmf.md) | Chaikin Money Flow | Volume |
-| CMO | Chande Momentum Oscillator | Momentum |
+| [CMO](/indicators/momentum/cmo.md) | Chande Momentum Oscillator | Momentum |
 | [COINTEGRATION](/indicators/statistics/cointegration.md) | Cointegration | Statistics |
 | [CONV](/indicators/trends_FIR/conv.md) | Convolution MA with any kernel | Trends (FIR) |
 | COPPOCK | Coppock Curve | Oscillators |
@@ -67,7 +67,7 @@
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | DIFF | Difference | Numerics |
 | [DIRTY](/indicators/errors/dirty.md) | Dirty Data Injection | Errors |
-| DMI | Directional Movement Index | Dynamics |
+| [DMX](/indicators/dynamics/dmx.md) | Jurik Directional Movement Index | Dynamics |
 | DOSC | Derivative Oscillator | Oscillators |
 | DPO | Detrended Price Oscillator | Dynamics |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
@@ -153,7 +153,7 @@
 | MASSI | Mass Index | Volatility |
 | [ME](/indicators/errors/me.md) | Mean Error | Errors |
 | [MEDIAN](/indicators/filters/median.md) | Median Filter | Numerics/Filters |
-| MFI | Money Flow Index | Volume/Momentum |
+| [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume/Momentum |
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
 | MINMAX | Lowest and highest values | Channels |
 | MINMAX_SCALE | Min-Max Scaling (Normalization) | Numerics |
@@ -162,7 +162,7 @@
 | MINUS_DM | Minus Directional Movement | Dynamics |
 | [MMA](/indicators/trends_IIR/mma.md) | Modified MA | Trends (IIR) |
 | MODE | Mode | Statistics |
-| MOM | Momentum | Momentum |
+| [MOM](/indicators/momentum/mom.md) | Momentum | Momentum |
 | [MPE](/indicators/errors/mpe.md) | Mean Percentage Error | Errors |
 | [MSE](/indicators/errors/mse.md) | Mean Squared Error | Errors |
 | [MSLE](/indicators/errors/msle.md) | Mean Squared Logarithmic Error | Errors |
@@ -235,8 +235,8 @@
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Cycles |
 | [STDDEV](/indicators/statistics/stddev.md) | Standard Deviation | Statistics |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
-| STOCHF | Stochastic Fast | Momentum |
-| STOCHRSI | Stochastic RSI | Momentum |
+| STOCHF | Stochastic Fast | Oscillators |
+| STOCHRSI | Stochastic RSI | Oscillators |
 | SUPER | SuperTrend | Reversals/Dynamics |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA | Trends (IIR) |
 | TANH | Hyperbolic Tangent | Numerics |
@@ -248,12 +248,14 @@
 | TRIX | Triple Exponential Average | Momentum |
 | TSF | Tsf | Statistics |
 | TSI | True Strength Index | Momentum |
+| [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Momentum |
 | TTM | TTM Trend | Dynamics |
 | TVI | Trade Volume Index | Volume |
 | UI | Ulcer Index | Volatility |
 | ULTOSC | Ultimate Oscillator | Momentum |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | VC | Volatility Cone | Volatility |
+| [VEL](/indicators/momentum/vel.md) | Velocity | Momentum |
 | VF | Volume Force | Volume |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | VORTEX | Vortex Indicator | Dynamics |

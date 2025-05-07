@@ -1,0 +1,50 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Money Flow Index (MFI)", "MFI", overlay=false)
+
+//@function Calculates Money Flow Index using circular buffer for efficiency
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/mfi.md
+//@param len Lookback period for calculations
+//@returns MFI value measuring volume-weighted buying/selling pressure
+mfi(simple int len) =>
+    if len <= 0
+        runtime.error("Length must be greater than 0")
+    float typical_price = (high + low + close) / 3.0
+    float result = 0.0
+    if na(typical_price) or na(volume) or na(typical_price[1]) or na(volume[1])
+        result := 50.0
+    else
+        float money_flow = typical_price * volume
+        var float pos_flow_sum = 0.0, var float neg_flow_sum = 0.0
+        var array<float> pos_buffer = array.new_float(len, 0.0)
+        var array<float> neg_buffer = array.new_float(len, 0.0)
+        var int head = 0
+        float pos_flow = typical_price > typical_price[1] ? money_flow : 0.0
+        float neg_flow = typical_price < typical_price[1] ? money_flow : 0.0
+        float old_pos = array.get(pos_buffer, head)
+        float old_neg = array.get(neg_buffer, head)
+        array.set(pos_buffer, head, pos_flow)
+        array.set(neg_buffer, head, neg_flow)
+        pos_flow_sum := 0.0, neg_flow_sum := 0.0
+        for i = 0 to len - 1
+            pos_flow_sum += array.get(pos_buffer, i)
+            neg_flow_sum += array.get(neg_buffer, i)
+        head := (head + 1) % len
+        if neg_flow_sum == 0.0
+            result := pos_flow_sum > 0.0 ? 100.0 : 50.0
+        else
+            float money_ratio = pos_flow_sum / neg_flow_sum
+            result := 100.0 - (100.0 / (1.0 + money_ratio))
+    result
+
+// ---------- Main loop ----------
+
+// Inputs
+i_length = input.int(14, "Length", minval=1)
+
+// Calculation
+mfi_value = mfi(i_length)
+
+// Plot
+plot(mfi_value, "MFI", color.new(color.yellow, 0), 2)
