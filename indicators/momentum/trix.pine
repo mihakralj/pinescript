@@ -1,0 +1,64 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Triple Exponential Average (TRIX)", "TRIX", overlay=false)
+
+//@function Calculates TRIX - rate of change of triple EMA
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/trix.md
+//@param source Source price series
+//@param period Lookback period
+//@returns TRIX value
+trix(series float source, simple int period=0, simple float alpha=0)=>
+    if alpha<=0 and period<=0
+        runtime.error("Alpha or period must be provided")
+    float a = alpha>0 ? alpha : 2.0/math.max(period,1)
+    var float ema1=0, var float ema2=0, var float ema3=0
+    var float result1=na, var float result2=na, var float result3=na
+    var float e=1.0
+    var bool warmup=true
+    var float trix_val=na
+    if not na(source)
+        if na(ema1)
+            ema1:=0, ema2:=0, ema3:=0
+            result1:=source, result2:=source, result3:=source
+            trix_val:=0
+        else
+            // calculate first EMA and apply compensator
+            ema1:=a*(source-ema1)+ema1
+            if warmup
+                e*=(1-a)
+                float c=1.0/(1.0-e)
+                result1:=c*ema1
+                ema2:=a*(result1-ema2)+ema2
+                result2:=c*ema2
+                float prev_result3=result3
+                ema3:=a*(result2-ema3)+ema3
+                result3:=c*ema3
+
+                if not na(prev_result3) and prev_result3 != 0
+                    trix_val:=100*(result3-prev_result3)/prev_result3
+                if e<=1e-10
+                    warmup:=false
+            else
+                result1:=ema1
+                ema2:=a*(result1-ema2)+ema2
+                result2:=ema2
+                float prev_result3=result3
+                ema3:=a*(result2-ema3)+ema3
+                result3:=ema3
+                // calculate TRIX as percentage rate of change of triple EMA
+                if not na(prev_result3) and prev_result3 != 0
+                    trix_val:=100*(result3-prev_result3)/prev_result3
+    trix_val
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(close, "Source")
+i_length = input.int(18, "Length", minval=1)
+
+// Calculate TRIX
+float trix_val = trix(i_source, period=i_length)
+
+// Plot
+plot(trix_val, "TRIX", color.yellow, 2)
