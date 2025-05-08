@@ -8,14 +8,15 @@
 | [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume-weighted RSI, measures buying/selling pressure using price and volume |
 | [MOM](/indicators/momentum/mom.md) | Momentum | Measures the rate of price change over a specified period |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Advanced momentum oscillator with zero-lag smoothing using JMA |
-| PMO | Price Momentum Oscillator | Double-smoothed Rate of Change (ROC) oscillator |
+| [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Double-smoothed Rate of Change (ROC) oscillator |
 | PPO | Percentage Price Oscillator | Shows relationship between two moving averages in percentage terms (MACD as percentage) |
 | PRS | Price Relative Strength | Compares the performance of one asset relative to another (ratio) |
 | ROC | Rate of Change | Measures the absolute change in price between the current price and the price N periods ago |
 | ROCP | Rate of Change Percentage | Measures the percentage change in price between the current price and the price N periods ago |
 | ROCR | Rate of Change Ratio | Measures the ratio of the current price to the price N periods ago |
 | ROCR100 | Rate of Change Ratio 100 scale | Measures the ratio of the current price to the price N periods ago, multiplied by 100 |
-| RSI | Relative Strength Index | Measures speed and change of price movements, identifies overbought/oversold conditions |
+| [RSI](/indicators/momentum/rsi.md) | Relative Strength Index | Measures speed and change of price movements, identifies overbought/oversold conditions |
+| [RSX](/indicators/momentum/rsx.md) | Jurik Relative Strength Quality Index | Enhanced RSI with JMA smoothing for cleaner signals |
 | TRIX | Triple Exponential Average | Measures percentage rate of change of a triple exponentially smoothed moving average |
 | TSI | True Strength Index | Double-smoothed momentum oscillator based on price changes |
 | ULTOSC | Ultimate Oscillator | Weighted average of three Stochastic oscillators using different time periods |

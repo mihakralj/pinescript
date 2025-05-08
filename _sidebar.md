@@ -153,6 +153,9 @@
   * [CMO: Chande Momentum Oscillator](/indicators/momentum/cmo.md)
   * [MFI: Money Flow Index](/indicators/momentum/mfi.md)
   * [MOM: Momentum](/indicators/momentum/mom.md)
+  * [PMO: Price Momentum Oscillator](/indicators/momentum/pmo.md)
+  * [RSI: Relative Strength Index](/indicators/momentum/rsi.md)
+  * [RSX: Relative Strength Xtra](/indicators/momentum/rsx.md)
   * [VEL: Jurik Velocity](/indicators/momentum/vel.md)
 
 * [Cycles](/indicators/cycles/_index.md)

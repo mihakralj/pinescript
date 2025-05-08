@@ -174,7 +174,7 @@
 | PIV | Pivot Points | Reversals |
 | PLUS_DI | Plus Directional Indicator | Dynamics |
 | PLUS_DM | Plus Directional Movement | Dynamics |
-| PMO | Price Momentum Oscillator | Momentum |
+| [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Momentum |
 | POLYFIT | Polynomial Fitting | Statistics |
 | PP | Price Pivots | Reversals |
 | PPB | Pivot Points Bands | Channels |
@@ -207,10 +207,10 @@
 | ROCR100 | Rate of Change Ratio 100 scale | Momentum |
 | RPP | Rolling Pivot Points | Reversals |
 | [RSE](/indicators/errors/rse.md) | Relative Squared Error | Errors |
-| RSI | Relative Strength Index | Momentum |
+| [RSI](/indicators/momentum/rsi.md) | Relative Strength Index | Momentum |
+| [RSX](/indicators/momentum/rsx.md) | Jurik Relative Strength Quality Index | Momentum |
 | [RSQUARED](/indicators/errors/rsquared.md) | R-Squared | Errors |
 | RSV | Rogers-Satchell Volatility | Volatility |
-| RSX | Relative Strength Xtra | Oscillators |
 | RV | Realized Volatility | Volatility |
 | RVI | Relative Vigor Index | Volatility |
 | RVGI | Relative Vigor Index | Volatility |

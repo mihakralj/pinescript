@@ -1,7 +1,7 @@
 # QuanTAlib: Technical Indicators Library for Pine Script® v6
 
 ![Pine Script v6.0](https://img.shields.io/badge/Pine%20Script-v6.0-blue?style=flat&logo=tradingview&logoColor=white)
-![Indicators Done](https://img.shields.io/badge/Indicators-135%2F280-orange)
+![Indicators Done](https://img.shields.io/badge/Indicators-138%2F281-orange)
 
 *A begrudgingly assembled heap of technical indicators, duct-taped together for a scripting language so limited, it makes Excel macros look like advanced AI — because apparently, suffering builds character. And also RSI curves.*
 
