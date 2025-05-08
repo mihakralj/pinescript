@@ -1,113 +1,104 @@
 # AllIrs
 
-| Cod e| Ny| [ACCBANDS]hannels/accbands.md) | Acceleration Bands | Channels |
-| [ACC | EL](/indicatorsmerics/accel.md) | Momentum change; 2nd derivative | Numerics |
-| ABBEaDisbDolius/D ChasltVou
-| [ACndicators/volaoscillaioy/aac | AverAVco mi ilMOx/clls/dyeraO inl atnr | Dynamics |
-| [ACCBANDAndicators/tririhtnmeT lasob s sAceeroBa| ALMA](/in|
-|a[ACCELtrends_FIR/alm)um ric AaccdlLegoux Mom ntumTcensg ;F2R) ser |ycvNric
-| [ADLndicators/oscillatorsa.l) | AweAcce ulOsicn/A(i/o-buanuu L| n' PVtlrk
-| [ADOSAindicators/oscvoaumtri|etm| Dyna|tat kAn A/ TOsrillg trperlitm
-| [[DR](/ctdccnnaig/von® |layIad .) Bollinger Band Width | Volatility
-| [BBX](/iedich Pes/dyacs/dx.md) [](/indicators/filters/bessel.md) | Bessel Filt
-|e[ADXR](/i Ficatoes/dysmic/adx.d) ](/indicators/statistics/beta.md) | Beta Coefficie |
-| [BIAS |](/indicators/trends_FIR/afirma.md) Bias | Numerics | (FIR)|
-LLGATO |Willias Allto | Dynmics
-| [[BIL](/indicators/trends_FIR/alma.md)ATERAL](/indicators/filters/ (FIR) |
-| AMATbilArchtr MAs Tr.nms |dDyna)ics |
-| [AO](/ Bdicators/oscillat|es/ro.md) | Aw|o Ocillator|Ocillaos
-| [[BLM](/indicators/volume/aobv.md)A](/indicators/trends_FIR/blma.md) | B
-|l[AP](/icWMcaAT)n/rho.cPln/a.m) B BRAR | Oscillators |
-|[APO](ditor/scillao/a.md) [](/indicators/filters/butter.md) | Bu
-|t[AROON](/ehdi aeors/dy amics/arton.rd) | Arso| Dynmic
-| [BWMAOSC](/indicaOscillator tors/trends_
-|F[AIR](/RBesWeighs/volatility/atr.md)te [indicators/momentum/cci.md) | Co
-|m[mTRBANDS](/indictnoes/chden on/atrbands.md)tu CCV|-to-Close Volatili
-|t[ATRN](/|tiicatorl/volat lity/atr|.md) [dicators/volatility/cv.md) | [0,1] Conditional Vo
-|l[atiP](/iidicattys/vol|ti Vtl/atyp.md) [ndicators/volatility/cvi.md) | Chaikin's
-| VolSa|lATR TyoilinltStit | Reveysals/Volat lity
-| [CEANDS](/indicators/channels/bbands.md) | Chandelier Exit® | Reversals/
-|VBBI | Bulls BeaisyIn |x | Oscllrs |
-| BBW | BolligerBWidth  Volatility |
-| CBWPChanollingdr Band Width PFrcentioer| VolatcaisyOs
-|c[BESSEL](/lndicators/filator/bessel.md) | OscillaFoter| Fs
-| [CG |](/indicators/statistics/beta.md) Center of Gravity | Oscillators |
-|BIAS|Bas| Nueics
-| [[CHANGE](](/indicators/filters/bilateral.md)/indicators/numerics/change.md)
-| [BLMA](/in icatoet/traCds_FIR/blma.md) |aBlackgan Wind w MA | Treuds (FIR)erics |
-| [[CH](/indicators/momentum/bop.md)EBY1](/indicators/filters/cheb |
-| BRARy1 BRAR.| Oecbllayh ser | Filters |
-| [[CHEBY](/indicators/filters/butter.md)2](/indicators/filters/cheby2.md|
-) [|WMA](/indicahshs/erenTs_FIR/bwmI.md) | BesseI-Weighted MA | Trends (FIR) | Filters |
-| [CHO](/indicators/momentum/cci.md)P | Choppiness Index | Oscillators/Dy |
-| CCV | Close-to-Close Volatility | Volatilityn|
-am[CV](/indicatocs/volatilsty/ v.md) |ConalVlatility |Voltility
-| [KSI](/indicators/volatility/cvi.md)P |rhaikin'lStop | Reversals/Channel |
-| CE | Chandelier Exits |Reversals/ |
-| CFO |ChndFrecastOsilatr | Ocllators |
-| CG | Ceter ofGavty | Osillator
-| [[CANGM](/indicators/numerics/change.md)/inPerccntagsvChangme|cNumd)ics |
-| [CHEBY1](/indicators/fhaikin/cheby1.md) Money Flow | VolumeFler |Fs
-| [[CMO]2](/indicators/filters/cheby(.md)/indicators/momentum/cmo.md) | Chande |
-| CHOP MomeoppinnsmcIndaxt| Oscollamors/Dynamics |
-| CKSP | Chende KrolntS|op | Revsals/Channels
-| [[CO](/indicators/volume/cmf.md)INTEGRATION](/indicators/statis|
-ti[CMO](/gnoidCoors/mnmett m/cmS.md)NV](/indicators/trends_FIR/conv.md) | Coth any kernel | Trends (FIR) |
-| [COPPOCK | Cop](/indicators/statistics/cointegration.md)pock Curve | Oscillators |
-|[CONV](/indicatrs/treds_FIR/conv.md) | Convoluion MA with any knel| Tnds(FIR) |
-| COPPOCK | Coppock Cuv | Oscilr
-| [[CORRELATIO](/indicntodi/otatistics/c/statistic.md)s/cCrelation (P(Prarso 's) | S|atistics Statistics |
-| [[COVARIANC](/indicators/statistics/covariance.md)E](/indicators/statistics/co
-|vCRSI | ConnorscRSI | Oseillat.rs |
-| CTI | Correldtion T)end Ind c|tor | OsCillatorsvariance | Statistics |
+| Indicator | Name | Category |
+|-----------|------|----------|
+| [ACCBANDS](/indicators/channels/accbands.md) | Acceleration Bands | Channels |
+| [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative | Numerics |
+| [AC](/indicators/oscillators/ac.md) | Acceleration Oscillator | Oscillators |
+| [ADL](/indicators/volume/adl.md) | Accumulation/Distribution Line | Volume |
+| [ADOSC](/indicators/volume/adosc.md) | Chaikin A/D Oscillator | Volume |
+| [ADR](/indicators/volatility/adr.md) | Average Daily Range | Volatility |
+| [ADX](/indicators/dynamics/adx.md) | Average Directional Movement Index | Dynamics |
+| [ADXR](/indicators/dynamics/adxr.md) | Average Directional Movement Rating | Dynamics |
+| [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
+| ALLIGATOR | Williams Alligator | Dynamics |
+| [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
+| AMAT | Archer Moving Average Trends | Dynamics |
+| [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Oscillators |
+| [AP](/indicators/channels/ap.md) | Andrews' Pitchfork | Channels |
+| [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Oscillators |
+| [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
+| [ATR](/indicators/volatility/atr.md) | Average True Range | Volatility |
+| [ATRBANDS](/indicators/channels/atrbands.md) | ATR Bands | Channels |
+| [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | Volatility |
+| [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent | Volatility |
+| ATRSL | ATR Trailing Stop | Reversals |
+| BB | Bollinger Bands | Channels |
+| BBW | Bollinger Band Width | Volatility |
+| BBWP | Bollinger Band Width Percentile | Oscillators |
+| [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Filters |
+| [BETA](/indicators/statistics/beta.md) | Beta Coefficient | Statistics |
+| BIAS | Bias | Numerics |
+| [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Filters |
+| [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA | Trends (FIR) |
+| [BOP](/indicators/momentum/bop.md) | Balance of Power | Momentum |
+| BRAR | BRAR | Oscillators |
+| [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
+| [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
+| [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Volatility |
+| [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Momentum |
+| CE | Chandelier Exits | Reversals |
+| CFO | Chande Forecast Oscillator | Oscillators |
+| CG | Center of Gravity | Oscillators |
+| [CHANGE](/indicators/numerics/change.md) | Percentage Change | Numerics |
+| [CHEBY1](/indicators/filters/cheby1.md) | Chebyshev Type I Filter | Filters |
+| [CHEBY2](/indicators/filters/cheby2.md) | Chebyshev Type II Filter | Filters |
+| [CMF](/indicators/volume/cmf.md) | Chaikin Money Flow | Volume |
+| [CMO](/indicators/momentum/cmo.md) | Chande Momentum Oscillator | Momentum |
+| CHOP | Choppiness Index | Oscillators/Dynamics |
+| CKSP | Chande Kroll Stop | Reversals/Channels |
+| [COINTEGRATION](/indicators/statistics/cointegration.md) | Cointegration | Statistics |
+| [CONV](/indicators/trends_FIR/conv.md) | Convolution MA with any kernel | Trends (FIR) |
+| COPPOCK | Coppock Curve | Oscillators |
+| [CORRELATION](/indicators/statistics/correlation.md) | Correlation (Pearson's) | Statistics |
+| [COVARIANCE](/indicators/statistics/covariance.md) | Covariance | Statistics |
 | CRSI | Connors RSI | Oscillators |
-|[CI](/indicatrs/vo/v.md) Correlation Trend Indicator | Oscil
-|lCWTs| C ntinuousWvletTransorm|Numerics
-| CVHN | Conditional VolastilVolytiVity
-| [[CVI](/indicators/trends_IIR/dema.md)](/indicators/volatility/cvi.md) |(IIR)
-|CDIFF | Diffarenins|lNumar|csoility |
-| [CWT |](/indicators/errors/dirty.md) Continuous Wavelet Transform | Nu
-|m[eMX](/indicriors/dyncmc/dmx.md)  Donchian Channels | Volatility |
-|DOSC | DerivtivOscllato | Oslatrs |
-| DPO | Dtrded Price Oscillaor Dynamics |
-| [[DEM](/indicators/trends_IIR/dsma.md)A](/indicators/trends_IIR/dema.m(IIR) d
-|)D S | Double Smoo|heo Stochustice| CyclEs |
-| [DWMA](/pndiconnrs/tretds_FIR/dama.md) | Doubll We MA | Trend Trends (IFR)F
-||DWT | Discrete WaveDft Tfansform | Numericr |
-| DX |eDiee tional Movem|nt Numer | Dynamics |
-| EACPic EhlerssAutoc|rreation Periodogra | Cycls |
-| EBSW EvenBette Snewave | Cyls |
-| [EFI](/indicators/me/efi.d) | EldrFrc Idex | Oscillaors/Vole
-| [[DIRT](/indicators/filters/ehbpf.md)Y](/indicators/errors/dirty.md) | Di|
-rt[EHHPF](/iDaicatorI/Errorss/ehhpf.md)(/indicators/dynamics/dmx.md) | Juri|
-k [EDSSF](/indicttoro/t Indes/ehssf.md)| Derivative Oscillato| Oscillators ||
-[EHUSF](/niars/s/ehusf.md) Detrended Price Osciltor | Dynamics |
-| [[DSMA](/](/indicators/filters/elliptic.md)indicators/trends_IIR/dsma.md) | Devi|
-at[iMA](/andAca ors/drends_IIR/sma.md) | Double Smoothed Stochas(IIR)
-| [[DWMA](](/indicators/statistics/entropy.md)/indicators/trends_FIR/dwma.md) | Double We|
-ig[EOM](/enA ca oTs/volnme/I|m.md) | Discrete Wavelet Transform|
- [EPMA](/rs/tends_DIX/epma.md)DilEnMvoinet Index | Dy (FIR) |
-| ERnamEffi cyRo |Oscillators
-| ERI| tEodrelRaytIndPxiodOmc ll|tory
- tEewave ExponCytial W I]iVoldtal/ty ElVoletFlIeyscillators/Volume |
-| EXPPFdicators/filehbafmfsrmetdonrers/ehhpf.mder | Filters |
-| FCBSSFFracta/nChaoscBa/filteVo.mliefml/ChannalF | Filters |
-| FLSHERIPTFCsh/idicators/fi EOicaultt| si|
-| FOSC(/iFrdecaI) Osantlorort/eOmmhalEtorropy | Statistics |
-| [FROat](/indicatovs/trolum_IIR/frama.md)e/eFr)cta |A of Movement MrendsA(IIR)(c
-|a[GAUSS](/tndirFIers/pi)t |s/g uss.md)o fiGaissntnsFrs|erFs
-| GKRldeGaRayn-K assxillators |
-|GRAGER | Gngr| Stsics
-| [GWMA](/inaiclWo s/trVola_FIR/gwma.md)tilGlusst|n-Weghtd TeTmdon(FIR)
-||[H MMA](/indicrtori/trc_CIR/hFamc.md)a BHiamesg Wnd wnMAflaTo n(FIR)
-| [HASM ](/ecdicstots/tsends_FIR/hcior.ad)|HnnWindow MA](tT/tnde_(FIR)r|
-am[HEMA](/)nd Fdtots/te ndA_IIR/hdma.md)s|SHull(rxpenenrmad MA GnTltndrF(IIR)
-| [HIVHEST](/nndasty|rs/ tility/hhang.td)HhA]cNom/Idcnted MA | Trends (FIR) |
-A]H(V/haH | -LownValatitirys_FVhlntigiWyA | Trends (FIR) |
-| [H[H](/icdicttRrH/txondM_FIR/hmT.me)HEiHulls/numerics/hh(FIR)t value | Numerics |
-| HOHO | LHomVdy|latiscrimintyCyls
-| [HM](/indicdtoro/fisRmMA/hp.md) |(HodRi)k-PHnceticFiitn|Fis
-| HT_DCPHRIODP](HilbirtpT) nsficmk- _om|n HtiCycetaPrmiod- DCycnysPeriod | Cycles |
+| CTI | Correlation Trend Indicator | Oscillators |
+| [CUMMEAN](/indicators/statistics/cummean.md) | Cumulative Mean (Average) | Statistics |
+| [CV](/indicators/volatility/cv.md) | Conditional Volatility | Volatility |
+| [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Volatility |
+| CWT | Continuous Wavelet Transform | Numerics |
+| CDIFF | Differentiating | Numerics |
+| [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
+| [DC](/indicators/channels/dc.md) | Donchian Channels | Channels |
+| DOSC | Derivative Oscillator | Oscillators |
+| DPO | Detrended Price Oscillator | Dynamics |
+| DSS | Double Smoothed Stochastic | Cycles |
+| [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
+| [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
+| DWT | Discrete Wavelet Transform | Numerics |
+| DX | Directional Movement Index | Dynamics |
+| EACP | Ehlers Autocorrelation Periodogram | Cycles |
+| EBSW | Ehlers Even Better Sinewave | Cycles |
+| [EFI](/indicators/volume/efi.md) | Elder's Force Index | Oscillators/Volume |
+| [EHBPF](/indicators/filters/ehbpf.md) | Ehlers Bandpass Filter | Filters |
+| [EHHPF](/indicators/filters/ehhpf.md) | Ehlers Highpass Filter | Filters |
+| [EHSSF](/indicators/filters/ehssf.md) | Ehlers Super Smoother Filter | Filters |
+| [EHUSF](/indicators/filters/ehusf.md) | Ehlers Ultra Smoother Filter | Filters |
+| [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Filters |
+| [EMA](/indicators/trends_IIR/ema.md) | Exponential MA | Trends (IIR) |
+| [ENTROPY](/indicators/statistics/entropy.md) | Normalized Shannon Entropy | Statistics |
+| [EOM](/indicators/volume/eom.md) | Ease of Movement | Volume |
+| [EPMA](/indicators/trends_FIR/epma.md) | Endpoint MA | Trends (FIR) |
+| ER | Efficiency Ratio | Oscillators |
+| ERI | Elder Ray Index | Oscillators |
+| FCB | Fractal Chaos Bands | Volume/Channels |
+| FISHER | Fisher Transform | Oscillators |
+| FOSC | Forecast Oscillator | Oscillators |
+| [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
+| [GAUSS](/indicators/filters/gauss.md) | Gaussian Filter | Filters |
+| GKR | Golden-Cross/Death-Cross | Oscillators |
+| [GRANGER](/indicators/statistics/granger.md) | Granger Causality Test | Statistics |
+| [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted MA | Trends (FIR) |
+| [HAMMA](/indicators/trends_FIR/hamma.md) | Hamming Window MA | Trends (FIR) |
+| [HANMA](/indicators/trends_FIR/hanma.md) | Hanning Window MA | Trends (FIR) |
+| [HEMA](/indicators/trends_IIR/hema.md) | Hull Exponential MA | Trends (IIR) |
+| [HIGHEST](/indicators/numerics/highest.md) | Highest value | Numerics |
+| HILO | High-Low Volatility | Volatility |
+| [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Trends (FIR) |
+| HOHO | Homodyne Discriminator | Cycles |
+| [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Filters |
+| HT_DCPERIOD | Hilbert Transform - Dominant Cycle Period | Cycles |
 | HT_DCPHASE | Hilbert Transform - Dominant Cycle Phase | Cycles |
 | HT_PHASOR | Hilbert Transform - Phasor Components | Cycles |
 | HT_SINE | Hilbert Transform - SineWave | Cycles |
@@ -136,6 +127,8 @@ A]H(V/haH | -LownValatitirys_FVhlntigiWyA | Trends (FIR) |
 | KVO | Klinger Volume Oscillator | Volume |
 | [LINEAR](/indicators/numerics/linear.md) | Linear Transformation | Numerics |
 | [LINREG](/indicators/statistics/linreg.md) | Linear Regression Curve | Statistics |
+| [CUMMEAN](/indicators/statistics/cummean.md) | Cumulative Mean (Average) | Statistics |
+| [MEDIAN](/indicators/statistics/median.md) | Median (Statistical) | Statistics |
 | [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Filters |
 | [LOG](/indicators/numerics/log.md) | Logarithmic Transformation | Numerics |
 | [LOWEST](/indicators/numerics/lowest.md) | Lowest value | Numerics |
@@ -152,7 +145,7 @@ A]H(V/haH | -LownValatitirys_FVhlntigiWyA | Trends (FIR) |
 | [MASE](/indicators/errors/mase.md) | Mean Absolute Scaled Error | Errors |
 | MASSI | Mass Index | Volatility |
 | [ME](/indicators/errors/me.md) | Mean Error | Errors |
-| [MEDIAN](/indicators/filters/median.md) | Median Filter | Numerics/Filters |
+| [MEDFILT](/indicators/filters/median.md) | Median Filter | Numerics/Filters |
 | [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume/Momentum |
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
 | MINMAX | Lowest and highest values | Channels |
@@ -161,7 +154,7 @@ A]H(V/haH | -LownValatitirys_FVhlntigiWyA | Trends (FIR) |
 | MINUS_DI | Minus Directional Indicator | Dynamics |
 | MINUS_DM | Minus Directional Movement | Dynamics |
 | [MMA](/indicators/trends_IIR/mma.md) | Modified MA | Trends (IIR) |
-| MODE | Mode | Statistics |
+| [MODE](/indicators/statistics/mode.md) | Mode (Most Frequent) | Statistics |
 | [MOM](/indicators/momentum/mom.md) | Momentum | Momentum |
 | [MPE](/indicators/errors/mpe.md) | Mean Percentage Error | Errors |
 | [MSE](/indicators/errors/mse.md) | Mean Squared Error | Errors |
@@ -169,7 +162,7 @@ A]H(V/haH | -LownValatitirys_FVhlntigiWyA | Trends (FIR) |
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Filters |
 | NVI | Negative Volume Index | Volume |
 | PCH | Price Channel Indicator | Volatility/Channels |
-| PERCENTILE | Percentile | Statistics |
+| [PERCENTILE](/indicators/statistics/percentile.md) | Percentile | Statistics |
 | PGO | Pretty Good Oscillator | Oscillators |
 | PIV | Pivot Points | Reversals |
 | PLUS_DI | Plus Directional Indicator | Dynamics |
@@ -192,7 +185,7 @@ A]H(V/haH | -LownValatitirys_FVhlntigiWyA | Trends (FIR) |
 | [QEMA](/indicators/trends_IIR/qema.md) | Quadruple Exponential MA | Trends (IIR) |
 | QQE | Quantitative Qualitative Estimation | Oscillators |
 | QSTICK | Q Stick | Dynamics |
-| QUANTILE | Quantile | Statistics |
+| [QUANTILE](/indicators/statistics/quantile.md) | Quantile | Statistics |
 | [RAE](/indicators/errors/rae.md) | Relative Absolute Error | Errors |
 | REGC | Regression Channels | Channels |
 | RELU | Rectified Linear Unit | Numerics |

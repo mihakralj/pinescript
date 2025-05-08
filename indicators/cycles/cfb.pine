@@ -1,0 +1,201 @@
+// The MIT License (MIT)
+// © pinescriptmaster
+//@version=6
+indicator("Composite Fractal Behavior (CFB)", "CFB", overlay=false)
+
+//@function Calculates auxiliary CFB values based on price series and depth
+//@param source Series to analyze for fractal patterns
+//@param depth Lookback period for analyzing price changes
+//@returns Ratio representing fractal behavior at specified depth
+//@optimized for performance and incremental calculation
+jcfbaux(series float source, series int depth) =>  // Changed to accept series int
+    var float absChangeSum = 0.0
+    var float weightedChangeSum = 0.0
+    var float levelSum = 0.0
+
+    if bar_index >= depth * 2
+        if bar_index == depth * 2
+            // Initialize sums on first valid bar
+            for k = depth - 1 to 0
+                float currentDiff = math.abs(nz(source[k]) - nz(source[k+1]))
+                absChangeSum := absChangeSum + currentDiff
+                weightedChangeSum := weightedChangeSum + (depth + k) * currentDiff
+                levelSum := levelSum + nz(source[k+1])
+        else
+            // Update sums incrementally
+            float currentDiff = math.abs(source - nz(source[1]))
+            float oldestDiff = math.abs(nz(source[depth]) - nz(source[depth+1]))
+            absChangeSum := absChangeSum - oldestDiff + currentDiff
+            weightedChangeSum := weightedChangeSum - absChangeSum + (currentDiff * depth)
+            levelSum := levelSum - nz(source[depth+1]) + nz(source[1])
+
+        float levelCompare = math.abs(depth * source - levelSum)
+        float result = weightedChangeSum > 0.0 ? levelCompare / weightedChangeSum : 0.0
+        result
+    else
+        0.0
+
+//@function Calculates Composite Fractal Behavior across multiple timeframes
+//@doc Identifies dominant market cycles by analyzing price behavior across multiple timeframes
+//@param source Series to analyze for fractal patterns
+//@param depth Depth parameter controlling timeframe analysis (1-10)
+//@param smoothLength Smoothing period for the calculation
+//@returns Composite Fractal Behavior value representing dominant market cycle
+//@optimized for memory efficiency and performance
+jcfb(series float source, simple int depth, simple int smoothLength) =>
+    // Initialize arrays on first bar
+    var array<float> powArray = array.new_float(depth * 2, 0.0)
+    var array<float> cumSumArray = array.new_float(depth * 2, 0.0)
+    var array<float> cfbValues = array.new_float(depth * 2, 0.0)
+    var array<float> smoothedValues = array.new_float(depth * 2, 0.0)
+    var array<float> weightedValues = array.new_float(depth * 2, 0.0)
+    var bool arraysInitialized = false
+
+    // Initialize arrays only once
+    if not arraysInitialized
+        arraysInitialized := true
+        // Build power and cumulative sum arrays
+        float cumSum = 2.0
+        for i = 0 to depth * 2 - 1
+            int powerIndex = int(i / 2)
+            float powerValue = math.pow(2, powerIndex)
+            array.set(powArray, i, powerValue)
+            array.set(cumSumArray, i, cumSum)
+            cumSum += powerValue
+
+    // Calculate CFB auxiliary values for each timeframe
+    int arraySize = array.size(cumSumArray)
+    for i = 0 to arraySize - 1
+        int timeframePeriod = int(array.get(cumSumArray, i))
+        array.set(cfbValues, i, jcfbaux(source, timeframePeriod))
+
+    // Apply smoothing logic
+    if bar_index <= smoothLength
+        // Accumulate values during initialization period
+        if bar_index > 0
+            for k = 0 to arraySize - 1
+                float currentValue = array.get(smoothedValues, k)
+                float newValue = currentValue + array.get(cfbValues, k)
+                array.set(smoothedValues, k, newValue)
+
+            // Normalize by bar count on last initialization bar
+            if bar_index == smoothLength
+                for k = 0 to arraySize - 1
+                    float currentValue = array.get(smoothedValues, k)
+                    array.set(smoothedValues, k, currentValue / smoothLength)
+    else
+        // Moving window smoothing after initialization
+        for k = 0 to arraySize - 1
+            float currentValue = array.get(smoothedValues, k)
+            float newSample = array.get(cfbValues, k)
+            float oldSample = nz(array.get(cfbValues, k)[smoothLength])
+            float updatedValue = currentValue + (newSample - oldSample) / smoothLength
+            array.set(smoothedValues, k, updatedValue)
+
+    float result = 0.0
+    // Calculate weighted values for final composition
+    if bar_index > 5
+        float factorA = 1.0
+        float factorB = 1.0
+
+        for k = 0 to arraySize - 1
+            float smoothedValue = array.get(smoothedValues, k)
+            if k % 2 == 0
+                float weightedValue = factorB * smoothedValue
+                array.set(weightedValues, k, weightedValue)
+                factorB := factorB * (1.0 - weightedValue)
+            else
+                float weightedValue = factorA * smoothedValue
+                array.set(weightedValues, k, weightedValue)
+                factorA := factorA * (1.0 - weightedValue)
+
+        // Compute final composite value
+        float weightedSquareSum = 0.0
+        float squareSum = 0.0
+
+        for i = 0 to arraySize - 1
+            float weightedValue = array.get(weightedValues, i)
+            float squaredValue = weightedValue * weightedValue
+            squareSum += squaredValue
+            weightedSquareSum += squaredValue * array.get(cumSumArray, i)
+
+        result := squareSum > 0.0 ? weightedSquareSum / squareSum : 0.0
+
+    result
+
+//@function Jurik Moving Average - adaptive smoothing function
+//@param source Series to smooth
+//@param period Smoothing period
+//@param phase Phase adjustment (-100 to 100)
+//@returns Smoothed JMA value
+jma(series float source, simple int period, simple int phase = 0, simple float power = 0.45) =>
+    var simple float PHASE_VALUE = math.min(math.max((phase * 0.01) + 1.5, 0.5), 2.5)
+    var simple float BETA = power * (period - 1) / ((power * (period - 1)) + 2)
+    var simple float LEN1 = math.max((math.log(math.sqrt(0.5*(period-1))) / math.log(2.0)) + 2.0, 0)
+    var simple float POW1 = math.max(LEN1 - 2.0, 0.5)
+    var simple float LEN2 = math.sqrt(0.5*(period-1))*LEN1
+    var simple float POW1_RECIPROCAL = 1.0 / POW1
+    var simple float AVG_VOLTY_ALPHA = 2.0 / (math.max(4.0 * period, 65) + 1.0)
+    var simple float DIV = 1.0/(10.0 + 10.0*(math.min(math.max(period-10,0),100))/100.0)
+    var float upperBand_state = na
+    var float lowerBand_state = na
+    var float ma1_state = na
+    var float jma_state = na
+    var float vSum_state = 0.0
+    var float det0_state = 0.0
+    var float det1_state = 0.0
+    var float avgVolty_state = na
+    var volty_array_state = array.new_float(11, 0.0)
+    float current_jma = na
+    if not na(source)
+        float del1 = source - nz(upperBand_state, source)
+        float del2 = source - nz(lowerBand_state, source)
+        float volty = math.abs(del1) == math.abs(del2) ? 0.0 : math.max(math.abs(del1), math.abs(del2))
+        array.unshift(volty_array_state, nz(volty, 0.0))
+        array.pop(volty_array_state)
+        if not na(volty)
+            vSum_state := vSum_state + (volty - array.get(volty_array_state, 10)) * DIV
+            avgVolty_state := nz(avgVolty_state, vSum_state) + AVG_VOLTY_ALPHA * (vSum_state - nz(avgVolty_state, vSum_state))
+        float rvolty = math.min(math.max(nz(avgVolty_state, 0) > 0 ? nz(volty, 0.0) / nz(avgVolty_state, 1.0) : 1.0, 1.0), math.pow(LEN1, POW1_RECIPROCAL))
+        float pow2 = math.pow(rvolty, POW1)
+        float Kv = math.pow(LEN2/(LEN2+1), math.sqrt(pow2))
+        upperBand_state := del1 > 0 ? source : source - Kv * del1
+        lowerBand_state := del2 < 0 ? source : source - Kv * del2
+        float alpha = math.pow(BETA, pow2)
+        float alphaSquared = alpha * alpha
+        float oneMinusAlpha = 1.0 - alpha
+        float oneMinusAlphaSquared = oneMinusAlpha * oneMinusAlpha
+        ma1_state := source + (alpha * (nz(ma1_state, source) - source))
+        det0_state := (source - ma1_state) * (1 - BETA) + BETA * nz(det0_state, 0)
+        float ma2 = ma1_state + (PHASE_VALUE * det0_state)
+        det1_state := ((ma2 - nz(jma_state, source)) * oneMinusAlphaSquared) + (alphaSquared * nz(det1_state, 0))
+        jma_state := nz(jma_state, source) + det1_state
+        current_jma := jma_state
+    current_jma
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(hlcc4, "Source",
+     tooltip="Price series to analyze for fractal behavior")
+i_depth = input.int(10, "CFB Depth", minval=1, maxval=10,
+     tooltip="Controls how many timeframes are analyzed (1-10)")
+i_smooth = input.int(8, "Smooth Length", minval=1,
+     tooltip="Number of bars used to smooth the CFB calculation")
+i_jma_period = input.int(5, "JMA Period", minval=1,
+     tooltip="Smoothing period for Jurik filter")
+i_jma_phase = input.int(0, "JMA Phase", minval=-100, maxval=100,
+     tooltip="Phase shift for Jurik filter (-100 to 100)")
+
+// Calculation with double smoothing
+cfb_value = jcfb(i_source, i_depth, i_smooth)
+cfb_smoothed = jma(jma(cfb_value, i_jma_period, i_jma_phase), i_jma_period, i_jma_phase)
+
+// Ensure minimum value is 1
+cfb_final = math.ceil(cfb_smoothed) < 1 ? 1 : math.ceil(cfb_smoothed)
+
+// Color settings
+color_cfb = color.new(#2DD204, 0)  // Green color
+
+// Plot
+plot(cfb_final, "CFB", color_cfb, 2)
