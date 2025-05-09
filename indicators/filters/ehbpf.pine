@@ -46,12 +46,12 @@ ehbpf(series float src, simple int lp, simple int up) =>
     // ---------- Main loop ----------
 
 // Inputs
-i_lower = input.int(10, "Longer Period", minval=1)
-i_upper = input.int(20, "Shorter Period", minval=1)
+i_lower = input.int(10, "Lower Cutoff", minval=1)
+i_upper = input.int(20, "Higher Cutoss", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
 ehbpf = ehbpf(i_source, i_lower, i_upper)
 
 // Plot
-plot(ehbpf, "EHBandpass", color.new(color.yellow, 0), 2)
+plot(i_source-ehbpf, "EHBandpass", color.new(color.yellow, 0), 2)

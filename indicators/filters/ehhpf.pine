@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Ehlers 2-Pole Highpass Filter(EHHPF)", "EHHPF", overlay=false, timeframe="", timeframe_gaps=true)
+indicator("Ehlers Highpass Filter (2-Pole) (EHHPF)", "sig-EHHPF", overlay=true)
 
 //@function Calculates Ehlers 2-Pole Highpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehhpf.md
@@ -35,4 +35,5 @@ i_source = input.source(close, "Source")
 hp_val = ehhpf(i_source, i_length)
 
 // Plot
-plot(hp_val, "EHBandpass", color.new(color.yellow, 0), 2)
+//subtract high-pass signal from source, leaving only low frequencies
+plot(i_source-hp_val, "EHBandpass", color.new(color.yellow, 0), 2)
