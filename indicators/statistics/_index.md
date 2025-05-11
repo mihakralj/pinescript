@@ -3,6 +3,7 @@
 | Code          | Name                        | Key Characteristics                                                                            |
 |---------------|-----------------------------|------------------------------------------------------------------------------------------------|
 | [BETA](/indicators/statistics/beta.md) | Beta Coefficient | Measures the volatility of an asset relative to the overall market                             |
+| [BIAS](/indicators/statistics/bias.md) | Bias | Measures the percentage deviation of signal from its moving average |
 | [COINTEGRATION](/indicators/statistics/cointegration.md) | Cointegration | Tests if two or more time series share a long-term equilibrium relationship                     |
 | [CORRELATION](/indicators/statistics/correlation.md) | Correlation (Pearson's) | Measures the linear relationship between two variables (-1 to +1)                               |
 | [COVARIANCE](/indicators/statistics/covariance.md) | Covariance | Measures the joint variability of two random variables                                         |
@@ -19,7 +20,7 @@
 | [PERCENTILE](/indicators/statistics/percentile.md)    | Percentile                  | Calculates the value below which a given percentage of observations fall                       |
 | POLYFIT       | Polynomial Fitting          | Fits a polynomial curve to data points                                                         |
 | [QUANTILE](/indicators/statistics/quantile.md)      | Quantile                    | Divides the probability distribution of a variable into continuous intervals with equal probabilities |
-| SKEW          | Skew                        | Measures the asymmetry of the probability distribution of a variable                             |
+| [SKEW](/indicators/statistics/skew.md)          | Skewness                    | Measures the asymmetry of the probability distribution of a variable                             |
 | SPEARMAN      | Spearman                    | Measures the strength and direction of association between two ranked variables                |
 | STANDARDIZE   | Standardization             | Rescales data to have a mean of 0 and a standard deviation of 1 (Z-score)                        |
 | [STDDEV](/indicators/statistics/stddev.md)        | Standard Deviation          | Measures the amount of variation or dispersion of a set of values                                |

@@ -28,7 +28,7 @@
 | BBWP | Bollinger Band Width Percentile | Oscillators |
 | [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Filters |
 | [BETA](/indicators/statistics/beta.md) | Beta Coefficient | Statistics |
-| BIAS | Bias | Numerics |
+| [BIAS](/indicators/statistics/bias.md) | Bias | Statistics |
 | [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Filters |
 | [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA | Trends (FIR) |
 | [BOP](/indicators/momentum/bop.md) | Balance of Power | Momentum |
@@ -149,7 +149,7 @@
 | [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume/Momentum |
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
 | MINMAX | Lowest and highest values | Channels |
-| MINMAX_SCALE | Min-Max Scaling (Normalization) | Numerics |
+| [NORMALIZE](/indicators/numerics/normalize.md) | Min-Max Scaling (Normalization) | Numerics |
 | [MOON](/indicators/cycles/moon.md) | Moon Phase | Cycles |
 | MINUS_DI | Minus Directional Indicator | Dynamics |
 | MINUS_DM | Minus Directional Movement | Dynamics |
@@ -188,7 +188,7 @@
 | [QUANTILE](/indicators/statistics/quantile.md) | Quantile | Statistics |
 | [RAE](/indicators/errors/rae.md) | Relative Absolute Error | Errors |
 | REGC | Regression Channels | Channels |
-| RELU | Rectified Linear Unit | Numerics |
+| [RELU](/indicators/numerics/relu.md) | Rectified Linear Unit | Numerics |
 | [REMA](/indicators/trends_IIR/rema.md) | Regularized Exponential MA | Trends (IIR) |
 | [RGMA](/indicators/trends_IIR/rgma.md) | Recursive Gaussian MA | Trends (IIR) |
 | [RMA](/indicators/trends_IIR/rma.md) | wildeR MA (SMMA, MMA) | Trends (IIR) |
@@ -210,10 +210,10 @@
 | SDC | Standard Deviation Channel | Channels |
 | [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Filters |
 | [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Trends (FIR) |
-| SIGMOID | Logistic Function | Numerics |
+| [SIGMOID](/indicators/numerics/sigmoid.md) | Logistic Function | Numerics |
 | SINE | Sine Wave | Cycles |
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Trends (FIR) |
-| SKEW | Skew | Statistics |
+| [SKEW](/indicators/statistics/skew.md) | Skewness | Statistics |
 | [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Trends (FIR) |
 | [SMAPE](/indicators/errors/smape.md) | Symmetric Mean Absolute Percentage Error | Errors |
@@ -231,7 +231,7 @@
 | STOCHRSI | Stochastic RSI | Oscillators |
 | SUPER | SuperTrend | Reversals/Dynamics |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA | Trends (IIR) |
-| TANH | Hyperbolic Tangent | Numerics |
+| [TANH](/indicators/numerics/tanh.md) | Hyperbolic Tangent | Numerics |
 | TD_SEQ | TD Sequential | Oscillators |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA | Trends (IIR) |
 | THEIL | Theil | Statistics |

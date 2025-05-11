@@ -1,0 +1,43 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Hyperbolic Tangent (TANH)", "TANH", overlay=false, precision=6)
+
+//@function Applies the hyperbolic tangent (tanh) function to a source series.
+// Formula: S(x) = tanh(k * (x - x0))
+// where tanh(y) = (exp(y) - exp(-y)) / (exp(y) + exp(-y))
+// Maps any real-valued input to the range (-1, 1).
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/tanh.md
+//@param src The source series.
+//@param k The steepness factor. Higher k means a steeper curve around x0.
+//@param x0 The x-value of the inflection point (where the output is 0).
+//@returns The tanh transformed series, values between -1 and 1.
+tanh(series float src, simple float k, float x0) =>
+    y = k * (src - x0)
+    exp_y = math.exp(y)
+    exp_neg_y = math.exp(-y)
+    numerator = exp_y - exp_neg_y
+    denominator = exp_y + exp_neg_y
+    result = float(na)
+    if denominator == 0.0
+        if numerator > 0
+            result := 1.0
+        else if numerator < 0
+            result := -1.0
+        else
+            result := 0.0
+    else
+        result := numerator / denominator
+    result
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(close, "Source")
+i_steepness_k = input.float(0.5, "Steepness (k)", minval = 0.1, step = 0.1)
+
+// Calculation
+tanhValue = tanh(i_source, i_steepness_k, ta.sma(i_source,200))
+
+// Plot
+plot(tanhValue, "Tanh", color.new(color.yellow, 0), 2)

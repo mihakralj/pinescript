@@ -89,7 +89,7 @@ const processIndexFiles = () => {
   }
 
   console.log('------------------------------------------------');
-  console.log(`TOTAL${' '.repeat(10)} ${totalImplemented} + ${grandTotal - totalImplemented} + ${totalImplemented} = ${grandTotal}`);
+  console.log(`TOTAL${' '.repeat(10)} ${totalImplemented} + ${grandTotal - totalImplemented} = ${grandTotal}`);
 };
 
 processIndexFiles();
