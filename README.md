@@ -13,8 +13,6 @@ Don't worry if you're new to this – odds are high you are. And yes, some of th
 
 ## What's in the box? (Besides existential dread)
 
-For more information about indicator types and characteristics, see:
-
 - [Finite Impulse Response Trends](./indicators/trends_FIR/_index.md)
 - [Infinite Impulse Response Trends](./indicators/trends_IIR/_index.md)
 - [Oscillators](./indicators/oscillators/_index.md)
