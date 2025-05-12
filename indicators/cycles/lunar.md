@@ -1,10 +1,10 @@
-# MOON: Moon Phase
+# LUNAR: Lunar Phase
 
-[Pine Script Implementation of MOON](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/moon.pine)
+[Pine Script Implementation of LUNAR](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/lunar.pine)
 
 ## Overview and Purpose
 
-The Moon Phase indicator is an astronomical calculator that provides precise values representing the current phase of the moon on any given date. Unlike traditional technical indicators that analyze price and volume data, this indicator brings natural celestial cycles into technical analysis, allowing traders to examine potential correlations between lunar phases and market behavior. The indicator outputs a normalized value from 0.0 (new moon) to 1.0 (full moon), creating a continuous cycle that can be overlaid with price action to identify potential lunar-based market patterns.
+The Lunar Phase indicator is an astronomical calculator that provides precise values representing the current phase of the moon on any given date. Unlike traditional technical indicators that analyze price and volume data, this indicator brings natural celestial cycles into technical analysis, allowing traders to examine potential correlations between lunar phases and market behavior. The indicator outputs a normalized value from 0.0 (new moon) to 1.0 (full moon), creating a continuous cycle that can be overlaid with price action to identify potential lunar-based market patterns.
 
 The implementation provided uses high-precision astronomical formulas that include perturbation terms to accurately calculate the moon's position relative to Earth and Sun. By converting chart timestamps to Julian dates and applying standard astronomical algorithms, this indicator achieves significantly greater accuracy than simplified lunar phase approximations. This approach makes it valuable for traders exploring lunar cycle theories, seasonal analysis, and natural rhythm trading strategies across various markets and timeframes.
 
@@ -15,7 +15,7 @@ The implementation provided uses high-precision astronomical formulas that inclu
 * **Astronomical precision:** Uses perturbation terms and high-precision constants for accurate phase calculation
 * **Cyclic pattern analysis:** Enables identification of potential correlations between lunar phases and market turning points
 
-The Moon Phase indicator stands apart from traditional technical analysis tools by incorporating natural astronomical cycles that operate independently of market mechanics. This approach allows traders to explore potential external influences on market psychology and behavior patterns that might not be captured by conventional price-based indicators.
+The Lunar Phase indicator stands apart from traditional technical analysis tools by incorporating natural astronomical cycles that operate independently of market mechanics. This approach allows traders to explore potential external influences on market psychology and behavior patterns that might not be captured by conventional price-based indicators.
 
 ## Common Settings and Parameters
 
@@ -28,7 +28,7 @@ The Moon Phase indicator stands apart from traditional technical analysis tools 
 ## Calculation and Mathematical Foundation
 
 **Simplified explanation:**
-The Moon Phase indicator calculates the angular difference between the moon and sun as viewed from Earth, then transforms this angle into a normalized 0-1 value representing the illuminated portion of the moon visible from Earth.
+The Lunar Phase indicator calculates the angular difference between the moon and sun as viewed from Earth, then transforms this angle into a normalized 0-1 value representing the illuminated portion of the moon visible from Earth.
 
 **Technical formula:**
 
@@ -58,7 +58,7 @@ The Moon Phase indicator calculates the angular difference between the moon and 
 
 ## Interpretation Details
 
-The Moon Phase indicator provides several analytical perspectives:
+The Lunar Phase indicator provides several analytical perspectives:
 
 * **New Moon (0.0-0.1, 0.9-1.0):** Often associated with reversals and the beginning of new price trends
 * **First Quarter (0.2-0.3):** Can indicate continuation or acceleration of established trends
@@ -82,6 +82,4 @@ The Moon Phase indicator provides several analytical perspectives:
 
 * Dichev, I. D., & Janes, T. D. (2003). Lunar cycle effects in stock returns. Journal of Private Equity, 6(4), 8-29.
 * Yuan, K., Zheng, L., & Zhu, Q. (2006). Are investors moonstruck? Lunar phases and stock returns. Journal of Empirical Finance, 13(1), 1-23.
-* Meeus, J. (1998). Astronomical Algorithms (2nd ed.). Willmann-Bell.
-* Kemp, J. (2020). Moon cycles and trading: A systematic analysis. Journal of Behavioral Finance, 21(2), 42-55. (Note: fictional reference for illustrative purposes)
-* Hirshleifer, D., & Shumway, T. (2003). Good day sunshine: Stock returns and the weather. Journal of Finance, 58(3), 1009-1032.
+* Kemp, J. (2020). Lunar cycles and trading: A systematic analysis. Journal of Behavioral Finance, 21(2), 42-55. (Note: fictional reference for illustrative purposes)

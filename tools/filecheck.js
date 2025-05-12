@@ -8,7 +8,7 @@ const validateMdLink = (content, mdFile) => {
   if (!linkMatch) return 'Missing or invalid Pine Script implementation link';
 
   const link = linkMatch[1];
-  const expectedPath = mdFile.replace(/\.md$/, '.pine');
+  const expectedPath = mdFile.replace(/\.md$/, '.pine').replace(/\\/g, '/');
   const expectedLink = `https://github.com/mihakralj/pinescript/blob/main/${expectedPath}`;
 
   return link === expectedLink ? null : `Invalid link:\nFound:    ${link}\nExpected: ${expectedLink}`;
@@ -19,7 +19,7 @@ const validatePineLink = (content, pineFile) => {
   if (!docMatch) return 'Missing //@doc link';
 
   const link = docMatch[1].trim();
-  const expectedPath = pineFile.replace(/^indicators/, 'indicators');
+  const expectedPath = pineFile.replace(/^indicators/, 'indicators').replace(/\\/g, '/');
   const expectedLink = `https://github.com/mihakralj/pinescript/blob/main/${expectedPath.replace('.pine', '.md')}`;
 
   return link === expectedLink ? null : `Invalid link:\nFound:    ${link}\nExpected: ${expectedLink}`;

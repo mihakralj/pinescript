@@ -177,7 +177,8 @@
   * [VEL: Jurik Velocity](/indicators/momentum/vel.md)
 
 * [Cycles](/indicators/cycles/_index.md)
-  * [MOON: Moon Phase](/indicators/cycles/moon.md)
+  * [LUNAR: Lunar Phase](/indicators/cycles/lunar.md)
+  * [SOLAR: Solar Cycle](/indicators/cycles/solar.md)
   * [STC: Schaff Trend Cycle](/indicators/cycles/stc.md)
 
 * [Stop and Reverse](/indicators/reversals/_index.md)

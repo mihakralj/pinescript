@@ -2,7 +2,8 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
-| [MOON](/indicators/cycles/moon.md) | Moon Phase | High-precision lunar phase incorporating orbital perturbations and epoch corrections |
+| [LUNAR](/indicators/cycles/lunar.md) | Lunar Phase | High-precision lunar phase incorporating orbital perturbations and epoch corrections |
+| [SOLAR](/indicators/cycles/solar.md) | Solar Cycle | High-precision seasonal cycle based on solar position using astronomical formulas |
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Measures cycles and trends using a combination of Macd and stochastic calculations |
 | EBSW| Even Better Sinewave | Ehlers indicator attempting to improve upon the basic Sine Wave cycle measurement |
 | EACP | Ehlers Autocorrelation Periodogram | Ehlers indicator using autocorrelation to estimate the dominant cycle period |
