@@ -17,6 +17,6 @@
 | [RSI](/indicators/momentum/rsi.md) | Relative Strength Index | Measures speed and change of price movements, identifies overbought/oversold conditions |
 | [RSX](/indicators/momentum/rsx.md) | Jurik Relative Strength Quality Index | Enhanced RSI with JMA smoothing for cleaner signals |
 | [TRIX](/indicators/momentum/trix.md) | Triple Exponential ROC | Measures percentage rate of change of a triple exponentially smoothed moving average |
-| TSI | True Strength Index | Double-smoothed momentum oscillator based on price changes |
-| ULTOSC | Ultimate Oscillator | Weighted average of three Stochastic oscillators using different time periods |
-| WILLR | Williams %R | Measures overbought/oversold levels, inverse of the Fast Stochastic Oscillator |
+| [TSI](/indicators/momentum/tsi.md) | True Strength Index | Double-smoothed momentum oscillator based on price changes |
+| [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Weighted average of three Stochastic oscillators using different time periods |
+| [WILLR](/indicators/momentum/willr.md) | Williams %R | Measures overbought/oversold levels, inverse of the Fast Stochastic Oscillator |

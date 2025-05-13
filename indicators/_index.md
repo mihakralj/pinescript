@@ -154,8 +154,11 @@
 | [THEIL](/indicators/statistics/theil.md) | Theil Index | Statistics |
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | [TRIX](/indicators/momentum/trix.md)  | Triple Exponential ROC | Momentum |
+| [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
+| [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Momentum |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Momentum |
+| [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |
 | [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Filters |

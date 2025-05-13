@@ -180,7 +180,10 @@
   * [RSI: Relative Strength Index](/indicators/momentum/rsi.md)
   * [RSX: Jurik Relative Strength Quality Index](/indicators/momentum/rsx.md)
   * [TRIX: Triple Exponential ROC](/indicators/momentum/trix.md)
+  * [TSI: True Strength Index](/indicators/momentum/tsi.md)
+  * [ULTOSC: Ultimate Oscillator](/indicators/momentum/ultosc.md)
   * [VEL: Jurik Velocity](/indicators/momentum/vel.md)
+  * [WILLR: Williams %R](/indicators/momentum/willr.md)
 
 * [Cycles](/indicators/cycles/_index.md)
   * [MOON: Moon Phase](/indicators/cycles/moon.md)

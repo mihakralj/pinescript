@@ -1,0 +1,115 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Ultimate Oscillator (ULTOSC)", "ULTOSC", overlay=false)
+
+//@function Calculates the Ultimate Oscillator
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/ultosc.md
+//@param shortLen int The shortest period for calculation.
+//@param mediumLen int The medium period for calculation.
+//@param longLen int The longest period for calculation.
+//@returns float The Ultimate Oscillator value.
+//@optimized for performance and dirty data
+ultosc(simple int shortLen, simple int mediumLen, simple int longLen) =>
+    if shortLen <= 0 or mediumLen <= 0 or longLen <= 0
+        runtime.error("Periods must be greater than 0")
+    if shortLen >= mediumLen or mediumLen >= longLen
+        runtime.error("Periods must be in increasing order: short < medium < long")
+
+    trueLow = math.min(low, nz(close[1]))
+    trueHigh = math.max(high, nz(close[1]))
+    bp = close - trueLow
+    tr = trueHigh - trueLow
+    float currentBP = nz(bp)
+    float currentTR = nz(tr)
+    var array<float> bpBufferShort = array.new_float(shortLen, 0.0)
+    var float sumBPShort = 0.0
+    var int headBPShort = 0
+    var int filledBPShort = 0
+    if filledBPShort == shortLen
+        sumBPShort -= array.get(bpBufferShort, headBPShort)
+    array.set(bpBufferShort, headBPShort, currentBP)
+    sumBPShort += currentBP
+    headBPShort := (headBPShort + 1) % shortLen
+    if filledBPShort < shortLen
+        filledBPShort += 1
+    float finalSumBPShort = filledBPShort == shortLen ? sumBPShort : na
+    var array<float> trBufferShort = array.new_float(shortLen, 0.0)
+    var float sumTRShort = 0.0
+    var int headTRShort = 0
+    var int filledTRShort = 0
+    if filledTRShort == shortLen
+        sumTRShort -= array.get(trBufferShort, headTRShort)
+    array.set(trBufferShort, headTRShort, currentTR)
+    sumTRShort += currentTR
+    headTRShort := (headTRShort + 1) % shortLen
+    if filledTRShort < shortLen
+        filledTRShort += 1
+    float finalSumTRShort = filledTRShort == shortLen ? sumTRShort : na
+    var array<float> bpBufferMedium = array.new_float(mediumLen, 0.0)
+    var float sumBPMedium = 0.0
+    var int headBPMedium = 0
+    var int filledBPMedium = 0
+    if filledBPMedium == mediumLen
+        sumBPMedium -= array.get(bpBufferMedium, headBPMedium)
+    array.set(bpBufferMedium, headBPMedium, currentBP)
+    sumBPMedium += currentBP
+    headBPMedium := (headBPMedium + 1) % mediumLen
+    if filledBPMedium < mediumLen
+        filledBPMedium += 1
+    float finalSumBPMedium = filledBPMedium == mediumLen ? sumBPMedium : na
+    var array<float> trBufferMedium = array.new_float(mediumLen, 0.0)
+    var float sumTRMedium = 0.0
+    var int headTRMedium = 0
+    var int filledTRMedium = 0
+    if filledTRMedium == mediumLen
+        sumTRMedium -= array.get(trBufferMedium, headTRMedium)
+    array.set(trBufferMedium, headTRMedium, currentTR)
+    sumTRMedium += currentTR
+    headTRMedium := (headTRMedium + 1) % mediumLen
+    if filledTRMedium < mediumLen
+        filledTRMedium += 1
+    float finalSumTRMedium = filledTRMedium == mediumLen ? sumTRMedium : na
+    var array<float> bpBufferLong = array.new_float(longLen, 0.0)
+    var float sumBPLong = 0.0
+    var int headBPLong = 0
+    var int filledBPLong = 0
+    if filledBPLong == longLen
+        sumBPLong -= array.get(bpBufferLong, headBPLong)
+    array.set(bpBufferLong, headBPLong, currentBP)
+    sumBPLong += currentBP
+    headBPLong := (headBPLong + 1) % longLen
+    if filledBPLong < longLen
+        filledBPLong += 1
+    float finalSumBPLong = filledBPLong == longLen ? sumBPLong : na
+    var array<float> trBufferLong = array.new_float(longLen, 0.0)
+    var float sumTRLong = 0.0
+    var int headTRLong = 0
+    var int filledTRLong = 0
+    if filledTRLong == longLen
+        sumTRLong -= array.get(trBufferLong, headTRLong)
+    array.set(trBufferLong, headTRLong, currentTR)
+    sumTRLong += currentTR
+    headTRLong := (headTRLong + 1) % longLen
+    if filledTRLong < longLen
+        filledTRLong += 1
+    float finalSumTRLong = filledTRLong == longLen ? sumTRLong : na
+    avgShort = nz(finalSumTRShort) == 0 ? 0 : nz(finalSumBPShort) / nz(finalSumTRShort)
+    avgMedium = nz(finalSumTRMedium) == 0 ? 0 : nz(finalSumBPMedium) / nz(finalSumTRMedium)
+    avgLong = nz(finalSumTRLong) == 0 ? 0 : nz(finalSumBPLong) / nz(finalSumTRLong)
+    oscillator = 100 * (4 * avgShort + 2 * avgMedium + 1 * avgLong) / (4 + 2 + 1)
+    oscillator
+
+
+// ---------- Main loop ----------
+
+// Inputs
+i_shortLen = input.int(7, "Short Period", minval=1)
+i_mediumLen = input.int(14, "Medium Period", minval=1)
+i_longLen = input.int(28, "Long Period", minval=1)
+
+// Calculation
+ultosc_value = ultosc(i_shortLen, i_mediumLen, i_longLen)
+
+// Plot
+plot(ultosc_value, "ULTOSC", color.new(color.yellow, 0), 2)

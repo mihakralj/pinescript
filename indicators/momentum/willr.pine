@@ -1,0 +1,41 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Williams %R (WILLR)", "WILLR", overlay=false)
+
+//@function Calculates the Williams %R.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/willr.md
+//@param len simple int The lookback period.
+//@returns float The Williams %R value.
+//@optimized for performance and dirty data
+willr(simple int len) =>
+    if len <= 0
+        runtime.error("Length must be greater than 0")
+    float hh = high
+    float ll = low
+    if len > 1
+        for i = 1 to len - 1 by 1
+            currentHigh = high[i]
+            currentLow = low[i]
+            if not na(currentHigh) and currentHigh > hh
+                hh := currentHigh
+            if not na(currentLow) and currentLow < ll
+                ll := currentLow
+    float highestHigh = hh
+    float lowestLow = ll
+    float priceRange = highestHigh - lowestLow
+    float calculatedWPR = priceRange == 0 ? (close == highestHigh ? 0.0 : -100.0) : ((highestHigh - close) / priceRange * -100.0)
+    float williamsR = math.max(-100.0, math.min(0.0, calculatedWPR))
+
+    williamsR
+
+// ---------- Main loop ----------
+
+// Inputs
+i_len = input.int(14, "Length", minval=1)
+
+// Calculation
+willr_value = willr(i_len)
+
+// Plot
+plot(willr_value, "Williams %R", color.new(color.yellow, 0), 2)

@@ -21,8 +21,6 @@
 | STB | Super Trend Bands | Bands derived from the SuperTrend indicator, acting as dynamic support/resistance |
 | VC | Volatility Cone | Visualizes expected future volatility range based on historical volatility term structure |
 | VWAPB | VWAP Bands | Bands plotted N standard deviations above and below the Volume Weighted Average Price (VWAP) |
-
-
 | ABBER | Aberration | Measures deviation from a central moving average, often used with Bollinger Bands |
 | BBW | Bollinger Band Width | Measures the difference between the upper and lower Bollinger Bands |
 | BBWP | Bollinger Band Width Percentile | Measures the current Bollinger Band Width relative to its historical range |
