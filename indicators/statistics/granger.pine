@@ -196,22 +196,15 @@ granger_causality_statistic(series float y_series, series float x_series, simple
 // ---------- Main loop ----------
 
 // Inputs
-i_source_y = input.source(close, "Y Series (e.g., Close of Stock A)")
-i_symbol_x = input.symbol("SPY", title="X Series Symbol")
-i_period = input.int(20, "Period", minval=4) // Minval 4 because period-3 must be > 0
+i_source1 = input(close, "Source 1")
+i_source2_ticker = input.symbol("SPY", title="Source 2 Ticker (e.g., SPY, AAPL)")
+i_period = input.int(20, "Period", minval = 2)
 
-// Get X series data
-// Defaulting to close of the specified X symbol.
-// For other sources from X symbol (e.g. hl2), user would need to modify the script or use a more complex input.
-actual_x_series = request.security(i_symbol_x, timeframe.period, close)
+i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahead=barmerge.lookahead_off)
 
 // Calculation
-[f_stat_yx, x_coeff_yx] = granger_causality_statistic(i_source_y, actual_x_series, i_period)
-// To test X -> Y, use (Y, X, period)
-// To test Y -> X, use (X, Y, period)
-// [f_stat_xy, y_coeff_xy] = granger_causality_statistic(i_source_x, i_source_y, i_period)
+[f_stat_yx, x_coeff_yx] = granger_causality_statistic(i_source1, i_source2, i_period)
 
-
-// Plot F-statistic for X -> Y
+// Plot
 plot(f_stat_yx, "F-Stat (X Granger-causes Y)", color.new(color.yellow, 0), 2)
 

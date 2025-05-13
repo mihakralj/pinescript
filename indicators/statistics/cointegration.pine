@@ -113,12 +113,14 @@ cointegration(series_a, series_b, period) =>
 // ---------- Main loop ----------
 
 // Inputs
-i_source_a = input(high, "Source A")
-i_source_b = input(low, "Source B")
+i_source1 = input(close, "Source 1")
+i_source2_ticker = input.symbol("SPY", title="Source 2 Ticker (e.g., SPY, AAPL)")
 i_period = input.int(20, "Period", minval = 2)
 
+i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahead=barmerge.lookahead_off)
+
 // Calculation
-coint_stat = cointegration(i_source_a, i_source_b, i_period)
+coint_stat = cointegration(i_source1, i_source2, i_period)
 
 // Plot
 plot(coint_stat, "Cointegration ADF Stat", color.yellow)
