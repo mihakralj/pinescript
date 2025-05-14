@@ -46,6 +46,7 @@
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
+| [EWMA](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility | Volatility |
 | [EFI](/indicators/volume/efi.md) | Elder's Force Index | Oscillators/Volume |
 | [EHBPF](/indicators/filters/ehbpf.md) | Ehlers Bandpass Filter | Filters |
 | [EHHPF](/indicators/filters/ehhpf.md) | Ehlers Highpass Filter | Filters |
@@ -60,6 +61,7 @@
 | [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
 | [GAUSS](/indicators/filters/gauss.md) | Gaussian Filter | Filters |
 | [GEOMEAN](/indicators/statistics/geomean.md) | Geometric Mean | Statistics |
+| [GKV](/indicators/volatility/gkv.md) | Garman-Klass Volatility | Volatility |
 | [GRANGER](/indicators/statistics/granger.md) | Granger Causality Test | Statistics |
 | [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted MA | Trends (FIR) |
 | [HAMMA](/indicators/trends_FIR/hamma.md) | Hamming Window MA | Trends (FIR) |
@@ -67,11 +69,13 @@
 | [HARMEAN](/indicators/statistics/harmean.md)| Harmonic Mean | Statistics |
 | [HEMA](/indicators/trends_IIR/hema.md) | Hull Exponential MA | Trends (IIR) |
 | [HIGHEST](/indicators/numerics/highest.md) | Highest value | Numerics |
+| [HLV](/indicators/volatility/hlv.md) | High-Low Volatility | Volatility |
 | [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Trends (FIR) |
 | [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Filters |
 | [HTIT](/indicators/trends_IIR/htit.md) | Hilbert Transform Instantaneous Trend | Trends (IIR) |
 | [HUBER](/indicators/errors/huber.md) | Huber Loss | Errors |
 | [HURST](/indicators/statistics/hurst.md) | Hurst | Statistics |
+| [HV](/indicators/volatility/hv.md) | Historical Volatility | Volatility |
 | [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA | Trends (FIR) |
 | [IQR](/indicators/statistics/iqr.md) | Interquartile Range | Statistics |
 | [JB](/indicators/statistics/jb.md) | Jarque-Bera Test | Statistics |
@@ -116,6 +120,7 @@
 | [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Momentum |
 | [PPO](/indicators/momentum/ppo.md) | Percentage Price Oscillator | Momentum |
 | [PRS](/indicators/momentum/prs.md) | Price Relative Strength | Momentum |
+| [PV](/indicators/volatility/pv.md) | Parkinson Volatility | Volatility |
 | [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted MA | Trends (FIR) |
 | [QEMA](/indicators/trends_IIR/qema.md) | Quadruple Exponential MA | Trends (IIR) |
 | [QUANTILE](/indicators/statistics/quantile.md) | Quantile | Statistics |
@@ -132,6 +137,9 @@
 | [RSE](/indicators/errors/rse.md) | Relative Squared Error | Errors |
 | [RSI](/indicators/momentum/rsi.md) | Relative Strength Index | Momentum |
 | [RSQUARED](/indicators/errors/rsquared.md) | R-Squared | Errors |
+| [RSV](/indicators/volatility/rsv.md) | Rogers-Satchell Volatility | Volatility |
+| [RV](/indicators/volatility/rv.md) | Realized Volatility | Volatility |
+| [RVI](/indicators/volatility/rvi.md) | Relative Volatility Index | Volatility |
 | [RSX](/indicators/momentum/rsx.md) | Jurik Relative Strength Quality Index | Momentum |
 | [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Filters |
 | [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Trends (FIR) |
@@ -155,9 +163,11 @@
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | [TRIX](/indicators/momentum/trix.md)  | Triple Exponential ROC | Momentum |
 | [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
+| [UI](/indicators/volatility/ui.md) | Ulcer Index | Volatility |
 | [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Momentum |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Momentum |
+| [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
 | [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |
