@@ -168,6 +168,7 @@
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Momentum |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
+| [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
 | [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |

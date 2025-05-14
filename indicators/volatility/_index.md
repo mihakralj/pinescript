@@ -21,5 +21,5 @@
 | [RVI](/indicators/volatility/rvi.md) | Relative Volatility Index | Measures the direction of volatility based on standard deviations of price changes |
 | [UI](/indicators/volatility/ui.md) | Ulcer Index | Measures downside risk and depth/duration of price drawdowns |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Measures the rate of change in volatility itself |
-| VR | Volatility Ratio | Compares the current true range to the true range over a longer period |
-| YZV | Yang-Zhang Volatility | Volatility estimator combining open, high, low, close, and overnight gaps |
+| [VR](/indicators/volatility/vr.md) | Volatility Ratio | Compares the current true range to the average true range over a longer period |
+| [YZV](/indicators/volatility/yzv.md) | Yang-Zhang Volatility | Volatility estimator combining open, high, low, close, and overnight gaps |

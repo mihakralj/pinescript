@@ -162,6 +162,7 @@
   * [STARC: Starc Bands](/indicators/volatility/starc.md)
   * [UI: Ulcer Index](/indicators/volatility/ui.md)
   * [VOV: Volatility of Volatility](/indicators/volatility/vov.md)
+  * [VR: Volatility Ratio](/indicators/volatility/vr.md)
 
 * [Volume](/indicators/volume/_index.md)
   * [ADL: Accumulation/Distribution Line](/indicators/volume/adl.md)
