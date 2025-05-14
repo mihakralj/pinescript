@@ -1,0 +1,32 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Price Channel (PCHANNEL)", "PCHANNEL", overlay=true)
+
+//@function Calculates Price Channel
+//@doc Plots the highest high and lowest low over a specified lookback period. Similar to Donchian Channels.
+//@param length Lookback period for determining the highest high and lowest low.
+//@returns tuple [upperChannel, middleChannel, lowerChannel]
+pchannel(simple int length) =>
+    if length <= 0
+        runtime.error("Length must be greater than 0")
+    float highestHigh = ta.highest(high, length)
+    float lowestLow = ta.lowest(low, length)
+    float middleChannel = (highestHigh + lowestLow) / 2
+    [highestHigh, middleChannel, lowestLow]
+
+// ---------- Main loop ----------
+
+// Inputs
+i_length = input.int(20, "Length", minval=1, tooltip="Lookback period for Highest High and Lowest Low.")
+
+// Calculation
+[upperCh, middleCh, lowerCh] = pchannel(i_length)
+
+// Plot
+
+plot(middleCh, "Middle Channel", color.new(color.yellow, 50), 2) 
+p1 = plot(upperCh, "Upper Channel", color.new(color.blue, 50), 1)
+p2 = plot(lowerCh, "Lower Channel", color.new(color.blue, 50), 1)
+fill(p1, p2, title="Background", color=color.new(color.blue, 90))
+

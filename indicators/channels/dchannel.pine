@@ -1,15 +1,15 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Donchian Channels (DC)", "DC", overlay=true)
+indicator("Donchian Channels (DCHANNEL)", "DCHANNEL", overlay=true)
 
 //@function Calculates the Donchian Channel (DC) efficiently using monotonic deques.
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dc.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dchannel.md
 //@param hi {series float} Source series for the highest high calculation (usually `high`).
 //@param lo {series float} Source series for the lowest low calculation (usually `low`).
 //@param p {simple int} Lookback period. `p` > 0.
 //@returns {[series float, series float, series float]} A tuple containing the basis, upper band, and lower band.
-dc(series float hi, series float lo, simple int p) =>
+dchannel(series float hi, series float lo, simple int p) =>
     if p <= 0
         runtime.error("Period must be > 0")
     var float[] hbuf = array.new_float(p, na)
@@ -42,7 +42,7 @@ i_high = input.source(high, "High Source")
 i_low = input.source(low, "Low Source")
 
 // Calculation
-[basis, upper, lower] = dc(i_high, i_low, i_period)
+[basis, upper, lower] = dchannel(i_high, i_low, i_period)
 
 // Plot
 plot(basis, "Basis", color.new(color.orange, 0), 2)

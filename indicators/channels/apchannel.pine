@@ -4,12 +4,12 @@
 indicator("Andrews' Pitchfork (AP)", "AP", overlay=true)
 
 //@function Calculates Andrews' Pitchfork lines based on three pivot points
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/ap.md
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/apchannel.md
 //@param p1_back Bars back to first pivot point (leftmost)
 //@param p2_back Bars back to second pivot point (middle)
 //@param p3_back Bars back to third pivot point (rightmost)
 //@returns tuple of [median, upper, lower] lines for current bar
-ap(simple int p1_back, simple int p2_back, simple int p3_back) =>
+apchannel(simple int p1_back, simple int p2_back, simple int p3_back) =>
     if   p1_back <= 0 or p2_back <= 0 or p3_back <= 0
       or not (p1_back > p2_back and p2_back > p3_back)
         runtime.error("Use P1 oldest, P2 newer, P3 newest — all >0")
@@ -48,7 +48,7 @@ if i_p1_back <= i_p2_back or i_p2_back <= i_p3_back
     runtime.error("Points must be in chronological order (P1 > P2 > P3)")
 
 // Calculation
-[median, upper, lower] = ap(i_p1_back, i_p2_back, i_p3_back)
+[median, upper, lower] = apchannel(i_p1_back, i_p2_back, i_p3_back)
 
 // Plot
 var color ap_color = color.blue

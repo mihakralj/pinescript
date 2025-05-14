@@ -13,13 +13,14 @@
 | [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
 | [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
 | [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Oscillators |
-| [AP](/indicators/channels/ap.md) | Andrews' Pitchfork | Channels |
+| [APCHANNEL](/indicators/channels/apchannel.md) | Andrews' Pitchfork | Channels |
 | [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Oscillators |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
 | [ATR](/indicators/volatility/atr.md) | Average True Range | Volatility |
 | [ATRBANDS](/indicators/channels/atrbands.md) | ATR Bands | Channels |
 | [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | Volatility |
 | [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent | Volatility |
+| [BBANDS](/indicators/channels/bbands.md) | Bollinger Bands | Channels |
 | [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Filters |
 | [BETA](/indicators/statistics/beta.md) | Beta Coefficient | Statistics |
 | [BIAS](/indicators/statistics/bias.md) | Bias | Statistics |
@@ -42,7 +43,7 @@
 | [CUMMEAN](/indicators/statistics/cummean.md) | Cumulative Mean (Average) | Statistics |
 | [CV](/indicators/volatility/cv.md) | Conditional Volatility | Volatility |
 | [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Volatility |
-| [DC](/indicators/channels/dc.md) | Donchian Channels | Channels |
+| [DCHANNEL](/indicators/channels/dchannel.md) | Donchian Channels | Channels |
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
@@ -85,7 +86,7 @@
 | [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility | Volatility |
 | [JVOLTYN](/indicators/volatility/jvoltyn.md) | Jurik Volatility Normalized [0,1] | Volatility |
 | [KAMA](/indicators/trends_IIR/kama.md) | Kaufman Adaptive MA | Trends (IIR) |
-| [KC](/indicators/channels/kc.md) | Keltner Channel | Channels |
+| [KCHANNEL](/indicators/channels/kchannel.md) | Keltner Channel | Channels |
 | [KENDALL](/indicators/statistics/kendall.md) | Kendall Rank Correlation | Statistics |
 | [KF](/indicators/filters/kf.md) | Kalman Filter | Filters |
 | [KURTOSIS](/indicators/statistics/kurtosis.md) | Kurtosis | Statistics |
@@ -117,6 +118,7 @@
 | [NORMALIZE](/indicators/numerics/normalize.md) | Min-Max Scaling (Normalization) | Numerics |
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Filters |
 | [PERCENTILE](/indicators/statistics/percentile.md) | Percentile | Statistics |
+| [PCHANNEL](/indicators/channels/pchannel.md) | Price Channel | Channels |
 | [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Momentum |
 | [PPO](/indicators/momentum/ppo.md) | Percentage Price Oscillator | Momentum |
 | [PRS](/indicators/momentum/prs.md) | Price Relative Strength | Momentum |
@@ -163,6 +165,8 @@
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | [TRIX](/indicators/momentum/trix.md)  | Triple Exponential ROC | Momentum |
 | [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
+| [UBANDS](/indicators/channels/ubands.md) | Ultimate Bands | Channels |
+| [UCHANNEL](/indicators/channels/uchannel.md) | Ultimate Channel | Channels |
 | [UI](/indicators/volatility/ui.md) | Ulcer Index | Volatility |
 | [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Momentum |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |

@@ -1,6 +1,6 @@
 # DC: Donchian Channels
 
-[Pine Script Implementation of DC](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dc.pine)
+[Pine Script Implementation of DCHANNEL](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dchannel.pine)
 
 ## Overview and Purpose
 

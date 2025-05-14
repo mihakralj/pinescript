@@ -1,6 +1,6 @@
-# KC: Keltner Channels
+# KCHANNEL: Keltner Channels
 
-[Pine Script Implementation of KC](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/kc.pine)
+[Pine Script Implementation of KC](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/kchannel.pine)
 
 ## Overview and Purpose
 
