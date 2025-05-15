@@ -1,16 +1,16 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Ehlers Ultrasmooth Filter (EHUSF)", "EHUSF", overlay=true)
+indicator("Ultrasmooth Filter (USF)", "USF", overlay=true)
 
-//@function Calculates Ehlers Ultrasmooth Filter
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehusf.md
-//@param source Series to calculate EHUS from
+//@function Calculates Ultrasmooth Filter
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/usf.md
+//@param src Series to calculate USF from
 //@param length Number of bars used in the calculation
-//@returns EHUS value with optimized smoothing
-ehusf(series float src, simple int length) =>
+//@returns USF value with optimized smoothing
+usf(series float src, simple int length) =>
     var float SQRT2_PI = math.sqrt(2) * math.pi
-    var float usf = na
+    var float usf_val = na
     var float c1 = 0.0, var float c2 = 0.0, var float c3 = 0.0
     var int prev_length = 0
     if prev_length != length
@@ -23,10 +23,10 @@ ehusf(series float src, simple int length) =>
     float ssrc = nz(src, src[1])
     float src1 = nz(src[1], ssrc)
     float src2 = nz(src[2], src1)
-    float us1 = nz(usf[1], src1)
-    float us2 = nz(usf[2], src2)
-    usf := (1 - c1) * ssrc + (2 * c1 - c2) * src1 - (c1 + c3) * src2 + c2 * us1 + c3 * us2
-    usf
+    float us1 = nz(usf_val[1], src1)
+    float us2 = nz(usf_val[2], src2)
+    usf_val := (1 - c1) * ssrc + (2 * c1 - c2) * src1 - (c1 + c3) * src2 + c2 * us1 + c3 * us2
+    usf_val
 
 // ---------- Main loop ----------
 
@@ -35,7 +35,7 @@ i_length = input.int(20, "Length", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-ehusf = ehusf(i_source, i_length)
+filt = usf(i_source, i_length)
 
 // Plot
-plot(ehusf, "Ehlers UltraSmooth", color.new(color.yellow, 0), 2)
+plot(filt, "UltraSmooth", color.new(color.yellow, 0), 2)

@@ -1,10 +1,10 @@
-# EHSSF: Ehlers Super Smooth Filter
+# SSF: Super Smooth Filter
 
-[Pine Script Implementation of EHSSF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehssf.pine)
+[Pine Script Implementation of SSF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ssf.pine)
 
 ## Overview and Purpose
 
-The Ehlers Super Smooth Filter (EHSSF) is an advanced signal processing tool designed to provide exceptional noise reduction with minimal lag. Developed by John Ehlers, this filter represents a significant improvement over traditional moving averages by using optimized pole pairs with complex conjugates to achieve superior filtering characteristics. EHSSF effectively removes market noise while preserving important price trends and transitions, making it particularly valuable for traders seeking clean signals without the excessive lag typically associated with heavy filtering. The filter's balanced performance makes it an excellent choice for trend identification in noisy market conditions.
+The Super Smooth Filter (SSF) is an advanced signal processing tool designed to provide exceptional noise reduction with minimal lag. Developed by John Ehlers, this filter represents a significant improvement over traditional moving averages by using optimized pole pairs with complex conjugates to achieve superior filtering characteristics. SSF effectively removes market noise while preserving important price trends and transitions, making it particularly valuable for traders seeking clean signals without the excessive lag typically associated with heavy filtering. The filter's balanced performance makes it an excellent choice for trend identification in noisy market conditions.
 
 ## Core Concepts
 
@@ -12,7 +12,7 @@ The Ehlers Super Smooth Filter (EHSSF) is an advanced signal processing tool des
 * **Optimized pole placement:** Uses precisely positioned mathematical poles in the complex plane to achieve optimal filter response
 * **Market application:** Particularly effective for trend following strategies in noisy markets where traditional moving averages generate excessive whipsaws
 
-The core innovation of EHSSF is its optimized coefficient design based on complex signal processing principles. By carefully positioning filter poles in the z-domain, EHSSF achieves a frequency response that effectively suppresses market noise while minimizing distortion of important trend information. This creates a much cleaner price representation than traditional moving averages without introducing the excessive lag typically associated with heavier filtering.
+The core innovation of SSF is its optimized coefficient design based on complex signal processing principles. By carefully positioning filter poles in the z-domain, SSF achieves a frequency response that effectively suppresses market noise while minimizing distortion of important trend information. This creates a much cleaner price representation than traditional moving averages without introducing the excessive lag typically associated with heavier filtering.
 
 ## Common Settings and Parameters
 
@@ -21,7 +21,7 @@ The core innovation of EHSSF is its optimized coefficient design based on comple
 | Length | 14 | Controls the cutoff period | Increase for smoother signals, decrease for more responsiveness |
 | Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
 
-**Pro Tip:** Unlike regular moving averages, EHSSF maintains good responsiveness even at longer length settings - try using 1.5-2× the period you would normally use for a simple moving average to achieve superior smoothing with comparable lag.
+**Pro Tip:** Unlike regular moving averages, SSF maintains good responsiveness even at longer length settings - try using 1.5-2× the period you would normally use for a simple moving average to achieve superior smoothing with comparable lag.
 
 ## Calculation and Mathematical Foundation
 
@@ -29,7 +29,7 @@ The core innovation of EHSSF is its optimized coefficient design based on comple
 The Super Smooth Filter calculates a weighted average that gives most importance to recent prices and gradually less to older prices, but does so using a special mathematical pattern that achieves much better noise reduction than standard averages. It combines current price data with previous filter values using carefully designed coefficients.
 
 **Technical formula:**
-SSF = C1 × X + C2 × SSF₁ + C3 × SSF₂
+SSF_val = C1 × X + C2 × SSF₁ + C3 × SSF₂
 
 Where coefficients are calculated as:
 - C1 = 1 - C2 - C3
@@ -44,11 +44,11 @@ Where coefficients are calculated as:
 
 The Super Smooth Filter can be used in various trading strategies:
 
-* **Trend identification:** The direction of EHSSF indicates the prevailing trend with minimal noise
-* **Signal generation:** Crossovers between price and EHSSF generate trade signals with reduced false positives
-* **Support/resistance levels:** EHSSF can act as dynamic support during uptrends and resistance during downtrends
-* **Multiple timeframe analysis:** Using EHSSF with different periods can identify trends across various time horizons
-* **Crossover systems:** Combining faster and slower EHSSF periods creates reliable crossover signals with minimal whipsaws
+* **Trend identification:** The direction of SSF indicates the prevailing trend with minimal noise
+* **Signal generation:** Crossovers between price and SSF generate trade signals with reduced false positives
+* **Support/resistance levels:** SSF can act as dynamic support during uptrends and resistance during downtrends
+* **Multiple timeframe analysis:** Using SSF with different periods can identify trends across various time horizons
+* **Crossover systems:** Combining faster and slower SSF periods creates reliable crossover signals with minimal whipsaws
 
 ## Limitations and Considerations
 

@@ -1,18 +1,18 @@
-# EHBPF: Ehlers Bandpass Filter
+# BPF: Bandpass Filter
 
-[Pine Script Implementation of EHBPF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehbpf.pine)
+[Pine Script Implementation of BPF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/bpf.pine)
 
 ## Overview and Purpose
 
-The Ehlers Bandpass Filter (EHBPF) is a specialized signal processing tool designed to isolate specific frequency components within a defined range. Developed by John Ehlers, a pioneer in applying signal processing techniques to financial markets, this filter addresses the challenge of extracting cyclical components from price data. By implementing a cascaded structure that combines highpass and lowpass filters, EHBPF effectively isolates market cycles of specific periodicities while removing both longer-term trends and shorter-term noise. This makes it particularly valuable for cycle analysis, seasonality detection, and trading strategies based on rhythm identification.
+The Bandpass Filter (BPF) is a specialized signal processing tool designed to isolate specific frequency components within a defined range. Developed by John Ehlers, a pioneer in applying signal processing techniques to financial markets, this filter addresses the challenge of extracting cyclical components from price data. By implementing a cascaded structure that combines highpass and lowpass filters, BPF effectively isolates market cycles of specific periodicities while removing both longer-term trends and shorter-term noise. This makes it particularly valuable for cycle analysis, seasonality detection, and trading strategies based on rhythm identification.
 
 ## Core Concepts
 
 * **Frequency isolation:** Combines highpass and lowpass filtering to extract market cycles within a specific frequency band
-* **Dual cutoff control:** Provides independent control over both the lower and upper cutoff periods 
+* **Dual cutoff control:** Provides independent control over both the lower and upper cutoff periods
 * **Market application:** Particularly effective for identifying and trading dominant market cycles or seasonal patterns
 
-The core innovation of EHBPF is its optimized cascade architecture that maintains maximum signal integrity within the passband while achieving excellent rejection of components outside the desired frequency range. Unlike simple moving averages that can only perform lowpass filtering, EHBPF can isolate specific market rhythms, allowing traders to focus on cycles of particular interest while eliminating both trend and noise components.
+The core innovation of BPF is its optimized cascade architecture that maintains maximum signal integrity within the passband while achieving excellent rejection of components outside the desired frequency range. Unlike simple moving averages that can only perform lowpass filtering, BPF can isolate specific market rhythms, allowing traders to focus on cycles of particular interest while eliminating both trend and noise components.
 
 ## Common Settings and Parameters
 
@@ -50,7 +50,7 @@ Lowpass coefficients:
 
 ## Interpretation Details
 
-The Ehlers Bandpass Filter can be used in various trading contexts:
+The Bandpass Filter can be used in various trading contexts:
 
 * **Cycle identification:** Reveals dominant market cycles by isolating specific frequency bands
 * **Signal generation:** Zero-line crossings and peaks/troughs of the filtered output generate potential trade signals

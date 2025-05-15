@@ -27,6 +27,7 @@
 | [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Filters |
 | [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA | Trends (FIR) |
 | [BOP](/indicators/momentum/bop.md) | Balance of Power | Momentum |
+| [BPF](/indicators/filters/bpf.md) | Ehlers Bandpass Filter | Filters |
 | [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
 | [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
 | [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Volatility |
@@ -47,12 +48,9 @@
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
+| [EBSW](/indicators/cycles/ebsw.md) | Ehlers Even Better Sinewave | Cycles |
 | [EWMA](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility | Volatility |
 | [EFI](/indicators/volume/efi.md) | Elder's Force Index | Oscillators/Volume |
-| [EHBPF](/indicators/filters/ehbpf.md) | Ehlers Bandpass Filter | Filters |
-| [EHHPF](/indicators/filters/ehhpf.md) | Ehlers Highpass Filter | Filters |
-| [EHSSF](/indicators/filters/ehssf.md) | Ehlers Super Smoother Filter | Filters |
-| [EHUSF](/indicators/filters/ehusf.md) | Ehlers Ultra Smoother Filter | Filters |
 | [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Filters |
 | [EMA](/indicators/trends_IIR/ema.md) | Exponential MA | Trends (IIR) |
 | [ENTROPY](/indicators/statistics/entropy.md) | Normalized Shannon Entropy | Statistics |
@@ -61,6 +59,8 @@
 | [EXP](/indicators/numerics/exp.md) | Exponential Transformation | Numerics |
 | [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
 | [GAUSS](/indicators/filters/gauss.md) | Gaussian Filter | Filters |
+| [HANN](/indicators/filters/hann.md) | Hann FIR Filter | Filters |
+| [HPF](/indicators/filters/hpf.md) | Ehlers Highpass Filter | Filters |
 | [GEOMEAN](/indicators/statistics/geomean.md) | Geometric Mean | Statistics |
 | [GKV](/indicators/volatility/gkv.md) | Garman-Klass Volatility | Volatility |
 | [GRANGER](/indicators/statistics/granger.md) | Granger Causality Test | Statistics |
@@ -118,6 +118,7 @@
 | [NORMALIZE](/indicators/numerics/normalize.md) | Min-Max Scaling (Normalization) | Numerics |
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Filters |
 | [PERCENTILE](/indicators/statistics/percentile.md) | Percentile | Statistics |
+| [PHASOR](/indicators/cycles/phasor.md) | Ehlers Phasor Analysis | Cycles |
 | [PCHANNEL](/indicators/channels/pchannel.md) | Price Channel | Channels |
 | [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Momentum |
 | [PPO](/indicators/momentum/ppo.md) | Percentage Price Oscillator | Momentum |
@@ -146,7 +147,9 @@
 | [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Filters |
 | [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Trends (FIR) |
 | [SIGMOID](/indicators/numerics/sigmoid.md) | Logistic Function | Numerics |
+| [SINE](/indicators/cycles/sine.md) | Sine Wave | Cycles |
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Trends (FIR) |
+| [SSF](/indicators/filters/ssf.md) | Ehlers Super Smooth Filter | Filters |
 | [SKEW](/indicators/statistics/skew.md) | Skewness | Statistics |
 | [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Trends (FIR) |
@@ -169,14 +172,15 @@
 | [UCHANNEL](/indicators/channels/uchannel.md) | Ultimate Channel | Channels |
 | [UI](/indicators/volatility/ui.md) | Ulcer Index | Volatility |
 | [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Momentum |
+| [USF](/indicators/filters/usf.md) | Ehlers Ultrasmooth Filter | Filters |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Momentum |
+| [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
-| [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
-| [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |
 | [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Filters |
+| [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
 | [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Trends (FIR) |
 | [ZLDEMA](/indicators/trends_IIR/zldema.md) | Zero-Lag Double Exponential MA | Trends (IIR) |
 | [ZLEMA](/indicators/trends_IIR/zlema.md) | Zero-Lag Exponential MA | Trends (IIR) |

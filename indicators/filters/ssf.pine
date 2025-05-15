@@ -2,16 +2,16 @@
 // © mihakralj
 // Indicator algorithm (C) 2004-2024 John F. Ehlers
 //@version=6
-indicator("Ehlers Supersmooth Lowpass Filter (EHSSF)", "EHSSF", overlay=true)
+indicator("Supersmooth Filter (SSF)", "SSF", overlay=true)
 
-//@function Calculates Ehlers Supersmooth Lowpass Filter
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehssf.md
-//@param source Series to calculate EHLP from
+//@function Calculates Supersmooth Lowpass Filter
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ssf.md
+//@param source Series to calculate SSF from
 //@param length Number of bars used in the calculation
-//@returns EHSSF value with optimized smoothing
-ehssf(series float src, simple int length) =>
+//@returns SSF value with optimized smoothing
+ssf(series float src, simple int length) =>
     var float SQRT2_PI = math.sqrt(2) * math.pi
-    var float ssf = 0.0, var float c1 = 0.0, var float c2 = 0.0, var float c3 = 0.0
+    var float ssf_internal = 0.0, var float c1 = 0.0, var float c2 = 0.0, var float c3 = 0.0 // Renamed internal ssf
     var int prev_length = 0
     if prev_length != length
         arg = SQRT2_PI / float(length)
@@ -23,8 +23,8 @@ ehssf(series float src, simple int length) =>
     float ssrc = nz(src, src[1])
     float src1 = nz(src[1], ssrc)
     float src2 = nz(src[2], src1)
-    ssf := c1 * ssrc + c2 * nz(ssf[1], src1) + c3 * nz(ssf[2], src2)
-    ssf
+    ssf_internal := c1 * ssrc + c2 * nz(ssf_internal[1], src1) + c3 * nz(ssf_internal[2], src2)
+    ssf_internal
 
 // ---------- Main loop ----------
 
@@ -33,7 +33,7 @@ i_length = input.int(20, "Length", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-ssf = ehssf(i_source, i_length)
+ssf_val = ssf(i_source, i_length)
 
 // Plot
-plot(ssf, "EHLowpass", color.new(color.yellow, 0), 2)
+plot(ssf_val, "SSF", color.new(color.yellow, 0), 2)

@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Solar Cyclev(SOLAR)", "Solar", overlay=false)
+indicator("Solar Cycle (SOLAR)", "SOLAR", overlay=false)
 
 //@function Calculates precise solar cycle value using Sun's ecliptic longitude.
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/solar.md

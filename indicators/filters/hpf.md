@@ -1,10 +1,10 @@
-# EHHPF: Ehlers Highpass Filter
+# HPF: Highpass Filter
 
-[Pine Script Implementation of EHHPF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ehhpf.pine)
+[Pine Script Implementation of HPF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/hpf.pine)
 
 ## Overview and Purpose
 
-The Ehlers Highpass Filter (EHHPF) is a specialized signal processing tool designed to remove low-frequency components (trends) from price data while preserving higher-frequency market movements. Developed by John Ehlers, a pioneer in applying digital signal processing to financial markets, this filter uses optimized coefficients to achieve excellent trend removal with minimal distortion of shorter-term price movements. Unlike moving averages which act as lowpass filters, EHHPF specifically isolates shorter-term market movements by suppressing longer-term trends, making it particularly valuable for identifying short-term trading opportunities regardless of the underlying trend direction.
+The Highpass Filter (HPF) is a specialized signal processing tool designed to remove low-frequency components (trends) from price data while preserving higher-frequency market movements. Developed by John Ehlers, a pioneer in applying digital signal processing to financial markets, this filter uses optimized coefficients to achieve excellent trend removal with minimal distortion of shorter-term price movements. Unlike moving averages which act as lowpass filters, HPF specifically isolates shorter-term market movements by suppressing longer-term trends, making it particularly valuable for identifying short-term trading opportunities regardless of the underlying trend direction.
 
 ## Core Concepts
 
@@ -12,7 +12,7 @@ The Ehlers Highpass Filter (EHHPF) is a specialized signal processing tool desig
 * **High-frequency preservation:** Maintains shorter-term market movements for analysis of oscillations and cycles
 * **Market application:** Particularly useful for range-bound trading, mean reversion strategies, and cycle analysis
 
-The core innovation of EHHPF is its optimized coefficient design that achieves sharp cutoff characteristics while minimizing unwanted artifacts like ringing or phase distortion. This allows traders to clearly see shorter-term market movements that might otherwise be obscured by dominant trends, enabling more precise identification of overbought/oversold conditions and short-term reversal points.
+The core innovation of HPF is its optimized coefficient design that achieves sharp cutoff characteristics while minimizing unwanted artifacts like ringing or phase distortion. This allows traders to clearly see shorter-term market movements that might otherwise be obscured by dominant trends, enabling more precise identification of overbought/oversold conditions and short-term reversal points.
 
 ## Common Settings and Parameters
 
@@ -42,7 +42,7 @@ Where coefficients are calculated as:
 
 ## Interpretation Details
 
-The Ehlers Highpass Filter can be used in various trading contexts:
+The Highpass Filter can be used in various trading contexts:
 
 * **Mean reversion trading:** Identify overbought/oversold conditions when the filter output reaches extreme values
 * **Cycle analysis:** Isolate market cycles by removing longer-term trends
