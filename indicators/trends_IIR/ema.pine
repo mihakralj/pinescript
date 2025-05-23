@@ -13,24 +13,16 @@ ema(series float source,simple int period=0,simple float alpha=0)=>
     if alpha<=0 and period<=0
         runtime.error("Alpha or period must be provided")
     float a=alpha>0?alpha:2.0/math.max(period,1)
-    var float ema=na
-    var float result=na
-    var float e=1.0 
-    var bool warmup=true
-    if not na(source)
-        if na(ema)
-            ema:=0
-            result:=source
-        else
-            ema:=a*(source-ema)+ema
-            if warmup
-                e*=(1-a)
-                float c=1.0/(1.0-e)
-                result:=c*ema
-                if e<=1e-10
-                    warmup:=false
-            else
-                result:=ema
+    var bool warmup=true, var float e=1.0
+    var float ema=0, var float result=source
+    ema:=a*(source-ema)+ema
+    if warmup
+        e*=(1-a)
+        float c=1.0/(1.0-e)
+        result:=c*ema
+        warmup := e>1e-10
+    else
+        result:=ema
     result
 
 

@@ -4,7 +4,6 @@
 indicator("Lunar Phase (LUNAR)", "LUNAR", overlay=false)
 
 //@function Calculates precise lunar phase using orbital mechanics
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/lunar.md
 //@param none Uses timestamp of open (start of the bar) for calculations
 //@returns float Lunar phase from 0.0 (new moon) through 1.0 (full moon)
 //@Includes orbital perturbation terms and epoch corrections
@@ -31,6 +30,7 @@ lunar() =>
     phase = (1.0 - math.cos(phase_angle)) / 2.0
     phase
 
+
 // Calculation
 lunarPhase = lunar()
 
@@ -42,16 +42,16 @@ delta1 = lunarPhase - lunarPhase[1]
 
 // New Moon detection (at the trough)
 newMoonCondition = lunarPhase < 0.1 and lunarPhase[1] < 0.1 and delta1 > 0 and delta1[1] < 0
-plotchar(newMoonCondition ? lunarPhase : na, "New Moon", "•", location.absolute, color.white, size = size.small)
+plotchar(newMoonCondition ? lunarPhase : na, "New Moon", "🌑", location.absolute, color.white, size = size.small)
 
 // First Quarter detection (crossing 0.5 going up)
 firstQuarterCondition = lunarPhase[1] < 0.5 and lunarPhase >= 0.5 and delta1 > 0
-plotchar(firstQuarterCondition ? 0.5 : na, "First Quarter", "•", location.absolute, color.white, size = size.small)
+plotchar(firstQuarterCondition ? lunarPhase : na, "First Quarter", "🌓", location.absolute, color.white, size = size.small)
 
 // Full Moon detection (at the peak)
 fullMoonCondition = lunarPhase > 0.9 and lunarPhase[1] > 0.9 and delta1 < 0 and delta1[1] > 0
-plotchar(fullMoonCondition ? lunarPhase : na, "Full Moon", "•", location.absolute, color.white, size = size.small)
+plotchar(fullMoonCondition ? lunarPhase : na, "Full Moon", "🌕", location.absolute, color.white, size = size.small)
 
 // Last Quarter detection (crossing 0.5 going down)
 lastQuarterCondition = lunarPhase[1] > 0.5 and lunarPhase <= 0.5 and delta1 < 0
-plotchar(lastQuarterCondition ? 0.5 : na, "Last Quarter", "•", location.absolute, color.white, size = size.small)
+plotchar(lastQuarterCondition ? lunarPhase : na, "Last Quarter", "🌗", location.absolute, color.white, size = size.small)

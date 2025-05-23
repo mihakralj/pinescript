@@ -23,6 +23,7 @@ TEMA achieves its enhanced responsiveness through an innovative triple-cascade a
 |-----------|---------|----------|---------------|
 | Length | 12 | Controls sensitivity/smoothness | Increase in choppy markets, decrease in strongly trending markets |
 | Source | Close | Data point used for calculation | Change to HL2/HLC3 for more balanced price representation |
+| Corrected | false | Adjusts internal EMA smoothing factors for potentially faster response. | Set to `true` for a modified TEMA that may react quicker to price changes. `false` uses standard TEMA calculation. |
 | Visualization | Line | Display format on charts | Use filled cloud to see divergence from price more clearly |
 
 **Pro Tip:** For optimal trade signals, many professional traders use two TEMAs (e.g., 8 and 21 periods) and look for crossovers, which often provide earlier signals than traditional moving average pairs.
@@ -36,10 +37,48 @@ TEMA calculates three levels of EMAs, then combines them using a special formula
 TEMA = 3 × EMA₁ - 3 × EMA₂ + EMA₃
 
 Where:
-- EMA₁ = EMA(source, length)
-- EMA₂ = EMA(EMA₁, length)
-- EMA₃ = EMA(EMA₂, length)
-- All EMAs use the same smoothing factor α = 2/(length + 1)
+- EMA₁ = EMA(source, α₁)
+- EMA₂ = EMA(EMA₁, α₂)
+- EMA₃ = EMA(EMA₂, α₃)
+
+The smoothing factors (α₁, α₂, α₃) are determined as follows:
+- Let α_base = 2/(length + 1)
+- α₁ = α_base
+- If `corrected` is `false`:
+  - α₂ = α_base
+  - α₃ = α_base
+- If `corrected` is `true`:
+  - Let r = (1/α_base)^(1/3)
+  - α₂ = α_base * r
+  - α₃ = α_base * r * r = α_base * r²
+
+The `corrected = true` option implements a variation that uses progressively smaller alpha values for the subsequent EMA calculations. This approach aims to optimize the filter's frequency response and phase lag.
+
+**Alpha Calculation for `corrected = true`:**
+- α₁ (alpha_base) = 2/(length + 1)
+- r = (1/α₁)^(1/3)  (cube root relationship)
+- α₂ = α₁ * r = α₁^(2/3)
+- α₃ = α₂ * r = α₁^(1/3)
+
+**Mathematical Rationale for Corrected Alphas:**
+
+1.  **Frequency Response Balance:**
+    The standard TEMA (where α₁ = α₂ = α₃) can lead to an uneven frequency response, potentially over-smoothing high frequencies or creating resonance artifacts. The geometric progression of alphas (α₁ > α₁^(2/3) > α₁^(1/3)) in the corrected version aims to create a more balanced filter cascade. Each stage contributes more proportionally to the overall frequency response.
+
+2.  **Phase Lag Optimization:**
+    The cube root relationship between the alphas is designed to minimize cumulative phase lag while maintaining smoothing effectiveness. Each subsequent EMA stage has a progressively smaller impact on phase distortion.
+
+3.  **Mathematical Stability:**
+    The geometric progression (α₁, α₁^(2/3), α₁^(1/3)) can enhance numerical stability due to constant ratios between consecutive alphas. This helps prevent the accumulation of rounding errors and maintains consistent convergence properties.
+
+**Practical Impact of `corrected = true`:**
+This modification aims to achieve:
+- Potentially better lag reduction for a similar level of smoothing.
+- A more uniform frequency response across different market cycles.
+- Reduced overshoot or undershoot in trending conditions.
+- Improved signal-to-noise ratio preservation.
+
+Essentially, the cube root relationship in the corrected TEMA attempts to optimize the trade-off between responsiveness and smoothness that can be a challenge with uniform alpha values.
 
 > 🔍 **Technical Note:** Advanced implementations apply compensation techniques to all three EMA stages, ensuring TEMA values are valid from the first bar without requiring a warm-up period. This compensation corrects initialization bias and prevents calculation errors from compounding through the cascade.
 

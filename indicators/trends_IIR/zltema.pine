@@ -7,35 +7,49 @@ indicator("Zero-Lag Triple EMA (ZLTEMA)", "ZLTEMA", overlay=true)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zltema.md
 //@param source Series to calculate ZLTEMA from
 //@param period Smoothing period
+//@param alpha smoothing factor, used to calculate alpha as 2/(period+1)
 //@returns ZLTEMA value with zero-lag effect applied
 //@optimized for performance and dirty data
-zltema(series float source,simple int period)=>
-    if period<=0
-        runtime.error("Period must be greater than 0")
-    simple float alpha=2.0/(period+1.0)
+zltema(series float source,simple int period=0,simple float alpha=0)=>
+    if alpha<=0 and period<=0
+        runtime.error("Alpha or period must be provided")
+    float a1=alpha>0?alpha:2.0/(1+period)
+    float r = math.pow(1/a1, 1/3)
+    float a2 = a1*r, float a3 = a2*r
     simple int lag=math.max(1,math.round((period-1)/2))
-    var priceBuffer=array.new<float>(lag+1,0.0)
-    var float raw_ema1=na
-    var float raw_ema2=na
-    var float raw_ema3=na
-    var float zltemaValue=na
+    var bool warmup=true, var float e=1.0
+    var float ema1_raw=0.0, var float ema2_raw=0.0, var float ema3_raw=0.0
+    var float ema1=na, var float ema2=na, var float ema3=na
+    var priceBuffer=array.new<float>(lag+1,na)
     if not na(source)
-        if na(zltemaValue)
-            zltemaValue:=source
-            raw_ema1:=source
-            raw_ema2:=source
-            raw_ema3:=source
+        if na(ema1)
+            ema1:=source
+            ema2:=source
+            ema3:=source
             array.fill(priceBuffer,source)
+        array.shift(priceBuffer)
+        array.push(priceBuffer,source)
+        float laggedPrice=nz(array.get(priceBuffer,0),source)
+        float signal=2*source-laggedPrice
+        ema1_raw:=a1*(signal-ema1_raw)+ema1_raw
+        if warmup
+            e*=(1-a1)
+            float c=1.0/(1.0-e)
+            ema1:=c*ema1_raw
+            ema2_raw:=a2*(ema1-ema2_raw)+ema2_raw
+            ema2:=c*ema2_raw
+            ema3_raw:=a3*(ema2-ema3_raw)+ema3_raw
+            ema3:=c*ema3_raw
+            warmup := e<=1e-10 ? false : true
         else
-            array.shift(priceBuffer)
-            array.push(priceBuffer,source)
-            float laggedPrice=array.get(priceBuffer,0)
-            float zlema_input=2*source-laggedPrice
-            raw_ema1:=alpha*(zlema_input-raw_ema1)+raw_ema1
-            raw_ema2:=alpha*(raw_ema1-raw_ema2)+raw_ema2
-            raw_ema3:=alpha*(raw_ema2-raw_ema3)+raw_ema3
-            zltemaValue:=3*raw_ema1-3*raw_ema2+raw_ema3
-    zltemaValue
+            ema1:=ema1_raw
+            ema2_raw:=a2*(ema1-ema2_raw)+ema2_raw
+            ema2:=ema2_raw
+            ema3_raw:=a3*(ema2-ema3_raw)+ema3_raw
+            ema3:=ema3_raw
+        3*ema1-3*ema2+ema3
+    else
+        na
 
 
 // ---------- Main loop ----------

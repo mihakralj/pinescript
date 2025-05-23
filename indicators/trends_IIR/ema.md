@@ -30,17 +30,28 @@ EMA achieves its enhanced responsiveness by applying a smoothing factor (α) tha
 ## Calculation and Mathematical Foundation
 
 **Simplified explanation:**
-EMA works by calculating a weighted average where recent prices have more influence. For each new calculation, a portion of the previous EMA value is retained, while adding a portion of the new price based on the smoothing factor. This creates a continuous average that adapts more quickly to new information.
+EMA works by calculating a weighted average where recent prices have more influence. The implementation uses an optimized form of the EMA calculation that is both computationally efficient and numerically stable.
 
 **Technical formula:**
-EMA = α × Price + (1 - α) × EMA_previous
+The optimized EMA formula used in the implementation is:
+```
+EMA = α × (Price - EMA_previous) + EMA_previous
+```
 
 Where:
 - α = 2/(length + 1) is the smoothing factor
 - Price is the current price value
 - EMA_previous is the previous period's EMA value
 
-> 🔍 **Technical Note:** For improved accuracy, proper initialization is critical. Advanced implementations use mathematical compensation methods that correct initialization bias, providing theoretically correct EMA values from the first bar without waiting for "warm-up" periods. This compensation is calculated as: EMA_corrected = EMA_raw/(1 - compensation), where compensation decays by (1-α) on each bar.
+This form is algebraically equivalent to the traditional EMA formula but offers better computational efficiency and numerical stability.
+
+> 🔍 **Technical Note:** The implementation uses a sophisticated warm-up compensation method that provides accurate EMA values from the first bar. The compensation works by tracking an error term that decays exponentially:
+> ```
+> e = e × (1 - α)  // error term decay
+> compensation = 1 / (1 - e)  // compensation factor
+> EMA_corrected = compensation × EMA_raw
+> ```
+> This compensation automatically adjusts during the warm-up phase and becomes negligible (e ≤ 1e-10) once sufficient data has been processed, ensuring mathematically correct values throughout the entire data series without requiring a traditional warm-up period.
 
 ## Interpretation Details
 

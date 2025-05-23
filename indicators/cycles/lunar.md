@@ -28,7 +28,7 @@ The Lunar Phase indicator stands apart from traditional technical analysis tools
 ## Calculation and Mathematical Foundation
 
 **Simplified explanation:**
-The Lunar Phase indicator calculates the angular difference between the moon and sun as viewed from Earth, then transforms this angle into a normalized 0-1 value representing the illuminated portion of the moon visible from Earth.
+The Lunar Phase indicator calculates the angular difference between the moon and sun as viewed from Earth, returning both a normalized phase value and precise moon phase detection based on exact angular positions.
 
 **Technical formula:**
 
@@ -50,23 +50,45 @@ The Lunar Phase indicator calculates the angular difference between the moon and
    L_moon = Lp + dL/1000000.0
    L_sun = (280.46646 + 36000.76983*T + 0.0003032*T²) % 360.0
 
-5. Calculate phase angle and normalize to [0, 1] range:
+5. Calculate phase angle (in degrees) and normalized phase:
    phase_angle = ((L_moon - L_sun) % 360.0)
-   phase = (1.0 - cos(phase_angle)) / 2.0
+   phase = (1.0 - cos(phase_angle * π/180)) / 2.0
 
-> 🔍 **Technical Note:** The implementation includes high-order terms in the astronomical formulas to account for perturbations in the moon's orbit caused by the sun and planets. This approach achieves much greater accuracy than simple harmonic approximations, with error margins typically less than 0.1% compared to ephemeris-based calculations.
+6. Calculate phase angle and moon phase:
+   - Calculate phase angles at both start and end of bar period
+   - Moon phase detection logic:
+     * New Moon: crossing 0° or 360° from below, or within ±1° of either angle
+     * First Quarter: crossing 90° from below, or within ±1° of 90°
+     * Full Moon: crossing 180° from below, or within ±1° of 180°
+     * Last Quarter: crossing 270° from below, or within ±1° of 270°
+
+> 🔍 **Technical Note:** The implementation includes several key optimizations:
+> 1. High-order perturbation terms for accurate moon position calculation
+> 2. Bar period analysis that detects phase changes occurring within the bar window
+> 3. Precise transition detection that identifies the exact bar when a phase change occurs
+> 4. Phase angle tolerance of ±1° to account for calculation precision
 
 ## Interpretation Details
 
-The Lunar Phase indicator provides several analytical perspectives:
+The Lunar Phase indicator provides dual analysis capabilities:
 
-* **New Moon (0.0-0.1, 0.9-1.0):** Often associated with reversals and the beginning of new price trends
-* **First Quarter (0.2-0.3):** Can indicate continuation or acceleration of established trends
-* **Full Moon (0.45-0.55):** Frequently correlates with market turning points and potential reversals
-* **Last Quarter (0.7-0.8):** May signal consolidation or preparation for new market moves
-* **Cycle alignment:** When market cycles align with lunar cycles, the effect may be amplified
-* **Phase transition timing:** Changes between lunar phases can coincide with shifts in market sentiment
-* **Volume correlation:** Some markets show increased volatility around full and new moons
+1. Continuous Phase Value (0.0 to 1.0):
+   * Real-time lunar phase progression
+   * Smooth transition through cycle phases
+   * Useful for gradual trend analysis
+   * Shows relative position between major phases
+
+2. Precise Moon Phase Detection (0-4):
+   * **New Moon (1):** Detected during the bar where moon-sun alignment occurs (0° or 360°)
+   * **First Quarter (2):** Identified on the exact bar of 90° moon-sun separation
+   * **Full Moon (3):** Signaled when moon is opposite to sun (180°)
+   * **Last Quarter (4):** Marked at precise 270° moon-sun separation
+   * **Other Phases (0):** All non-critical phase angles
+
+The combination of continuous phase value and discrete phase detection allows for both trend analysis and precise timing of lunar events. This can be particularly useful for:
+* Identifying exact timing of lunar phase changes
+* Analyzing market behavior around precise lunar events
+* Developing trading strategies based on lunar cycles
 
 ## Limitations and Considerations
 

@@ -44,6 +44,35 @@ Where:
 - r = (1/α₁)^(1/3) is the derived ratio
 - α₂ = α₁ × r, α₃ = α₂ × r, α₄ = α₃ × r are the progressive alphas
 
+**Mathematical Rationale for the Alpha Cascade:**
+
+The QEMA indicator employs a specific geometric progression for its smoothing factors (alphas) across the four EMA stages. This design is intentional and aims to optimize the filter's performance. The alphas are:
+- α₁ (base alpha, e.g., 2/(period + 1))
+- α₂ = α₁ * r = α₁^(2/3)
+- α₃ = α₂ * r = α₁ * r² = α₁^(1/3)
+- α₄ = α₃ * r = α₁ * r³ = α₁^0 = 1
+Where `r = (1/α₁)^(1/3)` is the common ratio, derived from the cube root of the reciprocal of the base alpha.
+
+For typical smoothing (α₁ < 1), this results in a sequence of increasing alpha values (α₁ < α₂ < α₃ < α₄), meaning that subsequent EMAs in the cascade are progressively faster (less smoothed). This specific progression, when combined with the QEMA coefficients (4, -6, 4, -1), is chosen for the following reasons:
+
+1.  **Optimized Frequency Response:**
+    Using the same alpha for all EMA stages (as in a naive multi-EMA approach) can lead to an uneven frequency response, potentially causing over-smoothing of certain frequencies or creating undesirable resonance. The geometric progression of alphas in QEMA helps to create a more balanced and controlled filter response across a wider range of market frequencies. Each stage's contribution to the overall filtering characteristic is more harmonized.
+
+2.  **Minimized Phase Lag:**
+    A key goal of QEMA is extreme lag reduction. The specific alpha cascade, particularly the relationship defined by `r`, is designed to minimize the cumulative phase lag introduced by the four smoothing stages, while still providing effective noise reduction. Faster subsequent EMAs (due to larger alphas) contribute to this reduced lag.
+
+3.  **Enhanced Mathematical Stability and Predictability:**
+    The geometric progression provides a structured and predictable way to scale the smoothing effect across stages. This can contribute to better numerical stability and more consistent filter behavior compared to ad-hoc alpha selections. The constant ratio `r` ensures a systematic relationship between the responsiveness of each EMA stage.
+
+**Practical Impact of this Alpha Cascade:**
+This carefully designed alpha progression is critical to QEMA's ability to:
+- Achieve significantly lower lag than simpler moving averages or even TEMA.
+- Provide a smoother output than a single EMA of equivalent responsiveness.
+- Maintain a relatively stable and predictable response to price changes.
+- Better capture the turning points in price trends with minimal delay.
+
+The use of `r = (1/α₁)^(1/3)` (a cube root relationship) for a 4-stage filter is a specific design choice aimed at achieving these optimal trade-offs between responsiveness, smoothness, and stability.
+
 > 🔍 **Technical Note:** The ratio-based alpha progression is crucial for balanced response. The ratio r is calculated as the cube root of 1/α₁, ensuring that the combined effect of all four EMAs creates a mathematically optimal response curve. All EMAs are initialized with the first source value rather than using progressive initialization, eliminating warm-up artifacts and providing consistent results from the first bar.
 
 ## Interpretation Details

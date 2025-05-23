@@ -4,44 +4,77 @@
 
 ## Overview and Purpose
 
-The Hull Exponential Moving Average (HEMA) is an experimental technical indicator that combines concepts from both Hull Moving Average (HMA) and Exponential Moving Average (EMA). While the traditional Hull Moving Average uses Weighted Moving Averages (WMA) in its calculation, HEMA replaces these with strategically configured EMAs to create a responsive yet smooth trend indicator.
+The Hull Exponential Moving Average (HEMA) is an experimental technical indicator that uses a sequence of Exponential Moving Averages (EMAs) with specially derived smoothing factors. It aims to create a responsive yet smooth trend indicator.
 
-HEMA applies a multi-stage approach where it calculates two EMAs with different speeds, combines them using logarithmic coefficients, and then applies a final EMA smoothing pass. This creates a moving average that responds quickly to genuine price changes while maintaining effective noise filtering capabilities. The algorithm's unique alpha acceleration and logarithmic weighting create a distinctive balance between responsiveness and smoothness.
+HEMA applies a multi-stage EMA process. Initial EMAs are calculated using alphas derived from logarithmic relationships and the input period. Their outputs are then combined in a de-lagging step, which itself uses a logarithmically derived ratio. A final EMA smoothing pass is then applied to this de-lagged series. This creates a moving average that responds quickly to genuine price changes while maintaining effective noise filtering. The specific alpha calculations and the de-lagging formula contribute to its balance between responsiveness and smoothness.
 
 ## Core Concepts
 
-* **Cubic alpha acceleration:** Uses a cubic function to accelerate the alpha parameter for the fast EMA component, creating enhanced responsiveness
-* **Logarithmic coefficient distribution:** Applies natural logarithm-based weightings to combine the fast and slow components
-* **Hull-inspired methodology:** Follows the Hull Moving Average concept of combining differently-weighted components but uses EMAs instead of WMAs
-* **Optimized final smoothing:** Applies a mathematically derived final alpha that maintains the balance between smoothness and responsiveness
+*   **Logarithmically-derived alphas:** Alpha values for the three EMA stages are derived using natural logarithms and specific formulas related to the input period `N`.
+*   **Three-stage EMA process:** The calculation involves:
+    1.  An initial EMA (using `αS`) on the source data.
+    2.  A second EMA (using `αF`) also on the source data.
+    3.  A de-lagging step that combines the outputs of the first two EMAs using a specific ratio `r`.
+    4.  A final EMA (using `αFin`) applied to the de-lagged series.
+*   **Specific de-lagging formula:** Utilizes a constant ratio `r = ln(2.0) / (1.0 + ln(2.0))` to combine the outputs of the first two EMAs, aiming to reduce lag.
+*   **Optimized final smoothing:** The alpha for the final EMA (`αFin`) is calculated based on the square root of the period `N`.
+*   **Warmup compensation:** The internal EMA calculations include a warmup mechanism to provide more accurate values from the initial bars. This involves tracking decay factors (`eS`, `eF`, `eFin`) and applying a compensation factor `1.0 / (1.0 - e_decay)` during the warmup period. A shared warmup duration is determined by the smallest alpha among the three stages.
 
-HEMA achieves its performance through a three-stage process that first calculates fast and slow EMAs, then combines them with logarithmic coefficients, and finally applies an optimized EMA smoothing to the result. The cubic acceleration of the fast alpha creates rapid response to price changes, while the logarithmic weighting and final smoothing prevent excessive noise and overshooting.
+HEMA achieves its characteristics through this multi-stage EMA process, where the specific alpha calculations and the de-lagging step are key to its responsiveness and smoothness.
 
 ## Common Settings and Parameters
 
 | Parameter | Default | Function | When to Adjust |
 |-----------|---------|----------|---------------|
-| Period | 10 | Base smoothing period | Increase for longer-term trends, decrease for shorter-term signals |
-| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
+| Period (`N`) | 10 | Base lookback period for all alpha calculations | Increase for longer-term trends and more smoothness, decrease for shorter-term signals and more responsiveness |
+| Source | Close | Data point used for calculation | Change to HL2, HLC3, or OHLC4 for different price representations |
 
-**Pro Tip:** When transitioning from HMA to HEMA, many traders find that a slightly longer period (approximately 15-20% longer) provides comparable responsiveness with improved smoothness. For example, if you typically use HMA(8), try HEMA(10) for similar performance with reduced noise.
+**Pro Tip:** The HEMA's behavior is sensitive to the `Period` setting due to the non-linear relationships in its alpha calculations. Experiment with values around your typical MA periods. Small changes in `N` can have a noticeable impact, especially for smaller `N` values.
 
 ## Calculation and Mathematical Foundation
 
 **Simplified explanation:**
-HEMA works by calculating two EMAs—one accelerated and one standard—then combines them using specially calculated coefficients. This combined value is then smoothed with a final EMA that uses an optimized alpha value. The result is a moving average that shows price trends clearly while filtering out market noise.
+HEMA calculates its value through a sequence of three Exponential Moving Averages (EMAs) with specially derived smoothing factors (alphas).
+1.  Two initial EMAs are calculated from the source price, using alphas `αS` and `αF`.
+2.  The outputs of these two EMAs are combined into a "de-lagged" series.
+3.  This de-lagged series is then smoothed by a third EMA, using alpha `αFin`, to produce the final HEMA value.
+All internal EMAs use a warmup compensation mechanism for improved accuracy on early bars.
 
-**Technical formula:**
-1. Calculate standard alpha for EMA: αSlow = 2/(period + 1)
-2. Calculate accelerated alpha for fast EMA: αFast = 1 - (1 - αSlow)³
-3. Calculate the optimized final alpha: αFinal = 2/(√((2/αSlow) - 1) + 1)
-4. Calculate the two EMAs:
-   - EMASlow = Standard EMA with αSlow
-   - EMAFast = Accelerated EMA with αFast
-5. Calculate weighted difference: diff = (1 + ln(2)) × EMAFast - ln(2) × EMASlow
-6. Apply final smoothing: HEMA = EMA of diff with αFinal
+**Technical formula (let `N` be the input period):**
 
-> 🔍 **Technical Note:** The coefficient values (approximately 1.693 and 0.693) are derived from natural logarithm properties (ln(2) ≈ 0.693). This logarithmic weighting creates a balanced combination that enhances responsiveness while maintaining a smooth output. The cubic acceleration of αFast means that for shorter periods, the fast component responds dramatically faster than the slow component, while for longer periods, the difference is less pronounced.
+1.  **Alpha for the first EMA (slow component related):**
+    `αS = 3.0 / (2.0 * N - 1.0)`
+2.  **Lambda for `αS` (intermediate value):**
+    `λS = -ln(1.0 - αS)`
+    *(Note: `αS` must be less than 1, which implies `2N-1 > 3` or `N > 2` for `λS` to be well-defined without `NaN` from `ln` of non-positive number. The code uses `nz()` for robustness but the formula implies this constraint.)*
+3.  **De-lagging ratio `r`:**
+    `r = ln(2.0) / (1.0 + ln(2.0))` (This is a constant, approximately 0.409365)
+4.  **Alpha for the second EMA (fast component related):**
+    `αF = 1.0 - exp(-λS / r)`
+5.  **Alpha for the final EMA smoothing:**
+    `αFin = 2.0 / (sqrt(N) / 2.0 + 1.0)`
+
+6.  **Internal EMA calculations (conceptual, with warmup compensation):**
+    Let `EMA_internal(data, alpha, e_state, ema_state)` be a function that performs one step of EMA calculation:
+    `ema_state := alpha * (data - ema_state) + ema_state`
+    If in shared warmup period:
+        `e_state *= (1.0 - alpha)`
+        `output = (1.0 / (1.0 - e_state)) * ema_state`
+    Else:
+        `output = ema_state`
+    Return `output`.
+
+7.  **Applying the stages:**
+    *   `OutputS = EMA_internal(source, αS, eS_state, emaS_state)`
+    *   `OutputF = EMA_internal(source, αF, eF_state, emaF_state)`
+
+8.  **Calculate the de-lagged series:**
+    `DeLag = (OutputF / (1.0 - r)) - (r * OutputS / (1.0 - r))`
+
+9.  **Calculate the final HEMA:**
+    `HEMA = EMA_internal(DeLag, αFin, eFin_state, emaFin_state)`
+
+> 🔍 **Technical Note:** The HEMA implementation uses a shared warmup period controlled by `aMin` (the minimum of `αS`, `αF`, `αFin`). During this period, each internal EMA stage still tracks its own decay factor (`eS`, `eF`, `eFin`) to apply the correct compensation. The `nz()` function is used in the code to handle potential `NaN` values from alpha calculations if `N` is very small (e.g., `N=1` would make `αS=3`, `1-αS = -2`, `ln(-2)` is `NaN`).
 
 ## Interpretation Details
 
