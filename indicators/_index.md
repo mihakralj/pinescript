@@ -45,6 +45,7 @@
 | [CV](/indicators/volatility/cv.md) | Conditional Volatility | Volatility |
 | [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Volatility |
 | [DCHANNEL](/indicators/channels/dchannel.md) | Donchian Channels | Channels |
+| [DECAYCHANNEL](/indicators/channels/decaychannel.md) | Decay Min-Max Channel | Channels |
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
@@ -108,6 +109,7 @@
 | [MEDIAN](/indicators/statistics/median.md) | Median (Statistical) | Statistics |
 | [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume/Momentum |
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
+| [MMCHANNEL](/indicators/channels/mmchannel.md) | Min-Max Channel | Channels |
 | [MMA](/indicators/trends_IIR/mma.md) | Modified MA | Trends (IIR) |
 | [MODE](/indicators/statistics/mode.md) | Mode (Most Frequent) | Statistics |
 | [MOM](/indicators/momentum/mom.md) | Momentum | Momentum |
@@ -128,6 +130,7 @@
 | [QEMA](/indicators/trends_IIR/qema.md) | Quadruple Exponential MA | Trends (IIR) |
 | [QUANTILE](/indicators/statistics/quantile.md) | Quantile | Statistics |
 | [RAE](/indicators/errors/rae.md) | Relative Absolute Error | Errors |
+| [REGCHANNEL](/indicators/channels/regchannel.md) | Regression Channels | Channels |
 | [RELU](/indicators/numerics/relu.md) | Rectified Linear Unit | Numerics |
 | [REMA](/indicators/trends_IIR/rema.md) | Regularized Exponential MA | Trends (IIR) |
 | [RGMA](/indicators/trends_IIR/rgma.md) | Recursive Gaussian MA | Trends (IIR) |
@@ -158,6 +161,7 @@
 | [SQRT](/indicators/numerics/sqrt.md) | Square Root Transformation | Numerics |
 | [STANDARDIZE](/indicators/numerics/standardize.md) | Standardization (Z-score) | Numerics |
 | [STARC](/indicators/volatility/starc.md) | Starc Bands | Volatility |
+| [STARCHANNEL](/indicators/channels/starchannel.md) | Stoller Average Range Channel | Channels |
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Cycles |
 | [STDDEV](/indicators/statistics/stddev.md) | Standard Deviation | Statistics |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
