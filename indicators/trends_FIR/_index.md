@@ -20,5 +20,4 @@
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Distributes weights according to sine function for gradual influence transition and improved harmonic response. |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Implements foundational uniformly-weighted average with optimized recursive calculation, achieving 85% noise reduction with deterministic -13dB/octave frequency roll-off. |
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Applies triangular weighting scheme for enhanced smoothing with twice the noise reduction of simple moving averages. |
-| [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Incorporates trading volume as a weighting factor to emphasize price movements with higher volume confirmation. |
 | [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Assigns linearly decreasing weights to older data points to reduce lag while maintaining effective noise filtering. |

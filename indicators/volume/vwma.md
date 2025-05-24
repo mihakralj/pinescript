@@ -1,6 +1,6 @@
 # VWMA: Volume Weighted Moving Average
 
-[Pine Script Implementation of VWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/vwma.pine)
+[Pine Script Implementation of VWMA](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/vwma.pine)
 
 ## Overview and Purpose
 
@@ -37,7 +37,7 @@ Where:
 - Volume[i] represents the volume at position i in the lookback window
 - The formula simply divides the sum of price×volume products by the sum of all volumes in the period
 
-> 🔍 **Technical Note:** Unlike weighted moving averages that use arbitrary weighting schemes, VWMA uses actual trading volume as the weight, making it responsive to real market activity rather than mathematical constructs.
+> 🔍 **Technical Note:** This implementation uses dual circular buffers to efficiently maintain both price and volume data over the lookback period. The algorithm achieves O(1) time complexity per bar by maintaining running sums rather than recalculating the entire window each time. Unlike weighted moving averages that use arbitrary weighting schemes, VWMA uses actual trading volume as the weight, making it responsive to real market activity rather than mathematical constructs.
 
 ## Interpretation Details
 

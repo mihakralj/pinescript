@@ -147,6 +147,7 @@
 | [RV](/indicators/volatility/rv.md) | Realized Volatility | Volatility |
 | [RVI](/indicators/volatility/rvi.md) | Relative Volatility Index | Volatility |
 | [RSX](/indicators/momentum/rsx.md) | Jurik Relative Strength Quality Index | Momentum |
+| [SDCHANNEL](/indicators/channels/sdchannel.md) | Standard Deviation Channel | Channels |
 | [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Filters |
 | [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Trends (FIR) |
 | [SIGMOID](/indicators/numerics/sigmoid.md) | Logistic Function | Numerics |
@@ -182,7 +183,10 @@
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
-| [VWMA](/indicators/trends_FIR/vwma.md) | Volume Weighted MA | Trends (FIR) |
+| [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Volume |
+| [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Volume |
+| [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Volume |
+| [WAD](/indicators/volume/wad.md) | Williams Accumulation/Distribution | Volume |
 | [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Filters |
 | [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
 | [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Trends (FIR) |

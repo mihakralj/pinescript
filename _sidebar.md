@@ -17,7 +17,6 @@
   * [SINEMA: Sine-weighted MA](/indicators/trends_FIR/sinema.md)
   * [SMA: Simple MA](/indicators/trends_FIR/sma.md)
   * [TRIMA: Triangular MA](/indicators/trends_FIR/trima.md)
-  * [VWMA: Volume Weighted MA](/indicators/trends_FIR/vwma.md)
   * [WMA: Weighted MA](/indicators/trends_FIR/wma.md)
 
 * [Trends - IIR](/indicators/trends_IIR/_index.md)
@@ -189,6 +188,7 @@
   * [MMCHANNEL: Min-Max Channel](/indicators/channels/mmchannel.md)
   * [PCHANNEL: Price Channel](/indicators/channels/pchannel.md)
   * [REGCHANNEL: Regression Channels](/indicators/channels/regchannel.md)
+  * [SDCHANNEL: Standard Deviation Channel](/indicators/channels/sdchannel.md)
   * [STARCHANNEL: Stoller Average Range Channel](/indicators/channels/starchannel.md)
   * [UBANDS: Ultimate Bands](/indicators/channels/ubands.md)
   * [UCHANNEL: Ultimate Channel](/indicators/channels/uchannel.md)
@@ -199,6 +199,10 @@
   * [CMF: Chaikin Money Flow](/indicators/volume/cmf.md)
   * [EFI: Elder's Force Index](/indicators/volume/efi.md)
   * [EOM: Ease of Movement](/indicators/volume/eom.md)
+  * [VWAP: Volume Weighted Average Price](/indicators/volume/vwap.md)
+  * [VWAD: Volume Weighted Accumulation/Distribution](/indicators/volume/vwad.md)
+  * [VWMA: Volume Weighted MA](/indicators/volume/vwma.md)
+  * [WAD: Williams Accumulation/Distribution](/indicators/volume/wad.md)
 
 * [Dynamics](/indicators/dynamics/_index.md)
   * [ADX: Average Directional Movement Index](/indicators/dynamics/adx.md)

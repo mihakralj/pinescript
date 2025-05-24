@@ -19,7 +19,7 @@
 | TVI | Trade Volume Index | Measures intra-day buying/selling pressure based on tick data |
 | VF | Volume Force | Measures the force of volume behind price movements |
 | VP | Volume Profile | Displays volume traded at different price levels over a specified time |
-| VWAD | Volume Weighted Accumulation/Distribution | Similar to ADL but weights accumulation/distribution by volume |
-| VWAP | Volume Weighted Average Price | Average price weighted by volume, often used as a benchmark |
-| VWMA | Volume Weighted MA | Moving average where each price point is weighted by its volume |
-| WAD | Williams Accumulation/Distribution | Measures cumulative buying/selling pressure by comparing closes to opens/highs/lows |
+| [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Average price weighted by volume, often used as a benchmark |
+| [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Similar to ADL but weights accumulation/distribution by volume |
+| [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Moving average where each price point is weighted by its volume |
+| [WAD](/indicators/volume/wad.md) | Williams Accumulation/Distribution | Measures cumulative buying/selling pressure by comparing closes to opens/highs/lows |
