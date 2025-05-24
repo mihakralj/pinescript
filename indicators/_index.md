@@ -91,6 +91,7 @@
 | [KENDALL](/indicators/statistics/kendall.md) | Kendall Rank Correlation | Statistics |
 | [KF](/indicators/filters/kf.md) | Kalman Filter | Filters |
 | [KURTOSIS](/indicators/statistics/kurtosis.md) | Kurtosis | Statistics |
+| [KVO](/indicators/volume/kvo.md) | Klinger Volume Oscillator | Volume |
 | [LINEAR](/indicators/numerics/linear.md) | Linear Transformation | Numerics |
 | [LINREG](/indicators/statistics/linreg.md) | Linear Regression Curve | Statistics |
 | [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Filters |

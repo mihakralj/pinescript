@@ -199,6 +199,7 @@
   * [CMF: Chaikin Money Flow](/indicators/volume/cmf.md)
   * [EFI: Elder's Force Index](/indicators/volume/efi.md)
   * [EOM: Ease of Movement](/indicators/volume/eom.md)
+  * [KVO: Klinger Volume Oscillator](/indicators/volume/kvo.md)
   * [VWAP: Volume Weighted Average Price](/indicators/volume/vwap.md)
   * [VWAD: Volume Weighted Accumulation/Distribution](/indicators/volume/vwad.md)
   * [VWMA: Volume Weighted MA](/indicators/volume/vwma.md)
