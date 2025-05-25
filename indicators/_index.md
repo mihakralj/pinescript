@@ -13,6 +13,7 @@
 | [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
 | [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
 | [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Oscillators |
+| [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume | Volume |
 | [APCHANNEL](/indicators/channels/apchannel.md) | Andrews' Pitchfork | Channels |
 | [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Oscillators |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
@@ -51,7 +52,7 @@
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
 | [EBSW](/indicators/cycles/ebsw.md) | Ehlers Even Better Sinewave | Cycles |
 | [EWMA](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility | Volatility |
-| [EFI](/indicators/volume/efi.md) | Elder's Force Index | Oscillators/Volume |
+| [EFI](/indicators/volume/efi.md) | Elder's Force Index | Volume |
 | [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Filters |
 | [EMA](/indicators/trends_IIR/ema.md) | Exponential MA | Trends (IIR) |
 | [ENTROPY](/indicators/statistics/entropy.md) | Normalized Shannon Entropy | Statistics |
@@ -108,7 +109,7 @@
 | [ME](/indicators/errors/me.md) | Mean Error | Errors |
 | [MEDFILT](/indicators/filters/median.md) | Median Filter | Numerics/Filters |
 | [MEDIAN](/indicators/statistics/median.md) | Median (Statistical) | Statistics |
-| [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume/Momentum |
+| [MFI](/indicators/volume/mfi.md) | Money Flow Index | Volume |
 | [MGDI](/indicators/trends_IIR/mgdi.md) | McGinley Dynamic Indicator | Trends (IIR) |
 | [MMCHANNEL](/indicators/channels/mmchannel.md) | Min-Max Channel | Channels |
 | [MMA](/indicators/trends_IIR/mma.md) | Modified MA | Trends (IIR) |
@@ -120,6 +121,7 @@
 | [MSLE](/indicators/errors/msle.md) | Mean Squared Logarithmic Error | Errors |
 | [NORMALIZE](/indicators/numerics/normalize.md) | Min-Max Scaling (Normalization) | Numerics |
 | [NOTCH](/indicators/filters/notch.md) | Notch Filter | Filters |
+| [NVI](/indicators/volume/nvi.md) | Negative Volume Index | Volume |
 | [PERCENTILE](/indicators/statistics/percentile.md) | Percentile | Statistics |
 | [PHASOR](/indicators/cycles/phasor.md) | Ehlers Phasor Analysis | Cycles |
 | [PCHANNEL](/indicators/channels/pchannel.md) | Price Channel | Channels |
@@ -127,6 +129,10 @@
 | [PPO](/indicators/momentum/ppo.md) | Percentage Price Oscillator | Momentum |
 | [PRS](/indicators/momentum/prs.md) | Price Relative Strength | Momentum |
 | [PV](/indicators/volatility/pv.md) | Parkinson Volatility | Volatility |
+| [PVI](/indicators/volume/pvi.md) | Positive Volume Index | Volume |
+| [PVO](/indicators/volume/pvo.md) | Percentage Volume Oscillator | Volume |
+| [PVR](/indicators/volume/pvr.md) | Price Volume Rank | Volume |
+| [PVT](/indicators/volume/pvt.md) | Price Volume Trend | Volume |
 | [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted MA | Trends (FIR) |
 | [QEMA](/indicators/trends_IIR/qema.md) | Quadruple Exponential MA | Trends (IIR) |
 | [QUANTILE](/indicators/statistics/quantile.md) | Quantile | Statistics |
@@ -174,16 +180,21 @@
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | [TRIX](/indicators/momentum/trix.md)  | Triple Exponential ROC | Momentum |
 | [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
+| [TVI](/indicators/volume/tvi.md) | Trade Volume Index | Volume |
 | [UBANDS](/indicators/channels/ubands.md) | Ultimate Bands | Channels |
 | [UCHANNEL](/indicators/channels/uchannel.md) | Ultimate Channel | Channels |
 | [UI](/indicators/volatility/ui.md) | Ulcer Index | Volatility |
 | [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Momentum |
 | [USF](/indicators/filters/usf.md) | Ehlers Ultrasmooth Filter | Filters |
+| [VA](/indicators/volume/va.md) | Volume Accumulation | Volume |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Momentum |
+| [VF](/indicators/volume/vf.md) | Volume Force | Volume |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
+| [VP](/indicators/volume/vp.md) | Volume Profile | Volume |
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
+| [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Volume |
 | [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Volume |
 | [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Volume |
 | [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Volume |

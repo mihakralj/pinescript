@@ -9,16 +9,17 @@
 | [EFI](/indicators/volume/efi.md) | Elder's Force Index | Combines price movement, direction, and volume to measure buying/selling power |
 | [EOM](/indicators/volume/eom.md) | Ease of Movement | Relates price change to volume, highlighting periods of effortless price movement |
 | [KVO](/indicators/volume/kvo.md) | Klinger Volume Oscillator | Compares short-term and long-term volume trends to identify potential reversals |
-| MFI | Money Flow Index | Volume-weighted RSI, measures buying/selling pressure using price and volume |
-| NVI | Negative Volume Index | Tracks price changes on days with lower volume, assuming smart money acts on quiet days |
-| PVI | Positive Volume Index | Tracks price changes on days with higher volume, assuming crowd behavior |
-| PVOL | Price-Volume | Basic indicator showing volume bars corresponding to price bars |
-| PVO | Percentage Volume Oscillator | Compares short-term and long-term volume moving averages as percentages |
-| PVR | Price Volume Rank | Ranks price performance relative to volume activity |
-| PVT | Price Volume Trend | Cumulative volume adjusted by relative price changes, similar to OBV |
-| TVI | Trade Volume Index | Measures intra-day buying/selling pressure based on tick data |
+| [MFI](/indicators/volume/mfi.md) | Money Flow Index | Volume-weighted RSI, measures buying/selling pressure using price and volume |
+| [NVI](/indicators/volume/nvi.md) | Negative Volume Index | Tracks price changes on days with lower volume, assuming smart money acts on quiet days |
+| [PVI](/indicators/volume/pvi.md) | Positive Volume Index | Tracks price changes on days with higher volume, assuming crowd behavior |
+| [PVO](/indicators/volume/pvo.md) | Percentage Volume Oscillator | Compares short-term and long-term volume moving averages as percentages |
+| [PVR](/indicators/volume/pvr.md) | Price Volume Rank | Ranks price performance relative to volume activity |
+| [PVT](/indicators/volume/pvt.md) | Price Volume Trend | Cumulative volume adjusted by relative price changes, similar to OBV |
+| [TVI](/indicators/volume/tvi.md) | Trade Volume Index | Measures intra-day buying/selling pressure based on tick data |
+| [VA](/indicators/volume/va.md) | Volume Accumulation | Cumulative volume adjusted by close position relative to range midpoint |
 | [VF](/indicators/volume/vf.md) | Volume Force | Measures the force of volume behind price movements |
-| VP | Volume Profile | Displays volume traded at different price levels over a specified time |
+| [VP](/indicators/volume/vp.md) | Volume Profile | Displays volume traded at different price levels over a specified time |
+| [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Measures the speed at which volume is changing over time |
 | [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Average price weighted by volume, often used as a benchmark |
 | [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Similar to ADL but weights accumulation/distribution by volume |
 | [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Moving average where each price point is weighted by its volume |
