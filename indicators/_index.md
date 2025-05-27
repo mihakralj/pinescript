@@ -176,18 +176,19 @@
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Cycles |
 | [STDDEV](/indicators/statistics/stddev.md) | Standard Deviation | Statistics |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
+| [STOCHF](/indicators/oscillators/stochf.md) | Stochastic Fast | Oscillators |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA | Trends (IIR) |
 | [TANH](/indicators/numerics/tanh.md) | Hyperbolic Tangent | Numerics |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA | Trends (IIR) |
 | [THEIL](/indicators/statistics/theil.md) | Theil Index | Statistics |
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
-| [TRIX](/indicators/momentum/trix.md)  | Triple Exponential ROC | Momentum |
+| [TRIX](/indicators/oscillators/trix.md) | Triple Exponential Average | Oscillators |
 | [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
 | [TVI](/indicators/volume/tvi.md) | Trade Volume Index | Volume |
 | [UBANDS](/indicators/channels/ubands.md) | Ultimate Bands | Channels |
 | [UCHANNEL](/indicators/channels/uchannel.md) | Ultimate Channel | Channels |
 | [UI](/indicators/volatility/ui.md) | Ulcer Index | Volatility |
-| [ULTOSC](/indicators/momentum/ultosc.md) | Ultimate Oscillator | Momentum |
+| [ULTOSC](/indicators/oscillators/ultosc.md) | Ultimate Oscillator | Oscillators |
 | [USF](/indicators/filters/usf.md) | Ehlers Ultrasmooth Filter | Filters |
 | [VA](/indicators/volume/va.md) | Volume Accumulation | Volume |
 | [VARIANCE](/indicators/statistics/variance.md) | Variance | Statistics |
@@ -204,7 +205,7 @@
 | [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Volume |
 | [WAD](/indicators/volume/wad.md) | Williams Accumulation/Distribution | Volume |
 | [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Filters |
-| [WILLR](/indicators/momentum/willr.md) | Williams %R | Momentum |
+| [WILLR](/indicators/oscillators/willr.md) | Williams %R | Oscillators |
 | [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Trends (FIR) |
 | [ZLDEMA](/indicators/trends_IIR/zldema.md) | Zero-Lag Double Exponential MA | Trends (IIR) |
 | [ZLEMA](/indicators/trends_IIR/zlema.md) | Zero-Lag Exponential MA | Trends (IIR) |

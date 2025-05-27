@@ -174,6 +174,10 @@
   * [AO: Awesome Oscillator](/indicators/oscillators/ao.md)
   * [APO: Absolute Price Oscillator](/indicators/oscillators/apo.md)
   * [STOCH: Stochastic Oscillator](/indicators/oscillators/stoch.md)
+  * [STOCHF: Stochastic Fast](/indicators/oscillators/stochf.md)
+  * [TRIX: Triple Exponential Average](/indicators/oscillators/trix.md)
+  * [ULTOSC: Ultimate Oscillator](/indicators/oscillators/ultosc.md)
+  * [WILLR: Williams %R](/indicators/oscillators/willr.md)
 
 * [Channels and Bands](/indicators/channels/_index.md)
   * [ACCBANDS: Acceleration Bands](/indicators/channels/accbands.md)
