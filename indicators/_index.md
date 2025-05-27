@@ -81,6 +81,7 @@
 | [HV](/indicators/volatility/hv.md) | Historical Volatility | Volatility |
 | [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA | Trends (FIR) |
 | [III](/indicators/volume/iii.md) | Intraday Intensity Index | Volume |
+| [INERTIA](/indicators/oscillators/inertia.md) | Inertia | Oscillators |
 | [IQR](/indicators/statistics/iqr.md) | Interquartile Range | Statistics |
 | [JB](/indicators/statistics/jb.md) | Jarque-Bera Test | Statistics |
 | [JBANDS](/indicators/channels/jbands.md) | Jurik Volatility Bands | Channels |
@@ -168,6 +169,7 @@
 | [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Trends (FIR) |
 | [SMAPE](/indicators/errors/smape.md) | Symmetric Mean Absolute Percentage Error | Errors |
+| [SMI](/indicators/oscillators/smi.md) | Stochastic Momentum Index | Oscillators |
 | [SPEARMAN](/indicators/statistics/spearman.md) | Spearman Rank Correlation | Statistics |
 | [SQRT](/indicators/numerics/sqrt.md) | Square Root Transformation | Numerics |
 | [STANDARDIZE](/indicators/numerics/standardize.md) | Standardization (Z-score) | Numerics |
@@ -177,6 +179,7 @@
 | [STDDEV](/indicators/statistics/stddev.md) | Standard Deviation | Statistics |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
 | [STOCHF](/indicators/oscillators/stochf.md) | Stochastic Fast | Oscillators |
+| [STOCHRSI](/indicators/oscillators/stochrsi.md) | Stochastic RSI | Oscillators |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA | Trends (IIR) |
 | [TANH](/indicators/numerics/tanh.md) | Hyperbolic Tangent | Numerics |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA | Trends (IIR) |
