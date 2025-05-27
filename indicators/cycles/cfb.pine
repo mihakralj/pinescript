@@ -4,6 +4,7 @@
 indicator("Composite Fractal Behavior (CFB)", "CFB", overlay=false)
 
 //@function Calculates auxiliary CFB values based on price series and depth
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/cfb.md
 //@param source Series to analyze for fractal patterns
 //@param depth Lookback period for analyzing price changes
 //@returns Ratio representing fractal behavior at specified depth
@@ -36,7 +37,7 @@ jcfbaux(series float source, series int depth) =>  // Changed to accept series i
         0.0
 
 //@function Calculates Composite Fractal Behavior across multiple timeframes
-//@doc Identifies dominant market cycles by analyzing price behavior across multiple timeframes
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/cfb.md
 //@param source Series to analyze for fractal patterns
 //@param depth Depth parameter controlling timeframe analysis (1-10)
 //@param smoothLength Smoothing period for the calculation

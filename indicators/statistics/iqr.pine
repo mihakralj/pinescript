@@ -3,7 +3,12 @@
 //@version=5
 indicator("Interquartile Range (IQR)", "IQR", overlay=false, precision=4)
 
-// Function to calculate percentile using linear interpolation
+//@function Function to calculate percentile using linear interpolation
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/iqr.md
+//@param src Source series for calculation
+//@param len Lookback period for data collection
+//@param p Percentile value (0-100)
+//@returns Calculated percentile value
 // Adapted from percentile.pine
 iqr(series float src, simple int len, simple float p) =>
     if len <= 0 // Should not happen due to input minval=2
@@ -59,4 +64,3 @@ iqr_value = q3 - q1
 
 // Plot IQR
 plot(iqr_value, title="IQR", color=color.new(color.yellow, 0), linewidth=2)
-

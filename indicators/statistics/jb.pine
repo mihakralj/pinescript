@@ -23,7 +23,7 @@ _central_moment(float[] arr, int moment_order, float mean_val) =>
         sum_pow_diff / n
 
 //@function Calculates the Jarque-Bera statistic.
-//@doc The Jarque-Bera test is a goodness-of-fit test of whether sample data have the skewness and kurtosis matching a normal distribution.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/jb.md
 //@param source series float The input series.
 //@param length simple int The lookback period (sample size). Min 10.
 //@returns series float The Jarque-Bera statistic. Higher values suggest deviation from normality.

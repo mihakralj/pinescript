@@ -4,7 +4,7 @@
 indicator("Price Channel (PCHANNEL)", "PCHANNEL", overlay=true)
 
 //@function Calculates Price Channel
-//@doc Plots the highest high and lowest low over a specified lookback period. Similar to Donchian Channels.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/pchannel.md
 //@param length_param Lookback period for determining the highest high and lowest low.
 //@returns tuple [upperChannel, middleChannel, lowerChannel]
 pchannel(simple int length_param) =>

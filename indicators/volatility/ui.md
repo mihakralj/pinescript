@@ -1,6 +1,6 @@
 # UI: Ulcer Index
 
-[View Pine Script™ Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/ui.pine)
+[Pine Script Implementation of UI](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/ui.pine)
 
 ## Overview and Purpose
 

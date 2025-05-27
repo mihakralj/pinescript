@@ -22,7 +22,6 @@
 | [VA](/indicators/volume/va.md) | Volume Accumulation | Cumulative volume adjusted by close position relative to range midpoint |
 | [VF](/indicators/volume/vf.md) | Volume Force | Measures the force of volume behind price movements |
 | [VO](/indicators/volume/vo.md) | Volume Oscillator | Difference between short and long volume moving averages showing volume momentum |
-| [VP](/indicators/volume/vp.md) | Volume Profile | Displays volume traded at different price levels over a specified time |
 | [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Measures the speed at which volume is changing over time |
 | [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Average price weighted by volume, often used as a benchmark |
 | [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Similar to ADL but weights accumulation/distribution by volume |

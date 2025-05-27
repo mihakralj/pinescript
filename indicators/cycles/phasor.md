@@ -1,146 +1,141 @@
-# Phasor Analysis (Ehlers)
+# PHASOR: Phasor Analysis (Ehlers)
 
-The Phasor Analysis indicator, developed by John Ehlers, is designed to identify the phase of the dominant cycle component in a time series. This implementation is based on Ehlers' work on cycle analysis and uses his specific correlation method to determine the real and imaginary components of the signal, which are then used to calculate the phase angle.
+[Pine Script Implementation of Phasor](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/phasor.pine)
 
-The indicator provides an unwrapped phase angle that continuously accumulates, helping to visualize cycle progression. It also includes Ehlers' specific logic to prevent the angle from moving backward under certain conditions, aiming for a more stable representation of the cycle phase. Optional plots for a "Derived Period" and a "Trend State Variable" offer further insights into market dynamics. All core calculations are encapsulated within a single `phasor()` function.
+## Overview and Purpose
 
-## Calculation
+The Phasor Analysis indicator, developed by John Ehlers, represents an advanced cycle analysis tool that identifies the phase of the dominant cycle component in a time series through complex signal processing techniques. This sophisticated indicator uses correlation-based methods to determine the real and imaginary components of the signal, converting them to a continuous phase angle that reveals market cycle progression. Unlike traditional oscillators, the Phasor provides unwrapped phase measurements that accumulate continuously, offering unique insights into market timing and cycle behavior.
 
-The primary `phasor(src, period)` function performs all calculations and returns three series: the final Phasor Angle, the Derived Period, and the Trend State.
+## Core Concepts
 
-### 1. Core Unwrapped Phasor Calculation (Internal to `phasor()` function)
+*   **Complex Signal Analysis** — Uses real and imaginary components to determine cycle phase
+*   **Correlation-Based Detection** — Employs Ehlers' correlation method for robust phase estimation
+*   **Unwrapped Phase Tracking** — Provides continuous phase accumulation without discontinuities
+*   **Anti-Regression Logic** — Prevents phase angle from moving backward under specific conditions
 
-   - **Correlation (Ehlers' Method):**
-     For a given `period`, the function calculates correlation sums to determine the real and imaginary parts of the signal relative to cosine and sine waves of that period.
-     - **Real Part Calculation:**
-       The real part is derived from correlating the source (`src`) with a cosine wave of the specified `period`. The formula involves sums of `src`, `cos_wave`, `src*src`, `src*cos_wave`, and `cos_wave*cos_wave` over the lookback `period`.
-       ```pine
-       // sx_corr = sum(x_val, period)
-       // sy_cos_corr = sum(y_val_cos, period)
-       // sxx_corr = sum(x_val*x_val, period)
-       // sxy_cos_corr = sum(x_val*y_val_cos, period)
-       // syy_cos_corr = sum(y_val_cos*y_val_cos, period)
+Market Applications:
+*   **Cycle Timing** — Precise identification of cycle peaks and troughs
+*   **Market Regime Analysis** — Distinguishes between trending and cycling market conditions
+*   **Turning Point Detection** — Advanced warning system for potential market reversals
 
-       den_cos = (period * sxx_corr - sx_corr * sx_corr) * (period * syy_cos_corr - sy_cos_corr * sy_cos_corr)
-       if den_cos > 0
-           real_part := (period * sxy_cos_corr - sx_corr * sy_cos_corr) / math.sqrt(den_cos)
-       ```
-     - **Imaginary Part Calculation:**
-       The imaginary part is derived similarly, correlating `src` with a negative sine wave (`-sin_wave`) of the `period`.
-       ```pine
-       // sx_corr = sum(x_val, period) (re-initialized)
-       // sy_sin_corr = sum(y_val_sin, period)
-       // sxx_corr = sum(x_val*x_val, period) (re-initialized)
-       // sxy_sin_corr = sum(x_val*y_val_sin, period)
-       // syy_sin_corr = sum(y_val_sin*y_val_sin, period)
+## Common Settings and Parameters
 
-       den_sin = (period * sxx_corr - sx_corr * sx_corr) * (period * syy_sin_corr - sy_sin_corr * sy_sin_corr)
-       if den_sin > 0
-           imag_part := (period * sxy_sin_corr - sx_corr * sy_sin_corr) / math.sqrt(den_sin)
-       ```
-   - **Phase Angle Conversion:**
-     The real and imaginary parts are converted to a raw phase angle in degrees:
-     ```pine
-     current_raw_phase = 0.0
-     if real_part != 0.0
-         current_raw_phase := 90.0 - math.atan(imag_part / real_part) * 180.0 / math.pi
-         if real_part < 0.0
-             current_raw_phase -= 180.0
-     else if imag_part != 0.0 // real_part is 0
-         current_raw_phase := imag_part > 0.0 ? 0.0 : 180.0
-     ```
-   - **Unwrapping:**
-     The raw phase angle is unwrapped to ensure it accumulates continuously. This result is stored internally as `calculated_Phasor_val`.
-     ```pine
-     var float core_Phasor_unwrapped_state = na // State for unwrapping
-     // ... unwrapping logic ...
-     core_Phasor_unwrapped_state := na(core_Phasor_unwrapped_state[1]) ? current_raw_phase : core_Phasor_unwrapped_state[1] + (current_raw_phase - core_Phasor_unwrapped_state[1])
-     float calculated_Phasor_val = core_Phasor_unwrapped_state
-     ```
+| Parameter | Default | Function | When to Adjust |
+|-----------|---------|----------|----------------|
+| Period | 28 | Fixed cycle period for correlation analysis | Match to expected dominant cycle length |
+| Source | Close | Price series for phase calculation | Use typical price or other smoothed series |
+| Show Derived Period | false | Display calculated period from phase rate | Enable for adaptive period analysis |
+| Show Trend State | false | Display trend/cycle state variable | Enable for regime identification |
 
-### 2. Ehlers' "Angle Cannot Go Backwards" Condition (Internal to `phasor()` function)
-The `calculated_Phasor_val` is then processed by Ehlers' specific condition:
-   ```pine
-   var float final_Phasor_state = na
-   if na(final_Phasor_state[1])
-       final_Phasor_state := calculated_Phasor_val
-   else
-       if calculated_Phasor_val < final_Phasor_state[1] and ((calculated_Phasor_val > -135 and final_Phasor_state[1] < 135) or (calculated_Phasor_val < -90 and final_Phasor_state[1] < -90))
-           final_Phasor_state := final_Phasor_state[1] // Keep previous angle
-       else
-           final_Phasor_state := calculated_Phasor_val // Use new angle
-   ```
-   This `final_Phasor_state` is the first value returned by the `phasor()` function.
+## Calculation and Mathematical Foundation
 
-### 3. Derived Period Calculation (Internal to `phasor()` function)
-   The Derived Period is calculated from the rate of change of `final_Phasor_state`.
-   ```pine
-   var float derivedPeriod_calc_state = na 
-   angle_Change_For_Period = final_Phasor_state - nz(final_Phasor_state[1], final_Phasor_state)
-   // Logic to handle zero or negative angle_Change_For_Period by referencing derivedPeriod_calc_state[1]
-   if nz(angle_Change_For_Period) != 0.0
-       derivedPeriod_calc_state := 360.0 / angle_Change_For_Period
-   // ... (clamping and default logic) ...
-   derivedPeriod_calc_state := math.max(1.0, math.min(derivedPeriod_calc_state, 60.0))
-   ```
-   This `derivedPeriod_calc_state` is the second value returned by the `phasor()` function.
+**Technical Formula:**
 
-### 4. Trend State Variable Calculation (Internal to `phasor()` function)
-   The Trend State is calculated based on the rate of change of `final_Phasor_state` and its current level.
-   ```pine
-   var int trendState_calc_state = 0 
-   angle_Change_For_State = final_Phasor_state - nz(final_Phasor_state[1], final_Phasor_state)
-   currentTrendState_calc = 0 // Default to cycling
-   if angle_Change_For_State <= 6.0: // Trend Mode (period >= 60)
-       if final_Phasor_state >= 90.0 or final_Phasor_state <= -90.0:
-           currentTrendState_calc := 1 // Long trend
-       else if final_Phasor_state > -90.0 and final_Phasor_state < 90.0:
-           currentTrendState_calc := -1 // Short trend (or out of trend)
-   trendState_calc_state := currentTrendState_calc
-   ```
-   This `trendState_calc_state` is the third value returned by the `phasor()` function.
+**Stage 1: Correlation Analysis**
+For period $n$ and source $x_t$:
 
-### 5. Plotting
-In the global scope, the script calls `phasor()` once:
-```pine
-[phasorAngle, derivedPeriodValue, trendStateValue] = phasor(i_source, i_period)
-```
-These returned values are then used in `plot()` calls.
+Real component correlation with cosine wave:
+$$R = \frac{n \sum x_t \cos\left(\frac{2\pi t}{n}\right) - \sum x_t \sum \cos\left(\frac{2\pi t}{n}\right)}{\sqrt{D_{cos}}}$$
 
-## Interpretation
+Imaginary component correlation with negative sine wave:
+$$I = \frac{n \sum x_t \left(-\sin\left(\frac{2\pi t}{n}\right)\right) - \sum x_t \sum \left(-\sin\left(\frac{2\pi t}{n}\right)\right)}{\sqrt{D_{sin}}}$$
 
-- **Phasor Angle (Red Line):** This line represents the unwrapped phase of the dominant cycle, after Ehlers' conditions.
-  - Crossing upwards through +90° can indicate a cycle peak.
-  - Crossing downwards through -90° can indicate a cycle trough.
-  - The continuous nature of the unwrapped phase helps in observing the cycle's progression over time.
-- **Reference Lines:**
-  - +90° (Green Dashed): Potential peak reference.
-  - -90° (Blue Dashed): Potential valley reference.
-  - 0° (Gray Dotted): Mid-cycle reference.
-- **Derived Period (Orange Line, Optional):** Shows the calculated period of the cycle based on the rate of change of the Phasor Angle. It is clamped between 1 and 60 bars. When the market is trending strongly, this derived period may become very long (clamped at 60).
-- **Trend State (Purple Histogram, Optional):**
-  - `1`: Indicates a potential long trend when the Phasor Angle's rate of change is slow (≤ 6° per bar) and the angle itself is in an extreme zone (≥ +90° or ≤ -90°).
-  - `-1`: Indicates a potential short trend or market indecision when the rate of change is slow, but the angle is between -90° and +90°.
-  - `0`: Indicates the market is primarily in a cycling mode (Phasor Angle changing by more than 6° per bar).
+where $D_{cos}$ and $D_{sin}$ are normalization denominators.
 
-## Usage
+**Stage 2: Phase Angle Conversion**
+$$\theta_{raw} = \begin{cases}
+90° - \arctan\left(\frac{I}{R}\right) \cdot \frac{180°}{\pi} & \text{if } R \neq 0 \\
+0° & \text{if } R = 0, I > 0 \\
+180° & \text{if } R = 0, I \leq 0
+\end{cases}$$
 
-The Phasor Analysis indicator can be used to:
-- Identify potential turning points in cyclical markets.
-- Gauge the current phase of the dominant cycle.
-- Determine if the market is in a trending or cycling mode using the optional Trend State variable.
-- Estimate the period of the dominant cycle using the optional Derived Period plot.
+**Stage 3: Phase Unwrapping**
+$$\theta_{unwrapped}(t) = \theta_{unwrapped}(t-1) + \Delta\theta$$
 
-Combine with other indicators for confirmation. The choice of `Period` input is crucial and may need adjustment based on the asset and timeframe being analyzed.
+where $\Delta\theta$ is the normalized phase difference.
 
-## Parameters
+**Stage 4: Ehlers' Anti-Regression Condition**
+$$\theta_{final}(t) = \begin{cases}
+\theta_{final}(t-1) & \text{if regression conditions met} \\
+\theta_{unwrapped}(t) & \text{otherwise}
+\end{cases}$$
 
-- **Period:** (Default: 28) The fixed cycle period to correlate against for the phase calculation.
-- **Source:** (Default: `close`) The source data series for the calculation.
-- **Show Derived Period:** (Default: `false`) Toggles the visibility of the Derived Period plot.
-- **Show Trend State Variable:** (Default: `false`) Toggles the visibility of the Trend State histogram.
+**Derived Calculations:**
 
-## Remarks
+Derived Period: $P_{derived} = \frac{360°}{\Delta\theta_{final}}$ (clamped to [1, 60])
 
-This indicator implements John Ehlers' specific correlation method for calculating the real and imaginary components. The unwrapping, the "angle cannot go backwards" logic, derived period, and trend state calculations are all encapsulated within the main `phasor()` function.
-The `//@version=6` is used, aligning with modern Pine Script practices.
+Trend State: 
+$$S_{trend} = \begin{cases}
+1 & \text{if } \Delta\theta \leq 6° \text{ and } |\theta| \geq 90° \\
+-1 & \text{if } \Delta\theta \leq 6° \text{ and } |\theta| < 90° \\
+0 & \text{if } \Delta\theta > 6°
+\end{cases}$$
+
+> 🔍 **Technical Note:** The correlation-based approach provides robust phase estimation even in noisy market conditions, while the unwrapping mechanism ensures continuous phase tracking across cycle boundaries.
+
+## Interpretation Details
+
+*   **Phasor Angle (Primary Output):**
+    - **+90°**: Potential cycle peak region
+    - **0°**: Mid-cycle ascending phase
+    - **-90°**: Potential cycle trough region
+    - **±180°**: Mid-cycle descending phase
+
+*   **Phase Progression:**
+    - Continuous upward movement → Normal cycle progression
+    - Phase stalling → Potential cycle extension or trend development
+    - Rapid phase changes → Cycle compression or volatility spike
+
+*   **Derived Period Analysis:**
+    - Period < 10 → High-frequency cycle dominance
+    - Period 15-40 → Typical swing trading cycles
+    - Period > 50 → Trending market conditions
+
+*   **Trend State Variable:**
+    - **+1**: Long trend conditions (slow phase change in extreme zones)
+    - **-1**: Short trend or consolidation (slow phase change in neutral zones)
+    - **0**: Active cycling (normal phase change rate)
+
+## Applications
+
+*   **Cycle-Based Trading:**
+    - Enter long positions near -90° crossings (cycle troughs)
+    - Enter short positions near +90° crossings (cycle peaks)
+    - Exit positions during mid-cycle phases (0°, ±180°)
+
+*   **Market Timing:**
+    - Use phase acceleration for early trend detection
+    - Monitor derived period for cycle length changes
+    - Combine with trend state for regime-appropriate strategies
+
+*   **Risk Management:**
+    - Adjust position sizes based on cycle clarity (derived period stability)
+    - Implement different risk parameters for trending vs. cycling regimes
+    - Use phase velocity for stop-loss placement timing
+
+## Limitations and Considerations
+
+*   **Parameter Sensitivity:**
+    - Fixed period assumption may not match actual market cycles
+    - Requires cycle period optimization for different markets and timeframes
+    - Performance degrades when multiple cycles interfere
+
+*   **Computational Complexity:**
+    - Correlation calculations over full period windows
+    - Multiple mathematical transformations increase processing requirements
+    - Real-time implementation requires efficient algorithms
+
+*   **Market Conditions:**
+    - Most effective in markets with clear cyclical behavior
+    - May provide false signals during strong trending periods
+    - Requires sufficient historical data for correlation analysis
+
+Complementary Indicators:
+* MESA Adaptive Moving Average (cycle-based smoothing)
+* Dominant Cycle Period indicators
+* Detrended Price Oscillator (cycle identification)
+
+## References
+
+1. Ehlers, J.F. "Cycle Analytics for Traders." Wiley, 2013.
+2. Ehlers, J.F. "Cybernetic Analysis for Stocks and Futures." Wiley, 2004.

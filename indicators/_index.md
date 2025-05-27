@@ -200,7 +200,6 @@
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VO](/indicators/volume/vo.md) | Volume Oscillator | Volume |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
-| [VP](/indicators/volume/vp.md) | Volume Profile | Volume |
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
 | [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Volume |
 | [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Volume |

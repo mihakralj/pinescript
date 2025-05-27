@@ -63,7 +63,7 @@ pearson_on_arrays(float[] x_arr, float[] y_arr) =>
                 sum_xy_diff / denominator_sqrt
 
 //@function Calculates Spearman Rank Correlation Coefficient.
-//@doc Measures the monotonic relationship between two time series by calculating Pearson correlation on their ranks.
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/spearman.md
 //@param source1 series float The first input series.
 //@param source2 series float The second input series.
 //@param length simple int The lookback period. Min 2, Max 60.
@@ -116,7 +116,6 @@ source2_series = request.security(i_source2_ticker, timeframe.period, i_source2_
 // Or, more robustly, use `input.string` for source type of external symbol.
 // For consistency with Kendall, let's use the same input structure:
 source2 = request.security(i_source2_ticker, timeframe.period, i_source2_data_type, lookahead=barmerge.lookahead_off)
-
 
 // Calculation
 spearman_value = spearman_corr(i_source1, source2, i_length)

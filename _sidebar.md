@@ -223,7 +223,6 @@
   * [VA: Volume Accumulation](/indicators/volume/va.md)
   * [VF: Volume Force](/indicators/volume/vf.md)
   * [VO: Volume Oscillator](/indicators/volume/vo.md)
-  * [VP: Volume Profile](/indicators/volume/vp.md)
   * [VROC: Volume Rate of Change](/indicators/volume/vroc.md)
   * [VWAP: Volume Weighted Average Price](/indicators/volume/vwap.md)
   * [VWAD: Volume Weighted Accumulation/Distribution](/indicators/volume/vwad.md)

@@ -1,6 +1,6 @@
 # RVI: Relative Volatility Index
 
-[View Pine Script™ Implementation](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/rvi.pine)
+[Pine Script Implementation of RVI](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/rvi.pine)
 
 ## Overview and Purpose
 
