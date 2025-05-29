@@ -2,6 +2,7 @@
 
 | Indicator | Name | Category |
 |-----------|------|----------|
+| [ABBER](/indicators/channels/abber.md) | Aberration | Channels |
 | [AC](/indicators/oscillators/ac.md) | Acceleration Oscillator | Oscillators |
 | [ACCBANDS](/indicators/channels/accbands.md) | Acceleration Bands | Channels |
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative | Numerics |
@@ -22,6 +23,9 @@
 | [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | Volatility |
 | [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent | Volatility |
 | [BBANDS](/indicators/channels/bbands.md) | Bollinger Bands | Channels |
+| [BBW](/indicators/volatility/bbw.md) | Bollinger Band Width | Volatility |
+| [BBWN](/indicators/volatility/bbwn.md) | Bollinger Band Width Normalized | Volatility |
+| [BBWP](/indicators/volatility/bbwp.md) | Bollinger Band Width Percentile | Volatility |
 | [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Filters |
 | [BETA](/indicators/statistics/beta.md) | Beta Coefficient | Statistics |
 | [BIAS](/indicators/statistics/bias.md) | Bias | Statistics |
@@ -32,6 +36,7 @@
 | [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
 | [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
 | [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Volatility |
+| [CG](/indicators/cycles/cg.md) | Center of Gravity | Cycles |
 | [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Momentum |
 | [CHANGE](/indicators/numerics/change.md) | Percentage Change | Numerics |
 | [CHEBY1](/indicators/filters/cheby1.md) | Chebyshev Type I Filter | Filters |
@@ -59,6 +64,7 @@
 | [EOM](/indicators/volume/eom.md) | Ease of Movement | Volume |
 | [EPMA](/indicators/trends_FIR/epma.md) | Endpoint MA | Trends (FIR) |
 | [EXP](/indicators/numerics/exp.md) | Exponential Transformation | Numerics |
+| [FCB](/indicators/channels/fcb.md) | Fractal Chaos Bands | Channels |
 | [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
 | [GAUSS](/indicators/filters/gauss.md) | Gaussian Filter | Filters |
 | [HANN](/indicators/filters/hann.md) | Hann FIR Filter | Filters |
@@ -175,6 +181,7 @@
 | [STANDARDIZE](/indicators/numerics/standardize.md) | Standardization (Z-score) | Numerics |
 | [STARC](/indicators/volatility/starc.md) | Starc Bands | Volatility |
 | [STARCHANNEL](/indicators/channels/starchannel.md) | Stoller Average Range Channel | Channels |
+| [STBANDS](/indicators/channels/stbands.md) | Super Trend Bands | Channels |
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Cycles |
 | [STDDEV](/indicators/statistics/stddev.md) | Standard Deviation | Statistics |
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
@@ -203,6 +210,7 @@
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
 | [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Volume |
 | [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Volume |
+| [VWAPBANDS](/indicators/channels/vwapbands.md) | VWAP Bands | Channels |
 | [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Volume |
 | [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Volume |
 | [WAD](/indicators/volume/wad.md) | Williams Accumulation/Distribution | Volume |

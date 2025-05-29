@@ -2,6 +2,8 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| [CG](/indicators/cycles/cg.md) | Center of Gravity | Ehlers' Center of Gravity indicator, which uses a weighted moving average to identify cycles |
+| DPO | Detrended Price Oscillator | Measures cycles by removing the long-term trend from price data, highlighting cyclical patterns |
 | [LUNAR](/indicators/cycles/lunar.md) | Lunar Phase | High-precision lunar phase incorporating orbital perturbations and epoch corrections |
 | [PHASOR](/indicators/cycles/phasor.md) | Ehlers Phasor Analysis | Identifies cycle phase using Ehlers' correlation method; includes unwrapping and trend state logic. |
 | [SOLAR](/indicators/cycles/solar.md) | Solar Cycle | High-precision seasonal cycle based on solar position using astronomical formulas |
@@ -14,4 +16,3 @@
 | HT_PHASOR | Hilbert Transform - Phasor Components | Provides the complex phasor components (real and imaginary) from the Hilbert Transform |
 | HT_SINE | Hilbert Transform - SineWave | Generates sine and lead-sine wave plots based on the dominant cycle identified by Hilbert Transform |
 | [SINE](/indicators/cycles/sine.md) | Ehlers Sine Wave | Original cycle indicator plotting sine and lead-sine waves based on an assumed dominant cycle period |
-| HWC | Holt-Winters Channel | Uses Holt-Winters forecasting method to create adaptive price channels |
