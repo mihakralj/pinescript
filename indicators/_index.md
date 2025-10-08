@@ -12,6 +12,7 @@
 | [ADX](/indicators/dynamics/adx.md) | Average Directional Movement Index | Dynamics |
 | [ADXR](/indicators/dynamics/adxr.md) | Average Directional Movement Rating | Dynamics |
 | [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
+| [ALLIGATOR](/indicators/dynamics/alligator.md) | Williams Alligator | Dynamics |
 | [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
 | [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Oscillators |
 | [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume | Volume |
@@ -54,6 +55,7 @@
 | [DECAYCHANNEL](/indicators/channels/decaychannel.md) | Decay Min-Max Channel | Channels |
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
+| [DPO](/indicators/oscillators/dpo.md) | Detrended Price Oscillator | Oscillators |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
 | [EBSW](/indicators/cycles/ebsw.md) | Ehlers Even Better Sinewave | Cycles |
 | [EWMA](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility | Volatility |

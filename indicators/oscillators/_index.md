@@ -16,6 +16,7 @@
 | CRSI | Connors RSI | Composite indicator combining RSI, Up/Down Streak Length, and Rate-of-Change |
 | CTI | Correlation Trend Indicator | Measures the correlation between price and time to determine trend strength |
 | DOSC | Derivative Oscillator | Measures the difference between a double-smoothed RSI and its signal line |
+| [DPO](/indicators/oscillators/dpo.md) | Detrended Price Oscillator | Removes trend from price by comparing to a displaced SMA, highlighting cyclical patterns |
 | ER | Efficiency Ratio | Measures price efficiency by comparing net price movement to total price movement (KAMA component) |
 | ERI | Elder Ray Index | Measures buying (Bull Power) and selling (Bear Power) pressure relative to an EMA |
 | FISHER | Fisher Transform | Converts price data into a Gaussian normal distribution to identify price reversals |
