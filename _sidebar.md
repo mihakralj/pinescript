@@ -143,6 +143,7 @@
   * [HV: Historical Volatility](/indicators/volatility/hv.md)
   * [JVOLTY: Jurik Volatility](/indicators/volatility/jvolty.md)
   * [JVOLTYN: Jurik Volatility Normalized [0,1]](/indicators/volatility/jvoltyn.md)
+  * [MASSI: Mass Index](/indicators/volatility/massi.md)
   * [PV: Parkinson Volatility](/indicators/volatility/pv.md)
   * [RSV: Rogers-Satchell Volatility](/indicators/volatility/rsv.md)
   * [RV: Realized Volatility](/indicators/volatility/rv.md)

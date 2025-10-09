@@ -98,6 +98,7 @@
 | [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility | Volatility |
 | [JVOLTYN](/indicators/volatility/jvoltyn.md) | Jurik Volatility Normalized [0,1] | Volatility |
 | [KAMA](/indicators/trends_IIR/kama.md) | Kaufman Adaptive MA | Trends (IIR) |
+| [MASSI](/indicators/volatility/massi.md) | Mass Index | Volatility |
 | [KCHANNEL](/indicators/channels/kchannel.md) | Keltner Channel | Channels |
 | [KENDALL](/indicators/statistics/kendall.md) | Kendall Rank Correlation | Statistics |
 | [KF](/indicators/filters/kf.md) | Kalman Filter | Filters |

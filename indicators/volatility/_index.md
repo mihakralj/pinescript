@@ -1,4 +1,4 @@
-# Volatility Indicators
+f# Volatility Indicators
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
@@ -18,7 +18,7 @@
 | [HV](/indicators/volatility/hv.md) | Historical Volatility | Standard deviation of price returns over a historical period |
 | [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility | Low-lag, smooth volatility measure developed by Mark Jurik |
 | [JVOLTYN](/indicators/volatility/jvoltyn.md) | Jurik Volatility Normalized [0,1] | Jurik Volatility normalized to a 0-1 scale |
-| MASSI | Mass Index | Predicts trend reversals by analyzing the narrowing and widening of price ranges |
+| [MASSI](/indicators/volatility/massi.md) | Mass Index | Predicts trend reversals by analyzing the narrowing and widening of price ranges |
 | [PV](/indicators/volatility/pv.md) | Parkinson Volatility | Volatility estimator using high and low prices, assuming no drift |
 | [RSV](/indicators/volatility/rsv.md) | Rogers-Satchell Volatility | Volatility estimator incorporating high, low, open, and close prices |
 | [RV](/indicators/volatility/rv.md) | Realized Volatility | Volatility calculated from high-frequency intra-day data |
@@ -27,4 +27,3 @@
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Measures the rate of change in volatility itself |
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Compares the current true range to the average true range over a longer period |
 | [YZV](/indicators/volatility/yzv.md) | Yang-Zhang Volatility | Volatility estimator combining open, high, low, close, and overnight gaps |
-
