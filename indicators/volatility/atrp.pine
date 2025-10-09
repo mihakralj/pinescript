@@ -39,4 +39,4 @@ i_length = input.int(14, "Length", minval=1, tooltip="Number of bars used for th
 atrpValue = atrp(i_length) // Call the custom atrp function
 
 // Plot
-plot(atrpValue, "ATRP", color.new(color.yellow, 0), 2)
+plot(atrpValue, "ATRP", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

@@ -47,9 +47,9 @@ band_color = color.new(color.blue, 0)
 fill_color = color.new(color.blue, 85)
 
 // Plots
-p_upper = plot(upper_band, "Upper Aberration Band", band_color, 1)
-p_lower = plot(lower_band, "Lower Aberration Band", band_color, 1)
-p_ma = plot(i_show_ma ? ma_line : na, "Moving Average", ma_color, 2)
+p_upper = plot(upper_band, "Upper Aberration Band", band_color, 1, color=color.yellow, linewidth=2)
+p_lower = plot(lower_band, "Lower Aberration Band", band_color, 1, color=color.yellow, linewidth=2)
+p_ma = plot(i_show_ma ? ma_line : na, "Moving Average", ma_color, 2, color=color.yellow, linewidth=2)
 
 // Fill between bands
 fill(p_upper, p_lower, fill_color, title="Aberration Fill")

@@ -84,4 +84,4 @@ i_length = input.int(100, "Length", minval=20, tooltip="Lookback period for Hurs
 hurstValue = hurst(i_source, i_length)
 
 // Plot
-plot(hurstValue, "Hurst Exponent", color.new(color.yellow, 0), 2)
+plot(hurstValue, "Hurst Exponent", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

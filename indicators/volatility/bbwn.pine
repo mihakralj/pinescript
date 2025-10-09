@@ -64,4 +64,4 @@ i_lookback = input.int(252, "Lookback Period", minval=1)
 bbwn_value = bbwn(i_source, i_period, i_multiplier, i_lookback)
 
 // Plot
-plot(bbwn_value, "BBWN", color.new(color.yellow, 0), 2)
+plot(bbwn_value, "BBWN", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

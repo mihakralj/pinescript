@@ -52,4 +52,4 @@ smoothing_period = input.int(3, "Smoothing Period", minval=1, maxval=20)
 pvd_value = pvd(price_period, volume_period, smoothing_period)
 
 // Plot main line
-plot(pvd_value, "PVD", color.new(color.yellow, 0), 2)
+plot(pvd_value, "PVD", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

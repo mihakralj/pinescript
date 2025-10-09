@@ -206,5 +206,5 @@ i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahea
 [f_stat_yx, x_coeff_yx] = granger_causality_statistic(i_source1, i_source2, i_period)
 
 // Plot
-plot(f_stat_yx, "F-Stat (X Granger-causes Y)", color.new(color.yellow, 0), 2)
+plot(f_stat_yx, "F-Stat (X Granger-causes Y, color=color.yellow, linewidth=2)", color.new(color.yellow, 0), 2)
 

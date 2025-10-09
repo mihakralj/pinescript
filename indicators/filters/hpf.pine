@@ -36,4 +36,4 @@ hp_component = hpf(i_source, i_length)
 
 // Plot
 //subtract high-pass signal from source, leaving only low frequencies
-plot(i_source - hp_component, "Trend Component", color.new(color.yellow, 0), 2)
+plot(i_source - hp_component, "Trend Component", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

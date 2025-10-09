@@ -50,4 +50,4 @@ i_source = input.source(close, "Source")
 vidya = vidya(i_source, i_period, i_std_period)
 
 // Plot
-plot(vidya, "VIDYA", color.new(color.yellow, 0), 2)
+plot(vidya, "VIDYA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

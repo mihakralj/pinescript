@@ -81,4 +81,4 @@ i_length = input.int(20, "Length", minval=3) // Minval 3 for skewness
 skewValue = skew(i_source, i_length)
 
 // Plot
-plot(skewValue, "Skewness", color.new(color.yellow, 0), 2)
+plot(skewValue, "Skewness", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

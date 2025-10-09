@@ -64,7 +64,7 @@ i_source = input.source(close, "Source")
 bwma_value = bwma(i_source, i_period, i_order)
 
 // Plot
-plot(bwma_value, "BWMA", color.new(color.yellow, 0), 2)
+plot(bwma_value, "BWMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
 
 // Alert
 alertcondition(ta.cross(i_source, bwma_value), "Price Crosses BWMA", "Price crossed BWMA on {{ticker}}")

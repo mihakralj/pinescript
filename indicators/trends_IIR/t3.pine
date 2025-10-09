@@ -47,4 +47,4 @@ i_vfactor = input.float(0.7, "Volume Factor", minval=0.0, maxval=1.0, step=0.1)
 t3 = t3(i_source, i_period, i_vfactor)
 
 // Plots
-plot(t3, "T3", color.new(color.yellow, 0), 2)
+plot(t3, "T3", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

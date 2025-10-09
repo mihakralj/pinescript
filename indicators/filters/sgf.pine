@@ -58,4 +58,4 @@ i_source = input.source(close, "Source")
 sgf_val = sgf(i_source, i_window, i_order)
 
 // Plot
-plot(sgf_val, "SGF", color=color.new(color.yellow, 0), linewidth=2)
+plot(sgf_val, "SGF", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

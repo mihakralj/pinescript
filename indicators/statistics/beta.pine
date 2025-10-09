@@ -69,4 +69,4 @@ src2Price = request.security(i_symbol, timeframe.period, close)
 beta_value = beta(i_src1, src2Price, i_period)
 
 // Plot
-plot(beta_value, "Beta", color.yellow, 2)
+plot(beta_value, "Beta", color.yellow, 2, color=color.yellow, linewidth=2)

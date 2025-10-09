@@ -57,4 +57,4 @@ i_percentile = input.float(25, "Percentile (0-100)", minval=0, maxval=100, step=
 percentile_value = percentile(i_source, i_length, i_percentile)
 
 // Plot
-plot(percentile_value, "Percentile", color=color.new(color.yellow, 0), linewidth=2)
+plot(percentile_value, "Percentile", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

@@ -34,4 +34,4 @@ is_percent = i_calc_type == "Percent"
 vroc_value = vroc(i_period, is_percent)
 
 // Plot
-plot(vroc_value, "VROC", color.new(color.yellow, 0), 2)
+plot(vroc_value, "VROC", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

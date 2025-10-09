@@ -38,4 +38,4 @@ i_source = input.source(close, "Source")
 filt = usf(i_source, i_length)
 
 // Plot
-plot(filt, "UltraSmooth", color.new(color.yellow, 0), 2)
+plot(filt, "UltraSmooth", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

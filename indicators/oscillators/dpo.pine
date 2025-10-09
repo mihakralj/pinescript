@@ -34,5 +34,5 @@ i_period = input.int(20, "Period", minval=1)
 dpo_value = dpo(i_source, i_period)
 
 // Plot
-plot(dpo_value, "DPO", color.new(color.blue, 0), 2)
+plot(dpo_value, "DPO", color.new(color.blue, 0, color=color.yellow, linewidth=2), 2)
 hline(0, "Zero Line", color.gray, hline.style_dotted)

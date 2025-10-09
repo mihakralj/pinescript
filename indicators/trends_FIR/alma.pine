@@ -49,4 +49,4 @@ i_source = input.source(close, "Source")
 alma_value = alma(i_source, i_period, i_offset, i_sigma)
 
 // Plot
-plot(alma_value, "ALMA", color.new(color.yellow, 0), 2)
+plot(alma_value, "ALMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

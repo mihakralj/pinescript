@@ -61,4 +61,4 @@ i_length = input.int(18, "Length", minval=1)
 float trix_val = trix(i_source, period=i_length)
 
 // Plot
-plot(trix_val, "TRIX", color.yellow, 2)
+plot(trix_val, "TRIX", color.yellow, 2, color=color.yellow, linewidth=2)

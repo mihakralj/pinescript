@@ -35,4 +35,4 @@ i_length = input.int(200, "Lookback Length", minval=1, tooltip="Lookback period 
 normalizedValue = normalize(i_source, i_length)
 
 // Plot
-plot(normalizedValue, "Normalized Value [0,1]", color.new(color.teal, 0), 2)
+plot(normalizedValue, "Normalized Value [0,1]", color.new(color.teal, 0, color=color.yellow, linewidth=2), 2)

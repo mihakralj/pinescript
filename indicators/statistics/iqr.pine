@@ -63,4 +63,4 @@ q3 = iqr(i_source, i_length, 75.0)
 iqr_value = q3 - q1
 
 // Plot IQR
-plot(iqr_value, title="IQR", color=color.new(color.yellow, 0), linewidth=2)
+plot(iqr_value, title="IQR", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

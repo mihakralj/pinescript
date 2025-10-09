@@ -53,4 +53,4 @@ i_quantile_level = input.float(0.25, title="Quantile Level (0.0-1.0)", minval=0.
 quantile_value = quantile(i_source, i_length, i_quantile_level)
 
 // Plot
-plot(quantile_value, title="Quantile", color=color.new(color.yellow, 0), linewidth=2)
+plot(quantile_value, title="Quantile", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

@@ -25,4 +25,4 @@ i_source = input(close, "Source")
 transformedSource = logT(i_source)
 
 // Plot
-plot(transformedSource, "Log Transformation", color=color.green)
+plot(transformedSource, "Log Transformation", color=color.green, color=color.yellow, linewidth=2)

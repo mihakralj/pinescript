@@ -45,4 +45,4 @@ i_length = input.int(14, title="Lookback Period", minval=1)
 theil_value = theil_t_index(i_source, i_length)
 
 // Plot
-plot(theil_value, "Theil T Index", color=color.new(color.yellow, 0), linewidth=2)
+plot(theil_value, "Theil T Index", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

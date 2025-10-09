@@ -40,4 +40,4 @@ i_source = input.source(close, "Source")
 sinema_value = sinema(i_source, i_period)
 
 // Plot
-plot(sinema_value, "SINEMA", color.new(color.yellow, 0), 2)
+plot(sinema_value, "SINEMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

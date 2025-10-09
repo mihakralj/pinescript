@@ -52,7 +52,7 @@ if i_p1_back <= i_p2_back or i_p2_back <= i_p3_back
 
 // Plot
 var color ap_color = color.blue
-plot(median, "Median", color.new(color.yellow, 0), 2)
-p1 = plot(upper, "Upper", color.new(ap_color, 50), 1)
-p2 = plot(lower, "Lower", color.new(ap_color, 50), 1)
+plot(median, "Median", color.new(color.yellow, 0, linewidth=2), 2)
+p1 = plot(upper, "Upper", color.new(ap_color, 50, color=color.yellow, linewidth=2), 1)
+p2 = plot(lower, "Lower", color.new(ap_color, 50, color=color.yellow, linewidth=2), 1)
 fill(p1, p2, color=color.new(ap_color, 90))

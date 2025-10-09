@@ -52,4 +52,4 @@ i_source = input.source(close, "Source")
 tema = tema(i_source, period=i_period)
 
 // Plot
-plot(tema, "Custom TEMA", color.new(color.yellow, 0), 2)
+plot(tema, "Custom TEMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

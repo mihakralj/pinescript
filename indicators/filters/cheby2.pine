@@ -66,4 +66,4 @@ i_source = input.source(close, "Source")
 cheby2_val = cheby2(i_source, i_length, i_attenuation)
 
 // Plot
-plot(cheby2_val, "Cheby2", color=color.new(color.yellow, 0), linewidth=2)
+plot(cheby2_val, "Cheby2", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

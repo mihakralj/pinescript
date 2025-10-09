@@ -39,4 +39,4 @@ i_source = input.source(close, "Source")
 wma_value = wma(i_source, i_period)
 
 // Plot
-plot(wma_value, "Custom WMA", color.new(color.yellow, 0), 2)
+plot(wma_value, "Custom WMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

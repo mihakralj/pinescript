@@ -65,4 +65,4 @@ i_length = input.int(14, "Length", minval=1)
 entropyValue = entropy(i_source, i_length)
 
 // Plot
-plot(entropyValue, "Entropy", color=color.blue)
+plot(entropyValue, "Entropy", color=color.blue, color=color.yellow, linewidth=2)

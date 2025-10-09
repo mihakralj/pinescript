@@ -39,4 +39,4 @@ i_length = input.int(14, "Period", minval=1)
 median_value = median(i_source, i_length)
 
 // Plot
-plot(median_value, "Median", color=color.new(color.orange, 0), linewidth=2)
+plot(median_value, "Median", color=color.new(color.orange, 0, color=color.yellow, linewidth=2), linewidth=2)

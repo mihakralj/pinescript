@@ -42,4 +42,4 @@ i_source = input.source(close, "Source")
 rgma_value = rgma(i_source, i_period, i_passes)
 
 // Plot
-plot(rgma_value, "RGMA", color.new(color.yellow, 0), 2)
+plot(rgma_value, "RGMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

@@ -28,4 +28,4 @@ va(series float h=high, series float l=low, series float c=close, series float v
 va_value = va()
 
 // Plot
-plot(va_value, "VA", color.new(color.yellow, 0), 2)
+plot(va_value, "VA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

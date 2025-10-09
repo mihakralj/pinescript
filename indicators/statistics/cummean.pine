@@ -24,4 +24,4 @@ i_source = input.source(close, "Source")
 cummean_value = cummean(i_source)
 
 // Plot
-plot(cummean_value, "CumMean", color=color.new(color.blue, 0), linewidth=2)
+plot(cummean_value, "CumMean", color=color.new(color.blue, 0, color=color.yellow, linewidth=2), linewidth=2)

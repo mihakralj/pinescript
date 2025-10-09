@@ -53,4 +53,4 @@ i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahea
 variance_value = covariance(i_source1, i_source2, i_period)
 
 // Plot
-plot(variance_value, "Covariance", color.new(color.yellow, 0), 2)
+plot(variance_value, "Covariance", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

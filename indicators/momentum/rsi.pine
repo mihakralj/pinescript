@@ -34,4 +34,4 @@ i_source = input.source(close, "Source")
 rsi_value = rsi(i_source, i_length)
 
 // Plot
-plot(rsi_value, "RSI", color.new(color.yellow, 0), 2)
+plot(rsi_value, "RSI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

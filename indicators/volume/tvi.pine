@@ -30,4 +30,4 @@ i_min_tick = input.float(0.125, "Min. Move", minval=0.0001, tooltip="Minimum pri
 tvi_value = tvi(i_price_source, i_min_tick)
 
 // Plot
-plot(tvi_value, "TVI", color.new(color.yellow, 0), 2)
+plot(tvi_value, "TVI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

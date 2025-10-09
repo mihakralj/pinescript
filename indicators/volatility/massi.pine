@@ -35,4 +35,4 @@ i_sum_length = input.int(25, "Sum Length", minval=1, tooltip="Period for summing
 massi_value = massi(i_ema_length, i_sum_length)
 
 // Plot
-plot(massi_value, "MASSI", color.new(color.yellow, 0), 2)
+plot(massi_value, "MASSI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

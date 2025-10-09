@@ -42,4 +42,4 @@ i_length = input.int(20, title="Length", minval=1, tooltip="The lookback period 
 yzvValue = yzv(i_length)
 
 // Plot
-plot(yzvValue, title="YZV", color=color.new(color.yellow, 0), linewidth=2)
+plot(yzvValue, title="YZV", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

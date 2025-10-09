@@ -70,7 +70,7 @@ i_length = input.int(20, title="Lookback Period (Sample Size)", minval=10, maxva
 jb_value = jb_stat(i_source, i_length) // Call renamed function
 
 // Plot
-plot(jb_value, "Jarque-Bera Statistic", color=color.new(color.teal, 0), linewidth=2)
+plot(jb_value, "Jarque-Bera Statistic", color=color.new(color.teal, 0, color=color.yellow, linewidth=2), linewidth=2)
 
 // Critical values for Chi-squared distribution with 2 degrees of freedom (approximate):
 // Significance Level | Critical Value

@@ -53,4 +53,4 @@ i_source = input.source(close, "Source")
 elliptic_val = elliptic(i_source, i_length)
 
 // Plot
-plot(elliptic_val, "Elliptic (Rp=1, Rs=40)", color=color.new(color.yellow, 0), linewidth=2)
+plot(elliptic_val, "Elliptic (Rp=1, Rs=40, color=color.yellow, linewidth=2)", color=color.new(color.yellow, 0), linewidth=2)

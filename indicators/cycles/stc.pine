@@ -71,4 +71,4 @@ i_smoothingType = input.int(2, title="Smoothing", minval=0, maxval=3, tooltip="0
 stcValue = stc(i_source, i_cycleLength, i_fastLength, i_slowLength, i_smoothingType)
 
 // Plot
-plot(stcValue, "STC", color.new(color.blue, 0), 2)
+plot(stcValue, "STC", color.new(color.blue, 0, color=color.yellow, linewidth=2), 2)

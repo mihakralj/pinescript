@@ -63,4 +63,4 @@ i_vovPeriod = input.int(10, "VOV Period", minval=1, tooltip="Period for StDev of
 vovValue = vov(i_src, i_volatilityPeriod, i_vovPeriod)
 
 // Plot
-plot(vovValue, "VOV", color.new(color.yellow, 0), 2)
+plot(vovValue, "VOV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

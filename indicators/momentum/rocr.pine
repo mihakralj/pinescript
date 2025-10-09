@@ -28,4 +28,4 @@ i_length = input.int(9, "Length", minval=1)
 float rocr_val = rocr(i_source, i_length)
 
 // Plot
-plot(rocr_val, "ROCR", color.yellow, 2)
+plot(rocr_val, "ROCR", color.yellow, 2, color=color.yellow, linewidth=2)

@@ -65,4 +65,4 @@ i_source = input.source(close, "Source")
 frama_value = frama(i_source, i_period)
 
 // Plot
-plot(frama_value, "FRAMA", color.new(color.yellow, 0), 2)
+plot(frama_value, "FRAMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

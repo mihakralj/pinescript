@@ -55,4 +55,4 @@ reset_condition = switch i_session_type
 vwap_value = vwap(i_source, volume, reset_condition)
 
 // Plot
-plot(vwap_value, "VWAP", color.new(color.yellow, 0), 2)
+plot(vwap_value, "VWAP", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

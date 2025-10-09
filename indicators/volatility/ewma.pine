@@ -41,4 +41,4 @@ i_annualPeriods = input.int(252, "Annual Periods", minval=1, tooltip="Number of 
 ewmaVolatilityValue = ewmaVolty(i_source, i_length, i_annualize, i_annualPeriods)
 
 // Plot
-plot(ewmaVolatilityValue, "EWMA Volty", color.new(color.yellow, 0), 2)
+plot(ewmaVolatilityValue, "EWMA Volty", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

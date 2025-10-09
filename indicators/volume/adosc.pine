@@ -37,4 +37,4 @@ longPeriod = input.int(10, "Long Period", minval=1)
 osc = adosc(shortPeriod, longPeriod)
 
 // ---------- Plotting ----------
-plot(osc, "ADOSC", color.new(color.yellow, 0), linewidth=2)
+plot(osc, "ADOSC", color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

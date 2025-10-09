@@ -48,4 +48,4 @@ i_source = input.source(close, "Source", tooltip="Price series to analyze")
 trix_value = trix(i_source, i_period)
 
 // Plot
-plot(trix_value, "TRIX", color.new(color.yellow, 0), 2)
+plot(trix_value, "TRIX", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

@@ -43,4 +43,4 @@ i_source = input.source(close, "Source")
 butter_val = butter(i_source, i_length)
 
 // Plot
-plot(butter_val, "Butterworth", color=color.new(color.yellow, 0), linewidth=2)
+plot(butter_val, "Butterworth", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

@@ -60,4 +60,4 @@ i_method = input.int(1, "Method", minval=1, maxval=3, tooltip="1=SMA, 2=EMA, 3=W
 adrValue = adr(i_length, i_method)
 
 // Plot
-plot(adrValue, "ADR", color.new(color.yellow, 0), 2)
+plot(adrValue, "ADR", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

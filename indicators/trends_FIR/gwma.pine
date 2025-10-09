@@ -53,4 +53,4 @@ i_source = input.source(close, "Source")
 gwma_value = gwma(i_source, i_period, i_sigma)
 
 // Plot
-plot(gwma_value, "GWMA", color.new(color.yellow, 0), 2)
+plot(gwma_value, "GWMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

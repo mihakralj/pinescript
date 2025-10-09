@@ -68,6 +68,6 @@ i_period = input.int(100, "Period", minval=1)
 [highest, lowest] = decaychannel(i_period)
 
 // Plot
-p1 = plot(highest, "Decaying High", color.new(color.blue, 0), 2)
-p2 = plot(lowest, "Decaying Low", color.new(color.blue, 0), 2)
+p1 = plot(highest, "Decaying High", color.new(color.blue, 0, color=color.yellow, linewidth=2), 2)
+p2 = plot(lowest, "Decaying Low", color.new(color.blue, 0, color=color.yellow, linewidth=2), 2)
 fill(p1, p2, title="Channel Fill", color=color.new(color.blue, 90))

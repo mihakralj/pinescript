@@ -49,7 +49,7 @@ i_rating_period = input.int(14, "Rating Period", minval=1, tooltip="Number of ba
 [adxr_value, adx_value, plus_di, minus_di] = adxr(i_period, i_rating_period)
 
 // Plot
-plot(adxr_value, "ADXR", color.new(color.yellow, 0), 2)
-plot(adx_value, "ADX", color.new(color.white, 0), 1)
-plot(plus_di, "+DI", color.new(color.green, 0), 1)
-plot(minus_di, "-DI", color.new(color.red, 0), 1)
+plot(adxr_value, "ADXR", color.new(color.yellow, 0, linewidth=2), 2)
+plot(adx_value, "ADX", color.new(color.white, 0, color=color.yellow, linewidth=2), 1)
+plot(plus_di, "+DI", color.new(color.green, 0, color=color.yellow, linewidth=2), 1)
+plot(minus_di, "-DI", color.new(color.red, 0, color=color.yellow, linewidth=2), 1)

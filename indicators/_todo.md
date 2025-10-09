@@ -1,17 +1,14 @@
-# Unimplemented Indicators TODO
 
-This document lists all indicators that are planned but not yet implemented in PineScript, organized by category.
+## Channels (2 indicators)
 
-## Summary
-- **Total Unimplemented**: 30 indicators
-- **Cycles**: 7 indicators
-- **Dynamics**: 12 indicators
-- **Reversals**: 10 indicators
-- **Volatility**: 1 indicator
+| Code | Name | Key Characteristics |
+|------|------|---------------------|
+| MIDPOINT | Midpoint over period | Average of highest and lowest values over period: (MAX(high,n) + MIN(low,n))/2 |
+| MIDPRICE | Midpoint Price | Average of high and low for single period: (high + low)/2 |
 
 ---
 
-## Cycles (7 indicators)
+## Cycles (6 indicators)
 
 | Code | Name | Key Characteristics |
 |------|------|---------------------|
@@ -24,12 +21,18 @@ This document lists all indicators that are planned but not yet implemented in P
 
 ---
 
-## Dynamics (12 indicators)
+## Dynamics (1 indicator)
 
 | Code | Name | Key Characteristics |
 |------|------|---------------------|
-| ALLIGATOR | Williams Alligator | Uses three smoothed moving averages (Jaw, Teeth, Lips) to identify trends and trading ranges |
-| AMAT | Archer MAs Trends | Trend identification system based on multiple moving averages |
+| DX | Directional Movement Index | Component of ADX: 100 * abs(+DI - -DI) / (+DI + -DI), measures directional strength |
+
+---
+
+## Momentum (8 indicators)
+
+| Code | Name | Key Characteristics |
+|------|------|---------------------|
 | AROONOSC | Aroon Oscillator | Subtracts Aroon Down from Aroon Up, measures trend strength |
 | CHOP | Choppiness Index | Measures market sidewaysness or trendiness, higher values indicate choppiness |
 | DPO | Detrended Price Oscillator | Removes longer-term trends from price to identify shorter-term cycles |
@@ -37,9 +40,43 @@ This document lists all indicators that are planned but not yet implemented in P
 | MACD | MA Convergence Divergence | Shows relationship between two EMAs, identifies momentum and trend direction |
 | MACDEXT | MACD with controllable MA type | Flexible MACD allowing different moving average types for calculation |
 | QSTICK | Q Stick | Measures buying/selling pressure by comparing the open and close prices over time |
-| SUPER | SuperTrend | Trend-following indicator based on ATR, plotting stop levels above/below price |
-| TTM | TTM Trend | Trend indicator often used with TTM Squeeze, based on moving averages |
 | VORTEX | Vortex Indicator | Identifies start of new trends and confirms current trends using +VI and -VI lines |
+
+---
+
+## Numerics (3 indicators)
+
+| Code | Name | Key Characteristics |
+|------|------|---------------------|
+| AVGPRICE | Average Price | Simple OHLC average: (open + high + low + close)/4 |
+| CEIL | Ceiling | Round up to nearest integer |
+| FLOOR | Floor | Round down to nearest integer |
+
+---
+
+## Oscillators (1 indicator)
+
+| Code | Name | Key Characteristics |
+|------|------|---------------------|
+| FISHER | Fisher Transform | Transforms prices to Gaussian normal distribution for clearer turning points |
+
+---
+
+## Statistics (3 indicators)
+
+| Code | Name | Key Characteristics |
+|------|------|---------------------|
+| LINEARREG_ANGLE | Linear Regression Angle | Angle of linear regression line in degrees |
+| LINEARREG_INTERCEPT | Linear Regression Intercept | Y-intercept value of linear regression line |
+| LINEARREG_SLOPE | Linear Regression Slope | Slope coefficient of linear regression line |
+
+---
+
+## Volatility (1 indicator)
+
+| Code | Name | Key Characteristics |
+|------|------|---------------------|
+| TRANGE | True Range | Single-period true range: max(H-L, abs(H-C_prev), abs(L-C_prev)) |
 
 ---
 
@@ -57,53 +94,3 @@ This document lists all indicators that are planned but not yet implemented in P
 | SAREXT | Parabolic SAR - Extended | Extended version of Parabolic SAR with additional parameters for customization |
 | SUPER | SuperTrend | Trend-following indicator based on ATR, plotting stop levels above/below price |
 | VS | Volatility Stop | Trailing stop loss based on volatility, often using ATR or standard deviation |
-
----
-
-## Volatility (1 indicator)
-
-| Code | Name | Key Characteristics |
-|------|------|---------------------|
-| MASSI | Mass Index | Predicts trend reversals by analyzing the narrowing and widening of price ranges |
-
----
-
-## Implementation Notes
-
-### Fully Implemented Categories
-The following categories have all indicators implemented:
-- **Channels** (20 indicators) - ✅ Complete
-- **Errors** (15 indicators) - ✅ Complete
-- **Filters** (17 indicators) - ✅ Complete
-- **Momentum** (17 indicators) - ✅ Complete
-- **Numerics** (15 indicators) - ✅ Complete
-- **Oscillators** (11 indicators) - ✅ Complete
-- **Statistics** (25 indicators) - ✅ Complete
-- **Trends (FIR)** (18 indicators) - ✅ Complete
-- **Trends (IIR)** (21 indicators) - ✅ Complete
-- **Volume** (25 indicators) - ✅ Complete
-
-### Priority Implementation Suggestions
-
-#### High Priority (Common Trading Indicators)
-1. **MACD** - One of the most widely used momentum indicators
-2. **PSAR** (Parabolic SAR) - Popular trailing stop and trend indicator
-3. **SUPER** (SuperTrend) - Modern trend-following indicator gaining popularity
-4. **ALLIGATOR** - Well-known Bill Williams indicator
-
-#### Medium Priority (Technical Analysis Tools)
-1. **HT_DCPERIOD**, **HT_DCPHASE**, **HT_SINE** - Hilbert Transform suite
-2. **VORTEX** - Effective trend confirmation tool
-3. **PIV/PP** - Essential pivot point calculations
-4. **CHOP** - Useful for identifying ranging markets
-5. **AROONOSC** - Complement to existing Aroon indicator
-
-#### Lower Priority (Specialized Indicators)
-1. **EACP**, **HOMOD** - Advanced Ehlers cycle indicators
-2. **AMAT**, **TTM** - Proprietary indicator systems
-3. **CKSP**, **CE**, **VS** - Alternative stop-loss methods
-4. **MASSI** - Specialized reversal predictor
-
----
-
-*Last Updated: 2025-10-08*

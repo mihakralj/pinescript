@@ -37,6 +37,7 @@
 | [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Filters |
 | [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Trends (FIR) |
 | [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Volatility |
+| [CFB](/indicators/cycles/cfb.md) | Composite Fractal Behavior | Cycles |
 | [CG](/indicators/cycles/cg.md) | Center of Gravity | Cycles |
 | [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Momentum |
 | [CHANGE](/indicators/numerics/change.md) | Percentage Change | Numerics |
@@ -54,6 +55,8 @@
 | [DCHANNEL](/indicators/channels/dchannel.md) | Donchian Channels | Channels |
 | [DECAYCHANNEL](/indicators/channels/decaychannel.md) | Decay Min-Max Channel | Channels |
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
+| [DIRTY](/indicators/errors/dirty.md) | Dirty Data Detection | Errors |
+| [DMX](/indicators/dynamics/dmx.md) | Directional Movement Index | Dynamics |
 | [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DPO](/indicators/oscillators/dpo.md) | Detrended Price Oscillator | Oscillators |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
@@ -111,6 +114,7 @@
 | [LOWEST](/indicators/numerics/lowest.md) | Lowest value | Numerics |
 | [LSMA](/indicators/trends_FIR/lsma.md) | Least Squares Moving Average | Trends (FIR) |
 | [LTMA](/indicators/trends_IIR/ltma.md) | Linear Trend MA | Trends (IIR) |
+| [LUNAR](/indicators/cycles/lunar.md) | Lunar Phase | Cycles |
 | [MAE](/indicators/errors/mae.md) | Mean Absolute Error | Errors |
 | [MAENV](/indicators/channels/maenv.md) | Moving Average Envelope | Channels |
 | [MAMA](/indicators/trends_IIR/mama.md) | MESA Adaptive MA | Trends (IIR) |
@@ -173,6 +177,7 @@
 | [SIGMOID](/indicators/numerics/sigmoid.md) | Logistic Function | Numerics |
 | [SINE](/indicators/cycles/sine.md) | Sine Wave | Cycles |
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Trends (FIR) |
+| [SOLAR](/indicators/cycles/solar.md) | Solar Activity Cycle | Cycles |
 | [SSF](/indicators/filters/ssf.md) | Ehlers Super Smooth Filter | Filters |
 | [SKEW](/indicators/statistics/skew.md) | Skewness | Statistics |
 | [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
@@ -220,6 +225,7 @@
 | [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Filters |
 | [WILLR](/indicators/oscillators/willr.md) | Williams %R | Oscillators |
 | [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Trends (FIR) |
+| [YZV](/indicators/volatility/yzv.md) | Yang-Zhang Volatility | Volatility |
 | [ZLDEMA](/indicators/trends_IIR/zldema.md) | Zero-Lag Double Exponential MA | Trends (IIR) |
 | [ZLEMA](/indicators/trends_IIR/zlema.md) | Zero-Lag Exponential MA | Trends (IIR) |
 | [ZLTEMA](/indicators/trends_IIR/zltema.md) | Zero-Lag Triple Exponential MA | Trends (IIR) |

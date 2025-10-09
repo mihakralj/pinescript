@@ -24,4 +24,4 @@ src = input.source(close, "Price Source")
 pvi_line = pvi(src, volume)
 
 // Plot
-plot(pvi_line, "PVI", color.yellow, 2)
+plot(pvi_line, "PVI", color.yellow, 2, color=color.yellow, linewidth=2)

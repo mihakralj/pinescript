@@ -37,4 +37,4 @@ i_length = input.int(14, "Length", minval=1, tooltip="Number of bars used for th
 atrValue = atr(i_length) // Call the custom atr function
 
 // Plot
-plot(atrValue, "ATR", color.new(color.yellow, 0), 2)
+plot(atrValue, "ATR", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

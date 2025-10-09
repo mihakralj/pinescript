@@ -58,4 +58,4 @@ i_length = input.int(20, title="Lookback Period", minval=2, tooltip="Period for 
 z_score_value = standardize(i_source, i_length) // Renamed for clarity
 
 // Plot
-plot(z_score_value, "Z-score", color=color.new(color.yellow, 0), linewidth=2)
+plot(z_score_value, "Z-score", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

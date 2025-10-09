@@ -28,8 +28,8 @@ i_period = input.int(25, "Period", minval=1, tooltip="Number of bars used in the
 [aroon_up, aroon_down] = aroon(i_period)
 
 // Plot
-plot(aroon_up, "Aroon Up", color.new(color.green, 0), 2)
-plot(aroon_down, "Aroon Down", color.new(color.red, 0), 2)
+plot(aroon_up, "Aroon Up", color.new(color.green, 0, color=color.yellow, linewidth=2), 2)
+plot(aroon_down, "Aroon Down", color.new(color.red, 0, color=color.yellow, linewidth=2), 2)
 hline(50, "Mid Level", color.new(color.gray, 50))
 hline(70, "Upper Level", color.new(color.gray, 50))
 hline(30, "Lower Level", color.new(color.gray, 50))

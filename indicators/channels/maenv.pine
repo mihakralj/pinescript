@@ -62,7 +62,7 @@ i_ma_type = input.int(1, "MA Type", minval=0, maxval=2, tooltip="0:SMA, 1:EMA, 2
 [middle, upper, lower] = mae(i_source, i_length, i_percentage, i_ma_type)
 
 // Plot
-plot(middle, "Middle", color.new(color.yellow, 0), 2)
-p1 = plot(upper, "Upper", color.new(color.blue, 50), 1)
-p2 = plot(lower, "Lower", color.new(color.blue, 50), 1)
+plot(middle, "Middle", color.new(color.yellow, 0, linewidth=2), 2)
+p1 = plot(upper, "Upper", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
+p2 = plot(lower, "Lower", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
 fill(p1, p2, title="Background", color=color.new(color.blue, 90))

@@ -44,4 +44,4 @@ i_period = input.int(20, "Volume Weight Period", minval=1)
 vwad_value = vwad(i_period)
 
 // Plot
-plot(vwad_value, "VWAD", color.new(color.yellow, 0), 2)
+plot(vwad_value, "VWAD", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

@@ -61,8 +61,8 @@ i_multiplier = input.float(2.0, "Standard Deviation Multiplier", minval=0.1, ste
 [upperBand, midLine, lowerBand] = regchannel(i_period, i_source, i_multiplier)
 
 // Plot
-p1 = plot(upperBand, "Upper Band", color.new(color.red, 0), 2)
-p2 = plot(midLine, "Regression Line", color.new(color.blue, 0), 2)
-p3 = plot(lowerBand, "Lower Band", color.new(color.green, 0), 2)
+p1 = plot(upperBand, "Upper Band", color.new(color.red, 0, color=color.yellow, linewidth=2), 2)
+p2 = plot(midLine, "Regression Line", color.new(color.blue, 0, color=color.yellow, linewidth=2), 2)
+p3 = plot(lowerBand, "Lower Band", color.new(color.green, 0, color=color.yellow, linewidth=2), 2)
 fill(p1, p2, title="Upper Fill", color=color.new(color.red, 90))
 fill(p2, p3, title="Lower Fill", color=color.new(color.green, 90))

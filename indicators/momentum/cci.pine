@@ -43,4 +43,4 @@ i_length = input.int(20, "Length", minval=1)
 cci_value = cci(i_length)
 
 // Plot
-plot(cci_value, "CCI", color.new(color.yellow, 0), 2)
+plot(cci_value, "CCI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

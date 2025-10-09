@@ -42,4 +42,4 @@ i_source = input.source(close, "Source")
 lowest_value = lowest(i_source, i_period)
 
 // Plot
-plot(lowest_value, "Lowest", color.new(color.yellow, 0), 2)
+plot(lowest_value, "Lowest", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

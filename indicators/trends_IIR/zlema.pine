@@ -43,4 +43,4 @@ alpha = 2.0/(float(i_period)+1.0)
 zlema = zlema(i_source, i_period)
 
 // Plot
-plot(zlema, "ZLEMA", color.new(color.yellow, 0), 2)
+plot(zlema, "ZLEMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

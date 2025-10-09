@@ -35,7 +35,7 @@ lunar() =>
 lunarPhase = lunar()
 
 // Plot the lunar phase line
-plot(lunarPhase, "Lunar Phase", color.yellow, 2)
+plot(lunarPhase, "Lunar Phase", color.yellow, 2, linewidth=2, color=color.yellow)
 
 // Calculate derivatives to find local maxima/minima and inflection points
 delta1 = lunarPhase - lunarPhase[1]

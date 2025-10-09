@@ -64,4 +64,4 @@ i_slowLength = input.int(34, "Slow Length", minval=1)
 ac_value = ac(i_fastLength, i_slowLength)
 
 // Plot
-plot(ac_value, "AC", ac_value >= 0 ? color.green : color.red, 2)
+plot(ac_value, "AC", ac_value >= 0 ? color.green : color.red, 2, color=color.yellow, linewidth=2)

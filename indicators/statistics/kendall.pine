@@ -59,4 +59,4 @@ i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahea
 kendall_value = kendall(i_source1, i_source2, i_period)
 
 // Plot
-plot(kendall_value, "Kendall's Tau", color=color.new(color.yellow,0), linewidth=2)
+plot(kendall_value, "Kendall's Tau", color=color.new(color.yellow,0, color=color.yellow, linewidth=2), linewidth=2)

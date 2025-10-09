@@ -41,7 +41,7 @@ i_source = input.source(close, "Source")
 trima_value = trima(i_source, i_period)
 
 // Plot
-plot(trima_value, "TRIMA", color.new(color.yellow, 0), 2)
+plot(trima_value, "TRIMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
 
 // Alert
 alertcondition(ta.cross(i_source, trima_value), "Price Crosses TRIMA", "Price crossed TRIMA on {{ticker}}")

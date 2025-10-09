@@ -44,4 +44,4 @@ i_ssfLength = input.int(10,        "Super‑Smoother Filter Length", minval=1)
 sine_wave = sine(i_source, i_hpLength, i_ssfLength)
 
 // Plot
-plot(sine_wave, "SINE", color.new(color.yellow, 0), 2)
+plot(sine_wave, "SINE", color.new(color.yellow, 0, linewidth=2, color=color.yellow), 2)

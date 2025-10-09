@@ -37,11 +37,11 @@ huber(series float source1, series float source2, simple int period, simple floa
 i_source1 = input.source(close, "Source")
 i_period = input.int(100, "Period", minval=1)
 i_delta = input.float(1.345, "Delta", minval=0.1)
-i_source2 = ta.ema(i_source1, i_period)
+i_source2 = ta.ema(i_source1, i_period) 
 
 // Calculation
 error = huber(i_source1, i_source2, i_period, i_delta)
 
 // Plot
-plot(error, "Huber", color.new(color.red, 60), linewidth = 2, style = plot.style_area)
-plot(i_source2, "EMA", color.new(color.yellow, 0), linewidth = 1, style = plot.style_line, force_overlay = true)
+plot(error, "Huber", color.new(color.red, 60, color=color.yellow, linewidth=2), linewidth = 2, style = plot.style_area)
+plot(i_source2, "EMA", color.new(color.yellow, 0, linewidth=2), linewidth = 1, style = plot.style_line, force_overlay = true)

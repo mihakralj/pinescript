@@ -40,4 +40,4 @@ i_source = input.source(close, "Source")
 dema = dema(i_source, period=i_period)
 
 // Plot
-plot(dema, "DEMA", color.new(color.yellow, 0), 2)
+plot(dema, "DEMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

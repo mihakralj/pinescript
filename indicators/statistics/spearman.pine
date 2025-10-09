@@ -121,7 +121,7 @@ source2 = request.security(i_source2_ticker, timeframe.period, i_source2_data_ty
 spearman_value = spearman_corr(i_source1, source2, i_length)
 
 // Plot
-plot(spearman_value, "Spearman's Rho", color=color.new(color.orange, 0), linewidth=2)
+plot(spearman_value, "Spearman's Rho", color=color.new(color.orange, 0, color=color.yellow, linewidth=2), linewidth=2)
 hline(0, "Zero Line", color.gray, linestyle=hline.style_dashed)
 hline(0.5, "Moderate Positive Correlation", color.new(color.green, 50), linestyle=hline.style_dotted)
 hline(-0.5, "Moderate Negative Correlation", color.new(color.red, 50), linestyle=hline.style_dotted)

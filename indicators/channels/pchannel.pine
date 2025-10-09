@@ -58,7 +58,7 @@ i_length = input.int(20, "Length", minval=1, tooltip="Lookback period for Highes
 [upperCh, middleCh, lowerCh] = pchannel(i_length)
 
 // Plot
-plot(middleCh, "Middle Channel", color.new(color.yellow, 50), 2) 
-p1 = plot(upperCh, "Upper Channel", color.new(color.blue, 50), 1)
-p2 = plot(lowerCh, "Lower Channel", color.new(color.blue, 50), 1)
+plot(middleCh, "Middle Channel", color.new(color.yellow, 50, linewidth=2), 2) 
+p1 = plot(upperCh, "Upper Channel", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
+p2 = plot(lowerCh, "Lower Channel", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
 fill(p1, p2, title="Background", color=color.new(color.blue, 90))

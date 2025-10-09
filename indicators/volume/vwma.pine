@@ -42,4 +42,4 @@ i_source = input.source(close, "Source")
 vwma_value = vwma(i_source, volume, i_period)
 
 // Plot
-plot(vwma_value, "VWMA", color.new(color.yellow, 0), 2)
+plot(vwma_value, "VWMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

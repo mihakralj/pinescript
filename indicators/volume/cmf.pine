@@ -44,4 +44,4 @@ i_length = input.int(20, "Length", minval=1)
 cmf_val = cmf(i_length)
 
 // ---------- Plotting ----------
-plot(cmf_val, "CMF", color.new(color.yellow, 0), 2)
+plot(cmf_val, "CMF", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

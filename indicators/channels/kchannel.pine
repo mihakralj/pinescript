@@ -52,7 +52,7 @@ i_mult = input.float(2.0, "ATR Multiplier", minval=0.001)
 [middle, upper, lower] = kchannel(i_source, i_length, i_mult)
 
 // Plot
-plot(middle, "Middle", color.new(color.yellow, 0), 2)
-p1 = plot(upper, "Upper", color.new(color.blue, 50), 1)
-p2 = plot(lower, "Lower", color.new(color.blue, 50), 1)
+plot(middle, "Middle", color.new(color.yellow, 0, linewidth=2), 2)
+p1 = plot(upper, "Upper", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
+p2 = plot(lower, "Lower", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
 fill(p1, p2, title="Background", color=color.new(color.blue, 90))

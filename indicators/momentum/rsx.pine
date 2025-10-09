@@ -88,5 +88,5 @@ i_source = input.source(close, "Source")
 rsx_value = rsx(i_source, i_length)
 
 // Plot
-plot(rsx_value, "RSX", color.new(color.yellow, 0), 2)
+plot(rsx_value, "RSX", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
 

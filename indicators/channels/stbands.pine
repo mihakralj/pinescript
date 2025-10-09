@@ -63,6 +63,6 @@ i_multiplier = input.float(3.0, "ATR Multiplier", minval=0.001)
 [upper_band, lower_band, trend] = stbands(i_source, i_period, i_multiplier)
 
 // Plots
-p_upper = plot(upper_band, "Upper Band", color=color.blue, linewidth=1)
-p_lower = plot(lower_band, "Lower Band", color=color.blue, linewidth=1)
+p_upper = plot(upper_band, "Upper Band", color=color.blue, linewidth=1, color=color.yellow, linewidth=2)
+p_lower = plot(lower_band, "Lower Band", color=color.blue, linewidth=1, color=color.yellow, linewidth=2)
 fill(p_upper, p_lower, color=color.new(color.blue, 80), title="Band Fill")

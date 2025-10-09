@@ -44,4 +44,4 @@ i_b = input.float(20.0, "Offset (b)")
 transformedSource = lin(i_source, i_a, i_b)
 
 // Plot
-plot(transformedSource, "Linear Transformation", color=color.yellow)
+plot(transformedSource, "Linear Transformation", color=color.yellow, linewidth=2)

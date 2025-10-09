@@ -41,5 +41,5 @@ i_source2 = ta.ema(i_source1, i_period)
 error = mpe(i_source1, i_source2, i_period)
 
 // Plot
-plot(error, "MPE", color.new(color.red, 60), linewidth = 2, style = plot.style_area)
-plot(i_source2, "EMA", color.new(color.yellow, 0), linewidth = 1, style = plot.style_line, force_overlay = true)
+plot(error, "MPE", color.new(color.red, 60, color=color.yellow, linewidth=2), linewidth = 2, style = plot.style_area)
+plot(i_source2, "EMA", color.new(color.yellow, 0, linewidth=2), linewidth = 1, style = plot.style_line, force_overlay = true)

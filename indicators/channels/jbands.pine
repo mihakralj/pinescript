@@ -48,6 +48,6 @@ i_source = input.source(close, "Source")
 [upperBand, lowerBand]= jbands(i_source, i_period)
 
 // Plot
-p1 = plot(upperBand, "Upper", color.new(color.blue, 50), 1)
-p2 = plot(lowerBand, "Lower", color.new(color.blue, 50), 1)
+p1 = plot(upperBand, "Upper", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
+p2 = plot(lowerBand, "Lower", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
 fill(p1, p2, title="Background", color=color.new(color.blue, 90))

@@ -50,4 +50,4 @@ i_source = input.source(close, "Source")
 loess_val = loess(i_source, i_length)
 
 // Plot
-plot(loess_val, "LOESS", color=color.new(color.yellow, 0), linewidth=2)
+plot(loess_val, "LOESS", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)

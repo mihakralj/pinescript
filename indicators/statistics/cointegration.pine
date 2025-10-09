@@ -123,4 +123,4 @@ i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahea
 coint_stat = cointegration(i_source1, i_source2, i_period)
 
 // Plot
-plot(coint_stat, "Cointegration ADF Stat", color.yellow)
+plot(coint_stat, "Cointegration ADF Stat", color.yellow, color=color.yellow, linewidth=2)

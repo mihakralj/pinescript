@@ -33,4 +33,4 @@ i_annualPeriods_pv = input.int(252, "Annual Periods", minval=1, tooltip="Number 
 pvValue = pv(i_length_pv, i_annualize_pv, i_annualPeriods_pv)
 
 // Plot
-plot(pvValue, "PV", color.new(color.yellow, 0), 2)
+plot(pvValue, "PV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

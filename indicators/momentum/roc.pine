@@ -28,4 +28,4 @@ i_length = input.int(9, "Length", minval=1)
 float roc_val = roc(i_source, i_length)
 
 // Plot
-plot(roc_val, "ROC", color.yellow, 2)
+plot(roc_val, "ROC", color.yellow, 2, color=color.yellow, linewidth=2)

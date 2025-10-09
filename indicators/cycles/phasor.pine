@@ -108,12 +108,12 @@ showTrendState = input.bool(false, "Show Trend State Variable", group="Optional 
 [phasorAngle, derivedPeriodValue, trendStateValue] = phasor(i_source, i_period)
 
 // ---------- Plotting Phasor Angle ----------
-plot(phasorAngle, "Phasor Angle", color.yellow, 2)
+plot(phasorAngle, "Phasor Angle", color.yellow, 2, linewidth=2)
 
 
 // ---------- Optional Plots ----------
 // Plot for Derived Period
-plot(showDerivedPeriod ? derivedPeriodValue : na, "Derived Period", color.orange, 1, display = display.all)
+plot(showDerivedPeriod ? derivedPeriodValue : na, "Derived Period", color.orange, 1, display = display.all, color=color.yellow, linewidth=2)
 
 // Plot for Trend State
-plot(showTrendState ? trendStateValue : na, "Trend State", color.purple, 2, display = display.all, style=plot.style_histogram)
+plot(showTrendState ? trendStateValue : na, "Trend State", color.purple, 2, display = display.all, style=plot.style_histogram, color=color.yellow, linewidth=2)

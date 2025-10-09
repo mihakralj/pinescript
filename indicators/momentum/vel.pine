@@ -62,4 +62,4 @@ i_source = input.source(close, "Source")
 vel_value = vel(i_source, i_length)
 
 // Plot
-plot(vel_value, "VEL", color.new(color.yellow, 0), 2)
+plot(vel_value, "VEL", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)

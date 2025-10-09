@@ -2,6 +2,7 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| [CFB](/indicators/cycles/cfb.md) | Composite Fractal Behavior | Measures market fractal behavior using composite fractal dimension analysis |
 | [CG](/indicators/cycles/cg.md) | Center of Gravity | Ehlers' Center of Gravity indicator, which uses a weighted moving average to identify cycles |
 | DPO | Detrended Price Oscillator | Measures cycles by removing the long-term trend from price data, highlighting cyclical patterns |
 | [LUNAR](/indicators/cycles/lunar.md) | Lunar Phase | High-precision lunar phase incorporating orbital perturbations and epoch corrections |

@@ -65,6 +65,7 @@
   * [WIENER: Wiener Filter](/indicators/filters/wiener.md)
 
 * [Error Metrics](/indicators/errors/_index.md)
+  * [DIRTY: Dirty Data Detection](/indicators/errors/dirty.md)
   * [HUBER: Huber Loss](/indicators/errors/huber.md)
   * [MAE: Mean Absolute Error](/indicators/errors/mae.md)
   * [MAPD: Mean Absolute Percentage Difference](/indicators/errors/mapd.md)
@@ -152,6 +153,7 @@
   * [UI: Ulcer Index](/indicators/volatility/ui.md)
   * [VOV: Volatility of Volatility](/indicators/volatility/vov.md)
   * [VR: Volatility Ratio](/indicators/volatility/vr.md)
+  * [YZV: Yang-Zhang Volatility](/indicators/volatility/yzv.md)
 
 * [Momentum](/indicators/momentum/_index.md)
   * [BOP: Balance of Power](/indicators/momentum/bop.md)
@@ -241,12 +243,14 @@
   * [ADX: Average Directional Movement Index](/indicators/dynamics/adx.md)
   * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
+  * [DMX: Directional Movement Index](/indicators/dynamics/dmx.md)
 
 * [Cycles](/indicators/cycles/_index.md)
+  * [CFB: Composite Fractal Behavior](/indicators/cycles/cfb.md)
   * [CG: Center of Gravity](/indicators/cycles/cg.md)
   * [EBSW: Ehlers Even Better Sinewave](/indicators/cycles/ebsw.md)
-  * [LUNAR: Moon Phase](/indicators/cycles/lunar.md)
+  * [LUNAR: Lunar Phase](/indicators/cycles/lunar.md)
   * [PHASOR: Ehlers Phasor Analysis](/indicators/cycles/phasor.md)
   * [SINE: Sine Wave](/indicators/cycles/sine.md)
-  * [SOLAR: Solar Cycle](/indicators/cycles/solar.md)
+  * [SOLAR: Solar Activity Cycle](/indicators/cycles/solar.md)
   * [STC: Schaff Trend Cycle](/indicators/cycles/stc.md)

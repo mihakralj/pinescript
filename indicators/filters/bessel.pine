@@ -37,4 +37,4 @@ i_source = input.source(close, "Source")
 bessel_val = bessel(i_source, i_length)
 
 // Plot
-plot(bessel_val, "Bessel", color=color.new(color.yellow, 0), linewidth=2)
+plot(bessel_val, "Bessel", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
