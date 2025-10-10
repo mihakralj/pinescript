@@ -86,5 +86,5 @@ i_blau = input.bool(true, "Blau Method", tooltip="True: Blau (smooth raw SMI rat
 [k_value, d_value] = smi(i_source, i_k_period, i_k_smooth, i_d_smooth, i_blau)
 
 // Plots
-plot(k_value, "SMI %K", color.new(color.yellow, 0), 2)
-plot(d_value, "SMI %D", color.new(color.blue, 0), 2)
+plot(k_value, "SMI %K", color=color.yellow, linewidth=2)
+plot(d_value, "SMI %D", color=color.blue, linewidth=2)

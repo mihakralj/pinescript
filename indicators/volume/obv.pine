@@ -23,4 +23,4 @@ obv(series float c = close, series float vol = volume) =>
 obv_value = obv(close, volume)
 
 // Plot
-plot(obv_value, "OBV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(obv_value, "OBV", color=color.yellow, linewidth=2)

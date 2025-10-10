@@ -48,4 +48,4 @@ i_length = input.int(14, title="Lookback Period", minval=1)
 geomean_value = geomean(i_source, i_length)
 
 // Plot
-plot(geomean_value, "GEOMEAN", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(geomean_value, "GEOMEAN", color=color.yellow, linewidth=2)

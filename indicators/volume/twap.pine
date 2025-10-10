@@ -53,4 +53,4 @@ reset_condition = switch i_session_type
 twap_value = twap(i_source, reset_condition)
 
 // Plot
-plot(twap_value, "TWAP", color.new(color.yellow, 0), 2)
+plot(twap_value, "TWAP", color=color.yellow, linewidth=2)

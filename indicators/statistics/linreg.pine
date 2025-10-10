@@ -55,5 +55,5 @@ i_source = input.source(close, "Source")
 [lr, slope] = linreg(i_source, i_period)
 
 // Plot
-plot(lr, "LinReg", color.new(color.yellow, 0), 2)
-// plot(slope, "Slope", color.new(color.orange, 0), 1, plot.style_histogram)
+plot(lr, "LinReg", color=color.yellow, linewidth=2)
+// plot(slope, "Slope", color=color.orange, linewidth=2, plot.style_histogram)

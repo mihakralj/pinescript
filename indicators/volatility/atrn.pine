@@ -40,4 +40,4 @@ i_length = input.int(14, "Length", minval=1, tooltip="Number of bars used for th
 atrnValue = atrn(i_length) // Call the custom atrn function
 
 // Plot
-plot(atrnValue, "ATRN", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(atrnValue, "ATRN", color=color.yellow, linewidth=2)

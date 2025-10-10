@@ -45,7 +45,7 @@ i_low = input.source(low, "Low Source")
 [basis, upper, lower] = dchannel(i_high, i_low, i_period)
 
 // Plot
-plot(basis, "Basis", color.new(color.orange, 0, color=color.yellow, linewidth=2), 2)
-p1 = plot(upper, "Upper", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-p2 = plot(lower, "Lower", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-fill(p1, p2, title="Background", color=color.new(color.blue, 90))
+plot(basis, "Basis", color=color.yellow, linewidth=2)
+p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
+p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
+fill(p1, p2, title="Background", color=color.blue)

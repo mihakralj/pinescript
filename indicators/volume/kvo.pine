@@ -65,4 +65,4 @@ hline(0, "Zero Line", color.gray, linestyle=hline.style_dashed)
 
 histogram = kvo_line - signal_line
 plot(histogram, "Histogram", style=plot.style_histogram, 
-     color=histogram >= 0 ? color.new(color.green, 50) : color.new(color.red, 50))
+     color=histogram >= 0 ? color.green : color.red)

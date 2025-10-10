@@ -26,4 +26,4 @@ adl(src_high = high, src_low = low, src_close = close, src_vol = volume) =>
 adl_val = adl(high, low, close, volume)
 
 // ---------- Plotting ----------
-plot(adl_val, "ADL", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(adl_val, "ADL", color=color.yellow, linewidth=2)

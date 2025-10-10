@@ -34,5 +34,5 @@ hp_trend_val = hp(i_source, i_lambda)
 hp_cycle_val = i_source - hp_trend_val
 
 // Plot
-plot(hp_trend_val, "HP Trend", color.new(color.yellow, 0), 2, force_overlay = true)
-plot(hp_cycle_val, "HP Cycle", color.new(color.blue, 0), 1, force_overlay = false)
+plot(hp_trend_val, "HP Trend", color=color.yellow, linewidth=2, force_overlay = true)
+plot(hp_cycle_val, "HP Cycle", color=color.blue, linewidth=2, force_overlay = false)

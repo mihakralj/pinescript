@@ -44,4 +44,4 @@ i_source = input.source(close, "Source")
 k = kurtosis(i_source, i_period)
 
 // Plot
-plot(k, "Kurtosis", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(k, "Kurtosis", color=color.yellow, linewidth=2)

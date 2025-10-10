@@ -47,4 +47,4 @@ i_slowLength = input.int(26, "Slow Length", minval=1)
 apo_value = apo(i_source, i_fastLength, i_slowLength)
 
 // Plot
-plot(apo_value, "APO", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(apo_value, "APO", color=color.yellow, linewidth=2)

@@ -36,4 +36,4 @@ i_period = input.int(14, "Period", minval=1, maxval=100, tooltip="Lookback perio
 willr_value = willr(i_period)
 
 // Plots
-plot(willr_value, "Williams %R", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(willr_value, "Williams %R", color=color.yellow, linewidth=2)

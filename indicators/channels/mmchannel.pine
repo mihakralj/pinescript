@@ -44,6 +44,6 @@ i_low = input.source(low, "Low Source")
 [highest, lowest] = mmchannel(i_high, i_low, i_period)
 
 // Plot
-p1=plot(highest, "Highest High", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-p2=plot(lowest, "Lowest Low", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-fill(p1, p2, title="Background", color=color.new(color.blue, 90))
+p1=plot(highest, "Highest High", color=color.yellow, linewidth=2)
+p2=plot(lowest, "Lowest Low", color=color.yellow, linewidth=2)
+fill(p1, p2, title="Background", color=color.blue)

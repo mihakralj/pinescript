@@ -54,5 +54,5 @@ vol = input(volume, "Volume")
 [aobvFast, aobvSlow] = aobv(src, vol)
 
 // ---------- Plotting ----------
-plot(aobvFast, "AOBV Fast", color.new(color.blue, 0), linewidth=2)
-plot(aobvSlow, "AOBV Slow", color.new(color.red, 0), linewidth=2)
+plot(aobvFast, "AOBV Fast", color.blue, linewidth=2)
+plot(aobvSlow, "AOBV Slow", color.red, linewidth=2)

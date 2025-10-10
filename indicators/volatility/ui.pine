@@ -45,4 +45,4 @@ i_period_ui = input.int(14, "Period", minval=1, tooltip="Lookback period for cal
 uiValue = ui(i_src_ui, i_period_ui)
 
 // Plot
-plot(uiValue, "UI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(uiValue, "UI", color=color.yellow, linewidth=2)

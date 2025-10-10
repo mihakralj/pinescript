@@ -45,4 +45,4 @@ iii_value = iii(period, cumulative)
 
 // ---------- Plots ----------
 
-plot(iii_value, "III", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(iii_value, "III", color=color.yellow, linewidth=2)

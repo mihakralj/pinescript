@@ -53,4 +53,4 @@ i_source = input.source(close, "Source")
 filt = bpf(i_source, i_lower, i_upper)
 
 // Plot
-plot(i_source-filt, "Bandpass", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(i_source-filt, "Bandpass", color=color.yellow, linewidth=2)

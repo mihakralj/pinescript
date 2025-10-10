@@ -76,11 +76,11 @@ reset_condition = switch i_session_type
 [vwap_value, upper_band1, lower_band1, upper_band2, lower_band2, stdev] = vwapbands(i_source, volume, reset_condition, i_multiplier)
 
 // Colors
-vwap_color = color.new(color.yellow, 0)
-band1_color = color.new(color.blue, 0)
-band2_color = color.new(color.purple, 0)
-fill_color1 = color.new(color.blue, 90)
-fill_color2 = color.new(color.purple, 95)
+vwap_color = color.yellow
+band1_color = color.blue
+band2_color = color.purple
+fill_color1 = color.blue
+fill_color2 = color.purple
 
 // Plots
 p_vwap = plot(vwap_value, "VWAP", vwap_color, 2, color=color.yellow, linewidth=2)

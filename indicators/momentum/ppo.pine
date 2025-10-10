@@ -81,6 +81,6 @@ i_signal_len = input.int(9, "Signal Length", minval=1)
 [ppo_line, signal_line, hist] = ppo(i_source, i_fast_len, i_slow_len, i_signal_len)
 
 // Plot
-plot(ppo_line, "PPO", color.new(color.blue, 0), 2)
-plot(signal_line, "Signal", color.new(color.red, 0), 1)
-plot(hist, "Histogram", color.new(color.gray, 0), style=plot.style_histogram)
+plot(ppo_line, "PPO", color=color.blue, linewidth=2)
+plot(signal_line, "Signal", color=color.red, linewidth=2)
+plot(hist, "Histogram", color.gray, style=plot.style_histogram)

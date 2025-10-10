@@ -38,4 +38,4 @@ i_len = input.int(14, "Length", minval=1)
 willr_value = willr(i_len)
 
 // Plot
-plot(willr_value, "Williams %R", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(willr_value, "Williams %R", color=color.yellow, linewidth=2)

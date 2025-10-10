@@ -47,4 +47,4 @@ i_length = input.int(14, "Length", minval=1)
 mfi_value = mfi(i_length)
 
 // Plot
-plot(mfi_value, "MFI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(mfi_value, "MFI", color=color.yellow, linewidth=2)

@@ -57,4 +57,4 @@ i_source = input.source(close, "Source")
 dwma = dwma(i_source, i_period)
 
 // Plot
-plot(dwma, "Custom DWMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(dwma, "Custom DWMA", color=color.yellow, linewidth=2)

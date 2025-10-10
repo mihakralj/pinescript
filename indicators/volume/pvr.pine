@@ -23,4 +23,4 @@ i_price_source = input.source(close, "Price Source")
 pvr_value = pvr(i_price_source)
 
 // Plot
-plot(pvr_value, "PVR", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2, plot.style_stepline)
+plot(pvr_value, "PVR", color=color.yellow, linewidth=2, plot.style_stepline)

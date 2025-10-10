@@ -42,6 +42,6 @@ i_multiplier = input.float(2.0, "StdDev Multiplier", minval=0.001)
 
 // Plot
 plot(basis, "Basis", color.new(color.yellow, 0, linewidth=2), 2)
-p1 = plot(upper, "Upper", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-p2 = plot(lower, "Lower", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-fill(p1, p2, title="Background", color=color.new(color.blue, 90))
+p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
+p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
+fill(p1, p2, title="Background", color=color.blue)

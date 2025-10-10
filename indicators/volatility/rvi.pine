@@ -74,4 +74,4 @@ i_rmaLength_rvi = input.int(14, "RMA Length (Wilder's Smoothing)", minval=1, too
 rviValue = rvi(i_src_rvi, i_stdevLength_rvi, i_rmaLength_rvi)
 
 // Plot
-plot(rviValue, "RVI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(rviValue, "RVI", color=color.yellow, linewidth=2)

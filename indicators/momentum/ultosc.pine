@@ -112,4 +112,4 @@ i_longLen = input.int(28, "Long Period", minval=1)
 ultosc_value = ultosc(i_shortLen, i_mediumLen, i_longLen)
 
 // Plot
-plot(ultosc_value, "ULTOSC", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(ultosc_value, "ULTOSC", color=color.yellow, linewidth=2)

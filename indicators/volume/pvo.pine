@@ -51,7 +51,7 @@ i_signal_period = input.int(9, "Signal Period", minval=1)
 [pvo_value, signal_value, histogram_value] = pvo(volume, i_fast_period, i_slow_period, i_signal_period)
 
 // Plot
-plot(pvo_value, "PVO", color.new(color.yellow, 0), 2)
-plot(signal_value, "Signal", color.new(color.red, 0), 1)
-plot(histogram_value, "Histogram", color.new(color.blue, 0), 1, plot.style_histogram)
-hline(0, "Zero Line", color.new(color.gray, 50))
+plot(pvo_value, "PVO", color=color.yellow, linewidth=2)
+plot(signal_value, "Signal", color=color.red, linewidth=2)
+plot(histogram_value, "Histogram", color=color.blue, linewidth=2, plot.style_histogram)
+hline(0, "Zero Line", color.gray)

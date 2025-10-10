@@ -42,4 +42,4 @@ i_source = input.source(close, "Source")
 mma_value = mma(i_source, i_period)
 
 // Plot
-plot(mma_value, "MMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(mma_value, "MMA", color=color.yellow, linewidth=2)

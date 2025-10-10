@@ -70,5 +70,5 @@ dPeriod = input.int(3, "D Smooth", minval=1)
 [kValue, dValue] = stoch(kPeriod, dPeriod)
 
 // Plot
-plot(kValue, "Stochastic %K", color.new(color.green, 0), 2)
-plot(dValue, "Stochastic %D", color.new(color.red, 0), 2)
+plot(kValue, "Stochastic %K", color=color.green, linewidth=2)
+plot(dValue, "Stochastic %D", color=color.red, linewidth=2)

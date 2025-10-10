@@ -68,6 +68,6 @@ dLength = input.int(3, "D Length", minval=1, maxval=50, tooltip="Smoothing perio
 [kValue, dValue] = stochf(kLength, dLength)
 
 // Plots
-plot(kValue, "Fast %K", color.new(color.yellow, 0), 2)
-plot(dValue, "Fast %D", color.new(color.blue, 0), 2)
+plot(kValue, "Fast %K", color=color.yellow, linewidth=2)
+plot(dValue, "Fast %D", color=color.blue, linewidth=2)
 

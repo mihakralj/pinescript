@@ -50,6 +50,6 @@ i_mult = input.float(1.0, "RMS Multiplier", minval=0.01, tooltip="Band width as 
 
 // Plot
 plot(middleBand, "Middle Band", color.new(color.yellow, 0, linewidth=2), 2)
-p1 = plot(upperBand, "Upper Band", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-p2 = plot(lowerBand, "Lower Band", color.new(color.blue, 50, color=color.yellow, linewidth=2), 1)
-fill(p1, p2, title="Background", color=color.new(color.blue, 90))
+p1 = plot(upperBand, "Upper Band", color=color.yellow, linewidth=2)
+p2 = plot(lowerBand, "Lower Band", color=color.yellow, linewidth=2)
+fill(p1, p2, title="Background", color=color.blue)

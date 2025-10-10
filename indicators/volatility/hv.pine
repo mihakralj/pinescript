@@ -59,4 +59,4 @@ i_annualPeriods = input.int(252, "Annual Periods", minval=1, tooltip="Number of 
 hvValue = hv(i_source, i_length, i_annualize, i_annualPeriods)
 
 // Plot
-plot(hvValue, "HV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(hvValue, "HV", color=color.yellow, linewidth=2)

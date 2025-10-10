@@ -42,4 +42,4 @@ i_source = input.source(close, "Source")
 highest_value = highest(i_source, i_period)
 
 // Plot
-plot(highest_value, "Highest", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2) // Changed color
+plot(highest_value, "Highest", color=color.yellow, linewidth=2) // Changed color

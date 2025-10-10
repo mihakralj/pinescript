@@ -38,5 +38,5 @@ i_smooth = input.int(10, "Smoothing Length", minval=1, maxval=500, tooltip="Peri
 cviValue = cvi(i_roc, i_smooth)
 
 // Plot
-plot(cviValue, "CVI", color.new(color.yellow, 0), 2)
-plot(0, "Zero", color.new(color.gray, 50), 1, plot.style_circles)
+plot(cviValue, "CVI", color=color.yellow, linewidth=2)
+plot(0, "Zero", color.gray, 1, plot.style_circles)

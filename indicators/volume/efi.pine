@@ -43,4 +43,4 @@ i_length = input.int(13, "Length", minval=1)
 efi_val = efi(i_length)
 
 // ---------- Plotting ----------
-plot(efi_val, "EFI", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(efi_val, "EFI", color=color.yellow, linewidth=2)

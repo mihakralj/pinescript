@@ -41,7 +41,7 @@ i_source = input.source(close, "Source")
 hanma_value = hanma(i_source, i_period)
 
 // Plot
-plot(hanma_value, "HANMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(hanma_value, "HANMA", color=color.yellow, linewidth=2)
 
 // Alert
 alertcondition(ta.cross(i_source, hanma_value), "Price Crosses HANMA", "Price crossed HANMA on {{ticker}}")

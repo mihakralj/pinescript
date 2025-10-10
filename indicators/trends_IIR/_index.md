@@ -20,7 +20,9 @@
 | [RMA](/indicators/trends_IIR/rma.md) | wildeR MA (SMMA, MMA)| Wilder's smoothing average using a specific alpha (1/period), designed for indicators like RSI and ATR. |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA | Six-stage EMA cascade with optimized coefficients based on a volume factor for reduced lag and superior noise reduction. |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA | Triple-cascade EMA architecture with optimized coefficients (3, -3, 1) for further lag reduction compared to DEMA. |
+| [VAMA](/indicators/trends_IIR/vama.md) | Volatility Adjusted MA | Dynamically adjusts moving average length based on ATR volatility ratio, shortening during high volatility and lengthening during low volatility. |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Adjusts smoothing factor based on market volatility using a Volatility Index (ratio of short-term to long-term standard deviation). |
+| [YZVAMA](/indicators/trends_IIR/yzvama.md) | Yang-Zhang Volatility Adjusted MA | Adjusts MA length based on percentile rank of short-term YZV, providing context-aware volatility adaptation for gap-prone markets. |
 | [ZLDEMA](/indicators/trends_IIR/zldema.md) | Zero-Lag Double Exponential MA | Hybrid dual-stage predictive architecture combining two ZLEMAs with optimized 1.5/0.5 coefficients for reduced lag and noise suppression. |
 | [ZLEMA](/indicators/trends_IIR/zlema.md) | Zero-Lag Exponential MA | Reduces lag by estimating future price based on current momentum, using a dynamically calculated lag period. |
 | [ZLTEMA](/indicators/trends_IIR/zltema.md) | Zero-Lag Triple Exponential MA | Advanced triple-cascade predictive architecture combining three ZLEMAs with optimized 2/2/1 coefficients for maximum lag reduction. |

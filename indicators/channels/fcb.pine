@@ -68,8 +68,8 @@ plot_fractal_points = input.bool(false, "Show Fractal Points")
 [upper_band, lower_band] = fcb(i_period)
 
 // Plots
-p_upper = plot(upper_band, "Upper FCB Band", color.new(color.blue, 0, color=color.yellow, linewidth=2), 1)
-p_lower = plot(lower_band, "Lower FCB Band", color.new(color.blue, 0, color=color.yellow, linewidth=2), 1)
+p_upper = plot(upper_band, "Upper FCB Band", color=color.yellow, linewidth=2)
+p_lower = plot(lower_band, "Lower FCB Band", color=color.yellow, linewidth=2)
 
 // Fill between bands
-fill(p_upper, p_lower, color.new(color.blue, 85), title="FCB Fill")
+fill(p_upper, p_lower, color.blue, title="FCB Fill")

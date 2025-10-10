@@ -64,4 +64,4 @@ i_windowType = input.int(4, "Window Function", minval=1, maxval=4, tooltip="1:Ha
 float afirma_value = afirma(i_source, i_period, i_windowType)
 
 // Plot
-plot(afirma_value, "AFIRMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(afirma_value, "AFIRMA", color=color.yellow, linewidth=2)

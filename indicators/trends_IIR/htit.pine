@@ -49,4 +49,4 @@ i_source = input.source(close, "Source")
 htit_value = htit(i_source)
 
 // Plot
-plot(htit_value, "HTIT", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(htit_value, "HTIT", color=color.yellow, linewidth=2)

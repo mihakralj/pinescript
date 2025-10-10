@@ -35,4 +35,4 @@ wad( series float src_open=open, series float src_high=high, series float src_lo
 wad_value = wad()
 
 // Plot
-plot(wad_value, "WAD", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(wad_value, "WAD", color=color.yellow, linewidth=2)

@@ -25,4 +25,4 @@ i_source = input(close, "Source")
 transformedSource = sqrtT(i_source)
 
 // Plot
-plot(transformedSource, "Square Root Transformation", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(transformedSource, "Square Root Transformation", color=color.yellow, linewidth=2)

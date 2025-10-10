@@ -37,6 +37,6 @@ i_period = input.int(14, "Period", minval=1, tooltip="Number of bars used in the
 [adx_value, plus_di, minus_di] = adx(i_period)
 
 // Plot
-plot(adx_value, "ADX", color.new(color.white, 0, color=color.yellow, linewidth=2), 2)
-plot(plus_di, "+DI", color.new(color.green, 0, color=color.yellow, linewidth=2), 1)
-plot(minus_di, "-DI", color.new(color.red, 0, color=color.yellow, linewidth=2), 1)
+plot(adx_value, "ADX", color=color.yellow, linewidth=2)
+plot(plus_di, "+DI", color=color.yellow, linewidth=2)
+plot(minus_di, "-DI", color=color.yellow, linewidth=2)

@@ -60,5 +60,5 @@ i_slowLimit = input.float(0.05, "Slow Limit", minval=0.001, maxval=0.5, step=0.0
 [mama_value, fama_value] = mama(i_source, i_fastLimit, i_slowLimit)
 
 // Plot results
-plot(mama_value, "MAMA", color.new(color.red, 0), 2)
-plot(fama_value, "FAMA", color.new(color.blue, 0), 2)
+plot(mama_value, "MAMA", color=color.red, linewidth=2)
+plot(fama_value, "FAMA", color=color.blue, linewidth=2)

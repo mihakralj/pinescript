@@ -26,4 +26,4 @@ i_source = input.source(close, "Source")
 mom_value = mom(i_source, i_length)
 
 // Plot
-plot(mom_value, "MOM", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(mom_value, "MOM", color=color.yellow, linewidth=2)

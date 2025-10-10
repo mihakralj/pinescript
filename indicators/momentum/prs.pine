@@ -59,5 +59,5 @@ if i_log
     smooth_ratio := math.log(smooth_ratio)
 
 // Plot
-plot(raw_ratio, "Raw Ratio", color.new(color.yellow, 0), 2)
-plot(smooth_ratio, "Smoothed", color.new(color.blue, 0), 1, display=i_smooth>1?display.all:display.none)
+plot(raw_ratio, "Raw Ratio", color=color.yellow, linewidth=2)
+plot(smooth_ratio, "Smoothed", color=color.blue, linewidth=2, display=i_smooth>1?display.all:display.none)

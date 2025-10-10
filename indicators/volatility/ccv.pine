@@ -67,4 +67,4 @@ i_method = input.int(1, "Method", minval=1, maxval=3, tooltip="1=SMA, 2=EMA, 3=W
 ccvValue = ccv(i_length, i_method)
 
 // Plot
-plot(ccvValue, "CCV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(ccvValue, "CCV", color=color.yellow, linewidth=2)

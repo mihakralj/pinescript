@@ -57,5 +57,5 @@ signal_period = input.int(10, "Signal Period", minval=1, maxval=50, tooltip="Per
 
 [vo_value, signal_line] = vo(short_period, long_period, signal_period)
 
-plot(vo_value, "Volume Oscillator", color.new(color.yellow, 0), 2)
-plot(signal_line, "Signal Line", color.new(color.blue, 0), 1)
+plot(vo_value, "Volume Oscillator", color=color.yellow, linewidth=2)
+plot(signal_line, "Signal Line", color=color.blue, linewidth=2)

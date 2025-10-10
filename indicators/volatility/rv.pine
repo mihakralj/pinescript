@@ -51,4 +51,4 @@ i_annualPeriods_rv = input.int(252, "Annual Periods", minval=1, tooltip="Number 
 rvValue = rv(i_length_rv, i_intraday_tf_rv, i_annualize_rv, i_annualPeriods_rv)
 
 // Plot
-plot(rvValue, "RV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(rvValue, "RV", color=color.yellow, linewidth=2)

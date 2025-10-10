@@ -59,4 +59,4 @@ i_source = input.source(close, "Source")
 s = slope(i_source, i_period)
 
 // Plot
-plot(s, "Slope", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(s, "Slope", color=color.yellow, linewidth=2)

@@ -89,4 +89,4 @@ i_slowWeight = input.float(1.0, "Slow Weight", minval=0.1, maxval=10.0, step=0.1
 ultosc_value = ultosc(i_fastPeriod, i_mediumPeriod, i_slowPeriod, i_fastWeight, i_mediumWeight, i_slowWeight)
 
 // Plots
-plot(ultosc_value, "Ultimate Oscillator", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(ultosc_value, "Ultimate Oscillator", color=color.yellow, linewidth=2)

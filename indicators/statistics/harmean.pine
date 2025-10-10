@@ -46,4 +46,4 @@ i_length = input.int(14, title="Lookback Period", minval=1)
 harmean_value = harmean(i_source, i_length)
 
 // Plot
-plot(harmean_value, "HARMEAN", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(harmean_value, "HARMEAN", color=color.yellow, linewidth=2)

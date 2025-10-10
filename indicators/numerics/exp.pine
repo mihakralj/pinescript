@@ -22,4 +22,4 @@ i_source = input(close, "Source")
 transformedSource = expT(i_source)
 
 // Plot
-plot(transformedSource, "Exponential Transformation", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(transformedSource, "Exponential Transformation", color=color.yellow, linewidth=2)

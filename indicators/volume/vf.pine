@@ -41,4 +41,4 @@ plot(vf_line, "Volume Force", color.yellow, 2, color=color.yellow, linewidth=2)
 hline(0, "Zero Line", color.gray, linestyle=hline.style_dashed)
 
 // Color zones for visual clarity
-bgcolor(vf_line > 0 ? color.new(color.green, 95) : color.new(color.red, 95))
+bgcolor(vf_line > 0 ? color.green : color.red)

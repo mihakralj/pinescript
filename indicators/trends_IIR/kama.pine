@@ -47,4 +47,4 @@ slow_alpha = 2.0/(float(i_slow)+1.0)
 kama = kama(i_source, i_period, fast_alpha, slow_alpha)
 
 // Plot
-plot(kama, "Custom KAMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(kama, "Custom KAMA", color=color.yellow, linewidth=2)

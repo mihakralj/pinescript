@@ -40,4 +40,4 @@ i_steepness_k = input.float(0.5, "Steepness (k)", minval = 0.1, step = 0.1)
 tanhValue = tanh(i_source, i_steepness_k, ta.sma(i_source,200))
 
 // Plot
-plot(tanhValue, "Tanh", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(tanhValue, "Tanh", color=color.yellow, linewidth=2)

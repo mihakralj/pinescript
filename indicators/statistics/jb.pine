@@ -78,6 +78,6 @@ plot(jb_value, "Jarque-Bera Statistic", color=color.new(color.teal, 0, color=col
 // 5%  (0.05)         | 5.991
 // 1%  (0.01)         | 9.210
 // These lines can help interpret the JB statistic. If JB > critical value, reject null hypothesis of normality.
-hline(4.605, "Critical Value (10%)", color.new(color.gray, 50), linestyle=hline.style_dotted, linewidth=1)
-hline(5.991, "Critical Value (5%)", color.new(color.orange, 50), linestyle=hline.style_dashed, linewidth=1)
-hline(9.210, "Critical Value (1%)", color.new(color.red, 50), linestyle=hline.style_solid, linewidth=1)
+hline(4.605, "Critical Value (10%)", color.gray, linestyle=hline.style_dotted, linewidth=1)
+hline(5.991, "Critical Value (5%)", color.orange, linestyle=hline.style_dashed, linewidth=1)
+hline(9.210, "Critical Value (1%)", color.red, linestyle=hline.style_solid, linewidth=1)

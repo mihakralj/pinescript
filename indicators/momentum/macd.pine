@@ -69,7 +69,7 @@ i_source = input.source(close, "Source")
 [macd_line, signal_line, histogram] = macd(i_source, i_fast, i_slow, i_signal)
 
 // Plot
-hline(0, "Zero Line", color=color.new(color.gray, 50))
-plot(histogram, "Histogram", style=plot.style_columns, color=histogram >= 0 ? (histogram[1] < histogram ? color.new(color.green, 0) : color.new(color.green, 50)) : (histogram[1] < histogram ? color.new(color.red, 50) : color.new(color.red, 0)))
+hline(0, "Zero Line", color=color.gray)
+plot(histogram, "Histogram", style=plot.style_columns, color=histogram >= 0 ? (histogram[1] < histogram ? color.green : color.green) : (histogram[1] < histogram ? color.red : color.red))
 plot(macd_line, "MACD", color=color.blue, linewidth=2)
 plot(signal_line, "Signal", color=color.red, linewidth=2)

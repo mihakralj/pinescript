@@ -42,4 +42,4 @@ i_multiplier = input.float(2.0, "StdDev Multiplier", minval=0.001)
 bbw_value = bbw(i_source, i_period, i_multiplier)
 
 // Plot
-plot(bbw_value, "BBW", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(bbw_value, "BBW", color=color.yellow, linewidth=2)

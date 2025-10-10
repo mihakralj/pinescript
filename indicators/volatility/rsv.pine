@@ -40,4 +40,4 @@ i_annualPeriods_rsv = input.int(252, "Annual Periods", minval=1, tooltip="Number
 rsvValue = rsv(i_length_rsv, i_annualize_rsv, i_annualPeriods_rsv)
 
 // Plot
-plot(rsvValue, "RSV", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(rsvValue, "RSV", color=color.yellow, linewidth=2)

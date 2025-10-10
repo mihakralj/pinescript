@@ -38,4 +38,4 @@ i_r = input.float(0.1, "Measurement Noise (R)", minval=1e-9, step=0.1)
 kf_val = kf(i_source, i_q, i_r)
 
 // Plot
-plot(kf_val, "KF", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(kf_val, "KF", color=color.yellow, linewidth=2)

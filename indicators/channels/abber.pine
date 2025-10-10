@@ -42,9 +42,9 @@ ma_line = switch i_ma_type
 [upper_band, lower_band, deviation] = abber(i_source, ma_line, i_period, i_multiplier)
 
 // Colors
-ma_color = color.new(color.yellow, 0)
-band_color = color.new(color.blue, 0)
-fill_color = color.new(color.blue, 85)
+ma_color = color.yellow
+band_color = color.blue
+fill_color = color.blue
 
 // Plots
 p_upper = plot(upper_band, "Upper Aberration Band", band_color, 1, color=color.yellow, linewidth=2)

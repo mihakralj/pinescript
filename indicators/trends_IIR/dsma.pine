@@ -57,4 +57,4 @@ scale  = input.float(0.9, "Scale Factor", minval=0.01, maxval=0.9, step=0.01)
 value = dsma(source, period, scale)
 
 // Plot
-plot(value, "DSMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(value, "DSMA", color=color.yellow, linewidth=2)

@@ -42,4 +42,4 @@ i_smooth = input.int(14, "Smoothing Length", minval=0, tooltip="0 for no smoothi
 bop_value = bop(i_smooth)
 
 // Plot
-plot(bop_value, "BOP", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(bop_value, "BOP", color=color.yellow, linewidth=2)

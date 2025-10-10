@@ -35,4 +35,4 @@ pvt_signal = ta.sma(pvt_line, signal_length)
 plot(pvt_signal, "PVT Signal", color.red, 1)
 
 // Background coloring for trend indication
-bgcolor(pvt_line > pvt_signal ? color.new(color.green, 95) : color.new(color.red, 95))
+bgcolor(pvt_line > pvt_signal ? color.green : color.red)

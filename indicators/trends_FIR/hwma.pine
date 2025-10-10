@@ -47,4 +47,4 @@ i_source = input.source(close, "Source")
 hwma = hwma(i_source, period = i_period)
 
 // Plot
-plot(hwma, "HWMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(hwma, "HWMA", color=color.yellow, linewidth=2)

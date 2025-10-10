@@ -110,5 +110,5 @@ i_signalLen = input.int(13, "Signal Length", minval=1)
 [tsi_value, signal_line] = tsi(i_source, i_longLen, i_shortLen, i_signalLen)
 
 // Plot
-plot(tsi_value, "TSI", color.new(color.blue, 0), 2)
-plot(signal_line, "Signal Line", color.new(color.red, 0), 1)
+plot(tsi_value, "TSI", color=color.blue, linewidth=2)
+plot(signal_line, "Signal Line", color=color.red, linewidth=2)

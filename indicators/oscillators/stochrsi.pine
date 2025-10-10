@@ -63,5 +63,5 @@ i_source = input.source(close, "Source", tooltip="Price series to analyze")
 [k_value, d_value] = stochrsi(i_source, i_rsi_length, i_stoch_length, i_k_smooth, i_d_smooth)
 
 // Plots
-plot(k_value, "StochRSI %K", color.new(color.yellow, 0), 2)
-plot(d_value, "StochRSI %D", color.new(color.blue, 0), 2)
+plot(k_value, "StochRSI %K", color=color.yellow, linewidth=2)
+plot(d_value, "StochRSI %D", color=color.blue, linewidth=2)

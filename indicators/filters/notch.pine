@@ -49,4 +49,4 @@ i_bandwidth = input.float(0.3, "Relative Bandwidth", minval=0.01, maxval=0.99, s
 notch_val = notch(i_source, i_period, i_bandwidth)
 
 // Plot
-plot(notch_val, "Notch", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(notch_val, "Notch", color=color.yellow, linewidth=2)

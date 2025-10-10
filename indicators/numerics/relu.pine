@@ -21,5 +21,5 @@ reluDn = -relu(ta.sma(i_source,20)-i_source)
 reluUp = relu(i_source-ta.sma(i_source,20))
 
 // Plot
-plot(reluUp, "ReLU", color.new(color.green, 0), 2)
-plot(reluDn, "ReLU", color.new(color.red, 0), 2)
+plot(reluUp, "ReLU", color=color.green, linewidth=2)
+plot(reluDn, "ReLU", color=color.red, linewidth=2)

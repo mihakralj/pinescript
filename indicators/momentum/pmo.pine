@@ -36,5 +36,5 @@ pmo_value = pmo(i_source, i_roc_len, i_smooth1_len, i_smooth2_len)
 signal_line = ta.ema(pmo_value, i_signal_len)
 
 // Plot
-plot(pmo_value, "PMO", color.new(color.blue, 0), 2)
-plot(signal_line, "Signal", color.new(color.red, 0), 1)
+plot(pmo_value, "PMO", color=color.blue, linewidth=2)
+plot(signal_line, "Signal", color=color.red, linewidth=2)

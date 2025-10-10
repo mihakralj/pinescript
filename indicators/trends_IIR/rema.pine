@@ -47,4 +47,4 @@ i_source = input.source(close, "Source")
 rema = rema(i_source, i_period, i_lambda)
 
 // Plot
-plot(rema, "REMA", color.new(color.yellow, 0, color=color.yellow, linewidth=2), 2)
+plot(rema, "REMA", color=color.yellow, linewidth=2)
