@@ -115,6 +115,7 @@
 | [LSMA](/indicators/trends_FIR/lsma.md) | Least Squares Moving Average | Trends (FIR) |
 | [LTMA](/indicators/trends_IIR/ltma.md) | Linear Trend MA | Trends (IIR) |
 | [LUNAR](/indicators/cycles/lunar.md) | Lunar Phase | Cycles |
+| [MACD](/indicators/momentum/macd.md) | Moving Average Convergence Divergence | Momentum |
 | [MAE](/indicators/errors/mae.md) | Mean Absolute Error | Errors |
 | [MAENV](/indicators/channels/maenv.md) | Moving Average Envelope | Channels |
 | [MAMA](/indicators/trends_IIR/mama.md) | MESA Adaptive MA | Trends (IIR) |
@@ -202,6 +203,7 @@
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | [TRIX](/indicators/oscillators/trix.md) | Triple Exponential Average | Oscillators |
 | [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
+| [TWAP](/indicators/volume/twap.md) | Time Weighted Average Price | Volume |
 | [TVI](/indicators/volume/tvi.md) | Trade Volume Index | Volume |
 | [UBANDS](/indicators/channels/ubands.md) | Ultimate Bands | Channels |
 | [UCHANNEL](/indicators/channels/uchannel.md) | Ultimate Channel | Channels |

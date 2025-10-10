@@ -21,14 +21,6 @@
 
 ---
 
-## Dynamics (1 indicator)
-
-| Code | Name | Key Characteristics |
-|------|------|---------------------|
-| DX | Directional Movement Index | Component of ADX: 100 * abs(+DI - -DI) / (+DI + -DI), measures directional strength |
-
----
-
 ## Momentum (8 indicators)
 
 | Code | Name | Key Characteristics |
@@ -37,7 +29,6 @@
 | CHOP | Choppiness Index | Measures market sidewaysness or trendiness, higher values indicate choppiness |
 | DPO | Detrended Price Oscillator | Removes longer-term trends from price to identify shorter-term cycles |
 | HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase |
-| MACD | MA Convergence Divergence | Shows relationship between two EMAs, identifies momentum and trend direction |
 | MACDEXT | MACD with controllable MA type | Flexible MACD allowing different moving average types for calculation |
 | QSTICK | Q Stick | Measures buying/selling pressure by comparing the open and close prices over time |
 | VORTEX | Vortex Indicator | Identifies start of new trends and confirms current trends using +VI and -VI lines |

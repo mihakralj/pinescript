@@ -18,6 +18,7 @@
 | [PVO](/indicators/volume/pvo.md) | Percentage Volume Oscillator | Compares short-term and long-term volume moving averages as percentages |
 | [PVR](/indicators/volume/pvr.md) | Price Volume Rank | Ranks price performance relative to volume activity |
 | [PVT](/indicators/volume/pvt.md) | Price Volume Trend | Cumulative volume adjusted by relative price changes, similar to OBV |
+| [TWAP](/indicators/volume/twap.md) | Time Weighted Average Price | Average price weighted equally by time, used as execution benchmark |
 | [TVI](/indicators/volume/tvi.md) | Trade Volume Index | Measures intra-day buying/selling pressure based on tick data |
 | [VA](/indicators/volume/va.md) | Volume Accumulation | Cumulative volume adjusted by close position relative to range midpoint |
 | [VF](/indicators/volume/vf.md) | Volume Force | Measures the force of volume behind price movements |

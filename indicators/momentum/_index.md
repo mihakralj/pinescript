@@ -5,6 +5,7 @@
 | [BOP](/indicators/momentum/bop.md) | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
 | [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
 | [CMO](/indicators/momentum/cmo.md) | Chande Momentum Oscillator | Measures momentum using both up and down price changes, similar to RSI but unbounded |
+| [MACD](/indicators/momentum/macd.md) | Moving Average Convergence Divergence | Shows relationship between two EMAs, identifies momentum and trend direction |
 | [MFI](/indicators/momentum/mfi.md) | Money Flow Index | Volume-weighted RSI, measures buying/selling pressure using price and volume |
 | [MOM](/indicators/momentum/mom.md) | Momentum | Measures the rate of price change over a specified period |
 | [VEL](/indicators/momentum/vel.md) | Jurik Velocity | Advanced momentum oscillator with zero-lag smoothing using JMA |
