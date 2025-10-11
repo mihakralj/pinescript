@@ -42,4 +42,4 @@ error = mae(i_source1, i_source2, i_period)
 
 // Plot
 plot(error, "MAE", color.new(color.blue, 60, color=color.yellow, linewidth=2), linewidth = 2, style = plot.style_area)
-plot(i_source2, "EMA", color.new(color.yellow, 0, linewidth=2), linewidth = 1, style = plot.style_line, force_overlay = true)
+plot(i_source2, "EMA", color=color.yellow, linewidth=1, style = plot.style_line, force_overlay = true)

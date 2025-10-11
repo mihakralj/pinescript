@@ -1,8 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
-// Implementation based on standard digital filter design (Bilinear Transform)
-//@version=5
-indicator("Chebyshev Type II Filter (CHEBY2)", "CHEBY2", overlay=true, timeframe="", timeframe_gaps=true)
+//@version=6
+indicator("Chebyshev Type II Filter (CHEBY2)", "CHEBY2", overlay=true)
 
 //@function Calculates 2nd Order Chebyshev Type II Lowpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/cheby2.md
@@ -10,6 +9,7 @@ indicator("Chebyshev Type II Filter (CHEBY2)", "CHEBY2", overlay=true, timeframe
 //@param length Cutoff period (related to cutoff frequency)
 //@param attenuation Stopband attenuation in decibels (dB) > 0
 //@returns Chebyshev Type II filter value
+//@optimized Uses IIR 2nd order Chebyshev Type II filter with O(1) complexity per bar
 cheby2(series float src, simple int length, simple float attenuation) =>
     float pi = math.pi
     int safe_length = math.max(length, 2)
@@ -42,7 +42,9 @@ cheby2(series float src, simple int length, simple float attenuation) =>
     float sumB = B0 + B1 + B2
     float sumA = 1.0 + A1 + A2
     float norm = sumA / sumB
-    B0 *= norm, B1 *= norm, B2 *= norm
+    B0 *= norm
+    B1 *= norm
+    B2 *= norm
     var float filt = na
     if bar_index < 2
         filt := nz(src, 0.0)
@@ -59,11 +61,11 @@ cheby2(series float src, simple int length, simple float attenuation) =>
 
 // Inputs
 i_length = input.int(10, "Length", minval=2)
-i_attenuation = input.float(5.0, "Stopband Attenuation (dB)", minval=0.1, step=1.0) // Typical values 20, 40, 60 dB
+i_attenuation = input.float(5.0, "Stopband Attenuation (dB)", minval=0.1, step=1.0)
 i_source = input.source(close, "Source")
 
 // Calculation
 cheby2_val = cheby2(i_source, i_length, i_attenuation)
 
 // Plot
-plot(cheby2_val, "Cheby2", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
+plot(cheby2_val, "Cheby2", color=color.yellow, linewidth=2)

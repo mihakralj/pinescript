@@ -9,7 +9,7 @@ indicator("ATR Bands (ATRBANDS)", "ATRBANDS", overlay=true)
 //@param length Period for ATR and MA calculations
 //@param multiplier ATR multiplier for band width
 //@returns tuple with [middle, upper, lower] band values
-//@optimized for performance and dirty data
+//@optimized Uses RMA with warmup compensator, O(1) complexity per bar
 atrbands(series float source, simple int length, simple float multiplier) =>
     if length <= 0 or multiplier <= 0.0
         runtime.error("Length and multiplier must be greater than 0")
@@ -45,7 +45,7 @@ atrbands(series float source, simple int length, simple float multiplier) =>
     var float e = 1.0
     float atrValue = na
     if not na(trueRange)
-        float alpha = 1.0/float(length)
+        float alpha = 1.0 / float(length)
         raw_rma := (raw_rma * (length - 1) + trueRange) / length
         e := (1 - alpha) * e
         atrValue := e > EPSILON ? raw_rma / (1.0 - e) : raw_rma
@@ -64,7 +64,7 @@ i_mult = input.float(2.0, "ATR Multiplier", minval=0.001)
 [middle, upper, lower] = atrbands(i_source, i_length, i_mult)
 
 // Plot
-plot(middle, "Middle", color.new(color.yellow, 0, linewidth=2), 2)
+plot(middle, "Middle", color=color.yellow, linewidth=2)
 p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
 p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

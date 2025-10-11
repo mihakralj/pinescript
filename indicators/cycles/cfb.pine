@@ -199,4 +199,4 @@ cfb_final = math.ceil(cfb_smoothed) < 1 ? 1 : math.ceil(cfb_smoothed)
 color_cfb = color.new(#2DD204, 0)  // Green color
 
 // Plot
-plot(cfb_final, "CFB", color_cfb, 2, color=color.yellow, linewidth=2)
+plot(cfb_final, "CFB", color=color.yellow, linewidth=2)

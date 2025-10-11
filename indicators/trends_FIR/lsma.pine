@@ -8,7 +8,7 @@ indicator("Least Squares Moving Average (LSMA)", "LSMA", overlay=true)
 //@param source Series to calculate LSMA from
 //@param period Lookback period for the linear regression
 //@returns LSMA value, calculates from first bar using available data
-//@optimized for performance and dirty data
+//@optimized Uses circular buffer with linear regression for O(n) complexity per bar
 lsma(series float source, simple int period) =>
     if period <= 1
         runtime.error("Period must be greater than 1")
@@ -18,11 +18,15 @@ lsma(series float source, simple int period) =>
         if p <= 1
             source
         else
-            var float[] buffer = array.new_float(period, na)
+            var array<float> buffer = array.new_float(period, na)
             var int head = 0
             array.set(buffer, head, source)
             head := (head + 1) % period
-            float sum_y = 0.0, sum_xy = 0.0, sum_x = 0.0, sum_x2 = 0.0, count = 0.0
+            float sum_y = 0.0
+            float sum_xy = 0.0
+            float sum_x = 0.0
+            float sum_x2 = 0.0
+            float count = 0.0
             int idx = (head - 1 + period) % period
             for i = 0 to p - 1
                 float val = array.get(buffer, idx)

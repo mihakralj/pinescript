@@ -63,7 +63,7 @@ i_numSTRs = input.float(1.0, "STR Multiplier", minval=0.01, tooltip="Number of S
 [upperCh, middleCh, lowerCh] = uchannel(i_source, i_high, i_low, i_strLength, i_length, i_numSTRs)
 
 // Plot
-plot(middleCh, "Middle Channel", color.new(color.yellow, 0, linewidth=2), 2)
+plot(middleCh, "Middle Channel", color=color.yellow, linewidth=2)
 p_upper = plot(upperCh, "Upper Channel", color=color.yellow, linewidth=2)
 p_lower = plot(lowerCh, "Lower Channel", color=color.yellow, linewidth=2)
-fill(p_upper, p_lower, title="Channel Fill", color=color.blue)
+fill(p_upper, p_lower, color=color.new(color.blue, 90), title="Channel Fill")

@@ -82,16 +82,12 @@ band2_color = color.purple
 fill_color1 = color.blue
 fill_color2 = color.purple
 
-// Plots
-p_vwap = plot(vwap_value, "VWAP", vwap_color, 2, color=color.yellow, linewidth=2)
-p_upper1 = plot(upper_band1, "Upper Band 1σ", band1_color, 1, color=color.yellow, linewidth=2)
-p_lower1 = plot(lower_band1, "Lower Band 1σ", band1_color, 1, color=color.yellow, linewidth=2)
-
-// Optional 2nd standard deviation bands
-p_upper2 = plot(i_show_bands2 ? upper_band2 : na, "Upper Band 2σ", band2_color, 1, color=color.yellow, linewidth=2)
-p_lower2 = plot(i_show_bands2 ? lower_band2 : na, "Lower Band 2σ", band2_color, 1, color=color.yellow, linewidth=2)
-
-// Fills
-fill(p_upper1, p_lower1, fill_color1, title="1σ Band Fill")
-fill(p_upper2, p_upper1, i_show_bands2 ? fill_color2 : na, title="Upper 2σ Fill")
-fill(p_lower1, p_lower2, i_show_bands2 ? fill_color2 : na, title="Lower 2σ Fill")
+// Plot
+p_vwap = plot(vwap_value, "VWAP", color=color.yellow, linewidth=2)
+p_upper1 = plot(upper_band1, "Upper Band 1σ", color=color.yellow, linewidth=2)
+p_lower1 = plot(lower_band1, "Lower Band 1σ", color=color.yellow, linewidth=2)
+p_upper2 = plot(i_show_bands2 ? upper_band2 : na, "Upper Band 2σ", color=color.yellow, linewidth=2)
+p_lower2 = plot(i_show_bands2 ? lower_band2 : na, "Lower Band 2σ", color=color.yellow, linewidth=2)
+fill(p_upper1, p_lower1, color=color.new(color.blue, 90), title="1σ Band Fill")
+fill(p_upper2, p_upper1, color=i_show_bands2 ? color.new(color.purple, 90) : na, title="Upper 2σ Fill")
+fill(p_lower1, p_lower2, color=i_show_bands2 ? color.new(color.purple, 90) : na, title="Lower 2σ Fill")

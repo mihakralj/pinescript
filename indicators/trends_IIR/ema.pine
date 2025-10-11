@@ -6,25 +6,27 @@ indicator("Exponential Moving Average (EMA)", "EMA", overlay=true)
 //@function Calculates EMA using exponential smoothing with compensator
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/ema.md
 //@param source Series to calculate EMA from
-//@param alpha smoothing factor, used to calculate alpha as 2/(period+1)
+//@param period Lookback period for EMA calculation
+//@param alpha Optional smoothing factor (overrides period if provided)
 //@returns EMA value from first bar with proper compensation
-//@optimized for performance and dirty data
-ema(series float source,simple int period=0,simple float alpha=0)=>
-    if alpha<=0 and period<=0
+//@optimized Uses exponential warmup compensator for O(1) complexity and valid output from bar 1
+ema(series float source, simple int period=0, simple float alpha=0) =>
+    if alpha <= 0 and period <= 0
         runtime.error("Alpha or period must be provided")
-    float a=alpha>0?alpha:2.0/math.max(period,1)
-    var bool warmup=true, var float e=1.0
-    var float ema=0, var float result=source
-    ema:=a*(source-ema)+ema
+    float a = alpha > 0 ? alpha : 2.0 / (period + 1)
+    var bool warmup = true
+    var float e = 1.0
+    var float ema = 0.0
+    var float result = source
+    ema := a * (source - ema) + ema
     if warmup
-        e*=(1-a)
-        float c=1.0/(1.0-e)
-        result:=c*ema
-        warmup := e>1e-10
+        e *= (1 - a)
+        float c = 1.0 / (1.0 - e)
+        result := c * ema
+        warmup := e > 1e-10
     else
-        result:=ema
+        result := ema
     result
-
 
 // ---------- Main loop ----------
 
@@ -33,7 +35,7 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-ema = ema(i_source, period=i_period)
+ema_value = ema(i_source, period=i_period)
 
 // Plot
-plot(ema, "Custom EMA", color=color.yellow, linewidth=2)
+plot(ema_value, "EMA", color=color.yellow, linewidth=2)

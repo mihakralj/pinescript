@@ -8,7 +8,7 @@ indicator("Convolution Moving Average (CONV)", "CONV", overlay=true)
 //@param source Series to calculate CONV from
 //@param kernel Array of weights to use as convolution kernel
 //@returns CONV value, calculates from first bar using available data
-//@optimized for performance and dirty data
+//@optimized Uses custom kernel convolution with O(n) complexity per bar due to lookback loop
 conv(series float source, simple array<float> kernel) =>
     int kernel_size = array.size(kernel)
     if kernel_size <= 0
@@ -35,7 +35,6 @@ conv(series float source, simple array<float> kernel) =>
             sum += price * w
             weight_sum += w
     nz(sum / weight_sum, source)
-
 
 // ---------- Main loop ----------
 

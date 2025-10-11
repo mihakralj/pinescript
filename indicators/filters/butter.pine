@@ -1,13 +1,14 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Butterworth 2nd Order Filter (BUTTER)", "BUTTER", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Butterworth 2nd Order Filter (BUTTER)", "BUTTER", overlay=true)
 
 //@function Calculates 2nd Order Butterworth Lowpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/butter.md
 //@param src Series to calculate Butterworth filter from
 //@param length Cutoff period (related to -3dB frequency)
 //@returns Butterworth filter value
+//@optimized Uses IIR 2nd order Butterworth filter with O(1) complexity per bar
 butter(series float src, simple int length) =>
     float pi = math.pi
     int safe_length = math.max(length, 2)
@@ -43,4 +44,4 @@ i_source = input.source(close, "Source")
 butter_val = butter(i_source, i_length)
 
 // Plot
-plot(butter_val, "Butterworth", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
+plot(butter_val, "Butterworth", color=color.yellow, linewidth=2)

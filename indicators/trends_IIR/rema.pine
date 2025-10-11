@@ -9,8 +9,8 @@ indicator("Regularized EMA (REMA)", "REMA", overlay=true)
 //@param period Lookback period used to determine alpha value
 //@param lambda Regularization parameter (0-1) controlling smoothness
 //@returns REMA value, calculates from first bar using available data
-//@optimized for performance and dirty data
-rema(series float source, simple int period, simple float lambda = 0.5) =>
+//@optimized Uses regularization term to reduce noise for O(1) complexity
+rema(series float source, simple int period, simple float lambda=0.5) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
     if lambda < 0.0 or lambda > 1.0
@@ -34,17 +34,15 @@ rema(series float source, simple int period, simple float lambda = 0.5) =>
         result := rema_val
     result
 
-
 // ---------- Main loop ----------
 
 // Inputs
 i_period = input.int(10, "Period", minval=1)
-i_lambda = input.float(0.5, "Lambda", minval=0.0, maxval=1.0, step=0.1,
-                      tooltip="Regularization parameter: 0 = maximum regularization, 1 = standard EMA")
+i_lambda = input.float(0.5, "Lambda", minval=0.0, maxval=1.0, step=0.1, tooltip="Regularization parameter: 0 = maximum regularization, 1 = standard EMA")
 i_source = input.source(close, "Source")
 
 // Calculation
-rema = rema(i_source, i_period, i_lambda)
+rema_value = rema(i_source, i_period, i_lambda)
 
 // Plot
-plot(rema, "REMA", color=color.yellow, linewidth=2)
+plot(rema_value, "REMA", color=color.yellow, linewidth=2)

@@ -2,6 +2,7 @@
 // © mihakralj
 //@version=6
 indicator("Volatility Adjusted Moving Average (VAMA)", "VAMA", overlay=true)
+
 //@function Calculates VAMA by adjusting MA length based on volatility ratio using ATR
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/vama.md
 //@param source Series to calculate VAMA from
@@ -11,7 +12,7 @@ indicator("Volatility Adjusted Moving Average (VAMA)", "VAMA", overlay=true)
 //@param min_length Minimum allowed adjusted length
 //@param max_length Maximum allowed adjusted length
 //@returns VAMA value
-//@optimized for performance and dirty data
+//@optimized Uses RMA compensator for ATR and circular buffer for O(1) sum updates
 vama(series float source, simple int base_length, simple int short_atr_period=10, simple int long_atr_period=50, simple int min_length=5, simple int max_length=100) =>
     if base_length <= 0
         runtime.error("Base length must be greater than 0")
@@ -27,7 +28,7 @@ vama(series float source, simple int base_length, simple int short_atr_period=10
     float tr3 = math.abs(low - prevClose)
     float trueRange = math.max(tr1, tr2, tr3)
     prevClose := close
-    var float EPSILON = 1e-10
+    float EPSILON = 1e-10
     var float raw_rma_short = 0.0
     var float e_short = 1.0
     var float raw_rma_long = 0.0
@@ -35,13 +36,13 @@ vama(series float source, simple int base_length, simple int short_atr_period=10
     float short_atr = na
     float long_atr = na
     if not na(trueRange)
-        float alpha_short = 1.0/float(short_atr_period)
+        float alpha_short = 1.0 / float(short_atr_period)
         raw_rma_short := (raw_rma_short * (short_atr_period - 1) + trueRange) / short_atr_period
-        e_short := (1 - alpha_short) * e_short
+        e_short := (1.0 - alpha_short) * e_short
         short_atr := e_short > EPSILON ? raw_rma_short / (1.0 - e_short) : raw_rma_short
-        float alpha_long = 1.0/float(long_atr_period)
+        float alpha_long = 1.0 / float(long_atr_period)
         raw_rma_long := (raw_rma_long * (long_atr_period - 1) + trueRange) / long_atr_period
-        e_long := (1 - alpha_long) * e_long
+        e_long := (1.0 - alpha_long) * e_long
         long_atr := e_long > EPSILON ? raw_rma_long / (1.0 - e_long) : raw_rma_long
     float volatility_ratio = not na(short_atr) and not na(long_atr) and short_atr != 0.0 ? long_atr / short_atr : 1.0
     float calc_length = base_length * volatility_ratio
@@ -75,7 +76,9 @@ vama(series float source, simple int base_length, simple int short_atr_period=10
             partial_sum += val
             partial_count += 1
     partial_count > 0 ? partial_sum / partial_count : nz(avg, source)
+
 // ---------- Main loop ----------
+
 // Inputs
 i_base_length = input.int(20, "Base Length", minval=1)
 i_source = input.source(close, "Source")
@@ -83,7 +86,9 @@ i_short_atr = input.int(10, "Short ATR Period", minval=1)
 i_long_atr = input.int(50, "Long ATR Period", minval=1)
 i_min_length = input.int(5, "Minimum Length", minval=1)
 i_max_length = input.int(100, "Maximum Length", minval=1)
+
 // Calculation
 vama_value = vama(i_source, i_base_length, i_short_atr, i_long_atr, i_min_length, i_max_length)
+
 // Plot
 plot(vama_value, "VAMA", color=color.yellow, linewidth=2)

@@ -9,12 +9,16 @@ indicator("Bollinger Bands (BBANDS)", "BBANDS", overlay=true)
 //@param period Lookback period for calculations
 //@param multiplier Standard deviation multiplier for band width
 //@returns tuple with [middle, upper, lower] band values
+//@optimized Uses circular buffer with running sums, O(1) complexity per bar
 bbands(series float source, simple int period, simple float multiplier) =>
     if period <= 0 or multiplier <= 0.0
         runtime.error("Period and multiplier must be greater than 0")
-    var int p = math.max(1, period), var int head = 0, var int count = 0
+    var int p = math.max(1, period)
+    var int head = 0
+    var int count = 0
     var array<float> buffer = array.new_float(p, na)
-    var float sum = 0.0, var float sumSq = 0.0
+    var float sum = 0.0
+    var float sumSq = 0.0
     float oldest = array.get(buffer, head)
     if not na(oldest)
         sum -= oldest
@@ -41,7 +45,7 @@ i_multiplier = input.float(2.0, "StdDev Multiplier", minval=0.001)
 [basis, upper, lower] = bbands(i_source, i_period, i_multiplier)
 
 // Plot
-plot(basis, "Basis", color.new(color.yellow, 0, linewidth=2), 2)
+plot(basis, "Basis", color=color.yellow, linewidth=2)
 p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
 p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

@@ -1,14 +1,15 @@
-\// The MIT License (MIT)
+// The MIT License (MIT)
 // © mihakralj
 //@version=6
 indicator("Min-Max Channel (MMCHANNEL)", "MMCHANNEL", overlay=true)
 
-//@function Calculates the Min-Max Channel efficiently using monotonic deques.
+//@function Calculates the Min-Max Channel efficiently using monotonic deques
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/mmchannel.md
-//@param hi {series float} Source series for the highest high calculation (usually `high`).
-//@param lo {series float} Source series for the lowest low calculation (usually `low`).
-//@param period {simple int} Lookback period. `p` > 0.
-//@returns {[series float, series float]} A tuple containing the highest high and lowest low.
+//@param hi Source series for the highest high calculation (usually high)
+//@param lo Source series for the lowest low calculation (usually low)
+//@param period Lookback period (period > 0)
+//@returns Tuple containing [highest_high, lowest_low]
+//@optimized Uses monotonic deque for O(1) amortized complexity per bar
 mmchannel(series float hi, series float lo, simple int period) =>
     if period <= 0
         runtime.error("Period must be > 0")
@@ -44,6 +45,6 @@ i_low = input.source(low, "Low Source")
 [highest, lowest] = mmchannel(i_high, i_low, i_period)
 
 // Plot
-p1=plot(highest, "Highest High", color=color.yellow, linewidth=2)
-p2=plot(lowest, "Lowest Low", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+p1 = plot(highest, "Highest High", color=color.yellow, linewidth=2)
+p2 = plot(lowest, "Lowest Low", color=color.yellow, linewidth=2)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

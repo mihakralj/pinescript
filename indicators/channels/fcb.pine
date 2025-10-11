@@ -7,13 +7,14 @@ indicator("Fractal Chaos Bands (FCB)", "FCB", overlay=true)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/fcb.md
 //@param period Lookback period for highest/lowest calculation
 //@returns [upper_band, lower_band] Fractal Chaos Band values
-//@optimized for performance and dirty data
+//@optimized Uses monotonic deque for O(1) amortized complexity
 fcb(simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
     bool is_fractal_high = high[1] > high[2] and high[1] > high[0]
     bool is_fractal_low = low[1] < low[2] and low[1] < low[0]
-    var float hi_fractal = high, var float lo_fractal = low
+    var float hi_fractal = high
+    var float lo_fractal = low
     if is_fractal_high
         hi_fractal := high[1]
     if is_fractal_low
@@ -68,8 +69,6 @@ plot_fractal_points = input.bool(false, "Show Fractal Points")
 [upper_band, lower_band] = fcb(i_period)
 
 // Plots
-p_upper = plot(upper_band, "Upper FCB Band", color=color.yellow, linewidth=2)
-p_lower = plot(lower_band, "Lower FCB Band", color=color.yellow, linewidth=2)
-
-// Fill between bands
-fill(p_upper, p_lower, color.blue, title="FCB Fill")
+p_upper = plot(upper_band, "Upper Band", color=color.yellow, linewidth=2)
+p_lower = plot(lower_band, "Lower Band", color=color.yellow, linewidth=2)
+fill(p_upper, p_lower, color=color.new(color.blue, 90), title="Band Fill")

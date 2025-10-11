@@ -1,25 +1,26 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Gaussian Filter (GAUSS)", "GAUSS", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Gaussian Filter (GAUSS)", "GAUSS", overlay=true)
 
 //@function Calculates Gaussian Filter using true convolution
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/gauss.md
 //@param src Series to calculate Gaussian filter from
 //@param sigma Standard deviation of the Gaussian kernel
 //@returns Gaussian filter value
+//@optimized Uses Gaussian kernel convolution with O(n) complexity per bar
 gauss(series float src, simple float sigma) =>
-    int kernel_size = 2 * math.ceil(3 * sigma) + 1
+    int kernel_size = 2 * math.ceil(3.0 * sigma) + 1
     var array<float> kernel = array.new_float(0)
     var array<float> norm_kernel = array.new_float(1, 1.0)
     var int last_kernel_size = 1
     if last_kernel_size != kernel_size
-        float center = math.floor(kernel_size / 2)
+        float center = math.floor(kernel_size / 2.0)
         array.clear(kernel)
         float kernel_sum = 0.0
         for i = 0 to kernel_size - 1
             float x = i - center
-            float weight = math.exp(-(x * x) / (2 * sigma * sigma))
+            float weight = math.exp(-(x * x) / (2.0 * sigma * sigma))
             array.push(kernel, weight)
             kernel_sum += weight
         norm_kernel := array.copy(kernel)
@@ -49,4 +50,4 @@ i_source = input.source(close, "Source")
 gauss_val = gauss(i_source, i_sigma)
 
 // Plot
-plot(gauss_val, "Gaussian", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
+plot(gauss_val, "Gaussian", color=color.yellow, linewidth=2)

@@ -10,13 +10,14 @@ indicator("MA Envelope (MAE)", "MAE", overlay=true)
 //@param percentage Distance of bands from MA as percentage
 //@param ma_type Type of moving average (0:SMA, 1:EMA, 2:WMA)
 //@returns tuple with [middle, upper, lower] band values
-//@optimized for performance and dirty data
+//@optimized SMA uses circular buffer O(1), EMA uses warmup O(1), WMA is O(n)
 mae(series float source, simple int length, simple float percentage, simple int ma_type = 1) =>
     if length <= 0 or percentage <= 0.0
         runtime.error("Length and percentage must be greater than 0")
     float middle = na
-    if ma_type == 0  // SMA
-        var int head = 0, var int count = 0
+    if ma_type == 0
+        var int head = 0
+        var int count = 0
         var array<float> buffer = array.new_float(length, na)
         var float sum = 0.0
         float oldest = array.get(buffer, head)
@@ -29,25 +30,27 @@ mae(series float source, simple int length, simple float percentage, simple int 
         array.set(buffer, head, current)
         head := (head + 1) % length
         middle := sum / count
-    else if ma_type == 1  // EMA
+    else if ma_type == 1
         var float alpha = 2.0 / (length + 1)
-        var float sum = 0.0, var float weight = 0.0
+        var float sum = 0.0
+        var float weight = 0.0
         if na(sum)
             sum := source
             weight := 1.0
-        sum := sum * (1 - alpha) + source * alpha
-        weight := weight * (1 - alpha) + alpha
+        sum := sum * (1.0 - alpha) + source * alpha
+        weight := weight * (1.0 - alpha) + alpha
         middle := sum / weight
-    else if ma_type == 2  // WMA
-        float norm = 0.0, float sum = 0.0
+    else if ma_type == 2
+        float norm = 0.0
+        float sum = 0.0
         for i = 0 to length - 1
-            w = (length - i) * length
+            float w = float((length - i) * length)
             norm += w
             sum += nz(source[i]) * w
         middle := sum / norm
     else
         runtime.error("MA type must be 0 (SMA), 1 (EMA), or 2 (WMA)")
-    float dist = middle * percentage / 100
+    float dist = middle * percentage / 100.0
     [middle, middle + dist, middle - dist]
 
 // ---------- Main loop ----------
@@ -62,7 +65,7 @@ i_ma_type = input.int(1, "MA Type", minval=0, maxval=2, tooltip="0:SMA, 1:EMA, 2
 [middle, upper, lower] = mae(i_source, i_length, i_percentage, i_ma_type)
 
 // Plot
-plot(middle, "Middle", color.new(color.yellow, 0, linewidth=2), 2)
+plot(middle, "Middle", color=color.yellow, linewidth=2)
 p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
 p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

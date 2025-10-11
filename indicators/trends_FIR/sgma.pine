@@ -9,12 +9,12 @@ indicator("Savitzky-Golay Moving Average (SGMA)", "SGMA", overlay=true)
 //@param period Lookback period - FIR window size (must be odd)
 //@param deg Polynomial degree (default: 2)
 //@returns SGMA value, calculates from first bar using available data
-//@optimized for performance and dirty data
-sgma(series float source, simple int period, simple int deg = 2) =>
+//@optimized Uses Savitzky-Golay coefficients with O(n) complexity per bar due to lookback loop
+sgma(series float source, simple int period, simple int deg=2) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    int use_period = period % 2 == 0 ? period + 1 : period 
-    int use_deg = deg < 0 or deg >= use_period ? 2 : math.min(deg, 4)  
+    int use_period = period % 2 == 0 ? period + 1 : period
+    int use_deg = deg < 0 or deg >= use_period ? 2 : math.min(deg, 4)
     int p = math.min(bar_index + 1, use_period)
     var array<float> weights = array.new_float(1, 1.0)
     var int last_p = 1
@@ -70,10 +70,10 @@ sgma(series float source, simple int period, simple int deg = 2) =>
                 else if use_deg == 1
                     w := 1.0 - math.abs(norm_x)
                 else if use_deg == 3
-                    w := 1.0 - math.abs(math.pow(norm_x, 3))
+                    w := 1.0 - math.abs(math.pow(norm_x, 3.0))
                 else if use_deg == 4
-                    w := 1.0 - math.pow(norm_x, 4)
-                else  // use_deg == 2
+                    w := 1.0 - math.pow(norm_x, 4.0)
+                else
                     w := 1.0 - norm_x * norm_x
                 array.set(weights, i, w)
                 total_weight += w

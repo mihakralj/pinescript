@@ -1,3 +1,5 @@
+// The MIT License (MIT)
+// © mihakralj
 //@version=6
 indicator("McGinley Dynamic Indicator (MGDI)", "MGDI", overlay=true)
 
@@ -7,8 +9,8 @@ indicator("McGinley Dynamic Indicator (MGDI)", "MGDI", overlay=true)
 //@param period Lookback period for initial SMA value
 //@param factor McGinley factor (default 0.6)
 //@returns MGDI value that tracks price movements more closely than EMAs
-//@optimized for performance and dirty data
-mgdi(series float source, simple int period, simple float factor = 0.6) =>
+//@optimized Uses adaptive smoothing with O(1) complexity after initialization
+mgdi(series float source, simple int period, simple float factor=0.6) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
     if factor <= 0

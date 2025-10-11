@@ -1,20 +1,20 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Kalman Filter (KF)", "KF", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Kalman Filter (KF)", "KF", overlay=true)
 
-//@function Applies a Kalman Filter to the input series.
+//@function Applies a Kalman Filter to the input series
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/kf.md
-//@param src Input series (measurement).
-//@param q Process noise covariance. Controls the smoothness/responsiveness trade-off. Lower values result in smoother output but slower response to changes.
-//@param r Measurement noise covariance. Represents the expected noise level in the input data. Higher values trust the model prediction more than the noisy measurement.
-//@returns Filtered series.
-//@optimized for performance and dirty data
+//@param src Input series (measurement)
+//@param q Process noise covariance
+//@param r Measurement noise covariance
+//@returns Filtered series
+//@optimized Uses Kalman filter with O(1) complexity per bar
 kf(series float src, simple float q, simple float r) =>
-    // Parameter validation
-    if q <= 0 or r <= 0
-        runtime.error("Process noise covariance (q) and measurement noise covariance (r) must be positive.")
-    var float x = na, var float p = na
+    if q <= 0.0 or r <= 0.0
+        runtime.error("Process noise covariance (q) and measurement noise covariance (r) must be positive")
+    var float x = na
+    var float p = na
     float measurement = nz(src, 0.0)
     if bar_index == 0 or na(x)
         x := measurement
@@ -22,9 +22,9 @@ kf(series float src, simple float q, simple float r) =>
     float x_pred = x
     float p_pred = p + q
     float denom = p_pred + r
-    float k_gain = denom == 0 ? 0 : p_pred / denom
+    float k_gain = denom == 0.0 ? 0.0 : p_pred / denom
     x := x_pred + k_gain * (measurement - x_pred)
-    p := (1 - k_gain) * p_pred
+    p := (1.0 - k_gain) * p_pred
     x
 
 // ---------- Main loop ----------

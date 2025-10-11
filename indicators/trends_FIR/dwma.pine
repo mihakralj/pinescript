@@ -8,7 +8,7 @@ indicator("Double Weighted Moving Average (DWMA)", "DWMA", overlay=true)
 //@param source Series to calculate DWMA from
 //@param period Lookback period for both smoothing passes
 //@returns DWMA value, calculates from first bar using available data
-//@optimized for performance and dirty data
+//@optimized Uses two-pass WMA with O(n) complexity per bar due to lookback loops
 dwma(series float src, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
@@ -45,16 +45,14 @@ dwma(series float src, simple int period) =>
                     weightSum2 += weight
             nz(sum2 / weightSum2, na)
 
-
-
 // ---------- Main loop ----------
 
 // Inputs
-i_period = input.int(10, "Period", minval=1)  // Changed default from 5000 to 20
+i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-dwma = dwma(i_source, i_period)
+dwma_value = dwma(i_source, i_period)
 
 // Plot
-plot(dwma, "Custom DWMA", color=color.yellow, linewidth=2)
+plot(dwma_value, "DWMA", color=color.yellow, linewidth=2)

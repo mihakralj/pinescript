@@ -1,13 +1,14 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Median Filter (MEDIAN)", "MEDIAN", overlay=true, timeframe="", timeframe_gaps=true)
+indicator("Median Filter (MEDIAN)", "MEDIAN", overlay=true)
 
 //@function Applies median filter to input series
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/median.md
 //@param src Input series to filter
 //@param length Window size (rounded down to nearest odd number)
 //@returns Filtered series
+//@optimized Uses sorting-based median with O(n log n) complexity per bar
 median(series float src, simple int length) =>
     int adj_length = math.max(1, length % 2 == 0 ? length - 1 : length)
     if na(src)
@@ -27,9 +28,9 @@ median(series float src, simple int length) =>
             array.sort(window)
             int mid = int(array.size(window) / 2)
             if array.size(window) % 2 == 1
-                array.get(window, mid)  // Odd number of values
+                array.get(window, mid)
             else
-                (array.get(window, mid - 1) + array.get(window, mid)) / 2.0  // Even number - average middle two
+                (array.get(window, mid - 1) + array.get(window, mid)) / 2.0
 
 // ---------- Main loop ----------
 
@@ -41,4 +42,4 @@ i_source = input.source(close, "Source")
 median_val = median(i_source, i_length)
 
 // Plot
-plot(median_val, "Median", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
+plot(median_val, "Median", color=color.yellow, linewidth=2)

@@ -93,5 +93,4 @@ i_period = input.int(14, "Period", minval=1, tooltip="Number of bars used in the
 dmx = dmx(i_period)
 
 // Plot
-plot(dmx, "DMX", color.new(color.yellow, 0, linewidth=2, color=color.yellow), 2)
-
+plot(dmx, "DMX", color=color.yellow, linewidth=2)

@@ -11,16 +11,19 @@ indicator("Acceleration Bands (ACCBANDS)", "ACCBANDS", overlay=true)
 //@param period Lookback period for the moving average
 //@param factor Multiplier for band width calculation
 //@returns tuple with [middle, upper, lower] band values
-//@optimized for performance and dirty data
+//@optimized Uses circular buffers with O(1) complexity per bar
 accbands(series float high, series float low, series float close, simple int period, simple float factor = 2.0) =>
     if period <= 0 or factor <= 0.0
         runtime.error("Period and factor must be greater than 0")
     var int p = math.max(1, period)
-    var int head = 0, var int count = 0
+    var int head = 0
+    var int count = 0
     var array<float> bufferHigh = array.new_float(p, na)
     var array<float> bufferLow = array.new_float(p, na)
     var array<float> bufferClose = array.new_float(p, na)
-    var float sumHigh = 0.0, var float sumLow = 0.0, var float sumClose = 0.0
+    var float sumHigh = 0.0
+    var float sumLow = 0.0
+    var float sumClose = 0.0
     float oldestHigh = array.get(bufferHigh, head)
     float oldestLow = array.get(bufferLow, head)
     float oldestClose = array.get(bufferClose, head)
@@ -46,7 +49,6 @@ accbands(series float high, series float low, series float close, simple int per
     float bandWidth = (smaHigh - smaLow) * factor
     [smaClose, smaHigh + bandWidth, smaLow - bandWidth]
 
-
 // ---------- Main loop ----------
 
 // Inputs
@@ -57,7 +59,7 @@ i_factor = input.float(2.0, "Factor", minval=0.001)
 [middle, upper, lower] = accbands(high, low, close, i_period, i_factor)
 
 // Plot
-plot(middle, "Middle", color.new(color.yellow, 0, linewidth=2), 2)
+plot(middle, "Middle", color=color.yellow, linewidth=2)
 p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
 p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

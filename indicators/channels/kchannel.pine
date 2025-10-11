@@ -9,18 +9,19 @@ indicator("Keltner Channel (KCHANNEL)", "KCHANNEL", overlay=true)
 //@param length Lookback period for calculations
 //@param mult ATR multiplier for band width
 //@returns tuple with [middle, upper, lower] band values
-//@optimized for performance and dirty data
+//@optimized Uses EMA with warmup and ATR with compensator, O(1) complexity per bar
 kchannel(series float source, simple int length, simple float mult) =>
     if length <= 0 or mult <= 0.0
         runtime.error("Length and multiplier must be greater than 0")
-
     var float alpha = 2.0 / (length + 1)
-    var float sum = 0.0, var float weight = 0.0, float ema = na
+    var float sum = 0.0
+    var float weight = 0.0
+    float ema = na
     if na(sum)
         sum := source
         weight := 1.0
-    sum := sum * (1 - alpha) + source * alpha
-    weight := weight * (1 - alpha) + alpha
+    sum := sum * (1.0 - alpha) + source * alpha
+    weight := weight * (1.0 - alpha) + alpha
     ema := sum / weight
     var float prevClose = close
     float tr1 = high - low
@@ -33,14 +34,13 @@ kchannel(series float source, simple int length, simple float mult) =>
     var float e = 1.0
     float atrValue = na
     if not na(trueRange)
-        float alpha_atr = 1.0/float(length)
+        float alpha_atr = 1.0 / float(length)
         raw_rma := (raw_rma * (length - 1) + trueRange) / length
-        e := (1 - alpha_atr) * e
+        e := (1.0 - alpha_atr) * e
         atrValue := e > EPSILON ? raw_rma / (1.0 - e) : raw_rma
-    float width = mult * nz(atrValue, 0)
+    float width = mult * nz(atrValue, 0.0)
     [ema, ema + width, ema - width]
 
-    
 // ---------- Main loop ----------
 
 // Inputs
@@ -52,7 +52,7 @@ i_mult = input.float(2.0, "ATR Multiplier", minval=0.001)
 [middle, upper, lower] = kchannel(i_source, i_length, i_mult)
 
 // Plot
-plot(middle, "Middle", color.new(color.yellow, 0, linewidth=2), 2)
+plot(middle, "Middle", color=color.yellow, linewidth=2)
 p1 = plot(upper, "Upper", color=color.yellow, linewidth=2)
 p2 = plot(lower, "Lower", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

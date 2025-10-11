@@ -5,16 +5,17 @@ indicator("Price Channel (PCHANNEL)", "PCHANNEL", overlay=true)
 
 //@function Calculates Price Channel
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/pchannel.md
-//@param length_param Lookback period for determining the highest high and lowest low.
+//@param length_param Lookback period for determining the highest high and lowest low
 //@returns tuple [upperChannel, middleChannel, lowerChannel]
+//@optimized Uses monotonic deque for O(1) amortized complexity per bar
 pchannel(simple int length_param) =>
     if length_param <= 0
         runtime.error("Length must be greater than 0")
     var deque_hi = array.new_int(0)
-    var src_buffer_hi = array.new_float(0,na)
+    var src_buffer_hi = array.new_float(0, na)
     var int current_index_hi = 0
     var deque_lo = array.new_int(0)
-    var src_buffer_lo = array.new_float(0,na)
+    var src_buffer_lo = array.new_float(0, na)
     var int current_index_lo = 0
     if array.size(src_buffer_hi) != length_param
         src_buffer_hi := array.new_float(length_param, na)
@@ -47,18 +48,18 @@ pchannel(simple int length_param) =>
     current_index_hi := (current_index_hi + 1) % length_param
     float lowestLow = array.get(src_buffer_lo, array.get(deque_lo, 0) % length_param)
     current_index_lo := (current_index_lo + 1) % length_param
-    [highestHigh, (highestHigh + lowestLow) / 2, lowestLow]
+    [highestHigh, (highestHigh + lowestLow) / 2.0, lowestLow]
 
 // ---------- Main loop ----------
 
 // Inputs
-i_length = input.int(20, "Length", minval=1, tooltip="Lookback period for Highest High and Lowest Low.")
+i_length = input.int(20, "Length", minval=1)
 
 // Calculation
 [upperCh, middleCh, lowerCh] = pchannel(i_length)
 
 // Plot
-plot(middleCh, "Middle Channel", color.new(color.yellow, 50, linewidth=2), 2) 
+plot(middleCh, "Middle Channel", color=color.yellow, linewidth=2)
 p1 = plot(upperCh, "Upper Channel", color=color.yellow, linewidth=2)
 p2 = plot(lowerCh, "Lower Channel", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

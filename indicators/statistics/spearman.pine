@@ -94,7 +94,7 @@ spearman_corr(series float source1, series float source2, simple int length) =>
 
 // Inputs
 i_source1 = input.source(close, title="Source 1")
-i_source2_ticker = input.symbol("SPY", title="Source 2 Ticker (e.g., SPY, AAPL)")
+i_source2_ticker = input.symbol("SPY", "Source 2 Ticker (e.g., SPY, AAPL)")
 i_source2_data_type = input.source(close, title="Source 2 Data Type (from Ticker)")
 i_length = input.int(20, title="Lookback Period", minval=2, maxval=60, tooltip="Number of bars for calculation. Max 60 due to O(N^2) complexity of ranking.")
 

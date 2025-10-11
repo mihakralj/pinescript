@@ -40,4 +40,5 @@ i_ssfLength = input.int(10, "Super Smoother Filter Length", minval=1, tooltip="P
 ebsw_wave = ebsw(i_source, i_hpLength, i_ssfLength)
 
 // Plot
-plot(ebsw_wave, "EBSW", color.new(color.yellow, 0, linewidth=2, color=color.yellow), 2)
+plot(ebsw_wave, "EBSW", color=color.yellow, linewidth=2)
+hline(0, "Zero Line", color.gray, linestyle=hline.style_dashed)

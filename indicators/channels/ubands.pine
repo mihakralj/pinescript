@@ -49,7 +49,7 @@ i_mult = input.float(1.0, "RMS Multiplier", minval=0.01, tooltip="Band width as 
 [upperBand, middleBand, lowerBand] = ubands(i_source, i_length, i_mult)
 
 // Plot
-plot(middleBand, "Middle Band", color.new(color.yellow, 0, linewidth=2), 2)
+plot(middleBand, "Middle Band", color=color.yellow, linewidth=2)
 p1 = plot(upperBand, "Upper Band", color=color.yellow, linewidth=2)
 p2 = plot(lowerBand, "Lower Band", color=color.yellow, linewidth=2)
-fill(p1, p2, title="Background", color=color.blue)
+fill(p1, p2, color=color.new(color.blue, 90), title="Band Fill")

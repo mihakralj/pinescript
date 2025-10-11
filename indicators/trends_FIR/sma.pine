@@ -8,11 +8,11 @@ indicator("Simple Moving Average (SMA)", "SMA", overlay=true)
 //@param source Series to calculate SMA from
 //@param period Lookback period - FIR window size
 //@returns SMA value, calculates from first bar using available data
-//@optimized for performance and dirty data
+//@optimized Uses circular buffer and running sum for O(1) complexity
 sma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
-    var int p = period
+    int p = period
     var array<float> buffer = array.new_float(p, na)
     var int head = 0
     var float sum = 0.0
@@ -38,4 +38,4 @@ i_source = input.source(close, "Source")
 sma_value = sma(i_source, i_period)
 
 // Plot
-plot(sma_value, "Custom SMA", color=color.yellow, linewidth=2)
+plot(sma_value, "SMA", color=color.yellow, linewidth=2)

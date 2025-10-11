@@ -8,7 +8,7 @@ indicator("Pascal Weighted Moving Average (PWMA)", "PWMA", overlay=true)
 //@param source Series to calculate PWMA from
 //@param period Lookback period - FIR window size
 //@returns PWMA value, calculates from first bar using available data
-//@optimized for performance and dirty data
+//@optimized Uses Pascal's triangle weighting with O(n) complexity per bar due to lookback loop
 pwma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")

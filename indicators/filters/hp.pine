@@ -1,27 +1,26 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("Hodrick-Prescott Filter (HP)", "HP", overlay=false, timeframe="", timeframe_gaps=true)
+indicator("Hodrick-Prescott Filter (HP)", "HP", overlay=false)
 
-//@function Calculates a causal approximation of the Hodrick-Prescott Filter trend component.
+//@function Calculates a causal approximation of the Hodrick-Prescott Filter trend component
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/hp.md
-//@param src Input series.
-//@param lambda Smoothing parameter (lambda). Higher values result in a smoother trend line but more lag. Typical values used in literature (e.g., 1600 for quarterly data) might be too large for typical chart periods; adjust based on timeframe and desired smoothness. A common causal approximation relates lambda to a period length.
-//@returns HP Filter trend component series.
-//@optimized for performance and dirty data
+//@param src Input series
+//@param lambda Smoothing parameter (lambda)
+//@returns HP Filter trend component series
+//@optimized Uses causal HP approximation with O(1) complexity per bar
 hp(series float src, simple float lambda) =>
-    // Parameter validation
-    if lambda <= 0
-        runtime.error("Lambda must be positive.")
+    if lambda <= 0.0
+        runtime.error("Lambda must be positive")
     float alpha = (math.sqrt(lambda) * 0.5 - 1.0) / (math.sqrt(lambda) * 0.5 + 1.0)
-    alpha := math.max(alpha, 0.0001), alpha := math.min(alpha, 0.9999)
+    alpha := math.max(alpha, 0.0001)
+    alpha := math.min(alpha, 0.9999)
     float price = nz(src, 0.0)
     var float hp_trend = na
     float prev_trend = nz(hp_trend[1], price)
     float prev_price = nz(src[1], price)
-    hp_trend := bar_index >= 1 ? (1 - alpha) * price + alpha * prev_trend + 0.5 * alpha * (prev_trend - nz(hp_trend[2], prev_trend)) : price
+    hp_trend := bar_index >= 1 ? (1.0 - alpha) * price + alpha * prev_trend + 0.5 * alpha * (prev_trend - nz(hp_trend[2], prev_trend)) : price
     hp_trend
-
 
 // ---------- Main loop ----------
 
@@ -34,5 +33,5 @@ hp_trend_val = hp(i_source, i_lambda)
 hp_cycle_val = i_source - hp_trend_val
 
 // Plot
-plot(hp_trend_val, "HP Trend", color=color.yellow, linewidth=2, force_overlay = true)
-plot(hp_cycle_val, "HP Cycle", color=color.blue, linewidth=2, force_overlay = false)
+plot(hp_trend_val, "HP Trend", color=color.yellow, linewidth=2, force_overlay=true)
+plot(hp_cycle_val, "HP Cycle", color=color.blue, linewidth=2, force_overlay=false)

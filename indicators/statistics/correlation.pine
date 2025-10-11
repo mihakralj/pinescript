@@ -56,9 +56,9 @@ correlation(series float src1, series float src2, simple int len) =>
 // ---------- Main loop ----------
 
 // Inputs
-i_source1 = input(close, "Source 1")
-i_source2_ticker = input.symbol("SPY", title="Source 2 Ticker (e.g., SPY, AAPL)")
-i_period = input.int(20, "Period", minval = 2)
+i_source1 = input.source(close, "Source 1")
+i_source2_ticker = input.symbol("SPY", "Source 2 Ticker (e.g., SPY, AAPL)")
+i_period = input.int(20, "Period", minval=2)
 
 i_source2 = request.security(i_source2_ticker, timeframe.period, close, lookahead=barmerge.lookahead_off)
 

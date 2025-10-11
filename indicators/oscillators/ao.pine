@@ -52,4 +52,4 @@ ao_value = ao(i_fastLength, i_slowLength)
 ao_prev = ao_value[1]
 
 // Plot
-plot(ao_value, "AO", ao_value >= ao_prev ? color.green : color.red, 2, color=color.yellow, linewidth=2)
+plot(ao_value, "AO", ao_value >= ao_prev ? color.green : color.red, linewidth=2)

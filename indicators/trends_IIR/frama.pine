@@ -8,16 +8,15 @@ indicator("Fractal Adaptive Moving Average (FRAMA)", "FRAMA", overlay=true)
 //@param source Series to calculate FRAMA from
 //@param period Number of bars used in the calculation
 //@returns FRAMA value with fractal-based adaptive smoothing
-//@optimized for performance and dirty data
+//@optimized Uses fractal dimension calculation for adaptive alpha, achieving O(n) per bar due to lookback requirements
 frama(series float src, simple int period) =>
-    p = math.max(2, period)
-    p_adj = p % 2 == 0 ? p : p + 1
-    i_p_adj = int(p_adj)
-    i_h_p = int(p_adj / 2)
+    int p = math.max(2, period)
+    int p_adj = p % 2 == 0 ? p : p + 1
+    int i_h_p = int(p_adj / 2)
     float n1 = na
     float n2 = na
     float n3 = na
-    bool data_available = bar_index >= i_p_adj - 1 and not na(src[i_p_adj - 1])
+    bool data_available = bar_index >= (p_adj - 1) and not na(src[p_adj - 1])
     if data_available
         float hh1 = ta.highest(src, i_h_p)
         float ll1 = ta.lowest(src, i_h_p)
@@ -25,7 +24,7 @@ frama(series float src, simple int period) =>
         float ll2_calc = src[i_h_p]
         bool second_half_na = na(hh2_calc)
         if not second_half_na
-            for i = i_h_p + 1 to i_p_adj - 1
+            for i = i_h_p + 1 to p_adj - 1
                 float val = src[i]
                 if not na(val)
                     hh2_calc := math.max(hh2_calc, val)
@@ -33,14 +32,14 @@ frama(series float src, simple int period) =>
                 else
                     second_half_na := true
                     break
-        float hh3 = ta.highest(src, i_p_adj)
-        float ll3 = ta.lowest(src, i_p_adj)
+        float hh3 = ta.highest(src, p_adj)
+        float ll3 = ta.lowest(src, p_adj)
         if not na(hh1) and not na(ll1) and i_h_p > 0
             n1 := (hh1 - ll1) / i_h_p
         if not second_half_na and i_h_p > 0
             n2 := (hh2_calc - ll2_calc) / i_h_p
-        if not na(hh3) and not na(ll3) and i_p_adj > 0
-            n3 := (hh3 - ll3) / i_p_adj
+        if not na(hh3) and not na(ll3) and p_adj > 0
+            n3 := (hh3 - ll3) / p_adj
     var float result = na
     float alpha = 1.0
     if n1 > 0 and n2 > 0 and n3 > 0
@@ -53,7 +52,6 @@ frama(series float src, simple int period) =>
     else
         result := na
     data_available ? result : na
-
 
 // ---------- Main loop ----------
 

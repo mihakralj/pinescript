@@ -1,8 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
-// Implementation based on standard digital filter design (Bilinear Transform)
-//@version=5
-indicator("Chebyshev Type I Filter (CHEBY1)", "CHEBY1", overlay=true, timeframe="", timeframe_gaps=true)
+//@version=6
+indicator("Chebyshev Type I Filter (CHEBY1)", "CHEBY1", overlay=true)
 
 //@function Calculates 2nd Order Chebyshev Type I Lowpass Filter
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/cheby1.md
@@ -10,6 +9,7 @@ indicator("Chebyshev Type I Filter (CHEBY1)", "CHEBY1", overlay=true, timeframe=
 //@param length Cutoff period (related to cutoff frequency)
 //@param ripple Passband ripple in decibels (dB) > 0
 //@returns Chebyshev Type I filter value
+//@optimized Uses IIR 2nd order Chebyshev Type I filter with O(1) complexity per bar
 cheby1(series float src, simple int length, simple float ripple) =>
     float pi = math.pi
     int safe_length = math.max(length, 2)
@@ -58,4 +58,4 @@ i_source = input.source(close, "Source")
 cheby1_val = cheby1(i_source, i_length, i_ripple)
 
 // Plot
-plot(cheby1_val, "Cheby1", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
+plot(cheby1_val, "Cheby1", color=color.yellow, linewidth=2)

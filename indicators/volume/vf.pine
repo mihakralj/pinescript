@@ -37,7 +37,7 @@ vf_line = vf(length, close, volume)
 
 // ---------- Plots ----------
 
-plot(vf_line, "Volume Force", color.yellow, 2, color=color.yellow, linewidth=2)
+plot(vf_line, "Volume Force", color=color.yellow, linewidth=2)
 hline(0, "Zero Line", color.gray, linestyle=hline.style_dashed)
 
 // Color zones for visual clarity

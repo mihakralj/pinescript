@@ -36,7 +36,7 @@ bool winterSolsticeCondition = solarCycleValue < -0.985 and solarCycleValue[1] <
 bool autumnalEquinoxCondition = solarCycleValue[1] > 0.0 and solarCycleValue <= 0.0 and delta1 < 0
 
 // Plot
-plot(solarCycleValue, "Solar Cycle", color.new(color.yellow, 0, linewidth=2, color=color.yellow), 2)
+plot(solarCycleValue, "Solar Cycle", color=color.yellow, linewidth=2)
 
 // Plotchars
 plotchar(summerSolsticeCondition ? solarCycleValue : na, "Peak Summer", "•", location.absolute, color.new(color.red,0), size = size.small)

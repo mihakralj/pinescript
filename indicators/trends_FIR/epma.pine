@@ -3,12 +3,12 @@
 //@version=6
 indicator("Endpoint Moving Average (EPMA)", "EPMA", overlay=true)
 
-//@function Calculates EPMA using exponential smoothing with endpoint emphasis
+//@function Calculates EPMA using linear weighting with endpoint emphasis
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/epma.md
 //@param source Series to calculate EPMA from
 //@param period Lookback period
 //@returns EPMA value with proper weight distribution
-//@optimized for performance and dirty data
+//@optimized Uses linear weighting with O(n) complexity per bar due to lookback loop
 epma(series float source, simple int period) =>
     if period <= 0
         runtime.error("Period must be greater than 0")
@@ -26,7 +26,6 @@ epma(series float source, simple int period) =>
                 totalWeight += weight
         nz(weightedSum / totalWeight, na)
 
-
 // ---------- Main loop ----------
 
 // Inputs
@@ -34,7 +33,7 @@ i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-epma = epma(i_source, i_period)
+epma_value = epma(i_source, i_period)
 
 // Plot
-plot(epma, "EPMA", color=color.yellow, linewidth=2)
+plot(epma_value, "EPMA", color=color.yellow, linewidth=2)

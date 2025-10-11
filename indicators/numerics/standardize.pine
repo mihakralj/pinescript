@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 // © mihakralj
-//@version=5
+//@version=6
 indicator("Standardization (Z-score)", "STANDARDIZE", overlay=false, precision=4)
 
 //@function Calculates the Z-score of a series over a lookback period.
@@ -58,4 +58,5 @@ i_length = input.int(20, title="Lookback Period", minval=2, tooltip="Period for 
 z_score_value = standardize(i_source, i_length) // Renamed for clarity
 
 // Plot
-plot(z_score_value, "Z-score", color=color.new(color.yellow, 0, color=color.yellow, linewidth=2), linewidth=2)
+plot(z_score_value, "Z-score", color=color.yellow, linewidth=2)
+hline(0, "Zero Line", color=color.gray, linestyle=hline.style_dashed)

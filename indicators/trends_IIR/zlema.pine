@@ -7,40 +7,42 @@ indicator("Zero-Lag EMA (ZLEMA)", "ZLEMA", overlay=true)
 //@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.md
 //@param source Series to calculate ZLEMA from
 //@param period Smoothing period
+//@param alpha Optional smoothing factor (overrides period if provided)
 //@returns ZLEMA value with zero-lag effect applied
-//@optimized for performance and dirty data
-zlema(series float source,simple int period=0,simple float alpha=0)=>
-    if alpha<=0 and period<=0
+//@optimized Uses lag compensation buffer and exponential warmup compensator for O(1) complexity
+zlema(series float source, simple int period=0, simple float alpha=0) =>
+    if alpha <= 0 and period <= 0
         runtime.error("Alpha or period must be provided")
-    float a=alpha>0?alpha:2.0/math.max(period,1)
-    simple int lag=math.max(1,math.round((period-1)/2))
-    var bool warmup=true, var float e=1.0
-    var float zlema=0, var float result=source
-    var priceBuffer=array.new<float>(lag+1,0.0)
+    float a = alpha > 0 ? alpha : 2.0 / (period + 1)
+    simple int lag = math.max(1, math.round((period - 1) / 2))
+    var bool warmup = true
+    var float e = 1.0
+    var float zlema = 0.0
+    var float result = source
+    var priceBuffer = array.new<float>(lag + 1, 0.0)
     if not na(source)
         array.shift(priceBuffer)
-        array.push(priceBuffer,source)
-        float laggedPrice=array.get(priceBuffer,0)
-        float signal=2*source-laggedPrice
-        zlema:=a*(signal-zlema)+zlema
+        array.push(priceBuffer, source)
+        float laggedPrice = array.get(priceBuffer, 0)
+        float signal = 2 * source - laggedPrice
+        zlema := a * (signal - zlema) + zlema
         if warmup
-            e*=(1-a)
-            float c=1.0/(1.0-e)
-            result:=c*zlema
-            warmup := e>1e-10
+            e *= (1 - a)
+            float c = 1.0 / (1.0 - e)
+            result := c * zlema
+            warmup := e > 1e-10
         else
-            result:=zlema
+            result := zlema
     result
 
 // ---------- Main loop ----------
 
 // Inputs
-i_period = input.int(10, "Period", minval=1, tooltip="Default period is 20, adjust as needed")
+i_period = input.int(10, "Period", minval=1)
 i_source = input.source(close, "Source")
 
 // Calculation
-alpha = 2.0/(float(i_period)+1.0)
-zlema = zlema(i_source, i_period)
+zlema_value = zlema(i_source, i_period)
 
 // Plot
-plot(zlema, "ZLEMA", color=color.yellow, linewidth=2)
+plot(zlema_value, "ZLEMA", color=color.yellow, linewidth=2)

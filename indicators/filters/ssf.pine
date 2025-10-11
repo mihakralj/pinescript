@@ -9,16 +9,20 @@ indicator("Supersmooth Filter (SSF)", "SSF", overlay=true)
 //@param source Series to calculate SSF from
 //@param length Number of bars used in the calculation
 //@returns SSF value with optimized smoothing
+//@optimized Uses 2-pole IIR Butterworth-style filter with O(1) complexity per bar
 ssf(series float src, simple int length) =>
-    var float SQRT2_PI = math.sqrt(2) * math.pi
-    var float ssf_internal = 0.0, var float c1 = 0.0, var float c2 = 0.0, var float c3 = 0.0 // Renamed internal ssf
+    var float SQRT2_PI = math.sqrt(2.0) * math.pi
+    var float ssf_internal = 0.0
+    var float c1 = 0.0
+    var float c2 = 0.0
+    var float c3 = 0.0
     var int prev_length = 0
     if prev_length != length
-        arg = SQRT2_PI / float(length)
-        exp_arg = math.exp(-arg)
-        c2 := 2 * exp_arg * math.cos(arg)
+        float arg = SQRT2_PI / float(length)
+        float exp_arg = math.exp(-arg)
+        c2 := 2.0 * exp_arg * math.cos(arg)
         c3 := -exp_arg * exp_arg
-        c1 := 1 - c2 - c3
+        c1 := 1.0 - c2 - c3
         prev_length := length
     float ssrc = nz(src, src[1])
     float src1 = nz(src[1], ssrc)
