@@ -1,14 +1,43 @@
-# Stop and Reverse Indicators
+# Reversals and Pattern Recognition
+
+## Implemented Indicators
 
 | Code | Name | Key Characteristics |
-| ------------ | --------------------------------------- | -------------------------------------------------------------------------------- |
-| ATRS | ATR Trailing Stop | Trailing stop loss level calculated using Average True Range |
-| CE | Chandelier Exit | Trailing stop loss based on ATR, placed below highs (long) or above lows (short) |
-| CKSP | Chande Kroll Stop | Stop-loss system using ATR to define stop levels for long and short positions |
-| PIV | Pivot Points | Calculates potential support/resistance levels based on previous period's high, low, close |
-| PP | Price Pivots | Similar to Pivot Points, identifies key price levels for potential reversals |
-| PSAR | Parabolic SAR | Time/price based trailing stop system that follows trends and reverses on stop hits |
-| RPP | Rolling Pivot Points | Pivot points calculated using a moving window, adapting to recent price action |
-| SAREXT | Parabolic SAR - Extended | Extended version of Parabolic SAR with additional parameters for customization |
-| SUPER | SuperTrend | Trend-following indicator based on ATR, plotting stop levels above/below price |
-| VS | Volatility Stop | Trailing stop loss based on volatility, often using ATR or standard deviation |
+| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| [PSAR](/indicators/reversals/psar.md) | Parabolic Stop And Reverse | Trailing stop indicator that accelerates with trend; provides entry/exit signals via SAR dots |
+
+## Planned Indicators
+
+| Code | Name | Key Characteristics | Notes |
+| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
+| PIVOT | Pivot Points | Support/resistance levels (Classic, Fibonacci, Camarilla, Woodie variants) | TODO |
+| SWINGS | Swing High/Low Detection | Identifies significant price reversals and swing points | TODO |
+| FRACTALS | Williams Fractals | Five-bar pattern for identifying potential reversal points | TODO |
+
+### Candlestick Patterns (TA-Lib has 60+)
+
+| Code | Name | Key Characteristics | Notes |
+| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
+| CDL_DOJI | Doji Patterns | Indecision patterns with equal open/close | TODO |
+| CDL_HAMMER | Hammer & Inverted Hammer | Bullish reversal with long lower shadow | TODO |
+| CDL_ENGULFING | Engulfing Pattern | Body completely engulfs prior candle | TODO |
+| CDL_HARAMI | Harami Pattern | Small candle within prior candle's body | TODO |
+| CDL_STAR | Morning/Evening Star | Three-candle reversal patterns | TODO |
+| CDL_MARUBOZU | Marubozu | No shadows, strong directional candle | TODO |
+| CDL_SPINNING | Spinning Top | Small body with upper/lower shadows | TODO |
+| CDL_3BLACKCROWS | Three Black Crows | Three consecutive bearish candles | TODO |
+| CDL_3WHITESOLDIERS | Three White Soldiers | Three consecutive bullish candles | TODO |
+| CDL_ABANDONED | Abandoned Baby | Gap pattern with doji in middle | TODO |
+| CDL_ADVANCEBLOCK | Advance Block | Three white candles with weakening momentum | TODO |
+
+### Chart Patterns
+
+| Code | Name | Key Characteristics | Notes |
+| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
+| HEAD_SHOULDERS | Head and Shoulders | Major reversal pattern with three peaks | TODO |
+| DOUBLE_TOP | Double Top/Bottom | Two peaks/troughs at similar levels | TODO |
+| TRIANGLE | Triangle Patterns | Converging trendlines (ascending, descending, symmetrical) | TODO |
+| FLAG | Flag Patterns | Continuation patterns with parallel channels | TODO |
+| WEDGE | Wedge Patterns | Converging lines (rising/falling wedge) | TODO |
+
+**Note:** The Reversals category focuses on identifying potential trend changes and reversal patterns. This is the newest category in the collection, starting with the foundational Parabolic SAR indicator.

@@ -145,6 +145,7 @@
 | [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Momentum |
 | [PPO](/indicators/momentum/ppo.md) | Percentage Price Oscillator | Momentum |
 | [PRS](/indicators/momentum/prs.md) | Price Relative Strength | Momentum |
+| [PSAR](/indicators/reversals/psar.md) | Parabolic Stop And Reverse | Reversals |
 | [PV](/indicators/volatility/pv.md) | Parkinson Volatility | Volatility |
 | [PVD](/indicators/volume/pvd.md) | Price Volume Divergence | Volume |
 | [PVI](/indicators/volume/pvi.md) | Positive Volume Index | Volume |

@@ -266,3 +266,6 @@
   * [SINE: Sine Wave](/indicators/cycles/sine.md)
   * [SOLAR: Solar Activity Cycle](/indicators/cycles/solar.md)
   * [STC: Schaff Trend Cycle](/indicators/cycles/stc.md)
+
+* [Reversals](/indicators/reversals/_index.md)
+  * [PSAR: Parabolic Stop And Reverse](/indicators/reversals/psar.md)
