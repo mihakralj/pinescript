@@ -250,6 +250,7 @@
 * [Dynamics](/indicators/dynamics/_index.md)
   * [ADX: Average Directional Movement Index](/indicators/dynamics/adx.md)
   * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
+  * [ALLIGATOR: Williams Alligator](/indicators/dynamics/alligator.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
   * [DMX: Jurik Directional Movement Index](/indicators/dynamics/dmx.md)
   * [DX: Directional Movement Index](/indicators/dynamics/dx.md)
