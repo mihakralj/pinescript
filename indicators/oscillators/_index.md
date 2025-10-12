@@ -4,7 +4,6 @@
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
 | [AC](/indicators/oscillators/ac.md) | Acceleration Oscillator | Measures acceleration/deceleration of the current market driving force (Awesome Oscillator) |
 | [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Measures market momentum by comparing recent momentum to overall momentum |
-| [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Shows difference between two exponential moving averages of price |
 | BBI | Bulls Bears Index | Measures the relative strength of bulls and bears based on price action |
 | [BOP](/indicators/oscillators/bop.md) | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
 | BRAR | BRAR | Combines AR (sentiment) and BR (momentum) indicators to gauge market mood |
