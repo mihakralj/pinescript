@@ -8,53 +8,52 @@ indicator("Choppiness Index", "CHOP", overlay=false)
 //@param length Lookback period for calculation
 //@returns CHOP value between 0 and 100 (lower=trending, higher=choppy)
 //@references E.W. Dreiss, Australian commodity trader
-//@optimized O(1) with circular buffers for ATR sum and high/low tracking
+//@optimized O(n) with circular buffers for TR sum and high/low tracking
 chop(simple int length) =>
-    if length <= 0
-        runtime.error("Length must be greater than 0")
-    var float sum_atr = 0.0
+    if length <= 1
+        runtime.error("Length must be > 1")
+    var float sum_tr = 0.0
     var int head = 0
-    var int count = 0
-    var array<float> atr_buffer = array.new_float(length, na)
-    var array<float> high_buffer = array.new_float(length, na)
-    var array<float> low_buffer = array.new_float(length, na)
-    var float highest_high = high
-    var float lowest_low = low
-    float tr = math.max(high - low, math.max(math.abs(high - nz(close[1])), math.abs(low - nz(close[1]))))
-    float oldest_atr = array.get(atr_buffer, head)
-    if not na(oldest_atr)
-        sum_atr -= oldest_atr
+    var int filled = 0
+    var array<float> atr_buf = array.new_float(length, na)
+    var array<float> high_buf = array.new_float(length, na)
+    var array<float> low_buf = array.new_float(length, na)
+    float prevClose = nz(close[1], close)
+    float tr = math.max(high - low, math.max(math.abs(high - prevClose), math.abs(low - prevClose)))
+    float out = array.get(atr_buf, head)
+    if not na(out)
+        sum_tr -= out
     else
-        count += 1
-    sum_atr += tr
-    array.set(atr_buffer, head, tr)
-    array.set(high_buffer, head, high)
-    array.set(low_buffer, head, low)
-    highest_high := high
-    lowest_low := low
-    int scan_length = math.min(count, length)
-    for i = 0 to scan_length - 1
-        float h = array.get(high_buffer, i)
-        float l = array.get(low_buffer, i)
+        filled += 1
+    array.set(atr_buf, head, tr)
+    array.set(high_buf, head, high)
+    array.set(low_buf, head, low)
+    sum_tr += tr
+    int win = math.min(filled, length)
+    float hhv = -1e100
+    float llv = 1e100
+    for k = 0 to win - 1
+        int idx = (head - k + length) % length
+        float h = array.get(high_buf, idx)
+        float l = array.get(low_buf, idx)
         if not na(h)
-            highest_high := math.max(highest_high, h)
+            hhv := math.max(hhv, h)
         if not na(l)
-            lowest_low := math.min(lowest_low, l)
+            llv := math.min(llv, l)
     head := (head + 1) % length
-    float price_range = highest_high - lowest_low
-    int effective_length = math.min(count, length)
-    float chop_value = 50.0
-    if price_range > 0 and effective_length > 1
-        float log_ratio = math.log10(sum_atr / price_range)
-        float log_length = math.log10(effective_length)
-        chop_value := 100 * log_ratio / log_length
-        chop_value := math.max(0, math.min(100, chop_value))
+    float price_range = hhv - llv
+    float chop_value = na
+    if win >= 2 and price_range > 0
+        float log_ratio = math.log10(sum_tr / price_range)
+        float log_len = math.log10(length)
+        chop_value := 100.0 * log_ratio / log_len
+        chop_value := math.max(0.0, math.min(100.0, chop_value))
     chop_value
 
 // ---------- Main loop ----------
 
 // Inputs
-i_length = input.int(14, "Length", minval=1)
+i_length = input.int(14, "Length", minval=2)
 
 // Calculation
 chop_value = chop(i_length)
