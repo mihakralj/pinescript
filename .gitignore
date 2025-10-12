@@ -403,7 +403,7 @@ FodyWeavers.xsd
 
 # Tools directory - development scripts not for distribution
 tools/
-
+.clinerules/
 # Memory bank - personal notes and research
 memory-bank/
-
+.DS_Store
