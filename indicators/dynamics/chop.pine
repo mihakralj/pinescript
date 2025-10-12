@@ -14,6 +14,7 @@ chop(simple int length) =>
         runtime.error("Length must be greater than 0")
     var float sum_atr = 0.0
     var int head = 0
+    var int count = 0
     var array<float> atr_buffer = array.new_float(length, na)
     var array<float> high_buffer = array.new_float(length, na)
     var array<float> low_buffer = array.new_float(length, na)
@@ -23,28 +24,26 @@ chop(simple int length) =>
     float oldest_atr = array.get(atr_buffer, head)
     if not na(oldest_atr)
         sum_atr -= oldest_atr
+    else
+        count += 1
     sum_atr += tr
     array.set(atr_buffer, head, tr)
-    float oldest_high = array.get(high_buffer, head)
-    float oldest_low = array.get(low_buffer, head)
     array.set(high_buffer, head, high)
     array.set(low_buffer, head, low)
-    if bar_index < length
-        highest_high := math.max(highest_high, high)
-        lowest_low := math.min(lowest_low, low)
-    else
-        highest_high := high
-        lowest_low := low
-        for i = 0 to length - 1
-            float h = array.get(high_buffer, i)
-            float l = array.get(low_buffer, i)
-            if not na(h)
-                highest_high := math.max(highest_high, h)
-            if not na(l)
-                lowest_low := math.min(lowest_low, l)
+    highest_high := high
+    lowest_low := low
+    int scan_length = math.min(count, length)
+    for i = 0 to scan_length - 1
+        float h = array.get(high_buffer, i)
+        float l = array.get(low_buffer, i)
+        if not na(h)
+            highest_high := math.max(highest_high, h)
+        if not na(l)
+            lowest_low := math.min(lowest_low, l)
     head := (head + 1) % length
     float price_range = highest_high - lowest_low
-    float chop_value = price_range == 0 ? 100 : 100 * math.log10(sum_atr / price_range) / math.log10(length)
+    int effective_length = math.min(count, length)
+    float chop_value = price_range == 0 ? 50 : 100 * math.log10(sum_atr / price_range) / math.log10(effective_length)
     math.max(0, math.min(100, chop_value))
 
 // ---------- Main loop ----------
