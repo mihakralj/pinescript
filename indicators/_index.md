@@ -204,6 +204,7 @@
 | [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Oscillators |
 | [STOCHF](/indicators/oscillators/stochf.md) | Stochastic Fast | Oscillators |
 | [STOCHRSI](/indicators/oscillators/stochrsi.md) | Stochastic RSI | Oscillators |
+| [SUPER](/indicators/dynamics/super.md) | SuperTrend | Dynamics |
 | [T3](/indicators/trends_IIR/t3.md) | Tillson T3 MA | Trends (IIR) |
 | [TANH](/indicators/numerics/tanh.md) | Hyperbolic Tangent | Numerics |
 | [TEMA](/indicators/trends_IIR/tema.md) | Triple Exponential MA | Trends (IIR) |

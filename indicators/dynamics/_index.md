@@ -13,6 +13,7 @@
 | [IMI](/indicators/dynamics/imi.md) | Intraday Momentum Index | RSI-like indicator using intraday ranges (open vs close); identifies overbought/oversold conditions |
 | [VORTEX](/indicators/dynamics/vortex.md) | Vortex Indicator | Uses VI+ and VI- to identify trend direction and strength based on vortex price movement |
 | [CHOP](/indicators/dynamics/chop.md) | Choppiness Index | Non-directional indicator measuring market trendiness; higher values indicate choppy sideways markets |
+| [SUPER](/indicators/dynamics/super.md) | SuperTrend | ATR-based trend following with dynamic support/resistance; green line below price = bullish, red above = bearish |
 
 ## Planned Indicators
 
@@ -23,7 +24,6 @@
 | DPO | Detrended Price Oscillator | Removes longer-term trends from price to identify shorter-term cycles | TODO |
 | HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase | TODO |
 | QSTICK | Q Stick | Measures buying/selling pressure by comparing the open and close prices over time | TODO |
-| SUPER | SuperTrend | Trend-following indicator based on ATR, plotting stop levels above/below price | TODO |
 | TTM | TTM Trend | Trend indicator often used with TTM Squeeze, based on moving averages | TODO |
 
 **Note:** MACD and MACDEXT are implemented in the [Momentum](/indicators/momentum/_index.md) category.
