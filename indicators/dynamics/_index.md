@@ -12,6 +12,7 @@
 | [DX](/indicators/dynamics/dx.md) | Directional Movement Index | Measures directional strength; unsmoothed component of ADX (100 * abs(+DI - -DI) / (+DI + -DI)) |
 | [IMI](/indicators/dynamics/imi.md) | Intraday Momentum Index | RSI-like indicator using intraday ranges (open vs close); identifies overbought/oversold conditions |
 | [VORTEX](/indicators/dynamics/vortex.md) | Vortex Indicator | Uses VI+ and VI- to identify trend direction and strength based on vortex price movement |
+| [CHOP](/indicators/dynamics/chop.md) | Choppiness Index | Non-directional indicator measuring market trendiness; higher values indicate choppy sideways markets |
 
 ## Planned Indicators
 
@@ -19,7 +20,6 @@
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
 | AMAT | Archer MAs Trends | Trend identification system based on multiple moving averages | TODO |
 | AROONOSC | Aroon Oscillator | Subtracts Aroon Down from Aroon Up, measures trend strength | TODO |
-| CHOP | Choppiness Index | Measures market sidewaysness or trendiness, higher values indicate choppiness | TODO |
 | DPO | Detrended Price Oscillator | Removes longer-term trends from price to identify shorter-term cycles | TODO |
 | HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase | TODO |
 | QSTICK | Q Stick | Measures buying/selling pressure by comparing the open and close prices over time | TODO |

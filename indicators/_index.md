@@ -43,6 +43,7 @@
 | [CHANGE](/indicators/numerics/change.md) | Percentage Change | Numerics |
 | [CHEBY1](/indicators/filters/cheby1.md) | Chebyshev Type I Filter | Filters |
 | [CHEBY2](/indicators/filters/cheby2.md) | Chebyshev Type II Filter | Filters |
+| [CHOP](/indicators/dynamics/chop.md) | Choppiness Index | Dynamics |
 | [CMF](/indicators/volume/cmf.md) | Chaikin Money Flow | Volume |
 | [CMO](/indicators/momentum/cmo.md) | Chande Momentum Oscillator | Momentum |
 | [COINTEGRATION](/indicators/statistics/cointegration.md) | Cointegration | Statistics |

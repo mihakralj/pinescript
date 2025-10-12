@@ -252,6 +252,7 @@
   * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
   * [ALLIGATOR: Williams Alligator](/indicators/dynamics/alligator.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
+  * [CHOP: Choppiness Index](/indicators/dynamics/chop.md)
   * [DMX: Jurik Directional Movement Index](/indicators/dynamics/dmx.md)
   * [DX: Directional Movement Index](/indicators/dynamics/dx.md)
   * [IMI: Intraday Momentum Index](/indicators/dynamics/imi.md)

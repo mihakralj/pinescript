@@ -1,0 +1,42 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Choppiness Index", "CHOP", overlay=false)
+
+//@function Calculates Choppiness Index to measure market trendiness
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/chop.md
+//@param length Lookback period for calculation
+//@returns CHOP value between 0 and 100 (lower=trending, higher=choppy)
+//@references E.W. Dreiss, Australian commodity trader
+chop(simple int length) =>
+    if length <= 0
+        runtime.error("Length must be greater than 0")
+    var float sum_atr = 0.0
+    var int head = 0
+    var array<float> atr_buffer = array.new_float(length, na)
+    float tr = math.max(high - low, math.max(math.abs(high - nz(close[1])), math.abs(low - nz(close[1]))))
+    float oldest_atr = array.get(atr_buffer, head)
+    if not na(oldest_atr)
+        sum_atr -= oldest_atr
+    sum_atr += tr
+    array.set(atr_buffer, head, tr)
+    head := (head + 1) % length
+    float highest_high = ta.highest(high, length)
+    float lowest_low = ta.lowest(low, length)
+    float range = highest_high - lowest_low
+    float chop_value = range == 0 ? 100 : 100 * math.log10(sum_atr / range) / math.log10(length)
+    math.max(0, math.min(100, chop_value))
+
+// ---------- Main loop ----------
+
+// Inputs
+i_length = input.int(14, "Length", minval=1)
+
+// Calculation
+chop_value = chop(i_length)
+
+// Plot
+plot(chop_value, "CHOP", color=color.yellow, linewidth=2)
+hline(61.8, "High Threshold", color=color.new(color.red, 50), linestyle=hline.style_dashed)
+hline(38.2, "Low Threshold", color=color.new(color.green, 50), linestyle=hline.style_dashed)
+hline(50, "Midline", color=color.new(color.gray, 70), linestyle=hline.style_dotted)
