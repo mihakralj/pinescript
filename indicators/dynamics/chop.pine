@@ -45,8 +45,7 @@ chop(simple int length) =>
     int effective_length = math.min(count, length)
     float chop_value = 50.0
     if price_range > 0 and effective_length > 1
-        float normalized_atr = sum_atr * effective_length / length
-        float log_ratio = math.log10(normalized_atr / price_range)
+        float log_ratio = math.log10(sum_atr / price_range)
         float log_length = math.log10(effective_length)
         chop_value := 100 * log_ratio / log_length
         chop_value := math.max(0, math.min(100, chop_value))
