@@ -1,0 +1,23 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("OHLC Average (OHLC4)", "OHLC4", overlay=true)
+
+//@function Calculates the average of open, high, low, and close prices
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/ohlc4.md
+//@param o Open price series
+//@param h High price series
+//@param l Low price series
+//@param c Close price series
+//@returns float The average value (open + high + low + close) * 0.25
+//@optimized Uses multiplication instead of division for performance
+ohlc4(series float o, series float h, series float l, series float c) =>
+    (o + h + l + c) * 0.25
+
+// ---------- Main loop ----------
+
+// Calculation
+result = ohlc4(open, high, low, close)
+
+// Plot
+plot(result, "OHLC4", color=color.yellow, linewidth=2)

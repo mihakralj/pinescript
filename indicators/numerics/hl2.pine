@@ -1,0 +1,21 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Midprice (HL2)", "HL2", overlay=true)
+
+//@function Calculates the midprice as the average of high and low prices
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/hl2.md
+//@param h High price series
+//@param l Low price series
+//@returns float The midprice value (high + low) * 0.5
+//@optimized Uses multiplication instead of division for performance
+hl2(series float h, series float l) =>
+    (h + l) * 0.5
+
+// ---------- Main loop ----------
+
+// Calculation
+result = hl2(high, low)
+
+// Plot
+plot(result, "HL2", color=color.yellow, linewidth=2)

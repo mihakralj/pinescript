@@ -1,0 +1,22 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Typical Price (HLC3)", "HLC3", overlay=true)
+
+//@function Calculates the typical price as the average of high, low, and close prices
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/hlc3.md
+//@param h High price series
+//@param l Low price series
+//@param c Close price series
+//@returns float The typical price (high + low + close) * 0.333333
+//@optimized Uses multiplication instead of division for performance
+hlc3(series float h, series float l, series float c) =>
+    (h + l + c) * 0.333333
+
+// ---------- Main loop ----------
+
+// Calculation
+result = hlc3(high, low, close)
+
+// Plot
+plot(result, "HLC3", color=color.yellow, linewidth=2)

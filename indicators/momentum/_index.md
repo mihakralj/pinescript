@@ -2,6 +2,7 @@
 
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
+| [APO](/indicators/momentum/apo.md) | Absolute Price Oscillator | Shows absolute difference between two EMAs, identifies momentum in price terms |
 | [BOP](/indicators/momentum/bop.md) | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
 | [CCI](/indicators/momentum/cci.md) | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
 | [CMO](/indicators/momentum/cmo.md) | Chande Momentum Oscillator | Measures momentum using both up and down price changes, similar to RSI but unbounded |
