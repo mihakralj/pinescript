@@ -14,13 +14,13 @@ pivotfib(simple string tf) =>
         [na, na, na, na, na, na, na]
     else
         float pp = (hi + lo + cl) / 3.0
-        float range = hi - lo
-        float r1 = pp + 0.382 * range
-        float s1 = pp - 0.382 * range
-        float r2 = pp + 0.618 * range
-        float s2 = pp - 0.618 * range
-        float r3 = pp + 1.000 * range
-        float s3 = pp - 1.000 * range
+        float hl_range = hi - lo
+        float r1 = pp + 0.382 * hl_range
+        float s1 = pp - 0.382 * hl_range
+        float r2 = pp + 0.618 * hl_range
+        float s2 = pp - 0.618 * hl_range
+        float r3 = pp + 1.000 * hl_range
+        float s3 = pp - 1.000 * hl_range
         [pp, r1, r2, r3, s1, s2, s3]
 
 // ---------- Main loop ----------

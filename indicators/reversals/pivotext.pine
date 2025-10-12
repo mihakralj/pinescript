@@ -14,11 +14,11 @@ pivotext(simple string tf) =>
         [na, na, na, na, na, na, na, na, na, na, na]
     else
         float pp = (hi + lo + cl) / 3.0
-        float range = hi - lo
+        float hl_range = hi - lo
         float r1 = 2.0 * pp - lo
         float s1 = 2.0 * pp - hi
-        float r2 = pp + range
-        float s2 = pp - range
+        float r2 = pp + hl_range
+        float s2 = pp - hl_range
         float r3 = hi + 2.0 * (pp - lo)
         float s3 = lo - 2.0 * (hi - pp)
         float r4 = hi + 3.0 * (pp - lo)

@@ -14,15 +14,15 @@ pivotcam(simple string tf) =>
         [na, na, na, na, na, na, na, na, na]
     else
         float pp = (hi + lo + cl) / 3.0
-        float range = hi - lo
-        float r1 = cl + range * 1.0833 / 12.0
-        float s1 = cl - range * 1.0833 / 12.0
-        float r2 = cl + range * 1.1666 / 12.0
-        float s2 = cl - range * 1.1666 / 12.0
-        float r3 = cl + range * 1.2500 / 12.0
-        float s3 = cl - range * 1.2500 / 12.0
-        float r4 = cl + range * 1.5000 / 12.0
-        float s4 = cl - range * 1.5000 / 12.0
+        float hl_range = hi - lo
+        float r1 = cl + hl_range * 1.0833 / 12.0
+        float s1 = cl - hl_range * 1.0833 / 12.0
+        float r2 = cl + hl_range * 1.1666 / 12.0
+        float s2 = cl - hl_range * 1.1666 / 12.0
+        float r3 = cl + hl_range * 1.2500 / 12.0
+        float s3 = cl - hl_range * 1.2500 / 12.0
+        float r4 = cl + hl_range * 1.5000 / 12.0
+        float s4 = cl - hl_range * 1.5000 / 12.0
         [pp, r1, r2, r3, r4, s1, s2, s3, s4]
 
 // ---------- Main loop ----------
