@@ -11,6 +11,7 @@
 | [DMX](/indicators/dynamics/dmx.md) | Jurik Directional Movement Index | Smoothed Bipolar Directional Movement Index (DMI) |
 | [DX](/indicators/dynamics/dx.md) | Directional Movement Index | Measures directional strength; unsmoothed component of ADX (100 * abs(+DI - -DI) / (+DI + -DI)) |
 | [IMI](/indicators/dynamics/imi.md) | Intraday Momentum Index | RSI-like indicator using intraday ranges (open vs close); identifies overbought/oversold conditions |
+| [VORTEX](/indicators/dynamics/vortex.md) | Vortex Indicator | Uses VI+ and VI- to identify trend direction and strength based on vortex price movement |
 
 ## Planned Indicators
 
@@ -24,6 +25,5 @@
 | QSTICK | Q Stick | Measures buying/selling pressure by comparing the open and close prices over time | TODO |
 | SUPER | SuperTrend | Trend-following indicator based on ATR, plotting stop levels above/below price | TODO |
 | TTM | TTM Trend | Trend indicator often used with TTM Squeeze, based on moving averages | TODO |
-| VORTEX | Vortex Indicator | Identifies start of new trends and confirms current trends using +VI and -VI lines | TODO |
 
 **Note:** MACD and MACDEXT are implemented in the [Momentum](/indicators/momentum/_index.md) category.

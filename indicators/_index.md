@@ -216,6 +216,7 @@
 | [VF](/indicators/volume/vf.md) | Volume Force | Volume |
 | [VIDYA](/indicators/trends_IIR/vidya.md) | Variable Index Dynamic Average | Trends (IIR) |
 | [VO](/indicators/volume/vo.md) | Volume Oscillator | Volume |
+| [VORTEX](/indicators/dynamics/vortex.md) | Vortex Indicator | Dynamics |
 | [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Volatility |
 | [VR](/indicators/volatility/vr.md) | Volatility Ratio | Volatility |
 | [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Volume |

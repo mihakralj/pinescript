@@ -255,6 +255,7 @@
   * [DMX: Jurik Directional Movement Index](/indicators/dynamics/dmx.md)
   * [DX: Directional Movement Index](/indicators/dynamics/dx.md)
   * [IMI: Intraday Momentum Index](/indicators/dynamics/imi.md)
+  * [VORTEX: Vortex Indicator](/indicators/dynamics/vortex.md)
 
 * [Cycles](/indicators/cycles/_index.md)
   * [CFB: Composite Fractal Behavior](/indicators/cycles/cfb.md)
