@@ -6,6 +6,7 @@
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
 | [ADX](/indicators/dynamics/adx.md) | Average Directional Movement Index | Measures trend strength, regardless of direction (uses +DI and -DI) |
 | [ADXR](/indicators/dynamics/adxr.md) | Average Directional Movement Rating | Smoothed version of ADX, often used in conjunction with ADX for signals |
+| [ALLIGATOR](/indicators/dynamics/alligator.md) | Williams Alligator | Uses three smoothed moving averages (Jaw, Teeth, Lips) to identify trends and trading ranges |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Identifies trend direction and strength by measuring time since price recorded new highs/lows |
 | [DMX](/indicators/dynamics/dmx.md) | Jurik Directional Movement Index | Smoothed Bipolar Directional Movement Index (DMI) |
 | [DX](/indicators/dynamics/dx.md) | Directional Movement Index | Measures directional strength; unsmoothed component of ADX (100 * abs(+DI - -DI) / (+DI + -DI)) |
@@ -15,7 +16,6 @@
 
 | Code | Name | Key Characteristics | Notes |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
-| ALLIGATOR | Williams Alligator | Uses three smoothed moving averages (Jaw, Teeth, Lips) to identify trends and trading ranges | TODO |
 | AMAT | Archer MAs Trends | Trend identification system based on multiple moving averages | TODO |
 | AROONOSC | Aroon Oscillator | Subtracts Aroon Down from Aroon Up, measures trend strength | TODO |
 | CHOP | Choppiness Index | Measures market sidewaysness or trendiness, higher values indicate choppiness | TODO |
