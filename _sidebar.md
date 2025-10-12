@@ -269,4 +269,10 @@
   * [STC: Schaff Trend Cycle](/indicators/cycles/stc.md)
 
 * [Reversals](/indicators/reversals/_index.md)
+  * [PIVOT: Pivot Points (Classic)](/indicators/reversals/pivot.md)
+  * [PIVOTCAM: Camarilla Pivot Points](/indicators/reversals/pivotcam.md)
+  * [PIVOTDEM: DeMark Pivot Points](/indicators/reversals/pivotdem.md)
+  * [PIVOTEXT: Extended Traditional Pivots](/indicators/reversals/pivotext.md)
+  * [PIVOTFIB: Fibonacci Pivot Points](/indicators/reversals/pivotfib.md)
+  * [PIVOTWOOD: Woodie's Pivot Points](/indicators/reversals/pivotwood.md)
   * [PSAR: Parabolic Stop And Reverse](/indicators/reversals/psar.md)

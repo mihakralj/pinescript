@@ -143,6 +143,12 @@
 | [PERCENTILE](/indicators/statistics/percentile.md) | Percentile | Statistics |
 | [PHASOR](/indicators/cycles/phasor.md) | Ehlers Phasor Analysis | Cycles |
 | [PCHANNEL](/indicators/channels/pchannel.md) | Price Channel | Channels |
+| [PIVOT](/indicators/reversals/pivot.md) | Pivot Points (Classic) | Reversals |
+| [PIVOTCAM](/indicators/reversals/pivotcam.md) | Camarilla Pivot Points | Reversals |
+| [PIVOTDEM](/indicators/reversals/pivotdem.md) | DeMark Pivot Points | Reversals |
+| [PIVOTEXT](/indicators/reversals/pivotext.md) | Extended Traditional Pivots | Reversals |
+| [PIVOTFIB](/indicators/reversals/pivotfib.md) | Fibonacci Pivot Points | Reversals |
+| [PIVOTWOOD](/indicators/reversals/pivotwood.md) | Woodie's Pivot Points | Reversals |
 | [PMO](/indicators/momentum/pmo.md) | Price Momentum Oscillator | Momentum |
 | [PPO](/indicators/momentum/ppo.md) | Percentage Price Oscillator | Momentum |
 | [PRS](/indicators/momentum/prs.md) | Price Relative Strength | Momentum |
