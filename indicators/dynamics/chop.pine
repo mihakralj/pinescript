@@ -43,7 +43,13 @@ chop(simple int length) =>
     head := (head + 1) % length
     float price_range = highest_high - lowest_low
     int effective_length = math.min(count, length)
-    float chop_value = price_range == 0 ? 50 : 100 * math.log10(sum_atr / price_range) / math.log10(effective_length)
+    float chop_value = 0.0
+    if price_range == 0
+        chop_value := 50
+    else if effective_length <= 1
+        chop_value := 50
+    else
+        chop_value := 100 * math.log10(sum_atr / price_range) / math.log10(effective_length)
     math.max(0, math.min(100, chop_value))
 
 // ---------- Main loop ----------
