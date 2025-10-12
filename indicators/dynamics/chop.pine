@@ -23,8 +23,8 @@ chop(simple int length) =>
     head := (head + 1) % length
     float highest_high = ta.highest(high, length)
     float lowest_low = ta.lowest(low, length)
-    float range = highest_high - lowest_low
-    float chop_value = range == 0 ? 100 : 100 * math.log10(sum_atr / range) / math.log10(length)
+    float price_range = highest_high - lowest_low
+    float chop_value = price_range == 0 ? 100 : 100 * math.log10(sum_atr / price_range) / math.log10(length)
     math.max(0, math.min(100, chop_value))
 
 // ---------- Main loop ----------
