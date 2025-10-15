@@ -19,6 +19,7 @@
 | [APCHANNEL](/indicators/channels/apchannel.md) | Andrews' Pitchfork | Channels |
 | [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Oscillators |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
+| [AROONOSC](/indicators/dynamics/aroonosc.md) | Aroon Oscillator | Dynamics |
 | [ATR](/indicators/volatility/atr.md) | Average True Range | Volatility |
 | [ATRBANDS](/indicators/channels/atrbands.md) | ATR Bands | Channels |
 | [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | Volatility |
@@ -71,6 +72,7 @@
 | [EPMA](/indicators/trends_FIR/epma.md) | Endpoint MA | Trends (FIR) |
 | [EXP](/indicators/numerics/exp.md) | Exponential Transformation | Numerics |
 | [FCB](/indicators/channels/fcb.md) | Fractal Chaos Bands | Channels |
+| [FRACTALS](/indicators/reversals/fractals.md) | Williams Fractals | Reversals |
 | [FRAMA](/indicators/trends_IIR/frama.md) | Fractal Adaptive MA | Trends (IIR) |
 | [GAUSS](/indicators/filters/gauss.md) | Gaussian Filter | Filters |
 | [HANN](/indicators/filters/hann.md) | Hann FIR Filter | Filters |
@@ -154,6 +156,7 @@
 | [PRS](/indicators/momentum/prs.md) | Price Relative Strength | Momentum |
 | [PSAR](/indicators/reversals/psar.md) | Parabolic Stop And Reverse | Reversals |
 | [PV](/indicators/volatility/pv.md) | Parkinson Volatility | Volatility |
+| [SWINGS](/indicators/reversals/swings.md) | Swing High/Low Detection | Reversals |
 | [PVD](/indicators/volume/pvd.md) | Price Volume Divergence | Volume |
 | [PVI](/indicators/volume/pvi.md) | Positive Volume Index | Volume |
 | [PVO](/indicators/volume/pvo.md) | Percentage Volume Oscillator | Volume |
@@ -161,6 +164,7 @@
 | [PVT](/indicators/volume/pvt.md) | Price Volume Trend | Volume |
 | [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted MA | Trends (FIR) |
 | [QEMA](/indicators/trends_IIR/qema.md) | Quadruple Exponential MA | Trends (IIR) |
+| [QSTICK](/indicators/dynamics/qstick.md) | Qstick Indicator | Dynamics |
 | [QUANTILE](/indicators/statistics/quantile.md) | Quantile | Statistics |
 | [RAE](/indicators/errors/rae.md) | Relative Absolute Error | Errors |
 | [REGCHANNEL](/indicators/channels/regchannel.md) | Regression Channels | Channels |

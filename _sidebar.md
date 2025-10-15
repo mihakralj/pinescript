@@ -252,10 +252,12 @@
   * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
   * [ALLIGATOR: Williams Alligator](/indicators/dynamics/alligator.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
+  * [AROONOSC: Aroon Oscillator](/indicators/dynamics/aroonosc.md)
   * [CHOP: Choppiness Index](/indicators/dynamics/chop.md)
   * [DMX: Jurik Directional Movement Index](/indicators/dynamics/dmx.md)
   * [DX: Directional Movement Index](/indicators/dynamics/dx.md)
   * [IMI: Intraday Momentum Index](/indicators/dynamics/imi.md)
+  * [QSTICK: Qstick Indicator](/indicators/dynamics/qstick.md)
   * [SUPER: SuperTrend](/indicators/dynamics/super.md)
   * [VORTEX: Vortex Indicator](/indicators/dynamics/vortex.md)
 
@@ -270,6 +272,7 @@
   * [STC: Schaff Trend Cycle](/indicators/cycles/stc.md)
 
 * [Reversals](/indicators/reversals/_index.md)
+  * [FRACTALS: Williams Fractals](/indicators/reversals/fractals.md)
   * [PIVOT: Pivot Points (Classic)](/indicators/reversals/pivot.md)
   * [PIVOTCAM: Camarilla Pivot Points](/indicators/reversals/pivotcam.md)
   * [PIVOTDEM: DeMark Pivot Points](/indicators/reversals/pivotdem.md)
@@ -277,3 +280,4 @@
   * [PIVOTFIB: Fibonacci Pivot Points](/indicators/reversals/pivotfib.md)
   * [PIVOTWOOD: Woodie's Pivot Points](/indicators/reversals/pivotwood.md)
   * [PSAR: Parabolic Stop And Reverse](/indicators/reversals/psar.md)
+  * [SWINGS: Swing High/Low Detection](/indicators/reversals/swings.md)
