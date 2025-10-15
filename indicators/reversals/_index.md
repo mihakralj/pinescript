@@ -11,13 +11,13 @@
 | [PIVOTFIB](/indicators/reversals/pivotfib.md) | Fibonacci Pivot Points | Fibonacci-ratio based pivots; Golden Ratio (61.8%) at R2/S2 |
 | [PIVOTWOOD](/indicators/reversals/pivotwood.md) | Woodie's Pivot Points | Weighted close pivots (2× close weight) for intraday trading |
 | [PSAR](/indicators/reversals/psar.md) | Parabolic Stop And Reverse | Trailing stop indicator that accelerates with trend; provides entry/exit signals via SAR dots |
+| [SWINGS](/indicators/reversals/swings.md) | Swing High/Low Detection | Identifies significant price reversals and swing points using configurable lookback |
+| [FRACTALS](/indicators/reversals/fractals.md) | Williams Fractals | Five-bar pattern identifying local peaks/troughs; marks support/resistance levels |
 
 ## Planned Indicators
 
 | Code | Name | Key Characteristics | Notes |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
-| SWINGS | Swing High/Low Detection | Identifies significant price reversals and swing points | TODO |
-| FRACTALS | Williams Fractals | Five-bar pattern for identifying potential reversal points | TODO |
 
 ### Candlestick Patterns (TA-Lib has 60+)
 
