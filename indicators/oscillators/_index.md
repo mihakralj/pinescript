@@ -9,8 +9,6 @@
 | BRAR | BRAR | Combines AR (sentiment) and BR (momentum) indicators to gauge market mood |
 | [CCI](/indicators/oscillators/cci.md) | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
 | CFO | Chande Forecast Oscillator | Measures the percentage difference between the closing price and its N-period linear regression forecast |
-| CG | Center of Gravity | Lag-free indicator identifying turning points based on weighted price distribution |
-| CHOP | Choppiness Index | Measures market sidewaysness or trendiness, higher values indicate choppiness |
 | COPPOCK | Coppock Curve | Long-term momentum oscillator used primarily for identifying major market bottoms |
 | CRSI | Connors RSI | Composite indicator combining RSI, Up/Down Streak Length, and Rate-of-Change |
 | CTI | Correlation Trend Indicator | Measures the correlation between price and time to determine trend strength |

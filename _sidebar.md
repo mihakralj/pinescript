@@ -251,6 +251,7 @@
   * [ADX: Average Directional Movement Index](/indicators/dynamics/adx.md)
   * [ADXR: Average Directional Movement Rating](/indicators/dynamics/adxr.md)
   * [ALLIGATOR: Williams Alligator](/indicators/dynamics/alligator.md)
+  * [AMAT: Archer Moving Averages Trends](/indicators/dynamics/amat.md)
   * [AROON: Aroon](/indicators/dynamics/aroon.md)
   * [AROONOSC: Aroon Oscillator](/indicators/dynamics/aroonosc.md)
   * [CHOP: Choppiness Index](/indicators/dynamics/chop.md)
@@ -259,6 +260,7 @@
   * [IMI: Intraday Momentum Index](/indicators/dynamics/imi.md)
   * [QSTICK: Qstick Indicator](/indicators/dynamics/qstick.md)
   * [SUPER: SuperTrend](/indicators/dynamics/super.md)
+  * [TTM: TTM Trend](/indicators/dynamics/ttm.md)
   * [VORTEX: Vortex Indicator](/indicators/dynamics/vortex.md)
 
 * [Cycles](/indicators/cycles/_index.md)

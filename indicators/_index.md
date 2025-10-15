@@ -14,6 +14,7 @@
 | [AFIRMA](/indicators/trends_FIR/afirma.md) | Adaptive Finite Impulse Response MA | Trends (FIR) |
 | [ALLIGATOR](/indicators/dynamics/alligator.md) | Williams Alligator | Dynamics |
 | [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Trends (FIR) |
+| [AMAT](/indicators/dynamics/amat.md) | Archer Moving Averages Trends | Dynamics |
 | [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Oscillators |
 | [AOBV](/indicators/volume/aobv.md) | Archer On-Balance Volume | Volume |
 | [APCHANNEL](/indicators/channels/apchannel.md) | Andrews' Pitchfork | Channels |
@@ -216,6 +217,7 @@
 | [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Trends (FIR) |
 | [TRIX](/indicators/oscillators/trix.md) | Triple Exponential Average | Oscillators |
 | [TSI](/indicators/momentum/tsi.md) | True Strength Index | Momentum |
+| [TTM](/indicators/dynamics/ttm.md) | TTM Trend | Dynamics |
 | [TWAP](/indicators/volume/twap.md) | Time Weighted Average Price | Volume |
 | [TVI](/indicators/volume/tvi.md) | Trade Volume Index | Volume |
 | [UBANDS](/indicators/channels/ubands.md) | Ultimate Bands | Channels |

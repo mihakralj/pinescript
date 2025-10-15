@@ -1,7 +1,5 @@
 # Trend Dynamics
 
-## Implemented Indicators
-
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
 | [ADX](/indicators/dynamics/adx.md) | Average Directional Movement Index | Measures trend strength, regardless of direction (uses +DI and -DI) |
@@ -16,14 +14,6 @@
 | [CHOP](/indicators/dynamics/chop.md) | Choppiness Index | Non-directional indicator measuring market trendiness; higher values indicate choppy sideways markets |
 | [QSTICK](/indicators/dynamics/qstick.md) | Qstick Indicator | Measures buying/selling pressure through moving average of close-open differences; positive = bullish, negative = bearish |
 | [SUPER](/indicators/dynamics/super.md) | SuperTrend | ATR-based trend following with dynamic support/resistance; green line below price = bullish, red above = bearish |
-
-## Planned Indicators
-
-| Code | Name | Key Characteristics | Notes |
-| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- | ----- |
-| AMAT | Archer MAs Trends | Trend identification system based on multiple moving averages | TODO |
-| DPO | Detrended Price Oscillator | Removes longer-term trends from price to identify shorter-term cycles | TODO |
-| HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase | TODO |
-| TTM | TTM Trend | Trend indicator often used with TTM Squeeze, based on moving averages | TODO |
-
-**Note:** MACD and MACDEXT are implemented in the [Momentum](/indicators/momentum/_index.md) category.
+| [TTM](/indicators/dynamics/ttm.md) | TTM Trend | Fast 6-period EMA with color-coded trend; green = bullish, red = bearish; part of John Carter's TTM system |
+| [AMAT](/indicators/dynamics/amat.md) | Archer Moving Averages Trends | Trend identification using multiple EMAs; requires alignment of fast/slow EMAs and directional movement |
+| HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase |
