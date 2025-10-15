@@ -1,0 +1,98 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("HT_TRENDMODE: Hilbert Transform Trend Mode", "HT_TRENDMODE", overlay=false)
+
+//@function Calculates HT_DCPERIOD (required for trend mode detection)
+//@param source Series to analyze
+//@returns Dominant cycle period
+ht_dcperiod(series float source) =>
+    var float smooth_price = 0.0
+    var float detrender = 0.0
+    var float i1 = 0.0
+    var float q1 = 0.0
+    var float ji = 0.0
+    var float jq = 0.0
+    var float i2 = 0.0
+    var float q2 = 0.0
+    var float re = 0.0
+    var float im = 0.0
+    var float period = 0.0
+    var float smooth_period = 0.0
+    float price = nz(source)
+    smooth_price := (4.0 * price + 3.0 * nz(price[1]) + 2.0 * nz(price[2]) + nz(price[3])) / 10.0
+    detrender := (0.0962 * smooth_price + 0.5769 * nz(smooth_price[2]) - 0.5769 * nz(smooth_price[4]) - 0.0962 * nz(smooth_price[6])) * (0.075 * nz(period[1]) + 0.54)
+    q1 := (0.0962 * detrender + 0.5769 * nz(detrender[2]) - 0.5769 * nz(detrender[4]) - 0.0962 * nz(detrender[6])) * (0.075 * nz(period[1]) + 0.54)
+    i1 := nz(detrender[3])
+    ji := (0.0962 * i1 + 0.5769 * nz(i1[2]) - 0.5769 * nz(i1[4]) - 0.0962 * nz(i1[6])) * (0.075 * nz(period[1]) + 0.54)
+    jq := (0.0962 * q1 + 0.5769 * nz(q1[2]) - 0.5769 * nz(q1[4]) - 0.0962 * nz(q1[6])) * (0.075 * nz(period[1]) + 0.54)
+    i2 := i1 - jq
+    q2 := q1 + ji
+    i2 := 0.2 * i2 + 0.8 * nz(i2[1])
+    q2 := 0.2 * q2 + 0.8 * nz(q2[1])
+    re := i2 * nz(i2[1]) + q2 * nz(q2[1])
+    im := i2 * nz(q2[1]) - q2 * nz(i2[1])
+    re := 0.2 * re + 0.8 * nz(re[1])
+    im := 0.2 * im + 0.8 * nz(im[1])
+    if re != 0.0 and im != 0.0
+        period := 6.28318530718 / math.atan(im / re)
+    period := math.max(6.0, math.min(50.0, period))
+    smooth_period := 0.2 * period + 0.8 * nz(smooth_period[1])
+    smooth_period
+
+//@function Determines if market is in trend mode (1) or cycle mode (0)
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/ht_trendmode.md
+//@param source Series to analyze for trend/cycle state
+//@returns 1 for trend mode, 0 for cycle mode
+ht_trendmode(series float source) =>
+    float dcperiod = ht_dcperiod(source)
+    var float smooth_price = 0.0
+    var float detrender = 0.0
+    var float i1 = 0.0
+    var float q1 = 0.0
+    var float ji = 0.0
+    var float jq = 0.0
+    var float i2 = 0.0
+    var float q2 = 0.0
+    var float re = 0.0
+    var float im = 0.0
+    var float dc_phase = 0.0
+    var float inst_period = 0.0
+    var int trend_mode = 0
+    float price = nz(source)
+    float smooth_factor = 0.075 * nz(dcperiod[1]) + 0.54
+    smooth_price := (4.0 * price + 3.0 * nz(price[1]) + 2.0 * nz(price[2]) + nz(price[3])) / 10.0
+    detrender := (0.0962 * smooth_price + 0.5769 * nz(smooth_price[2]) - 0.5769 * nz(smooth_price[4]) - 0.0962 * nz(smooth_price[6])) * smooth_factor
+    q1 := (0.0962 * detrender + 0.5769 * nz(detrender[2]) - 0.5769 * nz(detrender[4]) - 0.0962 * nz(detrender[6])) * smooth_factor
+    i1 := nz(detrender[3])
+    ji := (0.0962 * i1 + 0.5769 * nz(i1[2]) - 0.5769 * nz(i1[4]) - 0.0962 * nz(i1[6])) * smooth_factor
+    jq := (0.0962 * q1 + 0.5769 * nz(q1[2]) - 0.5769 * nz(q1[4]) - 0.0962 * nz(q1[6])) * smooth_factor
+    i2 := i1 - jq
+    q2 := q1 + ji
+    i2 := 0.2 * i2 + 0.8 * nz(i2[1])
+    q2 := 0.2 * q2 + 0.8 * nz(q2[1])
+    re := i2 * nz(i2[1]) + q2 * nz(q2[1])
+    im := i2 * nz(q2[1]) - q2 * nz(i2[1])
+    re := 0.2 * re + 0.8 * nz(re[1])
+    im := 0.2 * im + 0.8 * nz(im[1])
+    if im != 0.0 and re != 0.0
+        dc_phase := math.atan(im / re)
+    float delta_phase = dc_phase - nz(dc_phase[1])
+    if math.abs(delta_phase) < 0.1
+        delta_phase := nz(delta_phase[1])
+    if delta_phase != 0.0
+        float temp_period = 6.28318530718 / delta_phase
+        inst_period := 0.33 * temp_period + 0.67 * nz(inst_period[1])
+    trend_mode := inst_period > (1.5 * dcperiod) ? 1 : 0
+    trend_mode
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(hlc3, "Source")
+
+// Calculation
+trendmode = ht_trendmode(i_source)
+
+// Plot
+plot(trendmode, "Trend Mode", color=trendmode == 1 ? color.green : color.red, linewidth=3, style=plot.style_stepline)

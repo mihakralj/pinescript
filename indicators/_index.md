@@ -89,6 +89,8 @@
 | [HIGHEST](/indicators/numerics/highest.md) | Highest value | Numerics |
 | [HLV](/indicators/volatility/hlv.md) | High-Low Volatility | Volatility |
 | [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Trends (FIR) |
+| [HT_DCPERIOD](/indicators/cycles/ht_dcperiod.md) | Hilbert Transform Dominant Cycle Period | Cycles |
+| [HT_TRENDMODE](/indicators/dynamics/ht_trendmode.md) | Hilbert Transform Trend Mode | Dynamics |
 | [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Filters |
 | [HTIT](/indicators/trends_IIR/htit.md) | Hilbert Transform Instantaneous Trend | Trends (IIR) |
 | [HUBER](/indicators/errors/huber.md) | Huber Loss | Errors |

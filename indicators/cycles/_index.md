@@ -12,7 +12,7 @@
 | [STC](/indicators/cycles/stc.md) | Schaff Trend Cycle | Measures cycles and trends using a combination of Macd and stochastic calculations |
 | EACP | Ehlers Autocorrelation Periodogram | Ehlers indicator using autocorrelation to estimate the dominant cycle period |
 | HOMOD | Homodyne Discriminator | Ehlers indicator designed to measure the instantaneous frequency of market cycles |
-| HT_DCPERIOD| Hilbert Transform - Dominant Cycle Period | Uses Hilbert Transform to measure the dominant cycle period in price data |
+| [HT_DCPERIOD](/indicators/cycles/ht_dcperiod.md) | Hilbert Transform - Dominant Cycle Period | Uses Hilbert Transform to measure the dominant cycle period in price data |
 | HT_DCPHASE | Hilbert Transform - Dominant Cycle Phase | Uses Hilbert Transform to measure the phase of the dominant cycle |
 | HT_PHASOR | Hilbert Transform - Phasor Components | Provides the complex phasor components (real and imaginary) from the Hilbert Transform |
 | HT_SINE | Hilbert Transform - SineWave | Generates sine and lead-sine wave plots based on the dominant cycle identified by Hilbert Transform |

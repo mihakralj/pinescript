@@ -16,4 +16,4 @@
 | [SUPER](/indicators/dynamics/super.md) | SuperTrend | ATR-based trend following with dynamic support/resistance; green line below price = bullish, red above = bearish |
 | [TTM](/indicators/dynamics/ttm.md) | TTM Trend | Fast 6-period EMA with color-coded trend; green = bullish, red = bearish; part of John Carter's TTM system |
 | [AMAT](/indicators/dynamics/amat.md) | Archer Moving Averages Trends | Trend identification using multiple EMAs; requires alignment of fast/slow EMAs and directional movement |
-| HT_TRENDMODE | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase |
+| [HT_TRENDMODE](/indicators/dynamics/ht_trendmode.md) | Hilbert Transform - Trend vs Cycle Mode | Uses Hilbert Transform to determine if the market is in a trending or cycling phase |

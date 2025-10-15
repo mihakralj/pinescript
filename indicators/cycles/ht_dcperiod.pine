@@ -1,0 +1,55 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("HT_DCPERIOD: Hilbert Transform Dominant Cycle Period", "HT_DCPERIOD", overlay=false)
+
+//@function Calculates Hilbert Transform Dominant Cycle Period using Ehlers algorithm
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/ht_dcperiod.md
+//@param source Series to analyze for dominant cycle
+//@returns Dominant cycle period in bars (typically 6-50)
+ht_dcperiod(series float source) =>
+    var float smooth_price = 0.0
+    var float detrender = 0.0
+    var float i1 = 0.0
+    var float q1 = 0.0
+    var float ji = 0.0
+    var float jq = 0.0
+    var float i2 = 0.0
+    var float q2 = 0.0
+    var float re = 0.0
+    var float im = 0.0
+    var float period = 0.0
+    var float smooth_period = 0.0
+    float price = nz(source)
+    smooth_price := (4.0 * price + 3.0 * nz(price[1]) + 2.0 * nz(price[2]) + nz(price[3])) / 10.0
+    detrender := (0.0962 * smooth_price + 0.5769 * nz(smooth_price[2]) - 0.5769 * nz(smooth_price[4]) - 0.0962 * nz(smooth_price[6])) * (0.075 * nz(period[1]) + 0.54)
+    q1 := (0.0962 * detrender + 0.5769 * nz(detrender[2]) - 0.5769 * nz(detrender[4]) - 0.0962 * nz(detrender[6])) * (0.075 * nz(period[1]) + 0.54)
+    i1 := nz(detrender[3])
+    ji := (0.0962 * i1 + 0.5769 * nz(i1[2]) - 0.5769 * nz(i1[4]) - 0.0962 * nz(i1[6])) * (0.075 * nz(period[1]) + 0.54)
+    jq := (0.0962 * q1 + 0.5769 * nz(q1[2]) - 0.5769 * nz(q1[4]) - 0.0962 * nz(q1[6])) * (0.075 * nz(period[1]) + 0.54)
+    i2 := i1 - jq
+    q2 := q1 + ji
+    i2 := 0.2 * i2 + 0.8 * nz(i2[1])
+    q2 := 0.2 * q2 + 0.8 * nz(q2[1])
+    re := i2 * nz(i2[1]) + q2 * nz(q2[1])
+    im := i2 * nz(q2[1]) - q2 * nz(i2[1])
+    re := 0.2 * re + 0.8 * nz(re[1])
+    im := 0.2 * im + 0.8 * nz(im[1])
+    if re != 0.0 and im != 0.0
+        period := 6.28318530718 / math.atan(im / re)
+    period := math.max(6.0, math.min(50.0, period))
+    smooth_period := 0.2 * period + 0.8 * nz(smooth_period[1])
+    smooth_period
+
+// ---------- Main loop ----------
+
+// Inputs
+i_source = input.source(hlc3, "Source")
+
+// Calculation
+dcperiod = ht_dcperiod(i_source)
+
+// Plot
+plot(dcperiod, "Dominant Cycle Period", color=color.yellow, linewidth=2)
+hline(15, "Short Cycle", color=color.new(color.gray, 70), linestyle=hline.style_dashed)
+hline(30, "Long Cycle", color=color.new(color.gray, 70), linestyle=hline.style_dashed)
