@@ -11,3 +11,5 @@
 | [PSAR](/indicators/reversals/psar.md) | Parabolic Stop And Reverse | Trailing stop indicator that accelerates with trend; provides entry/exit signals via SAR dots |
 | [SWINGS](/indicators/reversals/swings.md) | Swing High/Low Detection | Identifies significant price reversals and swing points using configurable lookback |
 | [FRACTALS](/indicators/reversals/fractals.md) | Williams Fractals | Five-bar pattern identifying local peaks/troughs; marks support/resistance levels |
+| CHANDELIER | Chandelier Exit | ATR-based trailing stop; Highest High - (ATR × Multiplier) for long exits |
+| CKSTOP | Chande Kroll Stop | Dual stop system using True Range for both long and short positions |

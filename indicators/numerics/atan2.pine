@@ -1,0 +1,46 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Two-Argument Arctangent (ATAN2)", "ATAN2", overlay=false, precision=6)
+
+//@function Calculates the two-argument arctangent (atan2) with proper quadrant handling.
+// Formula: atan2(y, x) returns the angle θ in radians from the positive x-axis to the point (x, y)
+// Output range: (-π, π]
+// Handles all four quadrants correctly, avoiding the ambiguity of atan(y/x)
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/atan2.md
+//@param y The y-coordinate (opposite side)
+//@param x The x-coordinate (adjacent side)
+//@returns The angle in radians from -π to π
+atan2(series float y, series float x) =>
+    if y == 0.0 and x == 0.0
+        runtime.error("atan2: Both y and x cannot be zero")
+    ay = math.abs(y)
+    ax = math.abs(x)
+    angle = 0.0
+    if ax > ay
+        angle := math.atan(ay / ax)
+    else
+        angle := (math.pi / 2.0) - math.atan(ax / ay)
+    if x < 0.0
+        angle := math.pi - angle
+    if y < 0.0
+        angle := -angle
+    
+    angle
+
+// ---------- Main loop ----------
+
+// Inputs
+i_y = input.source(high - low, "Y (Numerator)")
+i_x = input.source((high + low) / 2.0, "X (Denominator)")
+
+// Calculation
+atan2Value = atan2(i_y, i_x)
+
+// Plot
+plot(atan2Value, "ATAN2", color=color.yellow, linewidth=2)
+hline(0, "Zero", color=color.gray)
+hline(1.5708, "π/2", color=color.new(color.gray, 70))
+hline(-1.5708, "-π/2", color=color.new(color.gray, 70))
+hline(3.1416, "π", color=color.new(color.gray, 70))
+hline(-3.1416, "-π", color=color.new(color.gray, 70))

@@ -86,6 +86,7 @@
 
 * [Numerics](/indicators/numerics/_index.md)
   * [ACCEL: Momentum change; 2nd derivative](/indicators/numerics/accel.md)
+  * [ATAN2: Two-Argument Arctangent](/indicators/numerics/atan2.md)
   * [CHANGE: Percentage Change](/indicators/numerics/change.md)
   * [EXP: Exponential Transformation](/indicators/numerics/exp.md)
   * [HIGHEST: Highest value](/indicators/numerics/highest.md)
@@ -269,6 +270,9 @@
   * [CG: Center of Gravity](/indicators/cycles/cg.md)
   * [EBSW: Ehlers Even Better Sinewave](/indicators/cycles/ebsw.md)
   * [HT_DCPERIOD: Hilbert Transform Dominant Cycle Period](/indicators/cycles/ht_dcperiod.md)
+  * [HT_DCPHASE: Hilbert Transform Dominant Cycle Phase](/indicators/cycles/ht_dcphase.md)
+  * [HT_PHASOR: Hilbert Transform Phasor Components](/indicators/cycles/ht_phasor.md)
+  * [HT_SINE: Hilbert Transform SineWave](/indicators/cycles/ht_sine.md)
   * [LUNAR: Lunar Phase](/indicators/cycles/lunar.md)
   * [PHASOR: Ehlers Phasor Analysis](/indicators/cycles/phasor.md)
   * [SINE: Sine Wave](/indicators/cycles/sine.md)

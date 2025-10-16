@@ -1,7 +1,7 @@
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
-indicator("HT_TRENDMODE: Hilbert Transform Trend Mode", "HT_TRENDMODE", overlay=false)
+indicator("HT_SINE: Hilbert Transform - SineWave", "HT_SINE", overlay=false)
 
 //@function Numerically stable atan2 implementation for quadrant-aware angle calculation
 //@param y Y-coordinate (imaginary/quadrature component)
@@ -23,11 +23,11 @@ atan2(series float y, series float x) =>
         angle := -angle
     angle
 
-//@function Determines if market is in trend mode (1) or cycle mode (0)
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/dynamics/ht_trendmode.md
-//@param source Series to analyze for trend/cycle state
-//@returns 1 for trend mode, 0 for cycle mode
-ht_trendmode(series float source) =>
+//@function Calculates Hilbert Transform SineWave and LeadSine
+//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/ht_sine.md
+//@param source Series to analyze for dominant cycle
+//@returns Tuple [sine, leadsine] - sine wave and lead sine wave
+ht_sine(series float source) =>
     var float smooth_price = 0.0
     var float detrender = 0.0
     var float i1 = 0.0
@@ -40,9 +40,9 @@ ht_trendmode(series float source) =>
     var float im = 0.0
     var float period = 15.0
     var float smooth_period = 15.0
-    var float dc_phase = 0.0
-    var float inst_period = 15.0
-    var int trend_mode = 0
+    var float phase = 0.0
+    var float sine = 0.0
+    var float leadsine = 0.0
     float price = nz(source)
     float bandwidth = 0.075 * smooth_period + 0.54
     smooth_price := (4.0 * price + 3.0 * nz(price[1]) + 2.0 * nz(price[2]) + nz(price[3])) / 10.0
@@ -65,16 +65,11 @@ ht_trendmode(series float source) =>
             period := 2.0 * math.pi / angle
     period := math.max(6.0, math.min(50.0, period))
     smooth_period := 0.33 * period + 0.67 * smooth_period
-    if im != 0.0 or re != 0.0
-        dc_phase := atan2(im, re)
-    float delta_phase = dc_phase - nz(dc_phase[1])
-    if math.abs(delta_phase) < 0.1
-        delta_phase := nz(delta_phase[1])
-    if delta_phase != 0.0
-        float temp_period = 2.0 * math.pi / delta_phase
-        inst_period := 0.33 * temp_period + 0.67 * nz(inst_period[1])
-    trend_mode := inst_period > (1.5 * smooth_period) ? 1 : 0
-    trend_mode
+    if i2 != 0.0 or q2 != 0.0
+        phase := atan2(q2, i2)
+    sine := math.sin(phase)
+    leadsine := math.sin(phase + math.pi / 4.0)
+    [sine, leadsine]
 
 // ---------- Main loop ----------
 
@@ -82,7 +77,9 @@ ht_trendmode(series float source) =>
 i_source = input.source(hlc3, "Source")
 
 // Calculation
-trendmode = ht_trendmode(i_source)
+[sine, leadsine] = ht_sine(i_source)
 
 // Plot
-plot(trendmode, "Trend Mode", color=trendmode == 1 ? color.green : color.red, linewidth=3, style=plot.style_stepline)
+plot(sine, "Sine", color=color.yellow, linewidth=2)
+plot(leadsine, "LeadSine", color=color.blue, linewidth=2)
+hline(0, "Zero", color=color.gray, linestyle=hline.style_solid)

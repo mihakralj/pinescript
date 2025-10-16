@@ -13,6 +13,7 @@
 | EACP | Ehlers Autocorrelation Periodogram | Ehlers indicator using autocorrelation to estimate the dominant cycle period |
 | HOMOD | Homodyne Discriminator | Ehlers indicator designed to measure the instantaneous frequency of market cycles |
 | [HT_DCPERIOD](/indicators/cycles/ht_dcperiod.md) | Hilbert Transform - Dominant Cycle Period | Uses Hilbert Transform to measure the dominant cycle period in price data |
-| HT_DCPHASE | Hilbert Transform - Dominant Cycle Phase | Uses Hilbert Transform to measure the phase of the dominant cycle |
-| HT_PHASOR | Hilbert Transform - Phasor Components | Provides the complex phasor components (real and imaginary) from the Hilbert Transform |
-| HT_SINE | Hilbert Transform - SineWave | Generates sine and lead-sine wave plots based on the dominant cycle identified by Hilbert Transform |
+| [HT_DCPHASE](/indicators/cycles/ht_dcphase.md) | Hilbert Transform - Dominant Cycle Phase | Uses Hilbert Transform to measure the phase angle of the dominant cycle (-π to π radians) |
+| [HT_PHASOR](/indicators/cycles/ht_phasor.md) | Hilbert Transform - Phasor Components | Returns I (In-phase) and Q (Quadrature) components for advanced cycle analysis and custom indicator development |
+| [HT_SINE](/indicators/cycles/ht_sine.md) | Hilbert Transform - SineWave | Generates sine and lead-sine wave plots with crossover signals for cycle timing and reversal identification |
+| DSP | Detrended Synthetic Price | Ehlers indicator that removes trend component to reveal underlying cycle structure |

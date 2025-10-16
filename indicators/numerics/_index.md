@@ -3,6 +3,7 @@
 | Code | Name | Key Characteristics |
 | ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
 | [ACCEL](/indicators/numerics/accel.md) | Momentum change; 2nd derivative | Measures the rate of change of momentum (second derivative of price) |
+| [ATAN2](/indicators/numerics/atan2.md) | Two-Argument Arctangent | Computes angle from positive x-axis to point (x,y) with full quadrant handling |
 | [CHANGE](/indicators/numerics/change.md) | Percentage Change | Calculates the percentage difference between current and previous values |
 | [EXP](/indicators/numerics/exp.md) | Exponential Transformation | Applies the exponential function (e^x) to data |
 | [HIGHEST](/indicators/numerics/highest.md) | Highest Value | Finds the maximum value over a specified lookback period |

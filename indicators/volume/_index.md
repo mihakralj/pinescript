@@ -25,6 +25,7 @@
 | [VO](/indicators/volume/vo.md) | Volume Oscillator | Difference between short and long volume moving averages showing volume momentum |
 | [VROC](/indicators/volume/vroc.md) | Volume Rate of Change | Measures the speed at which volume is changing over time |
 | [VWAP](/indicators/volume/vwap.md) | Volume Weighted Average Price | Average price weighted by volume, often used as a benchmark |
+| AVWAP | Anchored VWAP | VWAP calculated from a specific anchor point (date/event) rather than session start |
 | [VWAD](/indicators/volume/vwad.md) | Volume Weighted Accumulation/Distribution | Similar to ADL but weights accumulation/distribution by volume |
 | [VWMA](/indicators/volume/vwma.md) | Volume Weighted MA | Moving average where each price point is weighted by its volume |
 | [WAD](/indicators/volume/wad.md) | Williams Accumulation/Distribution | Measures cumulative buying/selling pressure by comparing closes to opens/highs/lows |

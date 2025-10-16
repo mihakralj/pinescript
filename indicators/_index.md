@@ -21,6 +21,7 @@
 | [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator | Oscillators |
 | [AROON](/indicators/dynamics/aroon.md) | Aroon | Dynamics |
 | [AROONOSC](/indicators/dynamics/aroonosc.md) | Aroon Oscillator | Dynamics |
+| [ATAN2](/indicators/numerics/atan2.md) | Two-Argument Arctangent | Numerics |
 | [ATR](/indicators/volatility/atr.md) | Average True Range | Volatility |
 | [ATRBANDS](/indicators/channels/atrbands.md) | ATR Bands | Channels |
 | [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | Volatility |
@@ -90,6 +91,9 @@
 | [HLV](/indicators/volatility/hlv.md) | High-Low Volatility | Volatility |
 | [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Trends (FIR) |
 | [HT_DCPERIOD](/indicators/cycles/ht_dcperiod.md) | Hilbert Transform Dominant Cycle Period | Cycles |
+| [HT_DCPHASE](/indicators/cycles/ht_dcphase.md) | Hilbert Transform Dominant Cycle Phase | Cycles |
+| [HT_PHASOR](/indicators/cycles/ht_phasor.md) | Hilbert Transform Phasor Components | Cycles |
+| [HT_SINE](/indicators/cycles/ht_sine.md) | Hilbert Transform SineWave | Cycles |
 | [HT_TRENDMODE](/indicators/dynamics/ht_trendmode.md) | Hilbert Transform Trend Mode | Dynamics |
 | [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Filters |
 | [HTIT](/indicators/trends_IIR/htit.md) | Hilbert Transform Instantaneous Trend | Trends (IIR) |
