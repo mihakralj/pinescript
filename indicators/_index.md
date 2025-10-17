@@ -61,8 +61,9 @@
 | [DEMA](/indicators/trends_IIR/dema.md) | Double Exponential MA | Trends (IIR) |
 | [DIRTY](/indicators/errors/dirty.md) | Dirty Data Detection | Errors |
 | [DMX](/indicators/dynamics/dmx.md) | Directional Movement Index | Dynamics |
-| [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DPO](/indicators/oscillators/dpo.md) | Detrended Price Oscillator | Oscillators |
+| [DSP](/indicators/cycles/dsp.md) | Detrended Synthetic Price | Cycles |
+| [DSMA](/indicators/trends_IIR/dsma.md) | Deviation-Scaled MA | Trends (IIR) |
 | [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Trends (FIR) |
 | [EBSW](/indicators/cycles/ebsw.md) | Ehlers Even Better Sinewave | Cycles |
 | [EWMA](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility | Volatility |
@@ -90,6 +91,7 @@
 | [HIGHEST](/indicators/numerics/highest.md) | Highest value | Numerics |
 | [HLV](/indicators/volatility/hlv.md) | High-Low Volatility | Volatility |
 | [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Trends (FIR) |
+| [HOMOD](/indicators/cycles/homod.md) | Homodyne Discriminator Dominant Cycle | Cycles |
 | [HT_DCPERIOD](/indicators/cycles/ht_dcperiod.md) | Hilbert Transform Dominant Cycle Period | Cycles |
 | [HT_DCPHASE](/indicators/cycles/ht_dcphase.md) | Hilbert Transform Dominant Cycle Phase | Cycles |
 | [HT_PHASOR](/indicators/cycles/ht_phasor.md) | Hilbert Transform Phasor Components | Cycles |
@@ -199,6 +201,7 @@
 | [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Trends (FIR) |
 | [SOLAR](/indicators/cycles/solar.md) | Solar Activity Cycle | Cycles |
 | [SSF](/indicators/filters/ssf.md) | Ehlers Super Smooth Filter | Filters |
+| [SSF-DSP](/indicators/cycles/ssfdsp.md) | SSF-Based Detrended Synthetic Price | Cycles |
 | [SKEW](/indicators/statistics/skew.md) | Skewness | Statistics |
 | [SLOPE](/indicators/numerics/slope.md) | Rate of change; 1st derivative | Numerics |
 | [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Trends (FIR) |
