@@ -4,7 +4,6 @@
 indicator("Hull Exponential Moving Average (HEMA)", "HEMA", overlay=true)
 
 //@function Calculates HEMA (Hull Exponential Moving Average) combining multiple EMA calculations
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/hema.md
 //@param source Series to calculate HEMA from
 //@param period Lookback period for calculation
 //@returns HEMA value that combines fast and slow EMAs with logarithmic weighting

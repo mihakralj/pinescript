@@ -1,114 +1,65 @@
-# SWINGS: Swing High/Low Detection
+# SWINGS - Swings
 
-[Pine Script Implementation of SWINGS](https://github.com/mihakralj/pinescript/blob/main/indicators/reversals/swings.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Swing High/Low Detection identifies significant price reversal points in financial markets by recognizing local peaks (swing highs) and troughs (swing lows). Developed as a core concept in technical analysis, swing points form the foundation of market structure analysis, trend identification, and support/resistance level determination.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. SWINGS addresses this by implementing `Detects swing highs and swing lows using lookback period` with parameterized inputs and direct state progression.
 
-A swing high occurs when a price peak is surrounded by lower prices on both sides, while a swing low occurs when a price trough is flanked by higher prices. These pivot points represent key moments where price momentum shifts, making them critical for understanding market behavior and identifying potential trading opportunities.
+## Design decision
 
-The indicator uses a configurable lookback period to determine how many bars must be lower/higher on each side to confirm a swing point. This flexibility allows traders to adjust sensitivity based on timeframe and market conditions - shorter periods detect more frequent but potentially less significant swings, while longer periods identify major structural pivots.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-* **Swing High Detection:** A price peak where both the preceding and following bars (within the lookback period) have lower highs, confirming local resistance
-* **Swing Low Detection:** A price trough where both the preceding and following bars (within the lookback period) have higher lows, confirming local support
-* **Lookback Period:** The number of bars on each side of a potential pivot required to confirm it as a valid swing point
-* **Market Structure:** Higher highs and higher lows indicate uptrends; lower highs and lower lows indicate downtrends
-* **Pivot Confirmation:** Swings are confirmed retrospectively (after the lookback period completes), creating a natural lag in detection
+### Functions
 
-## Common Settings and Parameters
+- `Detects swing highs and swing lows using lookback period`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Lookback | 5 | Number of bars on each side required to confirm swing | Lower (2-3) for intraday/scalping; higher (10-20) for swing trading and position trading |
-| Source High | high | Price series for swing high detection | Use close for less noise, high for true extremes |
-| Source Low | low | Price series for swing low detection | Use close for less noise, low for true extremes |
+### Parameters
 
-**Pro Tip:** The lookback period significantly affects signal quality versus frequency. For day trading on 5-minute charts, use lookback of 2-4 bars to catch quick reversals. For daily charts and swing trading, use 5-10 bars to filter out noise. For weekly charts identifying major structural pivots, consider 10-20 bars. Markets with higher volatility may benefit from larger lookback periods to avoid false signals.
+| Parameter | Purpose |
+|---|---|
+| `lookback` | Number of bars on each side to confirm swing point |
+| `source_high` | Price series for swing high detection (typically high) |
+| `source_low` | Price series for swing low detection (typically low) |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-The algorithm examines each bar and checks if it forms a local extremum by comparing it to surrounding bars. A swing high requires that the center bar's high is greater than all highs within the lookback period before and after it. Similarly, a swing low requires the center bar's low to be less than all lows in the surrounding period.
+- Tuple [swing_high, swing_low] with swing point values (na if no swing)
 
-**Technical formula:**
+## Input configuration
 
-For a bar at position `i` with lookback period `n`:
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_lookback` | `input.int` | default: `5`, label: "Lookback Period" |
+| `i_source_high` | `input.source` | default: `high`, label: "Source High" |
+| `i_source_low` | `input.source` | default: `low`, label: "Source Low" |
+| `i_show_high` | `input.bool` | default: `true`, label: "Show Swing High Lines" |
+| `i_show_low` | `input.bool` | default: `true`, label: "Show Swing Low Lines" |
+| `i_color_high` | `input.color` | default: `color.red`, label: "Swing High Color" |
+| `i_color_low` | `input.color` | default: `color.green`, label: "Swing Low Color" |
 
-**Swing High Detection:**
-```
-A swing high is confirmed at bar i-n when:
-high[i-n] > high[i-n-1] AND
-high[i-n] > high[i-n-2] AND
-...
-high[i-n] > high[i-n-n] AND
-high[i-n] > high[i-n+1] AND
-high[i-n] > high[i-n+2] AND
-...
-high[i-n] > high[i]
-```
+## Runtime profile
 
-**Swing Low Detection:**
-```
-A swing low is confirmed at bar i-n when:
-low[i-n] < low[i-n-1] AND
-low[i-n] < low[i-n-2] AND
-...
-low[i-n] < low[i-n-n] AND
-low[i-n] < low[i-n+1] AND
-low[i-n] < low[i-n+2] AND
-...
-low[i-n] < low[i]
-```
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The implementation uses an efficient O(n) rolling window approach to check all bars within the lookback period. Swing points are detected `n` bars after they occur due to the need to confirm that subsequent bars don't invalidate the pivot. This creates inherent lag but ensures reliability.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Swing highs and lows provide multiple analytical perspectives:
+## Verification checklist
 
-* **Trend Identification:**
-  - Uptrend: Series of higher swing highs AND higher swing lows
-  - Downtrend: Series of lower swing highs AND lower swing lows
-  - Sideways: Swing highs and lows remain within a defined range
-  - Trend break occurs when the pattern of higher/lower pivots is violated
-
-* **Support and Resistance:**
-  - Swing highs act as resistance levels where price previously reversed downward
-  - Swing lows act as support levels where price previously reversed upward
-  - Multiple tests of same swing level increase its significance
-  - Broken swing levels often flip roles (resistance becomes support and vice versa)
-
-* **Market Structure:**
-  - Break of Structure (BOS): Price breaks above previous swing high (bullish) or below previous swing low (bearish)
-  - Change of Character (CHOCH): Failure to create new swing high in uptrend or new swing low in downtrend
-  - These patterns signal potential trend reversals or continuations
-
-* **Entry and Exit Signals:**
-  - Enter long on break above swing high (breakout strategy)
-  - Enter short on break below swing low (breakdown strategy)
-  - Place stop-loss orders just beyond swing points to limit risk
-  - Use swing points to define risk-reward ratios for trade management
-
-* **Price Targets:**
-  - Measure distance between swing high and low to project targets
-  - Equal-leg moves: expect similar distance in next trend leg
-  - Fibonacci extensions from swing points provide potential target zones
-
-## Limitations and Considerations
-
-* **Confirmation Lag:** Swing points are identified retrospectively after `n` bars, meaning they appear `n` bars after the actual pivot occurred. This lag can delay entries and exits.
-* **False Signals in Choppy Markets:** During consolidation or ranging markets, many small swings may form that don't lead to significant moves, generating noise.
-* **Subjectivity:** Different lookback periods produce different swing points, leading to varying interpretations of market structure across timeframes.
-* **No Predictive Power Alone:** Swing points identify what has happened, not what will happen. They must be combined with other analysis for directional bias.
-* **Lookback Selection Impact:** Too small a lookback creates excessive signals and noise; too large misses important pivots and increases lag significantly.
-* **Not Suitable for Trending Markets:** In strong trends with minimal pullbacks, swing detection may produce few signals or miss the trend entirely.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Investopedia. (2024). "Swing Low Definition." Technical Analysis Concepts.
-* LuxAlgo. (2024). "Swing Highs and Lows: Basics for Traders." TradingView Technical Analysis.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Elder, A. (1993). Trading for a Living. John Wiley & Sons.
+- Source code: `indicators/reversals/swings.pine`
+- Documentation file: `indicators/reversals/swings.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/swings.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/swings.md

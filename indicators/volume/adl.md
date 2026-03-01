@@ -1,63 +1,54 @@
-# ADL: Accumulation/Distribution Line
+# ADL - Adl
 
-[Pine Script Implementation of ADL](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/adl.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Accumulation/Distribution Line (ADL) is a volume-based indicator that measures the cumulative flow of money into and out of a security. It identifies whether a security is being accumulated (bought) or distributed (sold) by analyzing price movements in relation to volume. Developed by Marc Chaikin in the 1970s, ADL expands on Joe Granville's earlier On-Balance Volume (OBV) concept by focusing not just on whether price closed higher or lower, but where the close occurred within the period's trading range.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ADL addresses this by implementing `Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow into and out of a security` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Volume-price relationship:** ADL measures buying and selling pressure by considering both trading volume and where prices close within their daily range
-* **Market application:** Particularly useful for identifying divergences between price action and underlying buying/selling pressure, which can signal potential reversals
-* **Timeframe suitability:** Works on all timeframes, but most effective on daily and weekly charts for identifying long-term accumulation or distribution patterns
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The ADL's core principle is that the close position within a period's range reflects the strength of buyers versus sellers. When prices close in the upper portion of the range, this suggests accumulation (buying pressure); conversely, closes in the lower portion suggest distribution (selling pressure). This concept is then weighted by the period's volume to determine money flow.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| src_high | high | High price used in MFM calculation | Rarely needs adjustment; typical high provides accurate range information |
-| src_low | low | Low price used in MFM calculation | Rarely needs adjustment; typical low provides accurate range information |
-| src_close | close | Close price used in MFM calculation | May adjust to other price points (OHLC4, HLC3) for different weighting approaches |
-| src_vol | volume | Trading volume used to weight money flow | Consider adjusting for specialized volume analysis or when using alternative volume metrics |
+- `Calculates the Accumulation/Distribution Line (ADL), a volume-based indicator that measures money flow into and out of a security`
 
-**Pro Tip:** Focus more on divergences between ADL and price rather than absolute ADL values - these divergences often provide the most actionable signals.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src_high` | The high price (default: built-in high) |
+| `src_low` | The low price (default: built-in low) |
+| `src_close` | The close price (default: built-in close) |
+| `src_vol` | The volume (default: built-in volume) |
 
-**Simplified explanation:**
-ADL calculates where price closed relative to its high-low range, multiplies this by volume to get "money flow," and maintains a running total of these values. When price closes in the upper half of the range, it adds volume (weighted by how high in the range); when price closes in the lower half, it subtracts volume (weighted by how low in the range).
+### Returns
 
-**Technical formula:**
-1. Money Flow Multiplier (MFM) = ((Close - Low) - (High - Close)) / (High - Low)
-   * Simplified as: (2 × Close - High - Low) / (High - Low)
-2. Money Flow Volume (MFV) = Money Flow Multiplier × Volume
-3. ADL = Previous ADL + Current Money Flow Volume
+- The cumulative ADL value representing buying/selling pressure
 
-> 🔍 **Technical Note:** The Pine Script implementation uses a persistent variable with `var` keyword to maintain the cumulative sum across bars. It handles edge cases efficiently - when high equals low (setting MFM to 0), when volume is NA (using 0), and preserves the previous cumulative sum when encountering NA values in the money flow calculation. The Money Flow Multiplier ranges from -1 to +1, with +1 at the high, -1 at the low, and 0 at the middle of the range.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-ADL is primarily used to confirm price trends and identify potential reversals through divergences:
+## Trade-offs
 
-* **Trend confirmation:** When both price and ADL move in the same direction, it confirms the current trend
-* **Bullish divergence:** When price makes a lower low but ADL makes a higher low, it suggests underlying buying pressure despite price weakness
-* **Bearish divergence:** When price makes a higher high but ADL makes a lower high, it suggests underlying selling pressure despite price strength
-* **Support/resistance breakthrough:** Strong ADL movements can help confirm valid breakouts from support or resistance levels
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Market conditions:** Less effective in low-volume environments where price movements may not reflect significant buying or selling pressure
-* **Lag factor:** As a cumulative indicator, ADL can be slow to signal reversals in strongly trending markets
-* **False signals:** Single-day volume spikes (earnings reports, news events) can distort the indicator without representing actual accumulation or distribution
-* **NA handling:** The implementation preserves the previous ADL value when encountering NA data, which maintains continuity but may not reflect actual market activity during those periods
-* **Scale dependency:** As a cumulative measure without normalization, ADL values are not comparable across different securities
-* **Parameter sensitivity:** While flexible with four input parameters, the relative importance of each price point (high, low, close) in the calculation can significantly affect the indicator's behavior
-* **Complementary tools:** Best used alongside momentum indicators and price action analysis rather than in isolation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* [Investopedia - Accumulation/Distribution Line](https://www.investopedia.com/terms/a/accumulationdistribution.asp)
-* [StockCharts - Accumulation Distribution Line](https://school.stockcharts.com/doku.php?id=technical_indicators:accumulation_distribution_line)
+- Source code: `indicators/volume/adl.pine`
+- Documentation file: `indicators/volume/adl.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/adl.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/adl.md

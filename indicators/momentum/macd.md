@@ -1,84 +1,63 @@
-# Moving Average Convergence Divergence (MACD)
+# MACD - Macd
 
-## Description
 
-The Moving Average Convergence Divergence (MACD) is one of the most popular momentum indicators, developed by Gerald Appel in the late 1970s. It shows the relationship between two exponential moving averages (EMAs) of a security's price and helps identify momentum, trend direction, and potential reversals.
+## Architectural problem
 
-The MACD consists of three components:
-- **MACD Line**: The difference between fast EMA and slow EMA
-- **Signal Line**: EMA of the MACD line
-- **Histogram**: Difference between MACD line and signal line
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MACD addresses this by implementing `Calculates MACD with fast and slow EMAs and signal line` with parameterized inputs and direct state progression.
 
-## Parameters
+## Design decision
 
-- **Fast Length** (default: 12): Period for the fast EMA
-- **Slow Length** (default: 26): Period for the slow EMA (must be greater than fast length)
-- **Signal Length** (default: 9): Period for the signal line EMA
-- **Source** (default: close): Input data series
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Formula
+## API surface
 
-```
-Fast EMA = EMA(source, fast_length)
-Slow EMA = EMA(source, slow_length)
-MACD Line = Fast EMA - Slow EMA
-Signal Line = EMA(MACD Line, signal_length)
-Histogram = MACD Line - Signal Line
-```
+### Functions
 
-## Usage
+- `Calculates MACD with fast and slow EMAs and signal line`
 
-### Interpretation
+### Parameters
 
-1. **Crossovers**:
-   - Bullish: MACD line crosses above signal line
-   - Bearish: MACD line crosses below signal line
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate MACD from |
+| `fast_length` | Period for fast EMA |
+| `slow_length` | Period for slow EMA |
+| `signal_length` | Period for signal line EMA |
 
-2. **Zero Line Crossovers**:
-   - Bullish: MACD line crosses above zero
-   - Bearish: MACD line crosses below zero
+### Returns
 
-3. **Divergence**:
-   - Bullish: Price makes lower lows while MACD makes higher lows
-   - Bearish: Price makes higher highs while MACD makes lower highs
+- Tuple [macd, signal, histogram] values
 
-4. **Histogram**:
-   - Growing histogram: Increasing momentum
-   - Shrinking histogram: Decreasing momentum
+## Input configuration
 
-### Trading Signals
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_fast` | `input.int` | default: `12`, label: "Fast Length" |
+| `i_slow` | `input.int` | default: `26`, label: "Slow Length" |
+| `i_signal` | `input.int` | default: `9`, label: "Signal Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-- **Buy Signal**: MACD line crosses above signal line (bullish crossover)
-- **Sell Signal**: MACD line crosses below signal line (bearish crossover)
-- **Trend Confirmation**: MACD line position relative to zero line confirms trend direction
+## Runtime profile
 
-## Implementation Details
+- Declared optimization: for performance and dirty data with embedded EMA calculations
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-- Uses custom EMA implementation with proper initialization
-- Stand-alone calculation without ta.* dependencies
-- Optimized for performance with O(1) complexity
-- Handles dirty data (NaN values) gracefully
-- Returns valid values from the first bar
+## Trade-offs
 
-## Visualization
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-- **MACD Line**: Yellow line (linewidth=2)
-- **Signal Line**: Orange line (linewidth=2)
-- **Histogram**: Column chart with dynamic colors:
-  - Bright teal: Positive and increasing
-  - Light teal: Positive and decreasing
-  - Light red: Negative and increasing
-  - Bright red: Negative and decreasing
-- **Zero Line**: Gray dashed line at zero level
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-- Appel, Gerald (2005). *Technical Analysis: Power Tools for Active Investors*
-- Murphy, John J. (1999). *Technical Analysis of the Financial Markets*
-- [StockCharts: MACD](https://school.stockcharts.com/doku.php?id=technical_indicators:moving_average_convergence_divergence_macd)
-
-## See Also
-
-- [EMA](/indicators/trends_IIR/ema.md) - Exponential Moving Average
-- [PPO](/indicators/momentum/ppo.md) - Percentage Price Oscillator (MACD percentage variant)
-- [APO](/indicators/oscillators/apo.md) - Absolute Price Oscillator (similar concept)
+- Source code: `indicators/momentum/macd.pine`
+- Documentation file: `indicators/momentum/macd.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/macd.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/macd.md

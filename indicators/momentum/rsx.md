@@ -1,112 +1,59 @@
-# RSX: Jurik Relative Strength Quality Index
+# RSX - Rsx
 
-[Pine Script Implementation of RSX](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/rsx.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Jurik Relative Strength Quality Index (RSX) is an enhanced version of the traditional RSI indicator that solves the common problem of signal noise and false triggers. By incorporating Jurik's JMA (Jurik Moving Average) smoothing algorithm, RSX provides cleaner, more accurate signals while maintaining excellent responsiveness to price changes.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. RSX addresses this by implementing `Calculates RSX (Relative Strength Xtra) using integrated JMA smoothing` with parameterized inputs and direct state progression.
 
-This implementation combines the momentum measurement capabilities of RSI with the advanced adaptive smoothing of JMA, resulting in an indicator that excels at identifying trend reversals and market conditions with significantly reduced noise.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Enhanced Signal Quality:** Eliminates the jitter common in traditional RSI
-* **Adaptive Smoothing:** Uses JMA to dynamically adjust to market conditions
-* **Precise Reversals:** Clearer identification of trend reversals
-* **Noise Reduction:** Minimizes false signals while maintaining responsiveness
-* **Zero-lag Design:** Maintains timing accuracy despite smoothing
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Lookback period for calculations | Lower for faster signals, higher for longer-term trends |
-| Source | Close | Price data used for calculation | Consider using hlc3 for more comprehensive price action |
+- `Calculates RSX (Relative Strength Xtra) using integrated JMA smoothing`
 
-**Pro Tip:** RSX's superior noise reduction allows for:
-- Tighter stop levels without premature triggers
-- More aggressive overbought/oversold thresholds
-- Earlier entry signals with higher confidence
-- Better trend acceleration analysis
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate RSX for |
+| `len` | Lookback period for RSX calculation |
 
-**Simplified explanation:**
-RSX combines RSI's momentum calculation with JMA's adaptive smoothing to produce cleaner signals.
+### Returns
 
-**Technical formula:**
-1. Calculate upward (U) and downward (D) price changes:
-   ```
-   U = max(close - close[1], 0)
-   D = max(close[1] - close, 0)
-   ```
+- RSX value measuring momentum with reduced noise
 
-2. Apply JMA smoothing to both U and D:
-   ```
-   smoothU = JMA(U, length)
-   smoothD = JMA(D, length)
-   ```
+## Input configuration
 
-3. Calculate the Relative Strength (RS) and RSX:
-   ```
-   RS = smoothU/smoothD
-   RSX = 100 - (100 / (1 + RS))
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `14`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The JMA algorithm provides superior smoothing through:
-> - Adaptive volatility measurement
-> - Phase-shifting for minimal lag
-> - Dynamic noise reduction
-> - Automatic adjustment to market conditions
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-RSX provides clearer signals across multiple analytical perspectives:
+## Trade-offs
 
-* **Trend Direction:**
-  - Above 50: Uptrend with reduced noise
-  - Below 50: Downtrend with reduced noise
-  - Crossovers more reliable due to reduced whipsaws
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Market Conditions:**
-  - Overbought/Oversold levels more reliable
-  - Cleaner divergence patterns
-  - Better trend strength measurement
-  - More accurate reversal signals
+## Verification checklist
 
-* **Signal Types:**
-  - Centerline (50) crossovers for trend changes
-  - Overbought/Oversold for reversals
-  - Divergence patterns for trend exhaustion
-  - Trend acceleration/deceleration analysis
-
-## Advantages Over Traditional RSI
-
-1. **Signal Quality:**
-   - Reduced false triggers
-   - Clearer trend direction
-   - More reliable reversals
-   - Better divergence identification
-
-2. **Trading Benefits:**
-   - Tighter stop placement
-   - Earlier entry signals
-   - More meaningful thresholds
-   - Reduced whipsaw risk
-
-3. **Analysis Improvements:**
-   - Clearer market structure
-   - Better trend quality assessment
-   - More accurate momentum measurement
-   - Enhanced reversal detection
-
-## Limitations and Considerations
-
-* **Learning Curve:** May require adjustment period for RSI users
-* **Complexity:** More sophisticated than simple momentum measures
-* **Resource Usage:** Higher computational requirements
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Jurik Research. "RSX - Relative Strength Quality Index". http://jurikres.com/catalog1/ms_rsx.htm#top
-* Jurik, M. "JMA - Jurik Moving Average". Jurik Research.
+- Source code: `indicators/momentum/rsx.pine`
+- Documentation file: `indicators/momentum/rsx.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rsx.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rsx.md

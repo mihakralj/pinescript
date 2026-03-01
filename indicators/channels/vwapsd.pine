@@ -4,7 +4,6 @@
 indicator("VWAP with Standard Deviation Bands", "VWAPSD", overlay=true)
 
 //@function Calculate VWAP with Standard Deviation Bands
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/vwapsd.md
 //@param src Source price series (typically hlc3)
 //@param vol Volume series
 //@param reset_condition Condition to reset VWAP calculation

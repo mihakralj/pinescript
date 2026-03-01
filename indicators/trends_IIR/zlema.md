@@ -1,76 +1,60 @@
-# ZLEMA: Zero-Lag Exponential Moving Average
+# ZLEMA - Zlema
 
-[Pine Script Implementation of ZLEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zlema.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Zero-Lag Exponential Moving Average (ZLEMA) is an advanced technical indicator designed to eliminate the lag typically associated with traditional moving averages. Developed by John Ehlers in the early 2000s, ZLEMA applies a unique predictive mechanism that estimates where price would be without lag and then applies exponential smoothing to this estimate.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ZLEMA addresses this by implementing `Calculates ZLEMA using zero-lag price and exponential smoothing with compensator` with parameterized inputs and direct state progression.
 
-Unlike standard moving averages that inevitably lag behind price action, ZLEMA uses a clever mathematical approach to "look ahead" by extrapolating price movement based on the observed lag. This makes it particularly valuable for traders who need early detection of trend changes and more responsive signals in fast-moving markets.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Lag elimination:** ZLEMA uses a predictive estimation technique to dramatically reduce the delay in signal generation compared to traditional moving averages
-* **Dynamic adjustment:** Automatically calculates and compensates for the appropriate lag period based on the smoothing factor
-* **Predictive mechanism:** Creates a "zero-lag" price estimate by doubling the current price and subtracting lagged price
-* **Enhanced responsiveness:** Provides significantly earlier trend change signals while maintaining reasonable noise filtering
+## API surface
 
-ZLEMA achieves its enhanced responsiveness by first creating a zero-lag price estimate (2 × current price - lagged price) and then applying exponential smoothing to this estimate. This approach effectively removes the lag component inherent in traditional moving average calculations.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates ZLEMA using zero-lag price and exponential smoothing with compensator`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls sensitivity/smoothness | Increase in choppy markets, decrease in strong trending markets |
-| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
-| Alpha override | auto | Direct control of smoothing factor | Manual setting allows fine-tuned behavior beyond standard length settings |
+### Parameters
 
-**Pro Tip:** Many professional traders use ZLEMA with shorter periods than they would use for traditional EMAs (e.g., ZLEMA(10) instead of EMA(20)) due to ZLEMA's inherent responsiveness and ability to provide earlier signals.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate ZLEMA from |
+| `period` | Smoothing period |
+| `alpha` | Optional smoothing factor (overrides period if provided) |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-ZLEMA works by first estimating what the price would be without lag by using a simple formula: double the current price and subtract the price from "lag" periods ago. This creates a "zero-lag" estimate that ZLEMA then smooths using an exponential moving average calculation.
+- ZLEMA value with zero-lag effect applied
 
-**Technical formula:**
-1. Calculate the appropriate lag:
-   lag = floor(1/α - 0.5)
-   (Where α is the smoothing factor)
+## Input configuration
 
-2. Create the zero-lag price estimate:
-   P_zero_lag = 2 × Current Price - Price_lag
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-3. Apply exponential smoothing:
-   ZLEMA = α × P_zero_lag + (1 - α) × ZLEMA_previous
+## Runtime profile
 
-Where:
-- α = 2/(length + 1)
-- Price_lag is the price from "lag" periods ago
+- Declared optimization: Uses lag compensation buffer and exponential warmup compensator for O(1) complexity
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** Advanced implementations use error compensation techniques to ensure accuracy from the first bar. This is calculated by tracking an error term (e_t = (1-α)e_t-1) and applying compensation: ZLEMA_compensated = ZLEMA/(1-error) when error exceeds a small epsilon value. Additionally, the lag period is dynamically adjusted when insufficient historical data is available.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-ZLEMA excels at identifying trend changes earlier than traditional moving averages, making it particularly valuable for both entry and exit signals:
+## Verification checklist
 
-- When price crosses above ZLEMA, it often signals the beginning of an uptrend
-- When price crosses below ZLEMA, it often signals the beginning of a downtrend
-- When a shorter-period ZLEMA crosses above a longer-period ZLEMA, it confirms an uptrend
-- When a shorter-period ZLEMA crosses below a longer-period ZLEMA, it confirms a downtrend
-- The slope of ZLEMA provides insight into trend strength and momentum
-
-ZLEMA performs exceptionally well in trending markets where its responsiveness helps capture more of the move, but it still provides reasonable smoothing to filter out minor fluctuations.
-
-## Limitations and Considerations
-
-* **Market conditions:** More prone to whipsaws in highly choppy, sideways markets due to enhanced responsiveness
-* **Overshooting:** Lag compensation can cause overshooting during sharp price reversals
-* **Parameter sensitivity:** Small changes in length/alpha can significantly impact behavior
-* **Computational complexity:** More complex to implement correctly than standard moving averages
-* **Complementary tools:** Best used with volume analysis or momentum indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Ehlers, J. (2001). "Zero Lag (EMA)," *Technical Analysis of Stocks & Commodities*.
-2. Ehlers, J. (2004). *Cybernetic Analysis for Stocks and Futures*. Wiley Trading.
-3. Vervoort, S. (2008). "Smoothing Techniques and their Applications in Trading," *Technical Analysis of Stocks & Commodities*.
+- Source code: `indicators/trends_IIR/zlema.pine`
+- Documentation file: `indicators/trends_IIR/zlema.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/zlema.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/zlema.md

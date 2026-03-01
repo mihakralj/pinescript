@@ -4,7 +4,6 @@
 indicator("Super Trend Bands (STBANDS)", "STBANDS", overlay=true)
 
 //@function Calculates Super Trend Bands using ATR-based dynamic support/resistance
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/stbands.md
 //@param source Series to calculate bands from
 //@param period Lookback period for ATR calculation
 //@param multiplier ATR multiplier for band distance

@@ -4,7 +4,6 @@
 indicator("Gaussian Filter (GAUSS)", "GAUSS", overlay=true)
 
 //@function Calculates Gaussian Filter using true convolution
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/gauss.md
 //@param src Series to calculate Gaussian filter from
 //@param sigma Standard deviation of the Gaussian kernel
 //@returns Gaussian filter value

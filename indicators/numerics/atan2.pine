@@ -7,7 +7,6 @@ indicator("Two-Argument Arctangent (ATAN2)", "ATAN2", overlay=false, precision=6
 // Formula: atan2(y, x) returns the angle θ in radians from the positive x-axis to the point (x, y)
 // Output range: (-π, π]
 // Handles all four quadrants correctly, avoiding the ambiguity of atan(y/x)
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/atan2.md
 //@param y The y-coordinate (opposite side)
 //@param x The x-coordinate (adjacent side)
 //@returns The angle in radians from -π to π

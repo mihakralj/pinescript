@@ -1,62 +1,58 @@
-# Lowest: Lowest Value
+# LOWEST - Lowest
 
-[Pine Script Implementation of Lowest](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/lowest.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Lowest Value indicator identifies the minimum price (or other data point) reached within a specified lookback period. This fundamental statistical measure serves as an essential component in many technical analysis tools and trading strategies. By tracking the lowest values over time, traders can identify significant price levels, support zones, and potential breakdown points.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. LOWEST addresses this by implementing `Lowest value over a specified period using a monotonic deque.` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Price extremes identification:** Lowest Value efficiently tracks price valleys, helping identify potential support levels and breakdown points
-* **Market application:** Particularly useful for setting take-profit targets, recognizing chart patterns, and defining entry points based on historical price action
-* **Timeframe suitability:** **All timeframes** are effective, with shorter periods (5-20) for identifying immediate support levels and longer periods (20-200) for significant historical support
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Lowest Value forms the foundation for numerous technical indicators and trading systems, including Donchian Channels, Price Envelopes, and various mean-reversion strategies.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Controls the lookback window for calculation | Decrease for more responsive readings in active markets, increase for identifying significant historical levels |
-| Source | Close | Data point used for calculation | Switch to Low for true price extremes, or use other price data based on specific strategy requirements |
+- `Lowest value over a specified period using a monotonic deque.`
 
-**Pro Tip:** Using multiple Lowest Value periods simultaneously (e.g., 20, 50, and 200) can help identify a hierarchy of support levels, with longer-period lows typically representing stronger support zones.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | {series float} Source series. |
+| `len` | {int} Lookback length. `len` > 0. |
 
-**Simplified explanation:**
-The Lowest Value indicator scans a specified number of previous bars and identifies the minimum value within that range. As each new bar forms, the indicator updates by dropping the oldest bar from its calculation and adding the newest one, continuously tracking the lowest value within the moving window.
+### Returns
 
-**Technical formula:**
-Lowest(Source, Length) = Minimum value of Source over the past Length bars
+- {series float} Lowest value of `src` for `len` bars back. Returns the lowest value seen so far during initial bars.
 
-Where:
+## Input configuration
 
-* Source is the price or data series being analyzed (typically Close or Low)
-* Length is the number of bars in the lookback period
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The implementation uses a monotonic deque algorithm with a circular buffer for efficiency. This approach maintains O(1) time complexity for each new bar, avoiding the need to scan all values in the lookback period repeatedly.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-Lowest Value provides valuable insights for various trading applications:
+## Trade-offs
 
-* **Support levels:** The lowest value over a significant period often acts as a psychological support level
-* **Breakdown trading:** When price breaks below the lowest value of recent periods, it often signals bearish momentum
-* **Entry signals:** Pullbacks that approach but respect the lowest values of recent periods can offer potential entry points
-* **Volatility assessment:** Comparing current price to recent lowest values helps gauge potential downside risk
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-The indicator is most effective when used alongside other technical tools that provide context about market conditions and trend direction.
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Market conditions:** Less predictive during highly volatile or gapping markets where price plunges beyond historical levels
-* **Lag factor:** By definition, the indicator looks backward and doesn't predict future price levels
-* **False breakdowns:** Price briefly falling below the lowest value doesn't always result in sustained downward momentum
-* **Complementary tools:** Best used in conjunction with volume analysis, trend indicators, or support/resistance confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Wilder, J. W. (1978). New Concepts in Technical Trading Systems. Trend Research.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/numerics/lowest.pine`
+- Documentation file: `indicators/numerics/lowest.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/lowest.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/lowest.md

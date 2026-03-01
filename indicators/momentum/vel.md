@@ -1,91 +1,59 @@
-# VEL: Jurik Velocity
+# VEL - Vel
 
-[Pine Script Implementation of VEL](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/vel.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Jurik Velocity (VEL) indicator is an advanced momentum oscillator that solves the classic trade-off between smoothness and lag. While traditional momentum indicators either show noisy signals or introduce significant lag when smoothed, VEL achieves exceptional smoothness without sacrificing timing, making it particularly valuable for identifying market reversals and trend changes.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. VEL addresses this by implementing `Calculates zero-lag velocity using JMA smoothing` with parameterized inputs and direct state progression.
 
-This implementation uses Jurik's JMA (Jurik Moving Average) algorithm to smooth the momentum signal while preserving its responsiveness to price changes. The result is a clean, noise-free momentum indicator that maintains excellent timing characteristics.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Zero-lag Smoothing:** Uses JMA to remove noise without introducing the lag typical of moving averages
-* **Adaptive Behavior:** Automatically adjusts to market volatility
-* **Clean Signals:** Eliminates the zig-zagging noise inherent in classic momentum
-* **Precise Timing:** Maintains responsiveness despite smoothing
-* **Versatile Application:** Effective across different timeframes and markets
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 10 | Lookback period for momentum calculation | Lower for faster signals, higher for longer-term trends |
-| Source | Close | Price data used for calculation | Consider using hlc3 for more comprehensive price action |
+- `Calculates zero-lag velocity using JMA smoothing`
 
-**Pro Tip:** While the default settings work well for most situations, consider:
-- Length 5-8 for intraday trading
-- Length 10-15 for daily charts
-- Length 20-30 for longer-term analysis
-- Increasing Power during high volatility periods
-- Adjusting Phase to fine-tune signal timing
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate velocity for |
+| `period` | Lookback period for velocity calculation |
 
-VEL combines two key components:
+### Returns
 
-1. **Raw Momentum Calculation:**
-   ```
-   raw_momentum = price(t) - price(t-n)
-   ```
-   Where:
-   - price(t) is the current price
-   - price(t-n) is the price n periods ago
+- Smoothed velocity value measuring rate of price change
 
-2. **JMA Smoothing:**
-   - Applies adaptive smoothing based on local volatility
-   - Uses phase-shifting to minimize lag
-   - Maintains sharp response to significant price moves
-   - Dampens noise without degrading signal quality
+## Input configuration
 
-> 🔍 **Technical Note:** The JMA algorithm provides superior smoothing by dynamically adjusting to market conditions. It uses volatility measurements and phase-shifting techniques to achieve smoothness without the lag typically associated with moving averages.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `10`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-## Interpretation Details
+## Runtime profile
 
-VEL provides clear signals through several key patterns:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Zero-line Crossovers:**
-  - Crossing above zero indicates positive momentum
-  - Crossing below zero indicates negative momentum
-  - More reliable due to reduced noise
+## Trade-offs
 
-* **Signal Strength:**
-  - Greater distance from zero indicates stronger momentum
-  - Convergence toward zero suggests momentum weakening
-  - Smooth curves make strength assessment more reliable
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Divergence Analysis:**
-  - Price making new highs while VEL makes lower highs (bearish)
-  - Price making new lows while VEL makes higher lows (bullish)
-  - Cleaner signals make divergences easier to identify
+## Verification checklist
 
-* **Trend Confirmation:**
-  - Consistent readings above/below zero confirm trend
-  - Magnitude of readings indicates trend strength
-  - Smooth curves reduce false trend change signals
-
-## Limitations and Considerations
-
-* **Adaptive Nature:** May require parameter adjustment across different markets
-* **Calculation Complexity:** More computationally intensive than simple momentum
-* **Parameter Sensitivity:** Phase and Power settings can significantly affect behavior
-* **Market Conditions:** Most effective in trending markets
-* **Timeframe Dependency:** Optimal settings vary by timeframe
-* **Volume Consideration:** Does not incorporate volume information
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Jurik, M. (2022). "JMA - Jurik Moving Average". Jurik Research.
-* Ehlers, J. (2002). "Advanced Digital Filters for Trading". Technical Analysis of Stocks & Commodities.
-* Kaufman, P. J. (2013). "Trading Systems and Methods" (5th ed.). Wiley Trading.
-* Murphy, J. J. (1999). "Technical Analysis of the Financial Markets". New York Institute of Finance.
+- Source code: `indicators/momentum/vel.pine`
+- Documentation file: `indicators/momentum/vel.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/vel.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/vel.md

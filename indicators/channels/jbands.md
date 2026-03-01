@@ -1,80 +1,59 @@
-# JBANDS: Jurik Volatility Bands
+# JBANDS - Jbands
 
-[Pine Script Implementation of JBANDS](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/jbands.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Jurik Volatility Bands (JBANDS) are adaptive price channels that apply Mark Jurik's proprietary smoothing techniques to create volatility-responsive price envelopes. Unlike traditional price channels with fixed or simple volatility-based widths, JBANDS utilize specialized adaptive filters that dynamically respond to changing market conditions. These bands automatically expand during volatile periods and contract during calm markets, creating a self-adjusting framework that adapts to each security's specific volatility characteristics without requiring parameter adjustments.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. JBANDS addresses this by implementing `Calculates JBANDS using adaptive techniques to adjust width to market volatility` with parameterized inputs and direct state progression.
 
-The implementation provided uses sophisticated calculation methods that avoid excessive lag while filtering market noise effectively. By employing non-linear volatility normalization and dynamic smoothing coefficients, JBANDS create a responsive but stable channel that can identify potential support and resistance levels, overbought/oversold conditions, and trend strength across various market environments and timeframes.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Adaptive envelope technology:** Bands automatically adjust their width based on dynamic volatility measurements specific to each security
-* **Non-linear volatility normalization:** Applies advanced scaling to volatility measurements to prevent overreaction to extreme price movements
-* **Noise-filtering methodology:** Proprietary smoothing techniques reduce market noise while maintaining responsiveness to genuine price movements
-* **Zero-lag band adjustment:** Unique mathematical approach that minimizes the lag typically associated with adaptive bands
+## API surface
 
-JBANDS stand apart from other channel indicators by their implementation of Jurik's specialized smoothing techniques. Instead of using fixed multipliers or linear scaling, they employ sophisticated mathematical transformations that create bands with exceptional noise rejection properties while maintaining responsiveness to significant market moves. This approach results in channels that are less prone to whipsaws during consolidation yet quickly adapt to changing market conditions.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates JBANDS using adaptive techniques to adjust width to market volatility`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 10 | Controls the lookback and smoothing intensity | Lower (5-8) for more responsiveness; higher (15-30) for more stability |
-| Source | Close | Price data used as a reference for calculations | Rarely needs adjustment for most applications |
+### Parameters
 
-**Pro Tip:** JBANDS work exceptionally well as a trailing stop mechanism. During uptrends, use the lower band as a dynamic stop level that adapts to market volatility; during downtrends, use the upper band. This approach helps avoid premature exits due to normal price fluctuations while protecting profits when genuine reversals occur.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate Jvolty from |
+| `period` | Number of bars used in the calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-JBANDS generate upper and lower bands by tracking the midpoint of the high-low range and creating adaptive envelope boundaries. The band width is dynamically adjusted based on relative volatility measurements that are normalized against recent average volatility, creating channels that are proportional to each security's specific trading characteristics.
+- JBANDS volatility bands
 
-**Technical formula:**
+## Input configuration
 
-1. Calculate volatility parameters from the period:
-   - LEN₁ = max(log₂(√(0.5*(period-1))) + 2.0, 0)
-   - POW₁ = max(LEN₁ - 2.0, 0.5)
-   - LEN₂ = √(0.5*(period-1)) * LEN₁
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-2. For each bar, calculate adaptive adjustment coefficient:
-   - Measure deviations (del₁, del₂) between price midpoint and current bands
-   - Calculate instantaneous volatility: volty = max(|del₁|, |del₂|)
-   - Normalize against average volatility: rvolty = volty / avgVolty
-   - Apply adaptive coefficient: Kv = (LEN₂/(LEN₂+1))^(√(rvolty^POW₁))
+## Runtime profile
 
-3. Adjust bands:
-   - upperBand = del₁ > 0 ? high : high - Kv * del₁
-   - lowerBand = del₂ < 0 ? low : low - Kv * del₂
+- Declared optimization: Uses adaptive volatility weighting with O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The implementation uses a specialized volatility averaging mechanism that applies non-linear transformations to price deviations. This approach prevents the excessive lag found in traditional moving averages while filtering out market noise effectively. The band adjustment coefficient (Kv) dynamically varies between near-zero (maximum adjustment) and one (minimum adjustment) based on the relative volatility, creating bands that are both stable and responsive.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-JBANDS provide several analytical perspectives:
+## Verification checklist
 
-* **Price containment:** In normal market conditions, price tends to oscillate between the bands, with breakouts indicating unusual strength or weakness
-* **Band width assessment:** Widening bands indicate increasing volatility, while narrowing bands suggest decreasing volatility and potential energy build-up
-* **Support and resistance levels:** The bands often function as dynamic support (lower band) and resistance (upper band) levels
-* **Trend strength analysis:** In strong trends, price will consistently touch or slightly penetrate the band in the direction of the trend
-* **Overbought/oversold identification:** Price reaching or exceeding the bands may indicate overbought or oversold conditions, especially when accompanied by momentum divergences
-* **Volatility squeeze detection:** When bands contract significantly, it often precedes a substantial price move (though not necessarily indicating the direction)
-* **Range-bound confirmations:** Price oscillating between bands without breaking out suggests a trading range environment
-
-## Limitations and Considerations
-
-* **Proprietary algorithm opacity:** Like most Jurik indicators, the exact mathematical foundations are not fully disclosed
-* **Parameter sensitivity:** Performance can vary based on period settings, though less dramatically than with many other indicators
-* **Complementary tool status:** Works best when combined with trend identification indicators rather than used in isolation
-* **Extreme volatility handling:** May lag in adjusting to sudden, extreme volatility events
-* **Data quality dependency:** Performs best with reliable price data; illiquid securities with wide spreads may create distorted signals
-* **Timeframe considerations:** While effective across timeframes, interpretation of signals may vary; what constitutes a significant band penetration differs between short and long timeframes
-* **Warm-up period:** Requires sufficient price history to establish reliable bands; early calculations may be less accurate
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Jurik, M. "JMA and JMA-Based Indicators." Jurik Research, 1998.
-* Harris, L. *Trading and Exchanges*. Oxford University Press, 2003.
-* Ehlers, J. F. "Jurik Filters." In *Cybernetic Analysis for Stocks and Futures*. Wiley, 2004.
-* Kaufman, P. J. "Adaptive Moving Averages and Channels." In *Trading Systems and Methods*. Wiley, 2013.
+- Source code: `indicators/channels/jbands.pine`
+- Documentation file: `indicators/channels/jbands.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/jbands.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/jbands.md

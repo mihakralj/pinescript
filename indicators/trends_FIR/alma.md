@@ -1,62 +1,63 @@
-# ALMA: Arnaud Legoux Moving Average
+# ALMA - Alma
 
-[Pine Script Implementation of ALMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/alma.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Arnaud Legoux Moving Average (ALMA) is a technical indicator that uses Gaussian distribution principles to reduce lag while maintaining effective noise filtering. Developed by Arnaud Legoux and Jean-Charles Doux in 2009, ALMA was introduced in their paper "Moving Average: A Gaussian Approach for Financial Applications." The indicator addresses a fundamental challenge in technical analysis: balancing smoothness with responsiveness. Unlike conventional moving averages, ALMA applies a Gaussian distribution curve to weight price data, with the ability to position this curve asymmetrically to emphasize more recent prices.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ALMA addresses this by implementing `Calculates ALMA using Gaussian distribution weights` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Gaussian weighting:** ALMA uses a bell curve to assign weights to price points, providing natural filtering properties that reduce noise while preserving important price signals
-* **Asymmetric window placement:** The Gaussian curve can be positioned off-center within the data window to reduce lag, with the peak typically placed toward recent prices
-* **Parameter flexibility:** Offers independent control of smoothness (sigma) and lag reduction (offset), allowing customization for different market conditions
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of ALMA is its application of signal processing principles to financial data. By implementing a Gaussian distribution with adjustable positioning, ALMA achieves better noise reduction with less lag than traditional moving averages of similar length. The shape and position of the weighting curve can be fine-tuned through two key parameters that work independently.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 9 | Controls the lookback period | Increase for smoother signals, decrease for more responsiveness |
-| Offset | 0.85 | Positions the Gaussian curve peak (0-1) | Higher values (closer to 1) reduce lag but may increase noise |
-| Sigma | 6 | Controls the width of the Gaussian curve | Lower values create sharper filters, higher values create smoother curves |
+- `Calculates ALMA using Gaussian distribution weights`
 
-**Pro Tip:** Start with the default parameters (9, 0.85, 6) and then adjust offset first - values above 0.85 emphasize recent price action, while lower values provide more smoothing with increased lag.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate ALMA from |
+| `period` | Lookback period - window size |
+| `offset` | Controls the Gaussian peak location (0 to 1) |
+| `sigma` | Controls the Gaussian distribution width/curve shape |
 
-**Simplified explanation:**
-ALMA creates a weighted average of prices where the weights follow a bell curve shape. This curve can be shifted toward recent prices and made narrower or wider. By controlling the curve's position and width, ALMA can reduce lag while still filtering out market noise effectively.
+### Returns
 
-**Technical formula:**
-1. Weight[i] = exp(-(i - m)² / (2 × s²))
-2. m = offset × (period - 1)
-3. s = period / sigma
-4. ALMA = Σ(Price[i] × Weight[i]) / Σ(Weight[i])
+- ALMA value, calculates from first bar using available data
 
-> 🔍 **Technical Note:** The offset parameter determines where the Gaussian peak is positioned. An offset of 1.0 places maximum weight on the most recent price, while 0.0 places it on the oldest price. The default 0.85 balances responsiveness with smoothness.
+## Input configuration
 
-## Interpretation Details
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `50`, label: "Period" |
+| `i_offset` | `input.float` | default: `0.85`, label: "Offset" |
+| `i_sigma` | `input.float` | default: `6.0`, label: "Sigma" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-ALMA can be used in various ways:
+## Runtime profile
 
-* **Trend identification:** The direction of ALMA indicates the prevailing trend
-* **Signal generation:** Crossovers between price and ALMA generate trade signals similar to other moving averages
-* **Support/resistance levels:** ALMA can act as dynamic support in uptrends and resistance in downtrends
-* **Trend strength assessment:** The angle of the ALMA line and its distance from price can indicate trend strength
-* **Filter optimization:** Adjusting offset and sigma allows for customization to specific trading styles and market conditions
+- Declared optimization: Uses Gaussian weighting with O(n) complexity per bar due to lookback loop
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Limitations and Considerations
+## Trade-offs
 
-* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
-* **Parameter sensitivity:** Performance highly dependent on parameter selection
-* **Complexity:** More complex to understand and optimize than simple moving averages
-* **Computational demands:** More intensive calculations than traditional moving averages
-* **Complementary tools:** Best used alongside momentum indicators and volume analysis for confirmation
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
+
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Legoux, A. and Doux, J. (2009). "Moving Average: A Gaussian Approach for Financial Applications." International Conference on Financial Engineering
-* [TradingView - ALMA Indicator](https://www.tradingview.com/script/vStKO5HK-ALMA-Arnaud-Legoux-Moving-Average/)
-
+- Source code: `indicators/trends_FIR/alma.pine`
+- Documentation file: `indicators/trends_FIR/alma.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_FIR/alma.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_FIR/alma.md

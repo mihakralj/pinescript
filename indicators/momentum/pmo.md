@@ -1,117 +1,64 @@
-# PMO: Price Momentum Oscillator
+# PMO - Pmo
 
-[Pine Script Implementation of PMO](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/pmo.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Price Momentum Oscillator (PMO) is a momentum indicator that measures the rate of change in price and applies double exponential smoothing to reduce noise. It combines the trend-following capabilities of Rate of Change (ROC) with the smoothing benefits of exponential moving averages, resulting in a cleaner momentum signal.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PMO addresses this by implementing `Calculates Price Momentum Oscillator using double-smoothed ROC` with parameterized inputs and direct state progression.
 
-This implementation uses a three-step calculation process: initial ROC computation followed by two stages of EMA smoothing. The indicator also includes a signal line for generating crossover signals.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Rate of Change:** Measures price momentum as percentage change
-* **Double Smoothing:** Reduces noise while maintaining responsiveness
-* **Signal Line:** Provides crossover signals for trade timing
-* **Zero Line:** Acts as trend direction reference
-* **Momentum Divergence:** Helps identify potential reversals
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| ROC Length | 35 | Base momentum calculation period | Lower for faster signals, higher for longer-term trends |
-| First Smoothing | 20 | Initial EMA smoothing period | Affects primary noise reduction |
-| Second Smoothing | 10 | Final EMA smoothing period | Fine-tunes signal smoothness |
-| Signal Line | 10 | Signal line EMA period | Adjust for optimal crossover signals |
+- `Calculates Price Momentum Oscillator using double-smoothed ROC`
 
-**Pro Tip:** Consider these combinations:
-- Short-term: ROC(20), Smooth1(10), Smooth2(5)
-- Medium-term: ROC(35), Smooth1(20), Smooth2(10)
-- Long-term: ROC(50), Smooth1(30), Smooth2(15)
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate PMO for |
+| `roc_len` | Lookback period for ROC calculation |
+| `smooth1_len` | First smoothing period |
+| `smooth2_len` | Second smoothing period |
 
-**Simplified explanation:**
-PMO applies double exponential smoothing to a percentage rate of change calculation.
+### Returns
 
-**Technical formula:**
-1. Calculate Rate of Change:
-   ```
-   ROC = 100 * (price - price[length]) / price[length]
-   ```
+- PMO value measuring smoothed momentum
 
-2. Apply first EMA smoothing:
-   ```
-   alpha1 = 2 / (smooth1_length + 1)
-   EMA1 = EMA1[1] * (1 - alpha1) + ROC * alpha1
-   ```
+## Input configuration
 
-3. Apply second EMA smoothing:
-   ```
-   alpha2 = 2 / (smooth2_length + 1)
-   PMO = EMA2[1] * (1 - alpha2) + EMA1 * alpha2
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_roc_len` | `input.int` | default: `35`, label: "ROC Length" |
+| `i_smooth1_len` | `input.int` | default: `20`, label: "First Smoothing Length" |
+| `i_smooth2_len` | `input.int` | default: `10`, label: "Second Smoothing Length" |
+| `i_signal_len` | `input.int` | default: `10`, label: "Signal Line Length" |
 
-4. Calculate Signal Line:
-   ```
-   Signal = EMA(PMO, signal_length)
-   ```
+## Runtime profile
 
-> 🔍 **Technical Note:** The double smoothing process helps eliminate noise while maintaining the indicator's responsiveness to significant price movements. The signal line provides additional confirmation through crossovers.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-PMO provides multiple analytical perspectives:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Trend Direction:**
-  - Above zero: Bullish momentum
-  - Below zero: Bearish momentum
-  - Slope indicates trend strength
+## Verification checklist
 
-* **Signal Line Crossovers:**
-  - PMO crosses above Signal: Bullish signal
-  - PMO crosses below Signal: Bearish signal
-  - More reliable near extremes
-
-* **Divergence Analysis:**
-  - Bullish: Price makes lower lows while PMO makes higher lows
-  - Bearish: Price makes higher highs while PMO makes lower highs
-  - Most effective at market extremes
-
-* **Overbought/Oversold:**
-  - Extreme readings suggest potential reversals
-  - More reliable with divergence confirmation
-  - Consider market context
-
-## Advantages
-
-1. **Signal Quality:**
-   - Reduced noise through double smoothing
-   - Clear trend direction identification
-   - Reliable momentum measurement
-
-2. **Trading Applications:**
-   - Multiple signal generation methods
-   - Trend confirmation capability
-   - Divergence identification
-   - Timing optimization
-
-3. **Versatility:**
-   - Works across different timeframes
-   - Adaptable to various markets
-   - Configurable for different trading styles
-
-## Limitations and Considerations
-
-* **Lag Component:** Double smoothing introduces some delay
-* **Parameter Sensitivity:** Results vary with different settings
-* **False Signals:** Can occur during ranging markets
-* **Context Required:** Best used with other indicators
-* **Timeframe Dependent:** Different settings needed for different timeframes
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Swannell, P. "Technical Analysis Using Multiple Timeframes". Marketplace Books.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/momentum/pmo.pine`
+- Documentation file: `indicators/momentum/pmo.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/pmo.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/pmo.md

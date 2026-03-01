@@ -1,93 +1,59 @@
-# RSI: Relative Strength Index
+# RSI - Rsi
 
-[Pine Script Implementation of RSI](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/rsi.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Relative Strength Index (RSI) is a momentum oscillator that measures the speed and magnitude of recent price changes to evaluate overbought or oversold conditions. Developed by J. Welles Wilder Jr. and introduced in his 1978 book "New Concepts in Technical Trading Systems", RSI has become one of the most popular and widely used technical indicators.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. RSI addresses this by implementing `Calculates Relative Strength Index using Wilder's smoothing` with parameterized inputs and direct state progression.
 
-This implementation uses Wilder's original smoothing method, which is equivalent to an exponential moving average with a smoothing factor of 1/length. The indicator oscillates between 0 and 100, with traditional overbought and oversold levels at 70 and 30 respectively.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Momentum measurement:** Compares upward and downward price movements
-* **Overbought/Oversold levels:** Identifies potential reversal points
-* **Wilder's smoothing:** Reduces noise while maintaining responsiveness
-* **Divergence analysis:** Helps identify potential trend reversals
-* **Centerline crossovers:** Indicates shift in momentum direction
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Lookback period for calculations | Lower for faster signals but more noise, higher for smoother readings |
-| Source | Close | Price data used for calculation | Consider using hlc3 for more comprehensive price action |
+- `Calculates Relative Strength Index using Wilder's smoothing`
 
-**Pro Tip:** While the default 14-period setting works well for daily charts, consider:
-- 9-11 periods for intraday trading
-- 14-21 periods for daily charts
-- 21-30 periods for weekly analysis
-- Adjusting overbought/oversold levels based on market conditions (e.g., 80/20 for strong trends)
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate RSI for |
+| `len` | Lookback period for RSI calculation |
 
-**Simplified explanation:**
-RSI compares the magnitude of recent gains to recent losses to determine overbought/oversold conditions and momentum.
+### Returns
 
-**Technical formula:**
-1. Calculate upward (U) and downward (D) price changes:
-   ```
-   U = max(close - close[1], 0)
-   D = max(close[1] - close, 0)
-   ```
+- RSI value measuring momentum and overbought/oversold conditions
 
-2. Apply Wilder's smoothing to both U and D:
-   ```
-   smoothU = prevU * (len-1)/(len) + U * 1/len
-   smoothD = prevD * (len-1)/(len) + D * 1/len
-   ```
+## Input configuration
 
-3. Calculate the Relative Strength (RS) and RSI:
-   ```
-   RS = smoothU/smoothD
-   RSI = 100 - (100 / (1 + RS))
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `14`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The implementation uses Wilder's smoothing method, which is similar to an EMA but with a specific alpha calculation (1/length). This provides a balance between responsiveness and noise reduction.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-RSI provides multiple analytical perspectives:
+## Trade-offs
 
-* **Overbought/Oversold:**
-  - Above 70: Potentially overbought
-  - Below 30: Potentially oversold
-  - Extreme readings suggest increased reversal probability
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Centerline (50) Analysis:**
-  - Above 50: Generally bullish momentum
-  - Below 50: Generally bearish momentum
-  - Crossovers can signal trend changes
+## Verification checklist
 
-* **Divergence Patterns:**
-  - Bullish: Price makes lower lows while RSI makes higher lows
-  - Bearish: Price makes higher highs while RSI makes lower highs
-  - Hidden divergences can confirm trend continuation
-
-* **Failure Swings:**
-  - Bullish: RSI falls into oversold, bounces, pulls back above oversold, then breaks resistance
-  - Bearish: RSI rises into overbought, drops, pulls back below overbought, then breaks support
-
-## Limitations and Considerations
-
-* **Lag Component:** Uses smoothed data, introducing some delay in signals
-* **False Signals:** Can remain in extreme territories during strong trends
-* **Timeframe Dependency:** Different periods needed for different timeframes
-* **Trend Context:** Best used alongside trend identification tools
-* **Range Bound:** May not capture absolute momentum magnitude
-* **Market Conditions:** More reliable in ranging markets than strong trends
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Wilder, J. W. (1978). New Concepts in Technical Trading Systems.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/momentum/rsi.pine`
+- Documentation file: `indicators/momentum/rsi.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rsi.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rsi.md

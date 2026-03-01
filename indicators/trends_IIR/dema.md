@@ -1,67 +1,60 @@
-# DEMA: Double Exponential Moving Average
+# DEMA - Dema
 
-[Pine Script Implementation of DEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/dema.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Double Exponential Moving Average (DEMA) is a technical indicator designed to reduce the inherent lag of traditional moving averages while maintaining signal quality. Developed by Patrick Mulloy in 1994 and published in the February issue of Technical Analysis of Stocks & Commodities magazine, DEMA has become a popular tool for traders seeking more responsive trend identification.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. DEMA addresses this by implementing `Calculates DEMA using double exponential smoothing with compensator` with parameterized inputs and direct state progression.
 
-DEMA accomplishes lag reduction by applying a formula that doubles the impact of the most recent data while filtering out excessive noise. This makes it particularly valuable in markets where traditional moving averages might be too slow to react to important price changes.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Lag reduction:** DEMA significantly reduces the delay in signal generation compared to standard EMAs, allowing for earlier identification of trend changes
-* **Signal quality preservation:** Despite its increased responsiveness, DEMA maintains reasonable smoothness by using double-smoothing techniques
-* **Strategic weighting:** Uses a mathematical formula (2× first EMA minus second EMA) that strategically amplifies recent price action while dampening noise
-* **Timeframe suitability:** Most effective in short to medium timeframes where quick reaction to price changes is critical
+## API surface
 
-DEMA achieves its enhanced responsiveness by essentially removing the lag component inherent in the EMA calculation itself, making it approximately twice as responsive as a standard EMA of the same length.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates DEMA using double exponential smoothing with compensator`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls sensitivity/smoothness | Increase in choppy markets, decrease in trending markets |
-| Source | Close | Data point used for calculation | Change to High/Low for volatility focus, or use HL2/HLC3 for balanced price representation |
-| Color threshold | 0 | Determines bullish/bearish visualization | Adjust based on instrument's typical momentum characteristics |
+### Parameters
 
-**Pro Tip:** Many professional traders use multiple DEMA lengths simultaneously (e.g., 9, 14, 21) to identify potential support/resistance levels where these lines converge or diverge.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate DEMA from |
+| `period` | Lookback period for DEMA calculation |
+| `alpha` | Optional smoothing factor (overrides period if provided) |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-DEMA works by calculating two EMAs, then applying a formula that doubles the weight of the first EMA and subtracts the second EMA to reduce lag. This mathematical approach effectively removes the delay component while preserving most of the smoothing benefits.
+- DEMA value from first bar with proper compensation
 
-**Technical formula:**
-DEMA = 2 × EMA(source, length) - EMA(EMA(source, length), length)
+## Input configuration
 
-Where:
-- EMA(source, length) is the first exponential moving average of the price data
-- EMA(EMA(source, length), length) is the second-order EMA (EMA of the first EMA)
-- The smoothing factor α = 2/(length + 1) is used for both EMA calculations
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** DEMA can be understood as a composite Infinite Impulse Response (IIR) filter that employs compensation techniques to both EMA stages, which improves accuracy of early values and reduces warm-up periods.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: Uses exponential warmup compensator on both EMA stages for O(1) complexity
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-DEMA excels at identifying trend changes earlier than traditional moving averages, making it valuable for both entry and exit signals. Its primary advantages include:
+## Trade-offs
 
-- Earlier trend change detection compared to standard EMAs
-- Cleaner signals during trending markets than simple moving averages
-- Reduced whipsaws compared to other lag-reduction techniques
-- Effective for both trend identification and dynamic support/resistance levels
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-For optimal results, traders typically use DEMA crossovers with price, multiple DEMA crossovers, or DEMA slope changes as actionable signals. The indicator performs particularly well in markets with clear trending behavior.
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Market conditions:** Performs poorly in highly choppy, sideways markets where the enhanced responsiveness can generate false signals
-* **Lag factor:** While reduced compared to standard EMAs, some lag remains and can still be problematic in extremely volatile conditions
-* **Overshooting:** Can overshoot the source signal during sharp reversals, potentially giving false reversal signals
-* **Parameter sensitivity:** Small changes in length can significantly alter behavior, requiring careful optimization
-* **Complementary tools:** Should be used alongside momentum indicators (RSI, MACD) or volume indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Mulloy, P. (1994). "Smoothing Data with Faster Moving Averages," *Technical Analysis of Stocks & Commodities*, February.
-2. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
+- Source code: `indicators/trends_IIR/dema.pine`
+- Documentation file: `indicators/trends_IIR/dema.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/dema.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/dema.md

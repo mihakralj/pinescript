@@ -1,64 +1,59 @@
-# SSF: Super Smooth Filter
+# SSF - Ssf
 
-[Pine Script Implementation of SSF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/ssf.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Super Smooth Filter (SSF) is an advanced signal processing tool designed to provide exceptional noise reduction with minimal lag. Developed by John Ehlers, this filter represents a significant improvement over traditional moving averages by using optimized pole pairs with complex conjugates to achieve superior filtering characteristics. SSF effectively removes market noise while preserving important price trends and transitions, making it particularly valuable for traders seeking clean signals without the excessive lag typically associated with heavy filtering. The filter's balanced performance makes it an excellent choice for trend identification in noisy market conditions.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. SSF addresses this by implementing `Calculates Supersmooth Lowpass Filter` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Enhanced smoothing:** Provides significantly better noise reduction than traditional moving averages with comparable lag
-* **Optimized pole placement:** Uses precisely positioned mathematical poles in the complex plane to achieve optimal filter response
-* **Market application:** Particularly effective for trend following strategies in noisy markets where traditional moving averages generate excessive whipsaws
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of SSF is its optimized coefficient design based on complex signal processing principles. By carefully positioning filter poles in the z-domain, SSF achieves a frequency response that effectively suppresses market noise while minimizing distortion of important trend information. This creates a much cleaner price representation than traditional moving averages without introducing the excessive lag typically associated with heavier filtering.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the cutoff period | Increase for smoother signals, decrease for more responsiveness |
-| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+- `Calculates Supersmooth Lowpass Filter`
 
-**Pro Tip:** Unlike regular moving averages, SSF maintains good responsiveness even at longer length settings - try using 1.5-2× the period you would normally use for a simple moving average to achieve superior smoothing with comparable lag.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate SSF from |
+| `length` | Number of bars used in the calculation |
 
-**Simplified explanation:**
-The Super Smooth Filter calculates a weighted average that gives most importance to recent prices and gradually less to older prices, but does so using a special mathematical pattern that achieves much better noise reduction than standard averages. It combines current price data with previous filter values using carefully designed coefficients.
+### Returns
 
-**Technical formula:**
-SSF_val = C1 × X + C2 × SSF₁ + C3 × SSF₂
+- SSF value with optimized smoothing
 
-Where coefficients are calculated as:
-- C1 = 1 - C2 - C3
-- C2 = 2 × exp(-√2π/N) × cos(√2π/N)
-- C3 = -exp(-2√2π/N)
-- N is the period
-- SSF₁, SSF₂ are the previous filter outputs
+## Input configuration
 
-> 🔍 **Technical Note:** The √2 factor in the coefficient calculations creates a "maximally flat" magnitude response (Butterworth characteristic), resulting in optimal smoothness in the passband while still maintaining good roll-off characteristics.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `20`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-## Interpretation Details
+## Runtime profile
 
-The Super Smooth Filter can be used in various trading strategies:
+- Declared optimization: Uses 2-pole IIR Butterworth-style filter with O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Trend identification:** The direction of SSF indicates the prevailing trend with minimal noise
-* **Signal generation:** Crossovers between price and SSF generate trade signals with reduced false positives
-* **Support/resistance levels:** SSF can act as dynamic support during uptrends and resistance during downtrends
-* **Multiple timeframe analysis:** Using SSF with different periods can identify trends across various time horizons
-* **Crossover systems:** Combining faster and slower SSF periods creates reliable crossover signals with minimal whipsaws
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Initialization period:** Requires several bars to stabilize after the start of data
-* **Parameter sensitivity:** Performance depends on appropriate length selection for the market being analyzed
-* **Extreme markets:** Very high volatility can still create occasional whipsaws
-* **Computational complexity:** More complex calculations than simple moving averages
-* **Complementary tools:** Best used alongside volume indicators and momentum oscillators for confirmation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013
-* Ehlers, J.F. "Rocket Science for Traders," Wiley, 2001
+- Source code: `indicators/filters/ssf.pine`
+- Documentation file: `indicators/filters/ssf.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/ssf.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/ssf.md

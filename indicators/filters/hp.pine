@@ -4,7 +4,6 @@
 indicator("Hodrick-Prescott Filter (HP)", "HP", overlay=false)
 
 //@function Calculates a causal approximation of the Hodrick-Prescott Filter trend component
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/hp.md
 //@param src Input series
 //@param lambda Smoothing parameter (lambda)
 //@returns HP Filter trend component series

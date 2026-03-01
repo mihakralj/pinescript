@@ -1,72 +1,61 @@
-# BPF: Bandpass Filter
+# BPF - Bpf
 
-[Pine Script Implementation of BPF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/bpf.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Bandpass Filter (BPF) is a specialized signal processing tool designed to isolate specific frequency components within a defined range. Developed by John Ehlers, a pioneer in applying signal processing techniques to financial markets, this filter addresses the challenge of extracting cyclical components from price data. By implementing a cascaded structure that combines highpass and lowpass filters, BPF effectively isolates market cycles of specific periodicities while removing both longer-term trends and shorter-term noise. This makes it particularly valuable for cycle analysis, seasonality detection, and trading strategies based on rhythm identification.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. BPF addresses this by implementing `Optimized Bandpass Filter combining highpass and lowpass filters` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Frequency isolation:** Combines highpass and lowpass filtering to extract market cycles within a specific frequency band
-* **Dual cutoff control:** Provides independent control over both the lower and upper cutoff periods
-* **Market application:** Particularly effective for identifying and trading dominant market cycles or seasonal patterns
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of BPF is its optimized cascade architecture that maintains maximum signal integrity within the passband while achieving excellent rejection of components outside the desired frequency range. Unlike simple moving averages that can only perform lowpass filtering, BPF can isolate specific market rhythms, allowing traders to focus on cycles of particular interest while eliminating both trend and noise components.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Lower Period | 10 | Controls the longer periodicity cutoff | Set to the maximum cycle length you want to analyze |
-| Upper Period | 2 | Controls the shorter periodicity cutoff | Set to the minimum cycle length you want to analyze |
-| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+- `Optimized Bandpass Filter combining highpass and lowpass filters`
 
-**Pro Tip:** For detecting market cycles, set the Lower Period to approximately 2-3× your suspected dominant cycle length and the Upper Period to about 1/3 of the dominant cycle length to isolate the primary cycle with good precision.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate bandpass from |
+| `lp` | Lower cutoff period for highpass filter |
+| `up` | Upper cutoff period for lowpass filter |
 
-**Simplified explanation:**
-The bandpass filter works by first removing long-term trends using a highpass filter (which blocks low frequencies), then removing short-term noise using a lowpass filter (which blocks high frequencies). What remains are the medium-term cycles that fall between these two cutoffs.
+### Returns
 
-**Technical formula:**
-BP = Lowpass(Highpass(X))
+- Optimized bandpass filtered series
 
-Highpass coefficients:
-- a1 = exp(-1.414π/lp)
-- b1 = 2a1 × cos(1.414 × 180/lp)
-- c1 = (1 + c2 - c3)/4
-- c2 = b1
-- c3 = -a1²
+## Input configuration
 
-Lowpass coefficients:
-- a2 = exp(-1.414π/up)
-- b2 = 2a2 × cos(1.414 × 180/up)
-- k1 = 1 - k2 - k3
-- k2 = b2
-- k3 = -a2²
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_lower` | `input.int` | default: `10`, label: "Lower Cutoff" |
+| `i_upper` | `input.int` | default: `20`, label: "Higher Cutoff" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The 1.414 (√2) factor in the coefficient calculations optimizes the filter response for maximally flat passband with minimal ringing, providing cleaner cycle extraction than simpler designs.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: Uses combined HP and LP IIR filters with O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-The Bandpass Filter can be used in various trading contexts:
+## Trade-offs
 
-* **Cycle identification:** Reveals dominant market cycles by isolating specific frequency bands
-* **Signal generation:** Zero-line crossings and peaks/troughs of the filtered output generate potential trade signals
-* **Market regime detection:** Changes in cycle amplitude indicate shifts between trending and ranging market conditions
-* **Seasonal analysis:** Isolate known seasonal patterns by setting period boundaries around the seasonal timeframe
-* **Multiple bandpass analysis:** Apply several bandpass filters with different period ranges to identify multiple cycle influences
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Parameter sensitivity:** Performance highly dependent on appropriate period settings
-* **Initialization period:** Requires several bars to stabilize after the start of data
-* **Phase shifts:** Some phase shift (timing delay) is unavoidable in the filtered output
-* **Amplitude variations:** Output amplitude varies based on the energy present in the selected frequency band
-* **Complementary tools:** Best used with phase analysis tools and amplitude-based indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013
-* Ehlers, J.F. "Rocket Science for Traders," Wiley, 2001
+- Source code: `indicators/filters/bpf.pine`
+- Documentation file: `indicators/filters/bpf.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/bpf.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/bpf.md

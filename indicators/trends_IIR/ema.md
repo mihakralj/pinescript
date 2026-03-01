@@ -1,80 +1,60 @@
-# EMA: Exponential Moving Average
+# EMA - Ema
 
-[Pine Script Implementation of EMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/ema.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Exponential Moving Average (EMA) is a fundamental technical indicator that calculates the average price over a specific period while giving more weight to recent price data. Introduced in the 1950s, EMA has become one of the most widely used technical indicators in financial markets due to its balance of responsiveness and stability.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. EMA addresses this by implementing `Calculates EMA using exponential smoothing with compensator` with parameterized inputs and direct state progression.
 
-Unlike the Simple Moving Average (SMA) which assigns equal weight to all data points, the EMA emphasizes recent price action, allowing traders to identify trend changes earlier while still filtering out short-term market noise. Its mathematical elegance has made it a standard tool in signal processing beyond finance, including communications, control systems, and data analysis.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Weighted price action:** EMA gives greater importance to recent prices through exponential weighting, providing a more timely response to current market conditions
-* **Smoothing mechanism:** Acts as a noise filter by reducing the impact of random price fluctuations while preserving meaningful trends
-* **Universal application:** Functions effectively across all timeframes from intraday to monthly charts, with parameter adjustments
-* **Foundation indicator:** Serves as the mathematical basis for numerous other technical indicators (MACD, PPO, etc.)
+## API surface
 
-EMA achieves its enhanced responsiveness by applying a smoothing factor (α) that determines how quickly older data points lose influence. This approach creates a moving average that reacts faster to price changes than an SMA of the same length while maintaining enough stability to identify the underlying trend.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates EMA using exponential smoothing with compensator`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 20 | Controls responsiveness/smoothness | Shorter for faster signals in active markets, longer for stable trends in ranging markets |
-| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
-| Alpha | 2/(length+1) | Determines weighting decay | Direct alpha manipulation allows for precise tuning beyond standard length settings |
+### Parameters
 
-**Pro Tip:** Many professional traders use multiple EMAs simultaneously (e.g., 8, 21, 50) to identify potential support/resistance levels and trend strength based on their relative positioning.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate EMA from |
+| `period` | Lookback period for EMA calculation |
+| `alpha` | Optional smoothing factor (overrides period if provided) |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-EMA works by calculating a weighted average where recent prices have more influence. The implementation uses an optimized form of the EMA calculation that is both computationally efficient and numerically stable.
+- EMA value from first bar with proper compensation
 
-**Technical formula:**
-The optimized EMA formula used in the implementation is:
-```
-EMA = α × (Price - EMA_previous) + EMA_previous
-```
+## Input configuration
 
-Where:
-- α = 2/(length + 1) is the smoothing factor
-- Price is the current price value
-- EMA_previous is the previous period's EMA value
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-This form is algebraically equivalent to the traditional EMA formula but offers better computational efficiency and numerical stability.
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation uses a sophisticated warm-up compensation method that provides accurate EMA values from the first bar. The compensation works by tracking an error term that decays exponentially:
-> ```
-> e = e × (1 - α)  // error term decay
-> compensation = 1 / (1 - e)  // compensation factor
-> EMA_corrected = compensation × EMA_raw
-> ```
-> This compensation automatically adjusts during the warm-up phase and becomes negligible (e ≤ 1e-10) once sufficient data has been processed, ensuring mathematically correct values throughout the entire data series without requiring a traditional warm-up period.
+- Declared optimization: Uses exponential warmup compensator for O(1) complexity and valid output from bar 1
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-The EMA's primary value comes from its ability to identify trend direction and potential reversal points:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-- When price is above EMA, the short-term trend is generally bullish
-- When price is below EMA, the short-term trend is generally bearish
-- When a shorter-period EMA crosses above a longer-period EMA, it often signals the beginning of an uptrend
-- When a shorter-period EMA crosses below a longer-period EMA, it often signals the beginning of a downtrend
-- The slope of the EMA indicates trend strength and momentum
+## Verification checklist
 
-EMAs work particularly well in trending markets but may generate false signals during sideways or choppy conditions. For optimal results, traders typically use EMA crossovers or EMA-price crossovers as part of a broader system that includes volume and momentum confirmation.
-
-## Limitations and Considerations
-
-* **Market conditions:** Less effective in choppy, sideways markets where price constantly crosses the average
-* **Lag factor:** While less significant than SMA, EMA still exhibits some lag, especially with longer lookback periods
-* **False signals:** Can produce whipsaws during consolidation phases or range-bound conditions
-* **Parameter sensitivity:** Small changes in length or alpha can significantly alter behavior
-* **Complementary tools:** Should be used with momentum indicators (RSI, MACD) or volume indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Murphy, J.J. (1999). *Technical Analysis of the Financial Markets*. New York Institute of Finance.
-2. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
-3. Ehlers, J. (2001). *Rocket Science for Traders*. John Wiley & Sons.
+- Source code: `indicators/trends_IIR/ema.pine`
+- Documentation file: `indicators/trends_IIR/ema.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/ema.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/ema.md

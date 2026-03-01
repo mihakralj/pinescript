@@ -4,7 +4,6 @@
 indicator("Ehlers Even Better Sinewave (EBSW)", "EBSW", overlay=false)
 
 //@function Calculates Ehlers Even Better Sinewave using HPF, SSF, and AGC
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/ebsw.md
 //@param src Series to calculate EBSW from
 //@param hpLength int Period for the High-Pass Filter
 //@param ssfLength int Period for the Super Smoother Filter

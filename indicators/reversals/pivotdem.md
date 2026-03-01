@@ -1,125 +1,63 @@
-# PIVOTDEM: DeMark Pivot Points
+# PIVOTDEM - Pivotdem
 
-[Pine Script Implementation of PIVOTDEM](https://github.com/mihakralj/pinescript/blob/main/indicators/reversals/pivotdem.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-DeMark Pivot Points, developed by renowned technical analyst Tom DeMark, represent a minimalist approach to pivot point analysis with only three levels: a pivot point (PP), one resistance (R1), and one support (S1). What makes this method unique is its conditional logic that adjusts the pivot calculation based on the relationship between the opening and closing prices, providing a directional bias built into the formula itself.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PIVOTDEM addresses this by implementing `Calculates DeMark pivot points with conditional open/close logic` with parameterized inputs and direct state progression.
 
-Introduced as part of DeMark's broader suite of technical indicators in the 1990s, this method reflects his philosophy of simplicity and trend-following. Rather than providing multiple support and resistance zones like traditional pivot systems, DeMark pivots identify the single most critical level for the upcoming period, making them ideal for traders who prefer clear, unambiguous decision points.
+## Design decision
 
-The conditional nature of DeMark pivots means they automatically adjust to market sentiment: bearish closes produce different pivots than bullish closes, creating a system that is inherently trend-aware rather than mean-reverting. This makes DeMark pivots particularly effective in trending markets where directional bias is more important than multiple price levels.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-* **Conditional Logic:** Different calculations based on Close vs Open relationship
-* **Minimalist Design:** Only 3 levels (PP, R1, S1) for clarity
-* **Trend Aware:** Built-in directional bias based on previous period's action
-* **Open Price Dependency:** Uses opening price unlike most pivot systems
-* **Single Decision Point:** PP is the primary reference level
+### Functions
 
-## Common Settings and Parameters
+- `Calculates DeMark pivot points with conditional open/close logic`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Timeframe | Daily | Period for pivot calculation | Use Weekly for swing trading, Monthly for position trading |
-| Show PP | True | Display pivot point | **Critical decision level - most important** |
-| Show R1 | True | Display resistance | Single resistance target above PP |
-| Show S1 | True | Display support | Single support target below PP |
+### Parameters
 
-**Pro Tip:** DeMark pivots excel in trending markets where a single clear reference level is more valuable than multiple zones. The pivot point (PP) is THE key level - **trade above PP in uptrends, below PP in downtrends**. The conditional calculation automatically adjusts the pivot higher after bullish closes and lower after bearish closes, creating a system that trends with the market. Use R1 and S1 as profit targets rather than reversal zones. This method works particularly well for trend-following strategies on higher timeframes (4H, Daily, Weekly) where you want one clear reference point without the noise of multiple levels.
+| Parameter | Purpose |
+|---|---|
+| `tf` | Timeframe for pivot calculation ("D", "W", "M") |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-DeMark pivots use conditional logic to calculate an intermediate value (X) based on whether the previous period closed higher, lower, or equal to its open, then derive PP, R1, and S1 from this adjusted value.
+- Tuple [pp, r1, s1] with pivot levels (only 3 levels)
 
-**Technical formula:**
+## Input configuration
 
-```
-Step 1: Calculate Conditional X Value
-If Close < Open (Bearish):
-    X = High + 2 × Low + Close
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_timeframe` | `input.timeframe` | default: `"D"`, label: "D" |
+| `i_show_pp` | `input.bool` | default: `true`, label: "Show Pivot Point" |
+| `i_show_r1` | `input.bool` | default: `true`, label: "Show R1" |
+| `i_show_s1` | `input.bool` | default: `true`, label: "Show S1" |
+| `i_color_pp` | `input.color` | default: `color.yellow`, label: "PP Color" |
+| `i_color_r` | `input.color` | default: `color.red`, label: "Resistance Color" |
+| `i_color_s` | `input.color` | default: `color.green`, label: "Support Color" |
 
-If Close > Open (Bullish):
-    X = 2 × High + Low + Close
+## Runtime profile
 
-If Close = Open (Neutral):
-    X = High + Low + 2 × Close
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-Step 2: Calculate Pivot Point
-PP = X / 4
+## Trade-offs
 
-Step 3: Calculate Resistance and Support
-R1 = X / 2 - Low
-S1 = X / 2 - High
-```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-> 🔍 **Technical Note:** The genius of DeMark's method lies in the conditional X calculation. When the previous period closes bearish (Close < Open), the formula weights Low twice, pulling the pivot down. When bullish (Close > Open), High is weighted twice, pushing the pivot up. When neutral (Close = Open), Close is weighted twice. This creates an automatic bias: bullish closes produce higher pivots (more room above, less below), and bearish closes produce lower pivots (more room below, less above). The division by 4 normalizes the calculation, while R1 and S1 are derived from X/2, creating asymmetric levels that reflect the previous period's directional momentum.
+## Verification checklist
 
-## Interpretation Details
-
-DeMark pivots require a trend-following mindset:
-
-* **Pivot Point (PP) - The Only Level That Matters:**
-  - **Primary reference for all trading decisions**
-  - Price above PP: Bullish bias, look for longs
-  - Price below PP: Bearish bias, look for shorts
-  - Crossovers of PP signal potential trend changes
-  - Most significant level in entire system
-
-* **Directional Bias Built-In:**
-  - Bullish previous close → Higher PP → Easier to stay bullish
-  - Bearish previous close → Lower PP → Easier to stay bearish
-  - PP naturally "trends" with the market
-
-* **R1 - Single Resistance:**
-  - Primary profit target for long positions
-  - Not typically a reversal level
-  - Breakthrough indicates strong uptrend
-  - Often reached in trending conditions
-
-* **S1 - Single Support:**
-  - Primary profit target for short positions
-  - Not typically a reversal level
-  - Breakdown indicates strong downtrend
-  - Often reached in trending conditions
-
-* **Trading Strategy:**
-  - **Trend Following:**
-    * Long when price is above PP and rising
-    * Short when price is below PP and falling
-    * Use R1/S1 as profit targets
-  
-  - **Breakout Trading:**
-    * Break above R1: Strong bullish signal
-    * Break below S1: Strong bearish signal
-    * PP breaks can signal trend reversals
-
-  - **Avoid Counter-Trend:**
-    * Don't fade R1 (selling resistance)
-    * Don't fade S1 (buying support)
-    * System designed for momentum, not mean reversion
-
-* **Comparison with Classic Pivots:**
-  - Fewer levels = clearer decisions
-  - Built-in bias vs. neutral reference
-  - Better for trending vs. ranging markets
-  - Single entry/exit levels vs. multiple zones
-
-## Limitations and Considerations
-
-* **Trending Markets Only:** Less effective in range-bound conditions
-* **Limited Levels:** Only 3 levels may miss intermediate support/resistance
-* **Open Price Dependency:** Requires reliable opening price data (gaps matter)
-* **No R2/R3 Targets:** Limited profit targets in extended moves
-* **Conditional Complexity:** Three different formulas can be confusing
-* **Less Universal:** Not as widely used as classic pivots; less "self-fulfilling"
-* **Pivot Dominance:** Over-reliance on single PP level can be limiting
-* **Gap Sensitivity:** Large gaps between close and open affect calculations significantly
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* DeMark, T. (1994). The New Science of Technical Analysis. Wiley.
-* DeMark, T. (2012). DeMark Indicators. Bloomberg Press.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/reversals/pivotdem.pine`
+- Documentation file: `indicators/reversals/pivotdem.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/pivotdem.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/pivotdem.md

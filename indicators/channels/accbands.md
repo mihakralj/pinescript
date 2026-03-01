@@ -1,74 +1,62 @@
-# ACCBANDS: Acceleration Bands
+# ACCBANDS - Accbands
 
-[Pine Script Implementation of ACCBANDS](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/accbands.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Acceleration Bands are a volatility-based indicator developed by Price Headley that creates an adaptive price envelope around a moving average. Unlike static percentage-based bands, Acceleration Bands dynamically adjust their width based on the spread between the high and low moving averages, making them responsive to changing market conditions. This approach allows the bands to expand during volatile periods and contract during consolidation, providing traders with a visual representation of potential support and resistance levels that adapt to market volatility.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ACCBANDS addresses this by implementing `Calculates Acceleration Bands using SMAs of high, low, close prices` with parameterized inputs and direct state progression.
 
-The implementation provided uses efficient circular buffers for SMA calculations, ensuring optimal performance while properly handling data gaps. By creating a channel that widens during increased volatility and narrows during reduced volatility, Acceleration Bands offer traders a framework for identifying potential reversal points and measuring trend strength based on a security's natural price rhythm rather than arbitrary fixed percentages.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Volatility-adaptive channels:** Bands automatically widen during volatile markets and narrow during calm periods
-* **Moving average foundation:** Uses simple moving averages of high, low, and close prices as the basis for calculations
-* **Dynamic bandwidth:** Band width determined by the difference between high and low SMAs, adjusted by a multiplier
-* **Symmetrical envelope:** Equal expansion above and below the centerline for balanced support/resistance identification
+## API surface
 
-Acceleration Bands stand apart from other channel indicators by directly incorporating the natural range of price movement (high-low differential) into their width calculation. This creates a more market-adaptive envelope that responds to the inherent volatility characteristics of each security, rather than applying a uniform volatility measure across different instruments.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Acceleration Bands using SMAs of high, low, close prices`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 20 | Lookback period for all SMA calculations | Shorter for more sensitivity to recent price action; longer for smoother, less reactive bands |
-| Factor | 2.0 | Multiplier for band width | Higher values for wider bands that trigger fewer signals; lower values for tighter bands with more frequent signals |
-| Sources | High, Low, Close | Price data components | Rarely needs adjustment unless analyzing specific price aspects |
+### Parameters
 
-**Pro Tip:** Try using a band factor of 1.0 for shorter-term trading and 2.0-3.0 for longer-term analysis. The sweet spot often lies where the bands contain approximately 85-90% of price action, with only significant moves breaking beyond the bands.
+| Parameter | Purpose |
+|---|---|
+| `high` | Series of high prices |
+| `low` | Series of low prices |
+| `close` | Series of close prices |
+| `period` | Lookback period for the moving average |
+| `factor` | Multiplier for band width calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Acceleration Bands calculate a middle line as the SMA of closing prices, then create upper and lower bands by adding or subtracting the high-low differential (multiplied by a factor) to or from this middle line.
+- tuple with [middle, upper, lower] band values
 
-**Technical formula:**
+## Input configuration
 
-Middle Band = SMA(Close, Period)
-Upper Band = SMA(High, Period) + [SMA(High, Period) - SMA(Low, Period)] × Factor
-Lower Band = SMA(Low, Period) - [SMA(High, Period) - SMA(Low, Period)] × Factor
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `20`, label: "Period" |
+| `i_factor` | `input.float` | default: `2.0`, label: "Factor" |
 
-Where:
-- SMA = Simple Moving Average
-- Period = Lookback period for calculations
-- Factor = Multiplier for the band width
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation uses circular buffers to efficiently maintain running sums for all three SMAs (high, low, close), ensuring O(1) computational complexity regardless of the lookback period. This approach prevents recalculating entire sums each bar while properly handling NA values that may appear in the source data.
+- Declared optimization: Uses circular buffers with O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-Acceleration Bands provide several analytical perspectives:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Overbought/oversold conditions:** Price reaching or exceeding the upper band suggests potentially overbought conditions; touching or breaking below the lower band indicates potentially oversold conditions
-* **Trend strength assessment:** Price persistently touching or moving beyond the bands in the direction of the trend indicates strong momentum
-* **Volatility measurement:** The distance between bands provides a visual representation of current market volatility
-* **Support and resistance levels:** During uptrends, the middle and lower bands often act as support; during downtrends, the middle and upper bands frequently serve as resistance
-* **Mean reversion signals:** Moves beyond the bands followed by reversals back inside often signal potential mean reversion opportunities
-* **Convergence/divergence patterns:** Narrowing bands indicate decreasing volatility, often preceding significant price moves; widening bands suggest increasing volatility
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Lagging component:** As a moving average-based indicator, Acceleration Bands exhibit some lag, potentially missing the initial stages of significant moves
-* **Parameter sensitivity:** Results can vary significantly based on period and factor settings
-* **False signals:** During strong trends, the bands may generate false reversal signals
-* **Ineffectiveness in trendless markets:** May produce excessive signals in consolidating or choppy markets
-* **Extreme volatility handling:** During periods of extremely high volatility, the bands may widen excessively, reducing their usefulness for near-term reversal identification
-* **Complementary tool:** Works best when combined with other technical indicators for confirmation
-* **Timeframe dependence:** Optimal parameters vary across different timeframes
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Headley, P. (2002). Big Trends in Trading: Strategies for Maximum Market Returns. John Wiley & Sons.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). John Wiley & Sons.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Pring, M. J. (2002). Technical Analysis Explained. McGraw-Hill.
+- Source code: `indicators/channels/accbands.pine`
+- Documentation file: `indicators/channels/accbands.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/accbands.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/accbands.md

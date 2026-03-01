@@ -4,7 +4,6 @@
 indicator("Standard Deviation Channel (SDCHANNEL)", "SDCHANNEL", overlay=true)
 
 //@function Calculates Standard Deviation Channel with lines N standard deviations above and below a linear regression line
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/sdchannel.md
 //@param period Lookback period for regression and standard deviation calculation (period > 1)
 //@param source Source series for analysis (usually close)
 //@param multiplier Standard deviation multiplier for channel distance (multiplier > 0)

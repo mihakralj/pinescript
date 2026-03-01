@@ -1,90 +1,55 @@
-# WAD: Williams Accumulation/Distribution
+# WAD - Wad
 
-[Pine Script Implementation of WAD](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/wad.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Williams Accumulation/Distribution (WAD) is a technical indicator developed by Larry Williams that measures the cumulative buying and selling pressure in a security. Unlike the traditional Accumulation/Distribution Line (ADL) which uses the relationship between close and the high-low range, WAD compares the current close to the previous close and uses true range calculations to determine the degree of accumulation or distribution. This approach makes WAD particularly sensitive to gap openings and provides a different perspective on money flow that emphasizes price momentum rather than intraday position.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. WAD addresses this by implementing `Calculates Williams A/D using price relationships and volume` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Close-to-close comparison:** Uses the relationship between current and previous closes to determine market direction
-* **True range integration:** Incorporates true range calculations to account for gaps and limit moves
-* **Momentum emphasis:** More sensitive to price momentum and gap movements than traditional A/D indicators
-* **Volume weighting:** Multiplies price movement by volume to reflect the intensity of buying/selling pressure
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-WAD's unique calculation method makes it particularly valuable for markets that experience frequent gaps or limit moves, as it accounts for these price discontinuities in a way that traditional A/D indicators cannot.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| High | high | High price series | Typically uses built-in high values |
-| Low | low | Low price series | Typically uses built-in low values |
-| Close | close | Close price series | Typically uses built-in close values |
-| Open | open | Open price series | Used for true range calculation |
-| Volume | volume | Volume series | Typically uses built-in volume data |
+- `Calculates Williams A/D using price relationships and volume`
 
-**Pro Tip:** WAD requires no parameter adjustments as it's a cumulative indicator. However, it's particularly effective when combined with price charts that clearly show gaps, as WAD will capture the accumulation/distribution occurring across these price discontinuities.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src_high` | High price series |
+| `src_low` | Low price series |
+| `src_close` | Close price series |
+| `src_open` | Open price series (if available) |
+| `src_vol` | Volume series |
 
-**Simplified explanation:**
-WAD calculates a Price Multiplier (PM) based on whether the current close is higher, lower, or equal to the previous close. When the close is higher, PM equals the close minus the true range low. When lower, PM equals the close minus the true range high. This value is then multiplied by volume and added to the cumulative total.
+### Returns
 
-**Technical formula:**
-```
-True Range High = MAX(High, Previous Close)
-True Range Low = MIN(Low, Previous Close)
+- WAD value representing Williams accumulation/distribution
 
-If Close > Previous Close:
-    PM = Close - True Range Low
-Else If Close < Previous Close:
-    PM = Close - True Range High
-Else:
-    PM = 0
+## Runtime profile
 
-A/D Value = PM × Volume
-WAD = Cumulative sum of A/D Values
-```
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-**Step-by-step calculation:**
-```
-1. Calculate True Range High: MAX(current high, previous close)
-2. Calculate True Range Low: MIN(current low, previous close)
-3. Determine Price Multiplier based on close direction:
-   - Up close: Close - True Range Low
-   - Down close: Close - True Range High
-   - Unchanged: 0
-4. Multiply PM by volume: A/D Value = PM × Volume
-5. Add to cumulative WAD: WAD += A/D Value
-```
+## Trade-offs
 
-> 🔍 **Technical Note:** WAD's use of true range calculations makes it superior to traditional A/D indicators in markets with gaps or limit moves. The true range ensures that the full price movement is captured, even when it extends beyond the current period's high-low range. This makes WAD particularly valuable for futures markets and stocks that frequently gap.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-WAD provides insights into cumulative buying and selling pressure:
-
-* **Trend confirmation:** Rising WAD confirms accumulation and upward price momentum; falling WAD confirms distribution and downward momentum
-* **Gap analysis:** WAD effectively captures accumulation/distribution that occurs across price gaps
-* **Divergence signals:** WAD diverging from price can provide early warning of potential trend changes
-* **Volume-confirmed moves:** Large WAD movements indicate strong volume backing behind price changes
-* **Support/resistance testing:** WAD behavior during support/resistance tests reveals the conviction behind price movements
-* **Momentum shifts:** Changes in WAD direction often precede changes in price momentum
-
-## Limitations and Considerations
-
-* **Cumulative nature:** As a cumulative indicator, WAD may trend in one direction for extended periods regardless of current conditions
-* **Volume dependency:** Requires reliable volume data; less effective in markets with poor volume reporting
-* **No absolute levels:** WAD values are relative; focus should be on direction and divergences rather than absolute levels
-* **Gap sensitivity:** While useful for gap analysis, unusual gap activity can temporarily distort the indicator
-* **Market structure:** More effective in liquid markets where volume accurately represents trading interest
-* **Lag factor:** Being cumulative, WAD may lag in identifying very short-term reversals
-* **Complementary analysis:** Best used alongside price action analysis, momentum indicators, and other volume tools
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Williams, Larry R. "The Secret of Selecting Stocks for Immediate and Substantial Gains." Windsor Books, 1972.
-* Williams, Larry R. "How I Made One Million Dollars Last Year Trading Commodities." Conceptual Management, 1973.
-* Pring, Martin J. "Technical Analysis Explained." McGraw-Hill, 2002.
+- Source code: `indicators/volume/wad.pine`
+- Documentation file: `indicators/volume/wad.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/wad.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/wad.md

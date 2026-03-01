@@ -1,63 +1,60 @@
-# RSQUARED: R-squared (Coefficient of Determination)
+# RSQUARED - Rsquared
 
-[Pine Script Implementation of RSQUARED](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rsquared.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-R-squared (Coefficient of Determination) is a statistical measure that quantifies how well one variable explains or predicts another. Unlike error metrics that focus on absolute deviations, R² expresses the proportion of variance in a dependent variable that is predictable from an independent variable or set of variables. Originating in regression analysis, R² has become a standard tool for evaluating model performance across statistics and financial analysis. For traders, it provides a normalized measure (typically 0-1) of how closely two signals track each other, making it particularly valuable for assessing how well indicators, price predictions, or trading systems capture market movements.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. RSQUARED addresses this by implementing `Calculates the R-squared (Coefficient of Determination) between two sources` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Variance explanation:** Quantifies the percentage of variance in one signal that is explained by another, providing a measure of explanatory power
-* **Goodness-of-fit:** Offers a scale-free metric where values closer to 1 indicate stronger relationships between signals
-* **Market application:** Particularly useful for evaluating how well technical indicators or prediction models capture overall market trends rather than point-by-point accuracy
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core principle of R² is its focus on explained variance rather than error magnitude. While metrics like MSE or MAE measure absolute differences between signals, R² measures relative predictive power by comparing prediction errors to the baseline variance of the target signal. This makes it especially valuable for understanding how much additional information a model or indicator provides beyond simply knowing the average value.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 20 | Controls the window for variance calculation | Increase for more stable evaluation of long-term relationships, decrease for detecting changing relationships |
-| Source 1 | close | Target signal (actual values) | Typically the value you're trying to predict or explain |
-| Source 2 | sma(close,20) | Predicting signal (model values) | The indicator, model output, or comparative signal |
+- `Calculates the R-squared (Coefficient of Determination) between two sources`
 
-**Pro Tip:** When evaluating trading indicators, compare their R² values during different market regimes (trending vs. ranging) to identify which indicators provide more explanatory power in specific conditions.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source1` | First series to compare (actual) |
+| `source2` | Second series to compare (predicted) |
+| `period` | Lookback period for averaging |
 
-**Simplified explanation:**
-R² compares how much error remains when using your model versus how much variation existed in the first place. If your model explains 80% of the original variation in the data, the R² is 0.80.
+### Returns
 
-**Technical formula:**
-R² = 1 - (Σ(Y₁ - Y₂)² / Σ(Y₁ - Y̅₁)²)
+- R-squared value averaging over the specified period
 
-Where:
-- Y₁ represents actual values
-- Y₂ represents predicted values
-- Y̅₁ represents the mean of actual values over the period
+## Input configuration
 
-> 🔍 **Technical Note:** While R² typically ranges from 0 to 1, it can become negative when models perform worse than simply using the mean as a prediction, indicating a fundamentally flawed model.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source" |
+| `i_period` | `input.int` | default: `100`, label: "Period" |
 
-## Interpretation Details
+## Runtime profile
 
-R² can be applied in various financial contexts:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Indicator evaluation:** Measure how much market movement is captured by technical indicators
-* **System validation:** Quantify how well trading systems track the intended market behavior
-* **Correlation strength:** Assess the relationship strength between different financial instruments
-* **Model selection:** Compare different predictive models to select the one with highest explanatory power
-* **Regime identification:** Track changes in R² to detect shifts in relationships between market variables
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Insensitivity to bias:** High R² can occur even with systematically biased predictions
-* **Over-optimization risk:** Adding variables almost always increases R², even with irrelevant predictors
-* **Non-linear relationships:** May not fully capture complex non-linear dependencies
-* **Outlier sensitivity:** Can be heavily influenced by a few extreme values
-* **Correlation vs. causation:** High R² doesn't necessarily imply causal relationships
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Draper, N.R. and Smith, H. "Applied Regression Analysis," Wiley, 1998
-* Alexander, C. "Market Models: A Guide to Financial Data Analysis," Wiley, 2001
+- Source code: `indicators/errors/rsquared.pine`
+- Documentation file: `indicators/errors/rsquared.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/rsquared.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/rsquared.md

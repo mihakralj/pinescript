@@ -4,7 +4,6 @@
 indicator("Endpoint Moving Average (EPMA)", "EPMA", overlay=true)
 
 //@function Calculates EPMA using linear weighting with endpoint emphasis
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/epma.md
 //@param source Series to calculate EPMA from
 //@param period Lookback period
 //@returns EPMA value with proper weight distribution

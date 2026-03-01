@@ -1,67 +1,59 @@
-# Stoch: Stochastic Oscillator
+# STOCH - Stoch
 
-[Pine Script Implementation of Stoch](https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/stoch.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Stochastic Oscillator is a momentum indicator that compares a security's closing price to its price range over a specific period. Developed by George Lane in the late 1950s, this indicator helps traders identify potential trend reversals by measuring the momentum of price movements. It operates on the principle that during uptrends, prices tend to close near their highs, and during downtrends, prices tend to close near their lows.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. STOCH addresses this by implementing `Calculates the Stochastic Oscillator (%K and %D). %K = 100 * (close - lowest_low(kLength)) / (highest_high(kLength) - lowest_low(kLength)). %D = SMA(%K, dPeriod). Uses efficient deque implementation for min/max and buffer-based SMA.` with parameterized inputs and direct state progression.
 
-By tracking the position of the current close relative to the recent trading range, the Stochastic Oscillator provides insights into overbought and oversold conditions, as well as potential momentum shifts before they become evident in price action. It consists of two lines: %K (the main line) and %D (the signal line), which oscillate between 0 and 100.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Range Position:** Measures where the current closing price is positioned relative to the high-low range over a specified period, expressed as a percentage.
-* **Momentum Shifts:** Identifies when price momentum may be changing before actual price reversals occur.
-* **Overbought/Oversold:** Provides clear threshold levels (typically 80 and 20) to identify potential market extremes.
-* **Signal Line Crossovers:** Generates trading signals when the fast %K line crosses the slower %D line.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-| :-------- | :------ | :------- | :------------ |
-| K Length | 14 | Period for calculating the %K line | Lower (5-9) for more signals but increased noise, higher (20+) for fewer but more reliable signals |
-| D Smooth | 3 | Smoothing period for the %D signal line | Lower values increase responsiveness, higher values reduce false signals |
+- `Calculates the Stochastic Oscillator (%K and %D). %K = 100 * (close - lowest_low(kLength)) / (highest_high(kLength) - lowest_low(kLength)). %D = SMA(%K, dPeriod). Uses efficient deque implementation for min/max and buffer-based SMA.`
 
-**Pro Tip:** Use divergences between the Stochastic Oscillator and price for powerful signals - when price makes a new high but the oscillator fails to make a new high, it often indicates weakening momentum that may precede a reversal.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `kLength` | `simple int` The lookback period for calculating highest high and lowest low. |
+| `dPeriod` | `simple int` The smoothing period for the %D line (SMA of %K). |
 
-**Simplified explanation:**
-The Stochastic Oscillator calculates where the current closing price sits relative to the highest high and lowest low over a specified period. If the close is near the high, the value approaches 100; if near the low, it approaches 0.
+### Returns
 
-**Technical formula:**
-%K = 100 × (Close - Lowest Low(K Length)) / (Highest High(K Length) - Lowest Low(K Length))
-%D = SMA(%K, D Smooth)
+- `[float, float]` A tuple containing the %K value and the %D value.
 
-Where:
+## Input configuration
 
-* Close is the most recent closing price
-* Lowest Low(K Length) is the lowest low over the K Length period
-* Highest High(K Length) is the highest high over the K Length period
-* SMA is the Simple Moving Average
+| Input variable | Type | Configuration |
+|---|---|---|
+| `kPeriod` | `input.int` | default: `14`, label: "K Length" |
+| `dPeriod` | `input.int` | default: `3`, label: "D Smooth" |
 
-> 🔍 **Technical Note:** The Pine Script implementation uses efficient dynamic arrays with deque operations for tracking highest highs and lowest lows, providing optimal performance with O(1) time complexity per bar. The algorithm carefully handles edge cases like equal highs/lows and maintains proper buffer management.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-The Stochastic Oscillator offers several approaches to market analysis:
+## Trade-offs
 
-* **Overbought/Oversold:** Readings above 80 suggest overbought conditions where prices may reverse down; readings below 20 suggest oversold conditions where prices may reverse up.
-* **%K/%D Crossovers:** When %K crosses above %D, it's often considered a bullish signal; when %K crosses below %D, it's considered a bearish signal.
-* **Divergences:** When price makes new highs/lows but the oscillator fails to confirm with corresponding extremes, it suggests potential reversal points.
-* **Centerline Crosses:** Movements above or below the 50 level can indicate the general market direction and momentum strength.
-* **Pattern Recognition:** Double tops or bottoms in the oscillator often precede significant price movements.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Range-Bound Effectiveness:** Works best in sideways, range-bound markets; may generate false signals during strong trends.
-* **Lagging Component:** Contains some inherent lag due to its smoothing components.
-* **Sensitivity to Settings:** Results vary significantly based on parameter choices - what works in one market may not work in another.
-* **False Signals:** Can remain in overbought/oversold territory for extended periods during strong trends, leading to premature signals.
-* **Complementary Analysis:** Should be used with other technical tools like trend indicators or volume studies for confirmation.
-* **Period Selection:** Shorter periods increase sensitivity but generate more noise; longer periods reduce false signals but decrease responsiveness.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Lane, G. C. (1984). Lane's Stochastics. Technical Analysis of Stocks and Commodities, 2(3).
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/oscillators/stoch.pine`
+- Documentation file: `indicators/oscillators/stoch.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/stoch.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/stoch.md

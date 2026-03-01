@@ -1,75 +1,52 @@
-# HL2: Midprice (High-Low Average)
+# HL2 - Hl2
 
-[Pine Script Implementation of HL2](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/hl2.pine)
 
-## Naming Convention
+## Architectural problem
 
-**HL2** is also known as **Median Price** in technical analysis literature. The term "median" here refers to the middle point between high and low, though mathematically it's the arithmetic mean (average) of the two extremes. This naming convention is widely adopted across trading platforms:
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HL2 addresses this by implementing `Calculates the midprice as the average of high and low prices` with parameterized inputs and direct state progression.
 
-- **HL2**: Common in Pine Script and many programming libraries
-- **Median Price**: Standard terminology in traditional technical analysis
-- **Midprice**: Financial mathematics terminology
-- **High-Low Average**: Descriptive name emphasizing the calculation method
+## Design decision
 
-## Overview and Purpose
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The HL2 indicator, also known as Midprice or High-Low Average, calculates the simple average of the high and low prices for each bar. This price transformation represents the midpoint of the bar's trading range and provides a less extreme measure of price than using either the high or low alone. HL2 is particularly useful as a smoothed price series that filters out the closing bias while maintaining sensitivity to the full range of price action within each period.
+## API surface
 
-This fundamental price transformation is widely used as an input source for other technical indicators, moving averages, and oscillators. By averaging the high and low, HL2 creates a balanced representation of price that is less susceptible to manipulation than the close price alone, making it valuable for analysis in markets with significant intrabar volatility.
+### Functions
 
-## Core Concepts
+- `Calculates the midprice as the average of high and low prices`
 
-* **Range midpoint:** Represents the exact center of each bar's price range, providing a balanced price measure
-* **Closing bias elimination:** Removes the emphasis on closing prices, focusing instead on the full trading range
-* **Volatility sensitivity:** Responds to the full extent of price movement within each period
-* **Price smoothing:** Creates a naturally smoothed price series by averaging extremes
+### Parameters
 
-## Common Settings and Parameters
+| Parameter | Purpose |
+|---|---|
+| `h` | High price series |
+| `l` | Low price series |
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| High | high | High price data | Typically not adjusted, uses standard high price |
-| Low | low | Low price data | Typically not adjusted, uses standard low price |
+### Returns
 
-**Pro Tip:** HL2 is particularly effective as a source input for moving averages and oscillators in volatile markets, as it reduces the impact of closing price manipulation while maintaining responsiveness to price action. Consider using HL2 instead of close prices for indicators in markets with wide intrabar ranges.
+- float The midprice value (high + low) * 0.5
 
-## Calculation and Mathematical Foundation
+## Runtime profile
 
-**Simplified explanation:**
-HL2 calculates the arithmetic mean of the high and low prices, representing the midpoint of each bar's trading range.
+- Declared optimization: Uses multiplication instead of division for performance
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-**Technical formula:**
+## Trade-offs
 
-```
-HL2 = (High + Low) / 2
-```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Where:
-- High is the highest price reached during the period
-- Low is the lowest price reached during the period
+## Verification checklist
 
-> 🔍 **Technical Note:** This calculation is computationally efficient with O(1) complexity, requiring only a single addition and division per bar. The formula is deterministic and requires no historical data, making it suitable for real-time analysis.
-
-## Interpretation Details
-
-HL2 provides several analytical perspectives:
-
-* **Balanced price measure:** Represents the true center of each bar's range, unbiased by opening or closing positions
-* **Range visualization:** Shows the midpoint around which price oscillated during each period
-* **Smoothing effect:** Creates a naturally smoother price series than close prices, reducing noise
-* **Volume-independent:** Unlike VWAP, HL2 is not influenced by volume distribution
-* **Support/Resistance:** HL2 often acts as a natural support or resistance level within each bar
-
-## Limitations and Considerations
-
-* **Time-weighted bias:** Gives equal weight to high and low regardless of how long price stayed at those levels
-* **Volume ignorance:** Does not account for the volume traded at different price levels
-* **Gap sensitivity:** Can show sudden jumps on bars with large gaps between consecutive ranges
-* **No trend indication:** Simply represents price position without directional information
-* **Extreme sensitivity:** Captures extreme highs and lows that may represent brief spikes rather than sustained levels
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Kaufman, P. J. (2013). Trading Systems and Methods. John Wiley & Sons.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Achelis, S. B. (2000). Technical Analysis from A to Z. McGraw-Hill.
+- Source code: `indicators/numerics/hl2.pine`
+- Documentation file: `indicators/numerics/hl2.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/hl2.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/hl2.md

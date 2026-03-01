@@ -4,7 +4,6 @@
 indicator("Quadruple EMA (QEMA)", "QEMA", overlay=true)
 
 //@function Calculates QEMA using quadruple exponential smoothing with compensator
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/qema.md
 //@param source Series to calculate QEMA from
 //@param period Lookback period for QEMA calculation
 //@param alpha Optional smoothing factor (overrides period if provided)

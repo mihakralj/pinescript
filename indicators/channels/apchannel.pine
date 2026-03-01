@@ -4,7 +4,6 @@
 indicator("Andrews' Pitchfork (AP)", "AP", overlay=true)
 
 //@function Calculates Andrews' Pitchfork lines based on three pivot points
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/apchannel.md
 //@param p1_back Bars back to first pivot point (leftmost)
 //@param p2_back Bars back to second pivot point (middle)
 //@param p3_back Bars back to third pivot point (rightmost)

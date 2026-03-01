@@ -1,138 +1,60 @@
-# HT_SINE: Hilbert Transform - SineWave
+# HT_SINE - Ht Sine
 
-[Pine Script Implementation of HT_SINE](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/ht_sine.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Hilbert Transform SineWave (HT_SINE) is a cycle visualization indicator developed by John Ehlers that generates sine and lead-sine wave plots based on the dominant market cycle identified through Hilbert Transform analysis. Unlike simple sine wave indicators that assume a fixed cycle period, HT_SINE adapts to the actual dominant cycle present in the market, providing a dynamic representation of cyclical behavior. The lead-sine component leads the sine wave, offering early signals of potential cycle turning points.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HT_SINE addresses this by implementing `Numerically stable atan2 implementation for quadrant-aware angle calculation` with parameterized inputs and direct state progression.
 
-This indicator transforms the complex phase information from Hilbert Transform analysis into intuitive sine wave visualizations that oscillate between -1 and +1. By plotting both the sine wave (current cycle position) and lead-sine wave (advanced cycle position), traders can identify cycle peaks, troughs, and transitions. Crossovers between the sine and lead-sine waves often coincide with significant price turning points, making this a valuable tool for timing entries and exits in cyclical markets.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Sine Wave**: Visual representation of the dominant cycle position; oscillates smoothly between -1 and +1
-* **Lead Sine Wave**: Phase-advanced version of sine wave; leads by delta_phase/period for early signals
-* **Dynamic Phase**: Uses instantaneous phase from Hilbert Transform rather than fixed cycle assumption
-* **Adaptive Cycle**: Automatically adjusts to dominant cycle period detected in price data
-* **Crossover Signals**: Sine/LeadSine crossovers indicate potential cycle turning points
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | hlc3 | Price data for cycle analysis | Use close for simpler signals; hlc3 for smoother, more comprehensive cycle detection |
+- `Numerically stable atan2 implementation for quadrant-aware angle calculation`
+- `Calculates Hilbert Transform SineWave and LeadSine`
 
-**Pro Tip:** Watch for crossovers between the sine and lead-sine waves as potential cycle reversal signals. When lead-sine crosses above sine near the trough (-1), it suggests an upcoming cycle bottom. When lead-sine crosses below sine near the peak (+1), it suggests an upcoming cycle top. The indicator works best in ranging or cyclical markets; strong trends can produce less reliable signals as the cycle assumption breaks down.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `y` | Y-coordinate (imaginary/quadrature component) |
+| `x` | X-coordinate (real/in-phase component) |
+| `source` | Series to analyze for dominant cycle |
 
-**Simplified explanation:**
-HT_SINE uses Hilbert Transform to determine the dominant cycle's phase, then generates sine and lead-sine waves based on that phase for visual cycle representation.
+### Returns
 
-**Technical formula:**
+- Angle in radians from -π to π
 
-1. Smooth the price data:
-   ```
-   SmoothPrice = (4×Price + 3×Price[1] + 2×Price[2] + Price[3]) / 10
-   ```
+## Input configuration
 
-2. Detrend with adaptive bandwidth:
-   ```
-   Bandwidth = 0.075 × Period[1] + 0.54
-   Detrender = Hilbert_FIR(SmoothPrice) × Bandwidth
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `hlc3`, label: "Source" |
 
-3. Calculate Quadrature and In-phase components:
-   ```
-   Q1 = Hilbert_FIR(Detrender) × Bandwidth
-   I1 = Detrender[3]
-   ```
+## Runtime profile
 
-4. Apply Hilbert Transform:
-   ```
-   jI = Hilbert_FIR(I1) × Bandwidth
-   jQ = Hilbert_FIR(Q1) × Bandwidth
-   ```
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-5. Compute smoothed I2 and Q2:
-   ```
-   I2 = I1 - jQ
-   Q2 = Q1 + jI
-   I2 = 0.2×I2 + 0.8×I2[1]
-   Q2 = 0.2×Q2 + 0.8×Q2[1]
-   ```
+## Trade-offs
 
-6. Calculate phase using four-quadrant arctangent:
-   ```
-   if I2 > 0:
-       Phase = atan(Q2 / I2)
-   else if I2 < 0:
-       Phase = atan(Q2 / I2) ± π
-   else:
-       Phase = ±π/2
-   ```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-7. Compute phase change and alpha:
-   ```
-   DeltaPhase = max(Phase[1] - Phase, 1.0)
-   Alpha = DeltaPhase / Period
-   ```
+## Verification checklist
 
-8. Generate sine waves:
-   ```
-   Sine = sin(Phase)
-   LeadSine = sin(Phase + Alpha)
-   ```
-
-Where `Hilbert_FIR` is a finite impulse response filter with coefficients [0.0962, 0.5769, 0, -0.5769, -0.0962].
-
-> 🔍 **Technical Note:** The lead-sine component is phase-advanced by alpha (DeltaPhase/Period), causing it to lead the sine wave. The minimum DeltaPhase constraint of 1.0 prevents division issues when phase changes slowly. The sine waves are bounded between -1 and +1, providing normalized cycle visualization regardless of price magnitude.
-
-## Interpretation Details
-
-HT_SINE provides cycle visualization and timing signals through multiple perspectives:
-
-* **Wave Position:**
-  - Sine ≈ +1: Cycle peak (potential sell zone)
-  - Sine ≈ 0: Mid-cycle (transition zone)
-  - Sine ≈ -1: Cycle trough (potential buy zone)
-  - Regular oscillation indicates clean cyclical behavior
-
-* **Crossover Signals:**
-  - LeadSine crosses above Sine: Potential bullish reversal signal
-  - LeadSine crosses below Sine: Potential bearish reversal signal
-  - Crossovers near extremes (+1 or -1) are most reliable
-  - Multiple rapid crossovers suggest choppy, non-cyclical conditions
-
-* **Wave Separation:**
-  - Wide separation: Strong, clear cycle in progress
-  - Narrow separation: Weak or transitioning cycle
-  - Consistent spacing: Steady cycle frequency
-  - Erratic spacing: Cycle instability or trend dominance
-
-* **Extreme Levels:**
-  - Both waves at +1: Confirmed cycle peak
-  - Both waves at -1: Confirmed cycle trough
-  - Failure to reach extremes: Weakening cycle or trend emergence
-  - Extended time at extremes: Possible trend rather than cycle
-
-* **Lead-Lag Relationship:**
-  - Lead-sine consistently ahead: Normal cycle mode
-  - Lead-sine loses leadership: Cycle breaking down
-  - Waves synchronizing: Transitioning to trend mode
-  - Lead reversing direction first: Early warning signal
-
-## Limitations and Considerations
-
-* **Cycle Assumption:** Assumes market is in cyclical mode; less reliable during strong trends
-* **Lag Component:** Despite "lead-sine," overall indicator lags actual price action due to Hilbert Transform smoothing
-* **False Signals:** Can generate whipsaws in choppy, non-cyclical markets
-* **Trend Weakness:** Strong directional moves violate cycle assumptions, producing unreliable waves
-* **Period Dependency:** Relies on accurate dominant cycle detection; errors in period affect wave quality
-* **Visual Tool:** Best used as confirmation with other indicators rather than standalone timing tool
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J. F. (2004). "Cybernetic Analysis for Stocks and Futures." John Wiley & Sons.
-* Ehlers, J. F. (2001). "Rocket Science for Traders: Digital Signal Processing Applications." John Wiley & Sons.
-* Ehlers, J. F. (2013). "Cycle Analytics for Traders: Advanced Technical Trading Concepts." John Wiley & Sons.
+- Source code: `indicators/cycles/ht_sine.pine`
+- Documentation file: `indicators/cycles/ht_sine.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/ht_sine.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/ht_sine.md

@@ -1,63 +1,60 @@
-# RAE: Relative Absolute Error
+# RAE - Rae
 
-[Pine Script Implementation of RAE](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/rae.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Relative Absolute Error (RAE) is a normalized error metric that provides context to absolute errors by comparing them against a naive baseline model. Developed as an extension of traditional error metrics, RAE expresses prediction accuracy as a ratio rather than an absolute value, making it particularly valuable for comparative analysis. By dividing absolute prediction errors by the errors of a simple baseline (typically using the mean as a constant prediction), RAE offers a clear benchmark for model performance. This allows traders and analysts to determine whether a prediction model or indicator provides genuine value beyond what could be achieved with minimal effort.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. RAE addresses this by implementing `Calculates Relative Absolute Error between two sources using SMA for averaging` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Normalized measurement:** Expresses error relative to a naive baseline model, providing context to raw error values
-* **Performance benchmarking:** Creates a natural threshold (1.0) that distinguishes useful from non-useful models
-* **Market application:** Particularly effective for comparing prediction models across different financial instruments or timeframes
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of RAE is its incorporation of a reference model that establishes a minimum performance threshold. Unlike absolute metrics like MAE that can be difficult to interpret in isolation, RAE immediately reveals whether a model offers improvement over the simplest possible alternative. A value of 0.5, for instance, indicates the model reduces absolute error by 50% compared to simply using the mean as a prediction.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 20 | Controls the baseline and error averaging period | Increase for more stable benchmark comparison, decrease for more responsive evaluation |
-| Source 1 | close | Actual value signal | Typically the target value you're trying to predict |
-| Source 2 | sma(close,20) | Predicted value signal | The indicator or model output being evaluated |
+- `Calculates Relative Absolute Error between two sources using SMA for averaging`
 
-**Pro Tip:** When RAE hovers near 1.0, your model is adding little value beyond using the mean as a prediction. Consider either refining your model or switching to a simpler approach during these periods.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source1` | First series to compare (actual) |
+| `source2` | Second series to compare (predicted) |
+| `period` | Lookback period for error averaging |
 
-**Simplified explanation:**
-RAE compares how much error your model produces to how much error you'd get by just guessing the average. If your model's errors are half the size of this simple guessing approach, your RAE would be 0.5 - meaning your model is twice as good as the baseline.
+### Returns
 
-**Technical formula:**
-RAE = Σ|Y₁ - Y₂| / Σ|Y₁ - Y̅₁|
+- RAE value averaged over the specified period using SMA
 
-Where:
-- Y₁ represents actual values
-- Y₂ represents predicted values
-- Y̅₁ represents the mean of actual values over the period
+## Input configuration
 
-> 🔍 **Technical Note:** Unlike RSE which uses squared errors, RAE uses absolute errors, making it less sensitive to occasional large errors. This can provide a more balanced assessment of models in markets with occasional extreme movements.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source" |
+| `i_period` | `input.int` | default: `100`, label: "Period" |
 
-## Interpretation Details
+## Runtime profile
 
-RAE can be applied in various financial contexts:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Model evaluation:** Determine if prediction models offer meaningful improvement over simple alternatives
-* **Indicator assessment:** Measure whether technical indicators provide value beyond baseline strategies
-* **Strategy validation:** Verify that trading systems outperform naive approaches
-* **Market regime identification:** Track when predictive models gain or lose effectiveness
-* **Parameter optimization:** Tune model parameters to minimize RAE rather than absolute error
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Baseline dependency:** Performance heavily influenced by the choice of baseline model
-* **Instability with low variance:** Can approach infinity when the actual values show little variation
-* **Computational overhead:** Requires calculating and tracking both model errors and baseline errors
-* **Window sensitivity:** Both error and baseline depend on the chosen window length
-* **Complementary metrics:** Best used alongside absolute error measures for comprehensive evaluation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Witten, I.H. and Frank, E. "Data Mining: Practical Machine Learning Tools and Techniques," Morgan Kaufmann, 2005
-* Armstrong, J.S. and Collopy, F. "Error Measures for Generalizing About Forecasting Methods," International Journal of Forecasting, 1992
+- Source code: `indicators/errors/rae.pine`
+- Documentation file: `indicators/errors/rae.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/rae.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/rae.md

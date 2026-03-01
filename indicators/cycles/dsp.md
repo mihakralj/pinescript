@@ -1,102 +1,59 @@
-# DSP: Detrended Synthetic Price
+# DSP - Dsp
 
-[Pine Script Implementation of DSP](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/dsp.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Detrended Synthetic Price (DSP) is a cycle analysis indicator developed by John Ehlers that isolates the cyclical component of price action by subtracting a slower-period EMA from a faster-period EMA. Introduced in his work on digital signal processing for traders, DSP creates a band-pass filter effect that removes both long-term trends and short-term noise, revealing the dominant market cycle.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. DSP addresses this by implementing `Calculates Detrended Synthetic Price using Ehlers dual-EMA algorithm` with parameterized inputs and direct state progression.
 
-Unlike traditional detrending methods that use high-pass filters, Ehlers' DSP uses the difference between a quarter-cycle EMA and a half-cycle EMA relative to the dominant cycle period. This creates an in-phase output that oscillates around zero, with the amplitude and frequency revealing information about cycle strength and timing. The quarter-cycle smoother responds quickly to price changes while the half-cycle smoother provides the baseline reference, and their difference creates the band-pass effect.
+## Design decision
 
-DSP serves as both a standalone cycle indicator and a foundational component for more advanced Ehlers indicators. By isolating the dominant cycle component, it provides a clearer view of market rhythms without the contamination of longer-term trends or higher-frequency noise.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-* **Dual-EMA Structure:** Uses two independent EMAs at quarter-cycle (P/4) and half-cycle (P/2) periods derived from the dominant cycle
-* **Band-Pass Effect:** Quarter-cycle minus half-cycle creates a filter that passes the dominant cycle while attenuating trends and noise
-* **In-Phase Output:** The resulting oscillator is in-phase with the dominant cycle, providing clear timing signals
-* **Zero-Crossing Analysis:** Oscillations around zero line reveal cycle phase and potential reversal points
-* **Cycle Isolation:** Mathematically isolates the periodic component that matches the specified dominant cycle period
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Detrended Synthetic Price using Ehlers dual-EMA algorithm`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | hlc3 | Price data used for calculation | Use `close` for end-of-bar analysis, `hlc3` for balanced price representation |
-| Dominant Cycle Period | 40 | Period used to calculate quarter-cycle and half-cycle EMAs | Should match actual market cycle: 20-30 for faster cycles, 40-50 for standard, 60-80 for slower cycles |
+### Parameters
 
-**Pro Tip:** The Dominant Cycle Period should ideally be obtained from HT_DCPERIOD or other cycle measurement tools for adaptive behavior. For fixed analysis, 40 bars works well for daily charts (approximates a 2-month cycle). The quarter-cycle EMA (P/4 = 10) responds to short-term moves while the half-cycle EMA (P/2 = 20) provides the baseline, creating the band-pass effect.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to detrend |
+| `period` | Dominant cycle period for quarter/half-cycle EMA calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-DSP calculates two EMAs at periods that are fractions of the dominant cycle (quarter and half), then subtracts the slower from the faster to create an oscillator that isolates the cyclical component.
+- Detrended synthetic price (difference between quarter-cycle and half-cycle EMAs)
 
-**Technical formula:**
+## Input configuration
 
-1. Calculate quarter-cycle and half-cycle periods from dominant cycle:
-   ```
-   Fast_Period = round(Period / 4)
-   Slow_Period = round(Period / 2)
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `hlc3`, label: "Source" |
+| `i_period` | `input.int` | default: `40`, label: "Dominant Cycle Period" |
 
-2. Calculate alpha values for both EMAs:
-   ```
-   Alpha_Fast = 2 / (Fast_Period + 1)
-   Alpha_Slow = 2 / (Slow_Period + 1)
-   ```
+## Runtime profile
 
-3. Apply exponential smoothing with warmup compensation:
-   ```
-   EMA_Fast = EMA(Price, Fast_Period)
-   EMA_Slow = EMA(Price, Slow_Period)
-   ```
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-4. Calculate DSP as the difference:
-   ```
-   DSP = EMA_Fast - EMA_Slow
-   ```
+## Trade-offs
 
-> 🔍 **Technical Note:** The implementation uses unified warmup compensation to ensure both EMAs produce valid outputs from bar 1. The quarter-cycle EMA provides rapid response to price changes while the half-cycle EMA establishes the reference baseline. Their difference creates a band-pass filter centered on the dominant cycle period, effectively removing both low-frequency trends (longer than the cycle) and high-frequency noise (shorter than the cycle).
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-DSP provides cycle-focused market analysis through the isolated cyclical component:
-
-* **Zero-Line Crossovers:**
-  - Cross above zero: Cycle entering positive phase, potential bullish swing point
-  - Cross below zero: Cycle entering negative phase, potential bearish swing point
-  - Frequency of crossings indicates cycle period accuracy
-
-* **Amplitude Analysis:**
-  - Larger oscillations: Stronger cycle component, more pronounced market rhythm
-  - Smaller oscillations: Weaker cycle, market transitioning or range-bound
-  - Amplitude expansion signals increasing cycle strength
-  - Amplitude contraction signals decreasing cycle strength
-
-* **Cycle Phase Identification:**
-  - Peak values: Cycle approaching maximum (consider taking profits on longs)
-  - Trough values: Cycle approaching minimum (consider taking profits on shorts)
-  - Rate of change indicates cycle acceleration/deceleration
-  - Zero crossings mark quarter-cycle phase transitions
-
-* **Trend vs Cycle:**
-  - Regular oscillations with consistent amplitude: Strong cyclic behavior
-  - Irregular oscillations or bias to one side: Trend component present
-  - Dampening oscillations: Cycle weakening, possible trend emergence
-  - Amplifying oscillations: Cycle strengthening, rhythmic behavior dominant
-
-## Limitations and Considerations
-
-* **Period Dependency:** Effectiveness depends on correct Dominant Cycle Period setting relative to actual market cycles
-* **Cycle Variability:** Market cycles are not perfectly periodic; DSP reveals approximate rhythms that can shift over time
-* **Trend Sensitivity:** During strong trends, the oscillator may show persistent bias rather than symmetric oscillations
-* **Lag Component:** EMAs introduce some lag, though the dual-EMA structure minimizes this compared to single moving averages
-* **Requires Cycle Knowledge:** Best results when dominant cycle period is known (use HT_DCPERIOD for adaptive approach)
-* **Not Predictive Alone:** Shows current cycle state; combine with other tools for timing and confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J. F. (2013). *Cycle Analytics for Traders: Advanced Technical Trading Concepts*. Wiley Trading.
-* Ehlers, J. F. (2001). *Rocket Science for Traders: Digital Signal Processing Applications*. Wiley Trading.
-* Ehlers, J. F. (2004). *Cybernetic Analysis for Stocks and Futures: Cutting-Edge DSP Technology to Improve Your Trading*. Wiley Trading.
+- Source code: `indicators/cycles/dsp.pine`
+- Documentation file: `indicators/cycles/dsp.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/dsp.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/dsp.md

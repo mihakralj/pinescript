@@ -1,100 +1,58 @@
-# PVR: Price Volume Rank
+# PVR - Pvr
 
-[Pine Script Implementation of PVR](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/pvr.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Price Volume Rank (PVR) is a simple technical indicator developed by Anthony J. Macek that categorizes market conditions using only two data sets: price and volume. Published in the June 1994 issue of "Technical Analysis of Stocks & Commodities" magazine, PVR provides a straightforward classification system that ranks the relationship between price movement and volume activity into four distinct categories plus a neutral state.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PVR addresses this by implementing `Calculates Price Volume Rank` with parameterized inputs and direct state progression.
 
-Unlike complex volume indicators that use moving averages or oscillators, PVR offers a binary comparison approach that immediately identifies the current market condition by comparing today's price and volume to yesterday's values. This simplicity makes it particularly useful for quick market assessment and systematic trading decisions.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Binary comparison system:** Compares current price and volume to previous period's values
-* **Categorical classification:** Assigns integer values (0-4) based on price-volume relationships
-* **Real-time assessment:** Provides immediate market condition identification
-* **Volume confirmation:** Validates price movements with corresponding volume activity
-* **Trend quality measurement:** Distinguishes between strong and weak price movements
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Price Source | Close | Price series used for comparison | Use High/Low for range analysis, Open for gap analysis |
-| Buy/Sell Threshold | 2.5 | Level separating buy and sell signals | Standard threshold recommended by Macek |
+- `Calculates Price Volume Rank`
 
-**Pro Tip:** PVR works best as a confirmation tool rather than a standalone signal generator. Combine with trend analysis and support/resistance levels for optimal results.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `price` | Price series for comparison |
+| `vol` | Volume series for comparison |
 
-**Simplified explanation:**
-PVR compares today's price and volume to yesterday's price and volume, assigning a rank from 0 to 4 based on the four possible combinations of higher/lower relationships.
+### Returns
 
-**Technical formula:**
-```
-If Price > PrevPrice AND Volume > PrevVolume then PVR = 1
-If Price > PrevPrice AND Volume < PrevVolume then PVR = 2  
-If Price < PrevPrice AND Volume < PrevVolume then PVR = 3
-If Price < PrevPrice AND Volume > PrevVolume then PVR = 4
-Else PVR = 0 (when Price = PrevPrice)
-```
+- Price Volume Rank (0-4)
 
-Where:
-- PrevPrice = Previous period's price
-- PrevVolume = Previous period's volume
+## Input configuration
 
-> 🔍 **Technical Note:** The indicator uses simple period-to-period comparisons without any smoothing or averaging. The neutral state (PVR = 0) occurs when price remains unchanged from the previous period, regardless of volume activity.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_price_source` | `input.source` | default: `close`, label: "Price Source" |
 
-## Interpretation Details
+## Runtime profile
 
-PVR provides clear categorical signals:
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **PVR = 1 (Strong Bullish):**
-  - Price up with increased volume
-  - Indicates strong buying pressure with institutional participation
-  - Most bullish condition with volume confirmation
+## Trade-offs
 
-* **PVR = 2 (Weak Bullish):**
-  - Price up with decreased volume
-  - Suggests limited buying interest or profit-taking
-  - Potential reversal warning as volume doesn't support price advance
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **PVR = 3 (Weak Bearish):**
-  - Price down with decreased volume
-  - Indicates selling without strong conviction
-  - May represent temporary pullback rather than trend reversal
+## Verification checklist
 
-* **PVR = 4 (Strong Bearish):**
-  - Price down with increased volume
-  - Shows strong selling pressure with volume confirmation
-  - Most bearish condition indicating potential continued decline
-
-* **PVR = 0 (Neutral):**
-  - Price unchanged from previous period
-  - Market indecision or consolidation
-  - Wait for clearer directional signals
-
-## Trading Signals
-
-**Basic Macek Strategy:**
-- **Buy Signal:** PVR ≤ 2.5 (Categories 1 and 2)
-- **Sell Signal:** PVR > 2.5 (Categories 3 and 4)
-
-**Advanced Interpretations:**
-- **Strongest Buy:** PVR = 1 (price up, volume up)
-- **Caution Zone:** PVR = 2 (price up, volume down - potential top)
-- **Weak Selling:** PVR = 3 (price down, volume down - potential bottom)
-- **Strong Sell:** PVR = 4 (price down, volume up)
-
-## Limitations and Considerations
-
-* **Single-period focus:** Only considers immediate previous period, may miss longer trends
-* **Equal weighting:** Treats small and large price/volume changes equally
-* **No magnitude consideration:** Doesn't account for the size of price or volume changes
-* **Gap sensitivity:** May give misleading signals during price gaps
-* **Low volume periods:** Less reliable during holiday or low-activity sessions
-* **Whipsaw potential:** Can generate frequent signals in choppy markets
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Macek, Anthony J. (1994). "Price Volume Rank." Technical Analysis of Stocks & Commodities, June 1994.
+- Source code: `indicators/volume/pvr.pine`
+- Documentation file: `indicators/volume/pvr.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/pvr.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/pvr.md

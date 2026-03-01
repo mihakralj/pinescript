@@ -1,83 +1,62 @@
-# PVO: Percentage Volume Oscillator
+# PVO - Pvo
 
-[Pine Script Implementation of PVO](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/pvo.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Percentage Volume Oscillator (PVO) is a momentum indicator that measures the relationship between short-term and long-term volume moving averages, expressed as a percentage. Similar to the Price Percentage Oscillator (PPO) but applied to volume data, PVO helps traders identify changes in volume momentum and potential trend confirmations or divergences. Developed as an extension of traditional volume analysis, PVO provides a normalized view of volume trends that can be compared across different securities and time periods.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PVO addresses this by implementing `Calculates Percentage Volume Oscillator` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Volume momentum measurement:** Compares short-term volume activity to long-term volume trends using percentage calculations
-* **Trend confirmation:** Rising PVO suggests increasing volume momentum supporting price moves
-* **Divergence analysis:** PVO divergences from price can signal potential trend changes
-* **Normalized comparison:** Percentage format allows comparison across different securities and volume scales
-* **Signal line crossovers:** Optional signal line provides additional entry/exit signals
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Common Settings and Parameters
+## API surface
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Fast Period | 12 | Short-term volume moving average period | Decrease for more sensitive signals, increase for smoother readings |
-| Slow Period | 26 | Long-term volume moving average period | Adjust based on analysis timeframe - longer for position trading |
-| Signal Period | 9 | Signal line smoothing period | Shorter for faster signals, longer for confirmation |
-| MA Type | EMA | Moving average type for calculations | SMA for equal weighting, EMA for recent emphasis |
+### Functions
 
-**Pro Tip:** PVO works best when combined with price momentum indicators. Look for PVO confirmation of price breakouts - rising PVO during price breakouts suggests strong volume support.
+- `Calculates Percentage Volume Oscillator`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Simplified explanation:**
-PVO calculates the percentage difference between a fast volume moving average and a slow volume moving average, then optionally adds a signal line for crossover signals.
+| Parameter | Purpose |
+|---|---|
+| `vol` | Volume series |
+| `fast_period` | Fast period for volume MA |
+| `slow_period` | Slow period for volume MA |
+| `signal_period` | Signal line smoothing period |
 
-**Technical formula:**
-```
-Fast MA = MA(Volume, Fast Period)
-Slow MA = MA(Volume, Slow Period)
-PVO = ((Fast MA - Slow MA) / Slow MA) × 100
-Signal Line = MA(PVO, Signal Period)
-Histogram = PVO - Signal Line
-```
+### Returns
 
-Where MA can be SMA, EMA, or other moving average types.
+- tuple with [pvo, signal, histogram] values
 
-> 🔍 **Technical Note:** The implementation uses exponential moving averages by default for responsiveness, with proper handling of zero volume periods to avoid division errors. The percentage calculation normalizes the oscillator, making it comparable across different securities regardless of their average volume levels.
+## Input configuration
 
-## Interpretation Details
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_fast_period` | `input.int` | default: `12`, label: "Fast Period" |
+| `i_slow_period` | `input.int` | default: `26`, label: "Slow Period" |
+| `i_signal_period` | `input.int` | default: `9`, label: "Signal Period" |
 
-PVO provides multiple analytical perspectives:
+## Runtime profile
 
-* **Centerline analysis:**
-  - Above 0: Short-term volume momentum is stronger than long-term average
-  - Below 0: Short-term volume momentum is weaker than long-term average
-  - Crossovers indicate shifts in volume momentum
+- Declared optimization: Beta precomputation for EMA warmup compensation
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Signal line crossovers:**
-  - PVO crossing above signal line: Potential bullish volume momentum
-  - PVO crossing below signal line: Potential bearish volume momentum
-  - Histogram helps visualize the convergence/divergence
+## Trade-offs
 
-* **Divergence patterns:**
-  - Bullish: Price makes lower lows while PVO makes higher lows
-  - Bearish: Price makes higher highs while PVO makes lower highs
-  - Volume divergences often precede price reversals
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Trend confirmation:**
-  - Rising PVO during uptrends confirms volume support
-  - Falling PVO during downtrends confirms selling pressure
-  - Diverging PVO may signal weakening trends
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Volume dependency:** Effectiveness depends on consistent and reliable volume data
-* **Market structure:** More effective in liquid markets with regular volume patterns
-* **False signals:** Can generate whipsaws during low-volume or consolidation periods
-* **Lag component:** Moving averages introduce some delay in signals
-* **Context dependency:** Should be used alongside price analysis and other technical indicators
-* **Time horizon:** Different period settings needed for different trading timeframes
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Appel, G. (2005). Technical Analysis: Power Tools for Active Investors. Financial Times Prentice Hall.
-* Granville, J. E. (1963). Granville's New Key to Stock Market Profits. Prentice-Hall.
+- Source code: `indicators/volume/pvo.pine`
+- Documentation file: `indicators/volume/pvo.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/pvo.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/pvo.md

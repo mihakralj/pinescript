@@ -1,123 +1,60 @@
-# HT_DCPHASE: Hilbert Transform - Dominant Cycle Phase
+# HT_DCPHASE - Ht Dcphase
 
-[Pine Script Implementation of HT_DCPHASE](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/ht_dcphase.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Hilbert Transform Dominant Cycle Phase (HT_DCPHASE) is an advanced cycle analysis indicator developed by John Ehlers that identifies the current phase position within the dominant market cycle. By applying Hilbert Transform mathematics to price data, this indicator extracts the phase angle of the dominant cycle, revealing where the market currently sits within its cyclical pattern. This information is invaluable for timing entries and exits, as it shows whether the cycle is in accumulation, markup, distribution, or markdown phases.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HT_DCPHASE addresses this by implementing `Numerically stable atan2 implementation for quadrant-aware angle calculation` with parameterized inputs and direct state progression.
 
-HT_DCPHASE works by computing the In-phase (I) and Quadrature (Q) components through Hilbert Transform analysis, then calculating the phase angle as the arctangent of Q/I. The result is a continuous phase measurement in radians ranging from -π to π, providing a precise indication of cycle position. This makes it particularly useful for identifying cycle turning points and anticipating trend changes before they become apparent in price action.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Phase Angle**: Measures position within cycle using arctangent of Q/I components; ranges from -π to π radians
-* **Hilbert Transform**: Mathematical technique that creates 90-degree phase-shifted version of price for quadrature analysis
-* **I and Q Components**: In-phase and Quadrature components represent cycle's position in two-dimensional phase space
-* **Cycle Position**: Phase angle indicates whether market is in trough (-π), peak (0), or transition phases (±π/2)
-* **Adaptive Bandwidth**: Uses dominant cycle period to adjust filter bandwidth for optimal detrending
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | hlc3 | Price data for analysis | Use close for simpler signals; hlc3 for smoother, more comprehensive cycle detection |
+- `Numerically stable atan2 implementation for quadrant-aware angle calculation`
+- `Calculates Hilbert Transform Dominant Cycle Phase using Ehlers algorithm`
 
-**Pro Tip:** HT_DCPHASE is most effective when used in conjunction with HT_DCPERIOD to understand both the cycle length and current position. Phase crossings through zero often correspond to significant trend changes. The indicator works best on instruments with clear cyclical behavior - sideways or ranging markets provide cleaner signals than strongly trending markets.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `y` | Y-coordinate (imaginary/quadrature component) |
+| `x` | X-coordinate (real/in-phase component) |
+| `source` | Series to analyze for dominant cycle phase |
 
-**Simplified explanation:**
-HT_DCPHASE applies Hilbert Transform mathematics to extract the phase angle of the dominant market cycle, indicating the current position within the cycle.
+### Returns
 
-**Technical formula:**
+- Angle in radians from -π to π
 
-1. Smooth the price data:
-   ```
-   SmoothPrice = (4×Price + 3×Price[1] + 2×Price[2] + Price[3]) / 10
-   ```
+## Input configuration
 
-2. Detrend with adaptive bandwidth:
-   ```
-   Bandwidth = 0.075 × Period[1] + 0.54
-   Detrender = Hilbert_FIR(SmoothPrice) × Bandwidth
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `hlc3`, label: "Source" |
 
-3. Calculate Quadrature component (90° phase shift):
-   ```
-   Q1 = Hilbert_FIR(Detrender) × Bandwidth
-   ```
+## Runtime profile
 
-4. Calculate In-phase component (delayed detrend):
-   ```
-   I1 = Detrender[3]
-   ```
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-5. Apply Hilbert Transform to get jI and jQ:
-   ```
-   jI = Hilbert_FIR(I1) × Bandwidth
-   jQ = Hilbert_FIR(Q1) × Bandwidth
-   ```
+## Trade-offs
 
-6. Compute smoothed I2 and Q2:
-   ```
-   I2 = I1 - jQ
-   Q2 = Q1 + jI
-   I2 = 0.2×I2 + 0.8×I2[1]  (smooth)
-   Q2 = 0.2×Q2 + 0.8×Q2[1]  (smooth)
-   ```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-7. Calculate phase angle:
-   ```
-   Phase = atan(Q2 / I2)
-   ```
+## Verification checklist
 
-Where `Hilbert_FIR` is a finite impulse response filter with coefficients [0.0962, 0.5769, 0, -0.5769, -0.0962].
-
-> 🔍 **Technical Note:** The phase calculation uses arctangent to convert the I and Q components from Cartesian to polar coordinates. The dominant cycle period (calculated from Re and Im) is used to adapt the filter bandwidth, ensuring the phase measurement tracks the actual market cycle rather than noise or shorter-term fluctuations.
-
-## Interpretation Details
-
-HT_DCPHASE provides cycle phase analysis through several interpretive lenses:
-
-* **Phase Position:**
-  - Phase ≈ -π: Cycle trough (potential buy zone)
-  - Phase ≈ -π/2: Rising from trough (early uptrend)
-  - Phase ≈ 0: Cycle peak (potential sell zone)
-  - Phase ≈ π/2: Declining from peak (early downtrend)
-
-* **Phase Levels:**
-  - Phase = 0: Cycle peak reached (distribution zone)
-  - Phase = ±π: Cycle trough reached (accumulation zone)
-  - Phase transitions through these levels indicate cycle progression
-  - Watch for price behavior at these phase extremes
-
-* **Phase Velocity:**
-  - Rapid phase changes indicate strong momentum
-  - Slow phase progression suggests consolidation
-  - Stalled phase can indicate cycle transition or mode change
-
-* **Cycle Synchronization:**
-  - Use with HT_DCPERIOD to confirm cycle consistency
-  - Phase leads price by design, providing early signals
-  - Most reliable in ranging or cyclical market conditions
-
-* **Quadrant Analysis:**
-  - Quadrant I (0 to π/2): Early decline phase
-  - Quadrant II (π/2 to π): Late decline phase
-  - Quadrant III (-π to -π/2): Late rise phase
-  - Quadrant IV (-π/2 to 0): Early rise phase
-
-## Limitations and Considerations
-
-* **Trend Dependence:** Less reliable in strong trending markets; works best in cyclical or ranging conditions
-* **Phase Wrapping:** Discontinuities at ±π boundaries require careful interpretation of phase transitions
-* **Lag Component:** Smoothing introduces slight lag; phase leads price but not instantaneously
-* **Noise Sensitivity:** Can produce erratic signals in highly volatile or choppy markets without clear cycles
-* **Cycle Assumption:** Assumes presence of dominant cycle; may give spurious signals in random walk conditions
-* **Parameter Adaptation:** Uses previous period for bandwidth calculation; may lag during rapid cycle changes
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J. F. (2004). "Cybernetic Analysis for Stocks and Futures." John Wiley & Sons.
-* Ehlers, J. F. (2001). "Rocket Science for Traders: Digital Signal Processing Applications." John Wiley & Sons.
-* Ehlers, J. F. (2013). "Cycle Analytics for Traders: Advanced Technical Trading Concepts." John Wiley & Sons.
+- Source code: `indicators/cycles/ht_dcphase.pine`
+- Documentation file: `indicators/cycles/ht_dcphase.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/ht_dcphase.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/ht_dcphase.md

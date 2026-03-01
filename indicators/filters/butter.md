@@ -1,69 +1,59 @@
-# BUTTER: Butterworth Filter
+# BUTTER - Butter
 
-[Pine Script Implementation of BUTTER](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/butter.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Butterworth Filter is a signal processing tool designed to provide maximally flat frequency response in the passband. Developed by British engineer Stephen Butterworth in 1930, it offers traders a means to smooth price data without introducing ripples in the frequency response. This implementation provides a 2nd-order low-pass filter that effectively removes high-frequency market noise while preserving lower-frequency trend components. Compared to other filters, Butterworth offers an optimal compromise between smoothing efficiency and signal fidelity, making it a versatile choice for various market conditions.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. BUTTER addresses this by implementing `Calculates 2nd Order Butterworth Lowpass Filter` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Maximally flat response:** Provides smooth frequency response with no ripples in the passband, ensuring consistent filtering across all frequencies below the cutoff
-* **Optimal roll-off:** Offers steeper attenuation of high frequencies than Bessel filters while maintaining better phase characteristics than Chebyshev filters
-* **Market application:** Particularly effective for identifying underlying trends in noisy market conditions while introducing minimal waveform distortion
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of the Butterworth filter is its mathematically optimal balance between opposing design constraints. The filter achieves the flattest possible frequency response in the passband without sacrificing roll-off steepness, providing traders with clean signals that maintain essential trend information while effectively eliminating random market noise.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the cutoff period | Increase for smoother signals and less noise, decrease for faster response to price changes |
-| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+- `Calculates 2nd Order Butterworth Lowpass Filter`
 
-**Pro Tip:** The Butterworth filter works particularly well with length settings that match known market cycles - for example, using 10-period settings for short-term trading on daily charts where 2-week cycles are common.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Series to calculate Butterworth filter from |
+| `length` | Cutoff period (related to -3dB frequency) |
 
-**Simplified explanation:**
-The Butterworth filter calculates a smoothed output by considering both the current price and previous filtered values. It applies carefully calculated coefficients to create a balance between smoothness and responsiveness, effectively removing random fluctuations while preserving important market trends.
+### Returns
 
-**Technical formula:**
-Implemented as a 2nd-order IIR filter using the difference equation:
+- Butterworth filter value
 
-y[n] = (b0 × x[n] + b1 × x[n-1] + b2 × x[n-2] - a1 × y[n-1] - a2 × y[n-2]) / a0
+## Input configuration
 
-Where coefficients are calculated as:
-- omega = 2 × π / length
-- alpha = sin(omega) / sqrt(2)
-- a0 = 1 + alpha
-- a1 = -2 × cos(omega)
-- a2 = 1 - alpha
-- b0 = (1 - cos(omega)) / 2
-- b1 = 1 - cos(omega)
-- b2 = (1 - cos(omega)) / 2
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `20`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The Butterworth design is characterized by its maximally flat magnitude response, achieved through a specific polynomial form that places all poles at equal angular spacing on a circle in the s-plane.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: Uses IIR 2nd order Butterworth filter with O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-The Butterworth filter can be used in various trading strategies:
+## Trade-offs
 
-* **Trend identification:** Reveals underlying price direction by effectively filtering out market noise
-* **Signal generation:** Crossovers between price and filtered output generate trade signals with reduced false positives
-* **Support/resistance levels:** Creates cleaner dynamic support and resistance levels
-* **Multiple timeframe analysis:** Apply filters with different cutoff periods to identify trends of varying durations
-* **Divergence detection:** Compare filtered output with momentum oscillators to identify potential reversals
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Phase distortion:** Introduces some non-linear phase response that can affect timing of signals, especially near the cutoff frequency
-* **Moderate ringing:** Can exhibit some overshoot when responding to sharp price changes
-* **Initialization period:** Requires several bars to stabilize after the start of data
-* **Filter order tradeoffs:** 2nd-order implementation balances smoothing and lag, higher orders would increase both
-* **Complementary tools:** Best used alongside volume analysis and momentum indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Butterworth, S. "On the Theory of Filter Amplifiers," Wireless Engineer, vol. 7, 1930
-* Smith, S.W. "The Scientist and Engineer's Guide to Digital Signal Processing," Chapters 19-20
+- Source code: `indicators/filters/butter.pine`
+- Documentation file: `indicators/filters/butter.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/butter.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/butter.md

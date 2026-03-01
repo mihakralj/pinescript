@@ -1,31 +1,34 @@
-f# Volatility Indicators
+# _INDEX -  Index
 
-| Code | Name | Key Characteristics |
-| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
-| [ADR](/indicators/volatility/adr.md) | Average Daily Range | Measures the average daily price movement range over a specified period |
-| [ATR](/indicators/volatility/atr.md) | Average True Range | Measures market volatility by averaging the true range over a period |
-| [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized [0,1] | ATR normalized to a 0-1 scale for comparative analysis |
-| [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent | ATR expressed as a percentage of the closing price |
-| [BBW](/indicators/volatility/bbw.md) | Bollinger Band Width | Measures the difference between the upper and lower Bollinger Bands |
-| [BBWN](/indicators/volatility/bbwn.md) | Bollinger Band Width Normalized | Measures the current Bollinger Band Width relative to its historical range in [0.0,1.0] normalized space|
-| [BBWP](/indicators/volatility/bbwp.md) | Bollinger Band Width Percentile | Measures the current Bollinger Band Width relative to its historical range|
-| [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility | Measures annualized volatility using log returns of closing prices |
-| [CV](/indicators/volatility/cv.md) | Conditional Volatility | Implements GARCH(1,1) model to capture time-varying volatility |
-| [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility | Measures volatility as the rate of change in smoothed high-low range using EMA and ROC |
-| [EWMA](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility | Volatility calculated using an exponentially weighted moving average of squared returns |
-| [GKV](/indicators/volatility/gkv.md) | Garman-Klass Volatility | Volatility estimator using high, low, open, and close prices for improved efficiency |
-| [HLV](/indicators/volatility/hlv.md) | High-Low Volatility | Volatility measure based solely on the range between high and low prices |
-| [HV](/indicators/volatility/hv.md) | Historical Volatility | Standard deviation of price returns over a historical period |
-| [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility | Low-lag, smooth volatility measure developed by Mark Jurik |
-| [JVOLTYN](/indicators/volatility/jvoltyn.md) | Jurik Volatility Normalized [0,1] | Jurik Volatility normalized to a 0-1 scale |
-| [MASSI](/indicators/volatility/massi.md) | Mass Index | Predicts trend reversals by analyzing the narrowing and widening of price ranges |
-| [NATR](/indicators/volatility/natr.md) | Normalized Average True Range | ATR expressed as a percentage of close price for cross-market comparison |
-| [PV](/indicators/volatility/pv.md) | Parkinson Volatility | Volatility estimator using high and low prices, assuming no drift |
-| [RSV](/indicators/volatility/rsv.md) | Rogers-Satchell Volatility | Volatility estimator incorporating high, low, open, and close prices |
-| [RV](/indicators/volatility/rv.md) | Realized Volatility | Volatility calculated from high-frequency intra-day data |
-| [RVI](/indicators/volatility/rvi.md) | Relative Volatility Index | Measures the direction of volatility based on standard deviations of price changes |
-| [TR](/indicators/volatility/tr.md) | True Range | Single-bar volatility measurement capturing gaps between sessions |
-| [UI](/indicators/volatility/ui.md) | Ulcer Index | Measures downside risk and depth/duration of price drawdowns |
-| [VOV](/indicators/volatility/vov.md) | Volatility of Volatility | Measures the rate of change in volatility itself |
-| [VR](/indicators/volatility/vr.md) | Volatility Ratio | Compares the current true range to the average true range over a longer period |
-| [YZV](/indicators/volatility/yzv.md) | Yang-Zhang Volatility | Volatility estimator combining open, high, low, close, and overnight gaps |
+This section documents indicators in architectural terms: problem, streaming design, trade-offs, and verification steps.
+
+| Indicator | Name |
+|---|---|
+| [ADR](/indicators/volatility/adr.md) | Average Daily Range |
+| [ATR](/indicators/volatility/atr.md) | Average True Range |
+| [ATRN](/indicators/volatility/atrn.md) | Average True Range Normalized |
+| [ATRP](/indicators/volatility/atrp.md) | Average True Range Percent |
+| [BBW](/indicators/volatility/bbw.md) | Bollinger Band Width |
+| [BBWN](/indicators/volatility/bbwn.md) | Bollinger Band Width Normalized |
+| [BBWP](/indicators/volatility/bbwp.md) | Bollinger Band Width Percentile |
+| [CCV](/indicators/volatility/ccv.md) | Close-to-Close Volatility |
+| [CV](/indicators/volatility/cv.md) | Conditional Volatility |
+| [CVI](/indicators/volatility/cvi.md) | Chaikin's Volatility |
+| [ETHERM](/indicators/volatility/etherm.md) | Elder's Thermometer |
+| [EWMA VOLTY](/indicators/volatility/ewma.md) | Exponential Weighted MA Volatility |
+| [GKV](/indicators/volatility/gkv.md) | Garman-Klass Volatility |
+| [HLV](/indicators/volatility/hlv.md) | High-Low Volatility |
+| [HV](/indicators/volatility/hv.md) | Historical Volatility |
+| [JVOLTY](/indicators/volatility/jvolty.md) | Jurik Volatility |
+| [JVOLTYN](/indicators/volatility/jvoltyn.md) | Normalized Jurik Volatility |
+| [MASSI](/indicators/volatility/massi.md) | Mass Index |
+| [NATR](/indicators/volatility/natr.md) | Normalized Average True Range |
+| [PV](/indicators/volatility/pv.md) | Parkinson Volatility |
+| [RSV](/indicators/volatility/rsv.md) | Rogers-Satchell Volatility |
+| [RV](/indicators/volatility/rv.md) | Realized Volatility |
+| [RVI](/indicators/volatility/rvi.md) | Rvi |
+| [TR](/indicators/volatility/tr.md) | True Range |
+| [UI](/indicators/volatility/ui.md) | Ui |
+| [VOV](/indicators/volatility/vov.md) | Vov |
+| [VR](/indicators/volatility/vr.md) | Vr |
+| [YZV](/indicators/volatility/yzv.md) | Yzv |

@@ -1,67 +1,57 @@
-# ATRP: Average True Range Percent
+# ATRP - Atrp
 
-[Pine Script Implementation of ATRP](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/atrp.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Average True Range Percent (ATRP) scales Wilder’s ATR by the instrument’s closing price and expresses the result in percent. This simple normalization, introduced by system developers in the 1990s, makes raw volatility directly comparable between stocks, futures, crypto, or forex pairs regardless of price level. ATRP is a quick gauge of relative turbulence, useful for watchlist filtering, stop calibration, and regime analysis.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ATRP addresses this by implementing `Calculates the Average True Range Percent (ATRP)` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Percent‑based volatility** — ATR ÷ Close × 100 removes price bias  
-* **Cross‑market comparability** — rank symbols or timeframes by identical metric  
-* **Volatility regime shifts** — rising/falling ATRP flags transitions between quiet and explosive phases  
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Market application:  
+## API surface
 
-* **Asset selection** — trade high‑ATRP symbols for breakout systems  
-* **Risk scaling** — size positions inversely to ATRP for equal‑volatility weighting  
-* **Stop setting** — trail price by *k × ATRP %* of price
+### Functions
 
-Timeframe suitability:  
+- `Calculates the Average True Range Percent (ATRP)`
 
-* **All frames** — from 1‑minute scalps to weekly swing, normalization adapts automatically.
+### Parameters
 
-## Common Settings and Parameters
+| Parameter | Purpose |
+|---|---|
+| `length` | The period length for the ATR calculation. |
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | ATR smoothing window | Shorten for reactive scalping; lengthen for macro view |
-| Source | HLC | Price set for True Range | Usually left unchanged |
-| Multiplier | 100 | Percent conversion factor | Use 1 for fractional form |
+### Returns
 
-**Pro Tip:** Plot a 50‑period SMA of ATRP and trade breakouts only when current ATRP is above its average—this filters low‑energy setups.
+- The ATRP value.
 
-## Calculation and Mathematical Foundation
+## Input configuration
 
-**Simplified explanation:**  
-Measure ATR volatility, divide by current close, then multiply by 100 to obtain percentage movement per bar.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `14`, label: "Length" |
 
-**Technical formula:**
+## Runtime profile
 
-ATRPₙ = 100 × ATRₙ ⁄ Cᵗ  
+- Declared optimization: Beta precomputation for RMA warmup compensation
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-ATRₙ = WilderMAₙ(TR)  
-TRᵗ = max( Hᵗ − Lᵗ, |Hᵗ − Cᵗ⁻¹|, |Lᵗ − Cᵗ⁻¹| )
+## Trade-offs
 
-> 🔍 **Technical Note:** Because both numerator (ATR) and denominator (Close) can trend, ATRP often exhibits mean‑reverting behavior suitable for volatility breakout thresholds.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-* **High ATRP (> 2 %)** — market is hot; favor momentum and wide stops  
-* **Low ATRP (< 0.5 %)** — dull environment; lean toward mean‑reversion or stay flat  
-* **Surging ATRP** — volatility ignition; confirms breakout strength  
-* **Diverging price vs. ATRP** — shrinking ATRP during trend warns of exhaustion
-
-## Limitations and Considerations
-
-* **Lag from smoothing** — volatile spikes reflected gradually  
-* **Corporate actions** — splits/dividends distort percent values; use adjusted data  
-* **Micro‑priced assets** — pennies inflate ATRP; apply floor filter
-
-Complementary tools: ADX for trend validation, Bollinger Band Width, and Keltner Channel ATR bands.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Wilder, J. W. Jr. *New Concepts in Technical Trading Systems*, 1978.  
-2. Schwager, J. *Technical Analysis*, 1996.
+- Source code: `indicators/volatility/atrp.pine`
+- Documentation file: `indicators/volatility/atrp.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/atrp.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/atrp.md

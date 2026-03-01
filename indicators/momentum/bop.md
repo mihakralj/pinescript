@@ -1,64 +1,57 @@
-# BOP: Balance of Power
+# BOP - Bop
 
-[Pine Script Implementation of BOP](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/bop.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Balance of Power (BOP) indicator measures the relative strength between buyers and sellers by comparing the closing price to the opening price within the context of the trading range. Developed to quantify market pressure, BOP provides insights into which market participants (buyers or sellers) are more aggressively controlling price action. By relating the position of the close relative to the open against the total trading range, BOP creates a normalized measure of buying or selling pressure that oscillates around zero.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. BOP addresses this by implementing `Calculates Balance of Power with optional smoothing` with parameterized inputs and direct state progression.
 
-The implementation provided uses calculations with optional smoothing to reduce noise while maintaining responsiveness. This approach helps traders identify shifts in market control and potential trend reversals by measuring the relationship between price movement and range, with proper handling of edge cases such as zero-range bars.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Price position analysis:** Measures where the close is relative to the open within the high-low range
-* **Market pressure quantification:** Normalizes buying/selling pressure to a scale that's comparable across different securities
-* **Range normalization:** Accounts for volatility by considering the total trading range
-* **Optional smoothing:** Provides flexibility to reduce noise while maintaining signal clarity
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Smoothing Length | 14 | Period for smoothing raw BOP values | 0 for no smoothing, increase for less noise but more lag |
+- `Calculates Balance of Power with optional smoothing`
 
-**Pro Tip:** While the default 14-period smoothing works well for daily charts, consider using shorter periods (5-10) for intraday trading or longer periods (20-30) for position trading. Using no smoothing (length=0) can be effective for detecting immediate shifts in market pressure.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `length` | Smoothing period (0 for no smoothing) |
 
-**Simplified explanation:**
-BOP measures how much of the day's range was controlled by buyers versus sellers by comparing where the price closed relative to where it opened, normalized by the day's range. A close near the high suggests buyer control, while a close near the low suggests seller control.
+### Returns
 
-**Technical formula:**
-Raw BOP = (Close - Open) / (High - Low)
+- BOP value measuring buying/selling pressure
 
-Where:
-- If High equals Low (zero range), BOP = 0
-- Final BOP value is optionally smoothed using EMA(Raw BOP, Length)
+## Input configuration
 
-> 🔍 **Technical Note:** The implementation includes special handling for zero-range bars and uses an optimized EMA calculation with proper warmup period handling. The algorithm maintains O(1) computational complexity while ensuring accurate smoothing from the first available bar.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_smooth` | `input.int` | default: `14`, label: "Smoothing Length" |
 
-## Interpretation Details
+## Runtime profile
 
-BOP provides several analytical perspectives:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Market control:** Positive values indicate buyer control, negative values indicate seller control
-* **Trend strength:** Greater distance from zero indicates stronger control by either buyers or sellers
-* **Momentum shifts:** Changes in BOP direction can signal potential trend reversals
-* **Divergence analysis:** BOP diverging from price can indicate weakening trends
-* **Range context:** Values are automatically normalized by the trading range
-* **Trend confirmation:** Consistent BOP sign confirms trend direction
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Range dependency:** Requires meaningful high-low range for accurate signals
-* **Gap handling:** Does not account for gaps between trading sessions
-* **Smoothing trade-off:** More smoothing reduces noise but increases lag
-* **Time frame sensitivity:** Most effective on time frames that capture complete trading sessions
-* **Market type influence:** More reliable in trending markets than in choppy conditions
-* **Complementary tool:** Should be used alongside price action and other indicators for confirmation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Elder, A. (2002). Come Into My Trading Room: A Complete Guide to Trading. John Wiley & Sons.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/momentum/bop.pine`
+- Documentation file: `indicators/momentum/bop.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/bop.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/bop.md

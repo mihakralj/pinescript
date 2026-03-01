@@ -1,70 +1,59 @@
-# AC: Accelerator Oscillator
+# AC - Ac
 
-[Pine Script Implementation of AC](https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/ac.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Accelerator Oscillator (AC) is a momentum indicator developed by Bill Williams as part of his trading methodology. It measures the acceleration or deceleration of market momentum by comparing the momentum of a fast moving average to a slow moving average, then measuring the rate of change of that difference. The AC builds upon the Awesome Oscillator (AO) concept by showing the acceleration of momentum rather than momentum itself, helping traders identify early stages of new moves and potential reversals before they become apparent in price action.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. AC addresses this by implementing `Calculates Bill Williams' Accelerator Oscillator` with parameterized inputs and direct state progression.
 
-The implementation provided uses efficient circular buffers for all moving average calculations, ensuring optimal performance while properly handling data gaps. This approach maintains O(1) computational complexity for all operations, making it particularly suitable for real-time analysis while preserving accuracy in the momentum acceleration measurements.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Momentum acceleration:** Measures the rate of change of momentum rather than momentum itself
-* **Early signal generation:** Often provides earlier signals than traditional momentum indicators
-* **Zero-line significance:** Crossovers indicate potential trend changes or acceleration points
-* **Color-based signals:** Green bars indicate increasing acceleration, red bars indicate deceleration
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Fast Length | 5 | Period for fast MA calculation | Rarely needs adjustment as it's part of Williams' original formula |
-| Slow Length | 34 | Period for slow MA calculation | Rarely needs adjustment as it's part of Williams' original formula |
+- `Calculates Bill Williams' Accelerator Oscillator`
 
-**Pro Tip:** Focus on the relationship between consecutive bars rather than absolute values. Three or more bars of the same color often indicate a sustained acceleration/deceleration phase that may precede a significant move.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `fastLength` | Period for fast MA calculation |
+| `slowLength` | Period for slow MA calculation |
 
-**Simplified explanation:**
-AC first calculates the Awesome Oscillator (AO) using two simple moving averages of median price, then subtracts a 5-period simple moving average of the AO from the current AO value to show acceleration.
+### Returns
 
-**Technical formula:**
-1. MP = (High + Low) / 2
-2. AO = SMA(MP, Fast Length) - SMA(MP, Slow Length)
-3. AC = AO - SMA(AO, 5)
+- AC value measuring acceleration/deceleration of market momentum
 
-Where:
-- MP = Median Price
-- SMA = Simple Moving Average
-- Fast Length = 5 periods (default)
-- Slow Length = 34 periods (default)
+## Input configuration
 
-> 🔍 **Technical Note:** The implementation uses three separate circular buffers to efficiently calculate the required moving averages without storing the entire price history. This approach ensures constant memory usage and O(1) computational complexity per bar while properly handling NA values and maintaining accurate calculations.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_fastLength` | `input.int` | default: `5`, label: "Fast Length" |
+| `i_slowLength` | `input.int` | default: `34`, label: "Slow Length" |
 
-## Interpretation Details
+## Runtime profile
 
-AC provides several analytical perspectives:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Zero-line crossovers:** Indicate potential trend changes or acceleration points
-* **Color changes:** Green bars suggest increasing upward momentum, red bars suggest increasing downward momentum
-* **Consecutive signals:** Three or more bars of the same color indicate sustained acceleration/deceleration
-* **Divergence analysis:** AC diverging from price can signal potential reversals
-* **Acceleration phases:** Higher highs in AC suggest strengthening momentum
-* **Deceleration phases:** Lower highs suggest weakening momentum even if still in same direction
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Lagging component:** Contains some lag due to multiple moving average calculations
-* **False signals:** Can generate noise in choppy or ranging markets
-* **Parameter sensitivity:** While default parameters are standard, their effectiveness varies across timeframes
-* **Complementary tool:** Should be used alongside price action and other indicators
-* **Timeframe dependency:** More reliable on higher timeframes where noise is reduced
-* **Signal confirmation:** Best used with other Williams' indicators like AO for confirmation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Williams, B. (1995). New Trading Dimensions. Wiley Trading.
-* Williams, B. (1999). Trading Chaos (2nd ed.). Wiley Trading.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/oscillators/ac.pine`
+- Documentation file: `indicators/oscillators/ac.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/ac.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/ac.md

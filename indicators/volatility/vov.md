@@ -1,120 +1,61 @@
-# VOV: Volatility of Volatility
+# VOV - Vov
 
-[Pine Script Implementation of VOV](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/vov.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Volatility of Volatility (VOV) indicator represents a second-order volatility measure that quantifies the rate of change in market volatility itself. Unlike traditional volatility indicators that measure price movement dispersion, VOV captures the stability or instability of volatility patterns. This advanced metric provides crucial insights into market regime changes, uncertainty levels, and the predictability of risk conditions.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. VOV addresses this by implementing `Calculates the Volatility of Volatility (VOV) with embedded rolling standard deviation algorithms.` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-*   **Second-Order Analysis** — Measures volatility of volatility rather than price volatility
-*   **Regime Detection** — Identifies transitions between stable and unstable volatility periods
-*   **Dual-Stage Calculation** — Uses nested standard deviation calculations for comprehensive analysis
-*   **Market Uncertainty** — Quantifies the uncertainty about uncertainty itself
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Market Applications:
-*   **Risk Management** — Enhanced portfolio risk assessment through volatility stability analysis
-*   **Options Trading** — Advanced volatility surface analysis and vega risk management
-*   **Market Timing** — Identification of volatility regime changes for strategic positioning
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|----------------|
-| Volatility Period | 20 | Lookback for initial volatility calculation | Shorter for responsive volatility; longer for stable baseline |
-| VOV Period | 10 | Lookback for volatility-of-volatility calculation | Shorter for sensitive detection; longer for stable readings |
-| Source | Close | Price series for volatility calculation | Use OHLC data when available for more comprehensive analysis |
+- `Calculates the Volatility of Volatility (VOV) with embedded rolling standard deviation algorithms.`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Technical Formula:**
+| Parameter | Purpose |
+|---|---|
+| `src` | The source series. Default is `close`. |
+| `volatilityPeriod` | The lookback period for the initial volatility calculation. Default is 20. |
+| `vovPeriod` | The lookback period for calculating the standard deviation of the volatility series. Default is 10. |
 
-Stage 1 - Initial Volatility Calculation:
-$\sigma_1(t) = \sqrt{\frac{1}{n_1-1} \sum_{i=0}^{n_1-1} (P_{t-i} - \bar{P})^2}$
+### Returns
 
-where:
-* $P_t$ = Price at time $t$
-* $\bar{P}$ = Mean price over volatility period $n_1$
-* $\sigma_1(t)$ = Initial volatility at time $t$
+- float The VOV value.
 
-Stage 2 - Volatility of Volatility Calculation:
-$VOV(t) = \sqrt{\frac{1}{n_2-1} \sum_{j=0}^{n_2-1} (\sigma_1(t-j) - \bar{\sigma_1})^2}$
+## Input configuration
 
-where:
-* $\bar{\sigma_1}$ = Mean of initial volatility over VOV period $n_2$
-* $VOV(t)$ = Volatility of volatility at time $t$
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_src` | `input.source` | default: `close`, label: "Source" |
+| `i_volatilityPeriod` | `input.int` | default: `20`, label: "Volatility Period" |
+| `i_vovPeriod` | `input.int` | default: `10`, label: "VOV Period" |
 
-**Embedded Rolling Algorithm:**
-The implementation uses efficient circular buffers and incremental calculations:
-```
-raw_variance = (previous_raw × (n-1) + new_value) / n
-bias_compensator = (1 - α) × previous_compensator
-corrected_variance = raw_variance / (1 - bias_compensator)
-volatility = √(corrected_variance)
-```
+## Runtime profile
 
-> 🔍 **Technical Note:** The dual embedded rolling standard deviation algorithms provide O(1) computational complexity per update while maintaining numerical stability through bias correction mechanisms.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-*   **Magnitude Analysis:**
-    - High VOV → Rapidly changing volatility, market uncertainty increasing
-    - Low VOV → Stable volatility regime, predictable risk environment
-    - Rising VOV → Volatility becoming more erratic, regime change possible
-    - Falling VOV → Volatility stabilizing, regime settling
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-*   **Threshold Interpretation:**
-    - VOV spikes → Potential volatility breakouts or regime shifts
-    - VOV compression → Stable periods, potential for volatility expansion
-    - VOV trends → Directional changes in volatility stability
+## Verification checklist
 
-*   **Comparative Analysis:**
-    - VOV vs. historical levels → Context for current market conditions
-    - VOV vs. implied volatility → Market expectations vs. realized uncertainty
-    - VOV cross-asset analysis → Systemic vs. idiosyncratic uncertainty
-
-## Applications
-
-*   **Advanced Risk Management:**
-    - Dynamic position sizing based on volatility stability
-    - Enhanced VaR models incorporating volatility uncertainty
-    - Portfolio optimization under changing volatility regimes
-
-*   **Options and Derivatives:**
-    - Volatility surface modeling and analysis
-    - Vega hedging in unstable volatility environments
-    - Advanced option pricing incorporating volatility uncertainty
-
-*   **Market Regime Analysis:**
-    - Identification of volatility regime transitions
-    - Early warning system for market stress periods
-    - Quantification of market uncertainty levels
-
-## Limitations and Considerations
-
-*   **Computational Complexity:**
-    - Dual-stage calculation increases computational requirements
-    - Parameter optimization requires careful calibration
-    - Real-time implementation needs efficient algorithms
-
-*   **Interpretation Challenges:**
-    - Second-order measure requires sophisticated interpretation
-    - Context-dependent readings need historical comparison
-    - Market regime dependency affects threshold levels
-
-*   **Data Requirements:**
-    - Requires sufficient historical data for meaningful calculation
-    - Data quality crucial for both volatility stages
-    - Parameter sensitivity requires robust testing
-
-Complementary Indicators:
-* Traditional volatility measures (ATR, Historical Volatility)
-* Implied volatility indicators
-* Market stress indicators (VIX, put/call ratios)
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Andersen, T.G., Bollerslev, T., Diebold, F.X., and Labys, P. "Modeling and Forecasting Realized Volatility." *Econometrica*, 71(2), 2003.
-2. Gatheral, J. "The Volatility Surface: A Practitioner's Guide." Wiley, 2006.
-3. Sinclair, E. "Volatility Trading." Wiley, 2013.
+- Source code: `indicators/volatility/vov.pine`
+- Documentation file: `indicators/volatility/vov.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/vov.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/vov.md

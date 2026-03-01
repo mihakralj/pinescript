@@ -7,7 +7,6 @@ indicator("Hyperbolic Tangent (TANH)", "TANH", overlay=false, precision=6)
 // Formula: S(x) = tanh(k * (x - x0))
 // where tanh(y) = (exp(y) - exp(-y)) / (exp(y) + exp(-y))
 // Maps any real-valued input to the range (-1, 1).
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/tanh.md
 //@param src The source series.
 //@param k The steepness factor. Higher k means a steeper curve around x0.
 //@param x0 The x-value of the inflection point (where the output is 0).

@@ -1,0 +1,11 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("MEDPRICE: Median Price", overlay=true)
+
+medprice(float h, float l) =>
+    (h + l) * 0.5
+
+result = medprice(high, low)
+
+plot(result, "MedPrice", color.new(color.orange, 0), 2)

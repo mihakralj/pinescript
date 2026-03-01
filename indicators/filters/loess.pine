@@ -4,7 +4,6 @@
 indicator("LOESS Filter", "LOESS", overlay=true)
 
 //@function Applies LOESS (LOcally Estimated Scatterplot Smoothing) filter
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/loess.md
 //@param src Input series to filter
 //@param length Window size (rounded down to nearest odd number)
 //@returns LOESS smoothed series

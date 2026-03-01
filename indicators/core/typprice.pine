@@ -1,0 +1,11 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("TYPPRICE: Typical Price", overlay=true)
+
+typprice(float h, float l, float c) =>
+    (h + l + c) / 3.0
+
+result = typprice(high, low, close)
+
+plot(result, "TypPrice", color.new(color.green, 0), 2)

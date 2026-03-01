@@ -1,71 +1,59 @@
-# NORMALIZE: Min-Max Scaling (Normalization)
+# NORMALIZE - Normalize
 
-[Pine Script Implementation of NORMALIZE](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/normalize.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Min-Max Scaling, often referred to as normalization, is a data preprocessing technique used to rescale numeric features to a fixed range, typically [0, 1] or [-1, 1]. This is achieved by shifting and scaling the values based on the minimum and maximum values observed in the data over a specified lookback period.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. NORMALIZE addresses this by implementing `Normalizes a source series to the fixed range [0, 1] using Min-Max scaling over a lookback period.` with parameterized inputs and direct state progression.
 
-In financial analysis, normalization can be useful for:
-*   Comparing indicators or price series that operate on different scales.
-*   Preparing data for machine learning algorithms that are sensitive to the scale of input features (e.g., Support Vector Machines, K-Nearest Neighbors, neural networks with certain activation functions).
-*   Creating bounded oscillators that fluctuate within a defined range, making it easier to identify overbought/oversold conditions or relative strength.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-*   **Rescaling:** Transforming data from its original range to a new, predefined range.
-*   **Lookback Period:** The number of past data points used to determine the current minimum and maximum values for scaling.
-*   **Target Range:** The normalized output is always scaled to the range [0, 1].
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter         | Default | Function                                                                 | When to Adjust                                                                                                                               |
-| :---------------- | :------ | :----------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| Source            | Close   | Data point or series to be normalized.                                   | Can be any series, such as price, returns, volume, or another indicator output.                                                              |
-| Lookback Length   | 200     | Number of bars to find the min and max values for scaling.               | Shorter lengths make the normalization more sensitive to recent price action; longer lengths provide a more stable, longer-term perspective. |
+- `Normalizes a source series to the fixed range [0, 1] using Min-Max scaling over a lookback period.`
 
-**Pro Tip:** Normalizing an indicator like RSI or Stochastics (which are already bounded) might not be necessary unless you want to rescale them to a different specific range or combine them with other differently scaled indicators. Normalizing unbounded indicators like Momentum or MACD can be very useful for creating consistent oscillator behavior within the [0, 1] range.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | The source series to normalize. |
+| `len` | The lookback period to determine min and max values. Must be >= 1. |
 
-**Simplified explanation:**
-1.  Find the highest and lowest values of the `Source` data over the `Lookback Length`.
-2.  For the current `Source` value, determine where it sits proportionally between this min and max. (e.g., if min=10, max=20, and current=15, it's at the 50% mark). This proportion will be a value between 0 and 1.
+### Returns
 
-**Technical formula:**
+- The normalized series (scaled to [0, 1]).
 
-Normalized Value = (X - X<sub>min</sub>) / (X<sub>max</sub> - X<sub>min</sub>)
+## Input configuration
 
-Where:
-*   `X` is the current value of the `Source` series.
-*   `X_min` is the minimum value of the `Source` series over the `Lookback Length`.
-*   `X_max` is the maximum value of the `Source` series over the `Lookback Length`.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_length` | `input.int` | default: `200`, label: "Lookback Length" |
 
-If `X_max` equals `X_min` (i.e., the range is zero), the `Normalized Value` is 0.0.
+## Runtime profile
 
-**Special Case (X<sub>max</sub> - X<sub>min</sub> = 0):**
-If all values within the `Lookback Length` are identical (i.e., `X_max` - `X_min` = 0), the `Source` value `X` must be equal to `X_min` (and `X_max`). In this scenario, the formula `(X - X_min) / (X_max - X_min)` would result in 0/0. The Pine Script implementation handles this by directly outputting `0.0`.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The Pine Script `normalize` function determines the minimum (`min_val_in_period`) and maximum (`max_val_in_period`) values of the `src` series over the specified `len` lookback period by iterating through the historical data in a single pass within its own code block. It does not use separate helper functions or the built-in `ta.lowest()`/`ta.highest()` functions for this. It then applies the simplified normalization formula for the [0, 1] range, carefully handling the case where `max_val_in_period - min_val_in_period` is zero to prevent division by zero errors and ensure an output of `0.0`.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-*   A value of **1.0** indicates that the current `Source` value is the highest it has been over the `Lookback Length`.
-*   A value of **0.0** indicates that the current `Source` value is the lowest it has been over the `Lookback Length` (or that all values in the lookback period were identical).
-*   Values between 0 and 1 represent the relative position of the current `Source` value within its range over the lookback period. For example:
-    *   Output ≈ 1.0: Source is at or near its recent high.
-    *   Output ≈ 0.0: Source is at or near its recent low.
-    *   Output ≈ 0.5: Source is midway between its recent high and low.
+## Verification checklist
 
-## Limitations and Considerations
-
-*   **Sensitivity to Lookback Period:** The choice of `Lookback Length` significantly impacts the output. A short period can lead to volatile normalized values, while a very long period might make the indicator slow to react to new price extremes.
-*   **Outliers:** Extreme outliers within the lookback window can compress the rest of the data into a small portion of the target range, potentially obscuring finer details.
-*   **Non-Stationary Data:** For highly trending or non-stationary data, the min/max values can shift dramatically, causing the normalized output to frequently hit the target boundaries.
-*   **Information Loss (Contextual):** While normalization makes comparison easier, it removes information about the absolute magnitude and volatility of the original series.
-*   **Warm-up Period:** Requires `Lookback Length` bars to have a full window for min/max calculation. Values during warm-up are based on fewer bars.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-*   Han, J., Pei, J., & Kamber, M. (2011). *Data Mining: Concepts and Techniques* (3rd ed.). Morgan Kaufmann. (Chapter 3: Data Preprocessing)
-*   Wikipedia contributors. (2023). *Feature scaling*. Wikipedia, The Free Encyclopedia.
+- Source code: `indicators/numerics/normalize.pine`
+- Documentation file: `indicators/numerics/normalize.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/normalize.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/normalize.md

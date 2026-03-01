@@ -1,47 +1,63 @@
-# Moving Average Envelope
+# MAENV - Maenv
 
-[Pine Script Implementation of MAENV](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/maenv.pine)
 
-Moving Average Envelope consists of three lines: a moving average in the middle and two lines plotted at a fixed percentage above and below it. The envelope provides a simple way to identify potential support and resistance levels based on a percentage deviation from the average price.
+## Architectural problem
 
-## Calculation
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MAE addresses this by implementing `Calculates MA Envelope bands using a fixed percentage` with parameterized inputs and direct state progression.
 
-```
-Middle = MA(Source, Length)
-Upper = Middle + (Middle × Percentage/100)
-Lower = Middle - (Middle × Percentage/100)
-```
+## Design decision
 
-Where:
-- MA = Moving Average (can be SMA, EMA, or WMA)
-- Source = Price series (typically close price)
-- Length = Lookback period for moving average
-- Percentage = Fixed percentage for band width
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Parameters
+## API surface
 
-- Source (default: close) - Price series used for the moving average
-- Length (default: 20) - Period used for moving average calculation
-- Percentage (default: 1.0) - Fixed percentage distance from MA to bands
-- MA Type (default: 1) - Moving average type: 0:SMA, 1:EMA, or 2:WMA
+### Functions
 
-## Interpretation
+- `Calculates MA Envelope bands using a fixed percentage`
 
-- The middle line shows the average price trend
-- Upper and lower bands create a channel based on fixed percentage
-- Price reaching the bands may indicate overbought/oversold conditions
-- Unlike volatility-based bands, envelope width changes proportionally with price
-- Band penetration may signal potential trend reversals
-- Works best in trending markets with consistent volatility
+### Parameters
 
-## Implementation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate moving average from |
+| `length` | Lookback period for MA calculation |
+| `percentage` | Distance of bands from MA as percentage |
+| `ma_type` | Type of moving average (0:SMA, 1:EMA, 2:WMA) |
 
-The implementation includes:
-- Choice of three moving average types (SMA, EMA, WMA)
-- Optimized calculations for each MA type
-- Circular buffer for efficient SMA calculation
-- Alpha smoothing for EMA
-- Linear weighting for WMA
-- Proper handling of NA values
-- Input validation
-- Percentage-based band width calculation
+### Returns
+
+- tuple with [middle, upper, lower] band values
+
+## Input configuration
+
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_length` | `input.int` | default: `20`, label: "Length" |
+| `i_percentage` | `input.float` | default: `1.0`, label: "Percentage" |
+| `i_ma_type` | `input.int` | default: `1`, label: "MA Type" |
+
+## Runtime profile
+
+- Declared optimization: SMA uses circular buffer O(1), EMA uses warmup O(1), WMA is O(n)
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
+
+## Trade-offs
+
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
+
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
+
+## References
+
+- Source code: `indicators/channels/maenv.pine`
+- Documentation file: `indicators/channels/maenv.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/maenv.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/maenv.md

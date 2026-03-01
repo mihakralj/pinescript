@@ -1,64 +1,59 @@
-# HANMA: Hanning Moving Average
+# HANMA - Hanma
 
-[Pine Script Implementation of HANMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/hanma.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Hanning Moving Average (HANMA) is a technical indicator that applies the Hanning window function from digital signal processing to price data. Developed in the 1960s by Julius von Hann for spectral analysis in signal processing, the Hanning window was later adapted for financial market analysis in the 1990s as digital signal processing techniques gained traction in technical analysis. HANMA uses a cosine-based weighting scheme to create an effective filter that reduces market noise while preserving important price movements.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HANMA addresses this by implementing `Calculates HANMA using Hanning window weighting` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Cosine-based weighting:** HANMA uses a raised cosine function that creates a bell-shaped weight distribution with excellent frequency domain characteristics
-* **Side-lobe suppression:** The Hanning window provides effective attenuation of side lobes, reducing false signals from market noise
-* **Timeframe flexibility:** Works across multiple timeframes with appropriate period adjustments
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of HANMA is its ability to separate meaningful price movements from market noise. Unlike simpler moving averages, the Hanning window's cosine-based weighting creates a bell-shaped curve that gradually tapers to zero at both ends, minimizing distortion while effectively filtering out random price fluctuations. This makes it particularly valuable in choppy or consolidating markets.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
-| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+- `Calculates HANMA using Hanning window weighting`
 
-**Pro Tip:** For trend following, use a length of 20-30 to maximize the Hanning window's noise reduction capabilities without introducing excessive lag.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate HANMA from |
+| `period` | Lookback period - FIR window size |
 
-**Simplified explanation:**
-HANMA calculates a weighted average of prices where the weights follow a bell-shaped pattern. The weights are highest in the middle and gradually decrease to zero at both ends, creating a smooth filter that effectively removes random price fluctuations.
+### Returns
 
-**Technical formula:**
-The Hanning window weights are calculated as:
-w(n) = 0.5 × (1 - cos(2π × n / (N - 1)))
+- HANMA value, calculates from first bar using available data
 
-Where:
-- n is the position in the window (0 to N-1)
-- N is the window size (period)
+## Input configuration
 
-The final HANMA calculation: HANMA = Σ(Price[i] × Window_Weight[i]) / Σ(Window_Weight[i])
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The Hanning window provides approximately -32dB of side-lobe attenuation, making it effective at filtering market noise while maintaining signal integrity. It offers a good balance between main-lobe width and side-lobe suppression.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: Uses Hanning window coefficients with O(n) complexity per bar due to lookback loop
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-HANMA can be used in various trading strategies:
+## Trade-offs
 
-* **Trend identification:** The direction of HANMA indicates the prevailing trend
-* **Signal generation:** Crossovers between price and HANMA generate trade signals
-* **Support/resistance levels:** HANMA can act as dynamic support during uptrends and resistance during downtrends
-* **Trend strength assessment:** Distance between price and HANMA can indicate trend strength
-* **Noise filtering:** Using HANMA to filter noisy price data before applying other indicators
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
-* **Lag factor:** More lag than linear-weighted averages due to center-weighted emphasis
-* **Limited adaptability:** Fixed weighting scheme cannot adapt to changing market volatility
-* **Main-lobe width:** Moderate main-lobe width affects frequency resolution
-* **Complementary tools:** Best used with momentum oscillators or volume indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Harris, F.J. "On the Use of Windows for Harmonic Analysis with the Discrete Fourier Transform", Proceedings of the IEEE, 1978
-* Ehlers, J.F. "Cycle Analytics for Traders," Wiley, 2013
+- Source code: `indicators/trends_FIR/hanma.pine`
+- Documentation file: `indicators/trends_FIR/hanma.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_FIR/hanma.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_FIR/hanma.md

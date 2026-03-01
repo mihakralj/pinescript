@@ -24,7 +24,6 @@ atan2(series float y,series float x)=>
     angle
 
 //@function Measures dominant cycle period using Ehlers homodyne discriminator
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/homod.md
 //@param source Price input series
 //@param minPeriod Minimum dominant cycle length
 //@param maxPeriod Maximum dominant cycle length

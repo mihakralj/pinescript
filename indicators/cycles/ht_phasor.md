@@ -1,125 +1,60 @@
-# HT_PHASOR: Hilbert Transform - Phasor Components
+# HT_PHASOR - Ht Phasor
 
-[Pine Script Implementation of HT_PHASOR](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/ht_phasor.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Hilbert Transform Phasor Components (HT_PHASOR) is an advanced cycle analysis indicator developed by John Ehlers that provides direct access to the In-phase (I) and Quadrature (Q) components of the dominant market cycle. Unlike HT_DCPHASE which derives the phase angle from these components, HT_PHASOR exposes the raw I and Q values themselves, allowing traders and analysts to construct custom cycle indicators or perform advanced signal processing techniques.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HT_PHASOR addresses this by implementing `Numerically stable atan2 implementation for quadrant-aware angle calculation` with parameterized inputs and direct state progression.
 
-The phasor components represent the cycle in two-dimensional phase space, where the I component is the detrended price delayed by a quarter cycle, and the Q component is a 90-degree phase-shifted version of the detrended price. Together, these components form a complex phasor that rotates through phase space as the market cycles, with the magnitude representing cycle amplitude and the angle representing phase position. This dual representation is invaluable for understanding both the strength and position of market cycles.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **In-Phase Component (I)**: The detrended price delayed by quarter cycle; represents the "real" part of the cycle phasor
-* **Quadrature Component (Q)**: 90-degree phase-shifted detrended price; represents the "imaginary" part of the cycle phasor
-* **Phasor Representation**: I and Q together form a rotating vector in 2D phase space tracking cycle evolution
-* **Complex Analysis**: Enables computation of amplitude (√(I²+Q²)), phase (atan2(Q,I)), and frequency
-* **Adaptive Processing**: Uses dominant cycle period to adjust bandwidth for optimal component extraction
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | hlc3 | Price data for analysis | Use close for simpler signals; hlc3 for smoother, more comprehensive cycle detection |
+- `Numerically stable atan2 implementation for quadrant-aware angle calculation`
+- `Calculates Hilbert Transform Phasor Components (InPhase and Quadrature)`
 
-**Pro Tip:** HT_PHASOR is primarily useful for custom indicator development and advanced cycle analysis. The I and Q components can be used to calculate amplitude (cycle strength), phase (cycle position), and instantaneous frequency. When I and Q oscillate with constant magnitude, the market is in a strong cyclical mode. When their magnitudes vary significantly, the market may be transitioning between cycle and trend modes.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `y` | Y-coordinate (imaginary/quadrature component) |
+| `x` | X-coordinate (real/in-phase component) |
+| `source` | Series to analyze for phasor components |
 
-**Simplified explanation:**
-HT_PHASOR applies Hilbert Transform mathematics to extract the In-phase and Quadrature components, which represent the dominant cycle as a rotating vector in 2D phase space.
+### Returns
 
-**Technical formula:**
+- Angle in radians from -π to π
 
-1. Smooth the price data:
-   ```
-   SmoothPrice = (4×Price + 3×Price[1] + 2×Price[2] + Price[3]) / 10
-   ```
+## Input configuration
 
-2. Detrend with adaptive bandwidth:
-   ```
-   Bandwidth = 0.075 × Period[1] + 0.54
-   Detrender = Hilbert_FIR(SmoothPrice) × Bandwidth
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `hlc3`, label: "Source" |
 
-3. Calculate Quadrature component (90° phase shift):
-   ```
-   Q1 = Hilbert_FIR(Detrender) × Bandwidth
-   ```
+## Runtime profile
 
-4. Calculate In-phase component (delayed detrend):
-   ```
-   I1 = Detrender[3]
-   ```
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-5. Apply Hilbert Transform to get jI and jQ:
-   ```
-   jI = Hilbert_FIR(I1) × Bandwidth
-   jQ = Hilbert_FIR(Q1) × Bandwidth
-   ```
+## Trade-offs
 
-6. Compute smoothed I2 and Q2:
-   ```
-   I2 = I1 - jQ
-   Q2 = Q1 + jI
-   I2 = 0.2×I2 + 0.8×I2[1]  (smooth)
-   Q2 = 0.2×Q2 + 0.8×Q2[1]  (smooth)
-   ```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-7. Return both components:
-   ```
-   return [I2, Q2]
-   ```
+## Verification checklist
 
-Where `Hilbert_FIR` is a finite impulse response filter with coefficients [0.0962, 0.5769, 0, -0.5769, -0.0962].
-
-> 🔍 **Technical Note:** The I and Q components form a complex number representation of the cycle. The dominant cycle period is calculated internally and used to adapt the bandwidth, but the phasor components themselves are the primary output. These can be used to derive amplitude (magnitude = √(I²+Q²)), phase (angle = atan2(Q,I)), and rate of change of phase (instantaneous frequency).
-
-## Interpretation Details
-
-HT_PHASOR provides direct access to cycle components for advanced analysis:
-
-* **Component Oscillation:**
-  - Both I and Q oscillate around zero
-  - Amplitude of oscillation indicates cycle strength
-  - Regular sinusoidal patterns indicate clean cycles
-  - Irregular patterns suggest trending or transitional periods
-
-* **Phasor Magnitude (√(I²+Q²)):**
-  - Large magnitude: Strong cyclical behavior
-  - Small magnitude: Weak cycle or trending phase
-  - Constant magnitude: Pure cycle mode
-  - Varying magnitude: Mixed cycle/trend mode
-
-* **Phase Angle (atan2(Q,I)):**
-  - Derived phase ranges from -π to π
-  - Constant rotation rate indicates steady cycle
-  - Accelerating rotation suggests cycle compression
-  - Decelerating rotation suggests cycle expansion
-
-* **Component Relationships:**
-  - I and Q approximately 90° out of phase in clean cycles
-  - Loss of quadrature relationship indicates trend dominance
-  - Relative magnitudes reveal cycle shape distortions
-  - Sign changes indicate cycle progression through quadrants
-
-* **Custom Indicator Construction:**
-  - Amplitude: `sqrt(I² + Q²)` for cycle strength
-  - Phase: `atan2(Q, I)` for cycle position
-  - Frequency: Rate of change of phase angle
-  - Power: `I² + Q²` for energy without sqrt overhead
-
-## Limitations and Considerations
-
-* **Raw Components:** Less intuitive than derived metrics (phase, amplitude); requires understanding of complex analysis
-* **Trend Dependence:** Component values less meaningful in strong trending markets
-* **Computation Required:** User must compute derived metrics (amplitude, phase) from I and Q components
-* **Noise Sensitivity:** Can show erratic behavior in choppy markets without clear cycles
-* **Cycle Assumption:** Assumes dominant cycle exists; questionable in random walk conditions
-* **Advanced Tool:** Primarily for custom indicator development and algorithmic trading applications
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J. F. (2004). "Cybernetic Analysis for Stocks and Futures." John Wiley & Sons.
-* Ehlers, J. F. (2001). "Rocket Science for Traders: Digital Signal Processing Applications." John Wiley & Sons.
-* Ehlers, J. F. (2013). "Cycle Analytics for Traders: Advanced Technical Trading Concepts." John Wiley & Sons.
+- Source code: `indicators/cycles/ht_phasor.pine`
+- Documentation file: `indicators/cycles/ht_phasor.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/ht_phasor.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/ht_phasor.md

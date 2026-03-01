@@ -1,0 +1,11 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("AVGPRICE: Average Price", overlay=true)
+
+avgprice(float o, float h, float l, float c) =>
+    (o + h + l + c) * 0.25
+
+result = avgprice(open, high, low, close)
+
+plot(result, "AvgPrice", color.new(color.blue, 0), 2)

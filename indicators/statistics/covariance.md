@@ -1,69 +1,61 @@
-# COVARIANCE: Covariance
+# COVARIANCE - Covariance
 
-[Pine Script Implementation of COVAR](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/covariance.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Covariance is a statistical measure that quantifies the degree to which two variables change together. In financial markets, covariance analysis helps traders understand the relationship between different securities, indicators, or price components. Unlike correlation, which is normalized to a range of -1 to +1, covariance values depend on the scale of the data, making it particularly useful for measuring the absolute magnitude of co-movement between price series or technical indicators.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. COVARIANCE addresses this by implementing `Calculates covariance using single pass with circular buffer` with parameterized inputs and direct state progression.
 
-The implementation provided uses an optimized single-pass algorithm with a circular buffer to calculate covariance efficiently, maintaining O(1) computational complexity regardless of the lookback period. This makes it suitable for real-time trading applications where computational efficiency is crucial.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Relationship measurement:** Quantifies how two data series move together, with positive values indicating they move in the same direction and negative values indicating they move in opposite directions
-* **Magnitude awareness:** Unlike correlation, preserves the scale of the movement, providing insight into the absolute size of co-movements
-* **Statistical foundation:** Based on solid statistical principles, making it valuable for quantitative trading strategies
-* **Linear dependency:** Measures linear relationships between variables, serving as a foundation for more complex statistical analyses
+## API surface
 
-Covariance forms the mathematical basis for many important financial concepts, including portfolio theory, risk management, and pairs trading. By measuring how different data series move together, it helps traders identify relationships that can be exploited for profit or used to manage risk.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates covariance using single pass with circular buffer`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Lookback period for calculation | Shorter for more sensitivity to recent changes, longer for more stable readings |
-| Source 1 | High | First data series to analyze | Adjust based on which data relationship you want to examine |
-| Source 2 | Low | Second data series to analyze | Adjust based on which data relationship you want to examine |
+### Parameters
 
-**Pro Tip:** Try using covariance between price and volume to identify when volume is confirming price moves. A high positive covariance indicates strong volume confirmation of price direction, while negative covariance may signal potential reversals.
+| Parameter | Purpose |
+|---|---|
+| `src1` | series float First series to analyze |
+| `src2` | series float Second series to analyze |
+| `len` | simple int Lookback period for calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Covariance measures how much two variables change together. It calculates the product of deviations from their respective means, then averages these products over the specified period.
+- float Covariance between src1 and src2
 
-**Technical formula:**
+## Input configuration
 
-Covariance(X, Y) = Σ[(Xᵢ - X̄) × (Yᵢ - Ȳ)] / n
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source 1" |
+| `i_source2_ticker` | `input.symbol` | default: `"SPY"`, label: "SPY" |
+| `i_period` | `input.int` | default: `20`, label: "Period" |
 
-Where:
+## Runtime profile
 
-* Xᵢ and Yᵢ are individual data points
-* X̄ and Ȳ are the means of the respective data series
-* n is the number of data points
+- Declared optimization: for performance using circular buffer
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The implementation uses a computationally efficient single-pass algorithm that doesn't require pre-calculating means, handling data streams and NA values gracefully. It maintains a circular buffer to efficiently track values within the lookback window, preventing memory leaks regardless of how long the script runs.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Covariance provides several analytical insights:
+## Verification checklist
 
-* **Direction of relationship:** Positive covariance indicates the variables tend to move in the same direction; negative covariance indicates they move in opposite directions
-* **Magnitude assessment:** Larger absolute values indicate stronger relationships; values closer to zero indicate weaker relationships
-* **Trend identification:** Consistently positive or negative covariance over time can help identify persistent relationships between data series
-* **Divergence detection:** Changes in covariance patterns can signal potential shifts in market dynamics
-* **Pairs analysis:** Evaluating covariance between related securities can identify potential pairs trading opportunities
-
-## Limitations and Considerations
-
-* **Scale dependency:** Unlike correlation, covariance values depend on the scale of the data, making direct comparisons between different pairs of variables challenging
-* **Linear relationship focus:** Only measures linear relationships, missing more complex nonlinear dependencies
-* **Outlier sensitivity:** Can be disproportionately influenced by extreme values
-* **Sample size requirements:** Requires a sufficient number of data points to produce reliable results
-* **Stationarity assumption:** Most meaningful when the statistical properties of the data series remain stable over time
-* **Directionality vs. causality:** Shows relationship strength and direction but doesn't imply causation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Hamilton, J. D. (1994). Time Series Analysis. Princeton University Press.
-* Vidyamurthy, G. (2004). Pairs Trading: Quantitative Methods and Analysis. John Wiley & Sons.
+- Source code: `indicators/statistics/covariance.pine`
+- Documentation file: `indicators/statistics/covariance.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/covariance.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/covariance.md

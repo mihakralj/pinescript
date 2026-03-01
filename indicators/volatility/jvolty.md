@@ -1,68 +1,59 @@
-# JVOLTY: Jurik Volatility
+# JVOLTY - Jvolty
 
-[Pine Script Implementation of JVOLTY](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/jvolty.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Jurik Volatility (JVOLTY) adapts Mark Jurik’s proprietary smoothing techniques to generate a fast yet low‑noise volatility gauge. By expanding and contracting adaptive envelopes around price, it extracts instantaneous volatility while filtering market micro‑structure noise. JVOLTY is favored for scalping systems, dynamic band construction, and volatility‑conditioned position sizing across all markets.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. JVOLTY addresses this by implementing `Calculates JVOLTY using adaptive techniques to adjust to market volatility` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Adaptive envelope spread** — measures max deviation of price from rolling bands to capture bar‑level volatility  
-* **Jurik smoothing** — non‑linear filter provides lag‑minimized noise suppression  
-* **Relative scaling** — current spread divided by smoothed average reveals volatility spikes
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Market application:  
+## API surface
 
-* **Band trading:** drive adaptive Keltner/Jurik bands  
-* **Vol filter:** disable signals when JVOLTY < threshold  
-* **Risk model:** expand stop distance as JVOLTY rises
+### Functions
 
-Timeframe suitability:  
+- `Calculates JVOLTY using adaptive techniques to adjust to market volatility`
 
-* **Intraday (1 m – H1)** for high‑frequency context; works on daily charts for swing as well.
+### Parameters
 
-## Common Settings and Parameters
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate Jvolty from |
+| `period` | Number of bars used in the calculation |
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 10 | Look‑back for adaptive envelope & smoothing | Shorten for faster spikes, lengthen for stability |
-| Source | Close | Price series for calculation | Use HL2 for range‑sensitive assets |
-| Offset Divisor | 10 (implicit) | Determines decay of historical vol sum | Rarely changed; lower for more reactivity |
+### Returns
 
-**Pro Tip:** Pair JVOLTY with a 50‑bar SMA of itself; trade breakouts only when JVOLTY exceeds 1.2 × its average to avoid low‑energy moves.
+- JVOLTY volatility
 
-## Calculation and Mathematical Foundation
+## Input configuration
 
-**Simplified explanation:**  
-Compute the widest gap between price and adaptive upper/lower bands, smooth this volatility trace with Jurik’s filter, then express current spread as a ratio of its average.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-**Technical formula (abridged):**
+## Runtime profile
 
-1. Kv = (LEN₂ / (LEN₂ + 1))^{√(rv^{POW₁})} with rv = vol / avgVol  
-2. UpperBand = src − Kv·Δ₊ ; LowerBand = src − Kv·Δ₋  
-3. JVOLTY = vol / avgVol , clipped to [1 , LEN₁^{1/POW₁}]
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-where LEN₁, LEN₂, POW₁ derive from `period` (see code); vol = max(|src−UB|, |src−LB|).
+## Trade-offs
 
-> 🔍 **Technical Note:** Jurik smoothing is similar to an EMA with dynamic α driven by volatility itself, yielding lower phase lag than standard filters of equal noise reduction.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-* **JVOLTY = 1** — volatility equals recent average; neutral backdrop  
-* **JVOLTY > 1.5** — volatility surge; favor momentum tactics and wider stops  
-* **JVOLTY falling toward 1** — compression phase; anticipate breakout after squeeze  
-* **Persistent low JVOLTY (< 1.1)** — range trading conditions dominate
-
-## Limitations and Considerations
-
-* **Opacity of Jurik math:** proprietary filter parameters hinder strict replication  
-* **Parameter sensitivity:** very small periods (< 5) can over‑fit noise  
-* **High‑tick spreads:** illiquid symbols may distort adaptive bands
-
-Complementary tools: Jurik Moving Average (JMA), ADX for trend strength, Bollinger Band Width.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Jurik, M. “JMA and JMA‑Based Indicators.” Jurik Research, 1998.  
-2. Harris, L. *Trading and Exchanges*, Oxford UP, 2003.
+- Source code: `indicators/volatility/jvolty.pine`
+- Documentation file: `indicators/volatility/jvolty.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/jvolty.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/jvolty.md

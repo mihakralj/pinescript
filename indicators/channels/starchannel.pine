@@ -4,7 +4,6 @@
 indicator("Stoller Average Range Channel (STARCHANNEL)", "STARCHANNEL", overlay=true)
 
 //@function Calculates Stoller Average Range Channel using ATR for width and SMA for center
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/starchannel.md
 //@param source Source series for the center line
 //@param length Period for ATR and SMA calculations
 //@param multiplier ATR multiplier for band width

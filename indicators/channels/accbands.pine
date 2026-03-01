@@ -4,7 +4,6 @@
 indicator("Acceleration Bands (ACCBANDS)", "ACCBANDS", overlay=true)
 
 //@function Calculates Acceleration Bands using SMAs of high, low, close prices
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/accbands.md
 //@param high Series of high prices
 //@param low Series of low prices
 //@param close Series of close prices

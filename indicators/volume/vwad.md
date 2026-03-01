@@ -1,71 +1,61 @@
-# VWAD: Volume Weighted Accumulation/Distribution
+# VWAD - Vwad
 
-[Pine Script Implementation of VWAD](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/vwad.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Volume Weighted Accumulation/Distribution (VWAD) is an enhanced version of the traditional Accumulation/Distribution Line (ADL) that incorporates volume weighting to provide more accurate signals of buying and selling pressure. While the standard ADL multiplies the Money Flow Multiplier by volume, VWAD adds an additional layer by weighting the money flow volume based on relative volume activity over a specified period. This creates a more sensitive indicator that emphasizes periods of unusually high or low volume activity, making it particularly valuable for identifying accumulation and distribution phases that occur with significant volume backing.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. VWAD addresses this by implementing `Calculates VWAD using volume weighting for enhanced sensitivity` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Volume weighting enhancement:** Builds upon ADL by adding volume-relative weighting to emphasize periods of high volume activity
-* **Money flow sensitivity:** More responsive to accumulation/distribution occurring on above-average volume
-* **Institutional activity detection:** Better at identifying large-scale buying and selling that typically occurs with elevated volume
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-VWAD addresses a key limitation of traditional ADL by recognizing that money flow occurring on high volume periods should carry more significance than the same money flow occurring on low volume periods. This makes VWAD particularly effective for spotting institutional accumulation or distribution phases.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Volume Weight Period | 20 | Lookback period for calculating volume weighting | Increase for longer-term volume context, decrease for more responsive weighting |
+- `Calculates VWAD using volume weighting for enhanced sensitivity`
 
-**Pro Tip:** The Volume Weight Period determines how the current bar's volume is weighted relative to recent volume history. A period of 20 provides good balance between responsiveness and stability, but shorter periods (10-15) can be more sensitive to volume spikes, while longer periods (30-50) provide smoother, more stable weighting.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src_high` | High price series |
+| `src_low` | Low price series |
+| `src_close` | Close price series |
+| `src_vol` | Volume series |
+| `period` | Lookback period for volume weighting |
 
-**Simplified explanation:**
-VWAD calculates the Money Flow Multiplier (same as ADL), multiplies it by volume, then applies an additional volume weight based on the current bar's volume relative to the average volume over the specified period. This double volume weighting makes the indicator more sensitive to accumulation/distribution occurring during high volume periods.
+### Returns
 
-**Technical formula:**
-```
-Money Flow Multiplier (MFM) = ((Close - Low) - (High - Close)) / (High - Low)
-Volume Weight = Current Volume / Average Volume (over period)
-Weighted Money Flow Volume = Volume × MFM × Volume Weight
-VWAD = Cumulative sum of Weighted Money Flow Volume
-```
+- VWAD value representing volume-weighted accumulation/distribution
 
-**Step-by-step calculation:**
-```
-1. Calculate Money Flow Multiplier: MFM = ((C-L) - (H-C)) / (H-L)
-2. Calculate volume weight: VW = Current Volume / Rolling Average Volume
-3. Calculate weighted money flow: WMFV = Volume × MFM × VW
-4. Add to cumulative VWAD: VWAD += WMFV
-```
+## Input configuration
 
-> 🔍 **Technical Note:** This implementation uses a circular buffer to efficiently maintain the rolling volume average for weighting calculations. The volume weight amplifies or diminishes the money flow based on whether current volume is above or below the recent average, making the indicator more responsive to volume-confirmed price movements while reducing noise from low-volume periods.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `20`, label: "Volume Weight Period" |
 
-## Interpretation Details
+## Runtime profile
 
-VWAD provides enhanced accumulation/distribution analysis:
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Trend confirmation:** Rising VWAD confirms accumulation with volume backing; falling VWAD confirms distribution
-* **Volume-confirmed breakouts:** VWAD movements that coincide with price breakouts on high volume provide stronger confirmation
-* **Divergence analysis:** VWAD diverging from price often provides earlier warning signals than standard ADL
-* **Institutional activity:** Large VWAD movements often indicate institutional accumulation or distribution phases
-* **Support/resistance testing:** VWAD behavior during support/resistance tests can reveal the volume-weighted conviction behind price movements
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Volume dependency:** Requires consistent and reliable volume data; less effective in markets with irregular volume reporting
-* **Sensitivity to volume spikes:** Can be temporarily distorted by unusual volume events (earnings, news, option expiration)
-* **Parameter sensitivity:** Different Volume Weight Periods can significantly affect the indicator's responsiveness and interpretation
-* **Market structure:** More effective in liquid markets where volume accurately represents trading interest
-* **Cumulative nature:** Like ADL, VWAD is cumulative and may trend higher or lower over long periods regardless of current conditions
-* **Complementary analysis:** Best used alongside price action, momentum indicators, and volume profile analysis
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Williams, Larry R. "The Secret of Selecting Stocks for Immediate and Substantial Gains." Windsor Books, 1972.
-* Granville, Joseph E. "Granville's New Key to Stock Market Profits." Prentice-Hall, 1963.
-* Arms Jr., Richard W. "Volume Cycles in the Stock Market." Equis International, 1994.
+- Source code: `indicators/volume/vwad.pine`
+- Documentation file: `indicators/volume/vwad.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/vwad.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/vwad.md

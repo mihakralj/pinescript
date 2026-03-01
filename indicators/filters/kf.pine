@@ -4,7 +4,6 @@
 indicator("Kalman Filter (KF)", "KF", overlay=true)
 
 //@function Applies a Kalman Filter to the input series
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/kf.md
 //@param src Input series (measurement)
 //@param q Process noise covariance
 //@param r Measurement noise covariance

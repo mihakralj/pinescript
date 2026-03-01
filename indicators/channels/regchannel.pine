@@ -4,7 +4,6 @@
 indicator("Regression Channels (REGCHANNEL)", "REGCHANNEL", overlay=true)
 
 //@function Calculates Regression Channels with parallel lines equidistant from a central linear regression line
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/regchannel.md
 //@param period Lookback period for regression calculation (period > 1)
 //@param source Source series for regression calculation (usually close)
 //@param multiplier Distance multiplier for channel bands (multiplier > 0)

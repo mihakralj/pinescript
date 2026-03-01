@@ -1,98 +1,59 @@
-# ROCR: Rate of Change Ratio
+# ROCR - Rocr
 
-[Pine Script Implementation of ROCR](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/rocr.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Rate of Change Ratio (ROCR) indicator measures the ratio between the current price and the price N periods ago. This momentum oscillator helps identify the relative magnitude of price changes as a ratio, making it particularly useful for multiplicative analysis.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ROCR addresses this by implementing `Calculates ratio between current price and N periods ago` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Price Ratio:** Measures relative price relationship over time
-* **Momentum:** Indicates strength and speed of price movements
-* **Oscillator:** Fluctuates around one
-* **Multiplicative Scale:** Useful for geometric analysis
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Common Settings and Parameters
+## API surface
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | close | Price data to analyze | Use high/low for range analysis |
-| Length | 9 | Lookback period | Shorter for faster signals |
+### Functions
 
-**Pro Tip:** Common lookback periods:
-- 12 periods for short-term analysis
-- 25 periods for medium-term trends
-- 50+ periods for long-term momentum
+- `Calculates ratio between current price and N periods ago`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Simplified explanation:**
-ROCR calculates the ratio between current price and historical price.
+| Parameter | Purpose |
+|---|---|
+| `source` | Source price series |
+| `length` | Lookback period |
 
-**Technical formula:**
-```
-ROCR = Price(t) / Price(t-n)
-```
+### Returns
 
-> 🔍 **Technical Note:** The ratio calculation provides a multiplicative view that's useful for geometric analysis and compound growth assessment.
+- Price ratio value
 
-## Interpretation Details
+## Input configuration
 
-ROCR provides multiple analytical perspectives:
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_length` | `input.int` | default: `9`, label: "Length" |
 
-* **Trend Direction:**
-  - Above 1: Price increasing
-  - Below 1: Price decreasing
-  - At 1: No change
+## Runtime profile
 
-* **Momentum Strength:**
-  - Higher values: Stronger upward momentum
-  - Lower values: Stronger downward momentum
-  - Near 1: Weak momentum
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Signal Types:**
-  - Unity line crossovers
-  - Divergence patterns
-  - Extreme readings
-  - Trend confirmation
+## Trade-offs
 
-## Advantages
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-1. **Analytical Benefits:**
-   - Multiplicative measurement
-   - Geometric interpretation
-   - Cross-asset comparison
-   - Compound growth analysis
+## Verification checklist
 
-2. **Trading Applications:**
-   - Trend identification
-   - Entry/exit timing
-   - Divergence trading
-   - Geometric progression analysis
-
-3. **Technical Benefits:**
-   - Simple calculation
-   - Flexible parameters
-   - Multiple timeframes
-   - Clear signals
-
-## Limitations and Considerations
-
-* **Lagging Indicator:** Signals occur after price moves
-* **Multiplicative Scale:** May need log transformation for analysis
-* **Timeframe Dependent:** Different periods show different patterns
-* **Market Context:** Works best in trending markets
-
-## Related Indicators
-
-* **ROC:** Absolute version of ROCR
-* **ROCP:** Percentage version of ROCR
-* **Momentum:** Similar concept but different scaling
-* **Velocity:** Rate of change with additional smoothing
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Achelis, S. B. (2001). Technical Analysis from A to Z. McGraw Hill.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
+- Source code: `indicators/momentum/rocr.pine`
+- Documentation file: `indicators/momentum/rocr.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rocr.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rocr.md

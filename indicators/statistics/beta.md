@@ -1,74 +1,61 @@
-# BETA: Beta Coefficient
+# BETA - Beta
 
-[Pine Script Implementation of BETA](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/beta.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Beta coefficient is a crucial risk measurement tool in financial analysis that quantifies the volatility or systematic risk of an individual security or portfolio in comparison to the market as a whole. Originally derived from the Capital Asset Pricing Model (CAPM), Beta measures how sensitive an asset's returns are to movements in the benchmark (typically a market index like the S&P 500). Unlike correlation which is limited to a -1 to +1 range, Beta's magnitude provides valuable insight into relative volatility, making it essential for portfolio construction, risk management, and performance attribution.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. BETA addresses this by implementing `Calculates the financial Beta indicator comparing src1 volatility to src2` with parameterized inputs and direct state progression.
 
-The implementation provided uses an optimized algorithm that efficiently calculates returns and their covariance, maintaining computational stability even with extended lookback periods. This makes it particularly useful for real-time trading applications where performance matters.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Relative volatility:** Quantifies how much an asset's price moves in relation to a benchmark, with values above 1 indicating higher volatility than the benchmark and values below 1 indicating lower volatility
-* **Directional risk:** Not only measures magnitude but also direction of risk, with positive Beta indicating the asset tends to move in the same direction as the benchmark and negative Beta indicating opposite movement
-* **Systematic risk assessment:** Isolates market risk (systematic) from security-specific risk (unsystematic), helping traders distinguish between diversifiable and non-diversifiable risk
-* **Performance benchmark:** Serves as a foundation for evaluating risk-adjusted returns and asset allocation decisions
+## API surface
 
-Beta forms the cornerstone of modern portfolio theory and risk analysis, helping traders identify assets that can either amplify returns during bull markets (high Beta) or provide defensive positions during market downturns (low Beta). The indicator's ability to quantify market sensitivity makes it invaluable for building diversified portfolios with specific risk characteristics.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates the financial Beta indicator comparing src1 volatility to src2`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Lookback period for return calculation | Shorter for more sensitivity to recent market changes, longer for more stable long-term risk assessment |
-| Source 1 | Close | Price data for the security being analyzed | Rarely needs adjustment unless analyzing specific price components |
-| Source 2 | Benchmark | Price data for the benchmark (typically market index) | Change to compare against different benchmarks based on your trading strategy |
+### Parameters
 
-**Pro Tip:** For pairs trading strategies, try calculating Beta between correlated securities rather than against a broad market index. A significant change in their historical Beta relationship can signal potential mean reversion opportunities.
+| Parameter | Purpose |
+|---|---|
+| `src1` | series float Series to analyze |
+| `src2` | series float src2 series to compare against |
+| `period` | simple int Lookback period for calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Beta calculates the relationship between an asset's returns and a benchmark's returns. It divides the covariance of these returns by the variance of the benchmark returns, essentially measuring how much the asset moves for each unit of benchmark movement.
+- float Beta value showing src1 volatility relative to src2
 
-**Technical formula:**
+## Input configuration
 
-Beta = Covariance(Asset Returns, Benchmark Returns) / Variance(Benchmark Returns)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_symbol` | `input.symbol` | default: `"SPY"`, label: "SPY" |
+| `i_period` | `input.int` | default: `14`, label: "Period" |
+| `i_src1` | `input.source` | default: `close`, label: "src1" |
 
-Where:
+## Runtime profile
 
-* Returns are calculated as (Current Price - Previous Price) / Previous Price
-* Covariance measures how the two return series move together
-* Variance measures the dispersion of benchmark returns around their mean
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The implementation uses efficient array-based circular buffers to track returns without growing memory usage over time. It handles missing data gracefully and includes safeguards against division by zero when benchmark variance is negligible, ensuring stability even in unusual market conditions.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Beta provides several analytical perspectives:
+## Verification checklist
 
-* **Beta = 1:** The security moves in tandem with the market (same volatility)
-* **Beta > 1:** The security is more volatile than the market (amplified movements)
-* **Beta < 1 (but positive):** The security is less volatile than the market (dampened movements)
-* **Beta = 0:** The security's movements have no relation to market movements
-* **Beta < 0:** The security tends to move in the opposite direction of the market (rare)
-* **Magnitude assessment:** A Beta of 2 means the security typically moves twice as much as the benchmark in the same direction
-* **Risk evaluation:** Higher Beta typically suggests higher potential returns but with increased downside risk
-* **Sector analysis:** Comparing Betas across sector peers can identify relative defensive or aggressive positions
-
-## Limitations and Considerations
-
-* **Past performance disclaimer:** Beta is calculated from historical data and may not predict future relationships
-* **Benchmark relevance:** The calculated Beta is only meaningful if the chosen benchmark is relevant to the security being analyzed
-* **Non-linear relationships:** Beta assumes a linear relationship between asset and benchmark returns, which may not hold during extreme market conditions
-* **Timeframe dependency:** Different calculation periods can yield significantly different Beta values
-* **Return distribution assumptions:** Standard Beta calculation assumes normally distributed returns, which is often not the case in financial markets
-* **Regime sensitivity:** Beta relationships can change dramatically during market regime shifts (e.g., from low to high volatility environments)
-* **Fundamental changes:** Corporate actions or structural market changes can alter Beta characteristics, requiring recalibration
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Sharpe, W. F. (1964). Capital asset prices: A theory of market equilibrium under conditions of risk. The Journal of Finance, 19(3), 425-442.
-* Fama, E. F., & French, K. R. (2004). The Capital Asset Pricing Model: Theory and Evidence. Journal of Economic Perspectives, 18(3), 25-46.
-* Jacobs, B. I., & Levy, K. N. (2005). Market Neutral Strategies. John Wiley & Sons.
+- Source code: `indicators/statistics/beta.pine`
+- Documentation file: `indicators/statistics/beta.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/beta.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/beta.md

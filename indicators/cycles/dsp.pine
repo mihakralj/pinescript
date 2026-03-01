@@ -4,7 +4,6 @@
 indicator("Detrended Synthetic Price (DSP)", "DSP", overlay=false)
 
 //@function Calculates Detrended Synthetic Price using Ehlers dual-EMA algorithm
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/dsp.md
 //@param source Series to detrend
 //@param period Dominant cycle period for quarter/half-cycle EMA calculation
 //@returns Detrended synthetic price (difference between quarter-cycle and half-cycle EMAs)

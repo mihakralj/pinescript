@@ -1,64 +1,59 @@
-# JVOLTYN: Normalized Jurik Volatility
+# JVOLTYN - Jvoltyn
 
-[Pine Script Implementation of JVOLTYN](https://github.com/mihakralj/pinescript/blob/main/indicators/volatility/jvoltyn.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Normalized Jurik Volatility (JVOLTYN) compresses the raw Jurik Volatility (JVOLTY) output onto a bounded 0–1 scale via a sigmoid transformation. The result offers a quick, dimension‑less reading of how “hot” or “cold” the market is relative to its own recent activity, eliminating units and simplifying comparative scans across symbols and timeframes. Traders employ JVOLTYN as a volatility oscillator for breakout timing, position‑sizing caps, and risk‑on/off dashboards.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. JVOLTYN addresses this by implementing `Calculates normalized JVOLTYN using adaptive techniques to adjust to market volatility` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Sigmoid normalization** — maps unbounded JVOLTY ratios to [0 , 1] for intuitive interpretation  
-* **Adaptive responsiveness** — inherits Jurik smoothing, providing swift detection of regime shifts with low noise  
-* **Volatility oscillator** — behaves like an RSI of volatility, enabling overbought/oversold‑style thresholds  
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Market application:  
+## API surface
 
-* **Breakout filter:** act only when JVOLTYN > 0.7 (high energy)  
-* **Risk dial:** scale leverage linearly to JVOLTYN; cap risk when > 0.9  
-* **Mean‑reversion:** seek fades when JVOLTYN < 0.3
+### Functions
 
-Timeframe suitability:  
+- `Calculates normalized JVOLTYN using adaptive techniques to adjust to market volatility`
 
-* **All frames**—intraday scalps to multi‑day swing; normalization keeps values consistent.
+### Parameters
 
-## Common Settings and Parameters
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate Jvolty from |
+| `period` | Number of bars used in the calculation |
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 10 | Underlying JVOLTY calculation window | Shorten for faster spikes, lengthen to smooth |
-| Source | Close | Price input | HL2 for range emphasis |
-| Sigmoid Strength | 2 | Steepness of 0–1 mapping | Increase for crisper extremes |
+### Returns
 
-**Pro Tip:** Use dual thresholds: enter momentum trades when JVOLTYN crosses above 0.65 and exit when it falls back below 0.45—this avoids whipsaws during volatility collapses.
+- JVOLTYN volatility
 
-## Calculation and Mathematical Foundation
+## Input configuration
 
-**Simplified explanation:**  
-Calculate JVOLTY, then pass it through a logistic (sigmoid) function so values hug 0 in calm periods and approach 1 during volatility explosions.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-**Technical formula:**
+## Runtime profile
 
-1. JVOLTYₜ from original algorithm  
-2. JVOLTYNₜ = 1 ⁄ (1 + e^{−k·(JVOLTYₜ − 1)})    ; *k* = Sigmoid Strength
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** Centering the logistic at JVOLTY = 1 ensures a 0.5 neutral line; choosing *k* ≈ 2 maps JVOLTY ≈ 1.5 to JVOLTYN ≈ 0.73.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **> 0.8** — extreme volatility; trend followers thrive, tighten risk controls  
-* **0.5 zone** — average energy; standard strategies  
-* **< 0.2** — volatility drought; expect range‑bound price, favor options selling or stay flat
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Inherited opacity:** depends on JVOLTY internals  
-* **Parameter over‑tuning:** extreme sigmoid strength can flatten mid‑range sensitivity  
-* **Normalization illusion:** 0.9 on one asset may reflect different absolute ATR than another; still confirm with dollars‑at‑risk.
-
-Complementary tools: ATRP for percent volatility, Bollinger Band %‑b, ADX.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Jurik, M. “Normalized Volatility Techniques.” Jurik Research Notes, 1999.  
-2. Sheldon, N. *Volatility Modeling in Intraday Trading*. Wiley, 2014.
+- Source code: `indicators/volatility/jvoltyn.pine`
+- Documentation file: `indicators/volatility/jvoltyn.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/jvoltyn.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volatility/jvoltyn.md

@@ -1,105 +1,67 @@
-# PIVOT: Classic Pivot Points
+# PIVOT - Pivot
 
-[Pine Script Implementation of PIVOT](https://github.com/mihakralj/pinescript/blob/main/indicators/reversals/pivot.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Classic Pivot Points, also known as Standard or Floor Pivot Points, are one of the oldest and most widely used technical indicators in trading. Originally developed by floor traders in the commodity pits before the era of electronic trading, these levels serve as objective price markers that identify potential support and resistance zones throughout the trading day.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PIVOT addresses this by implementing `Calculates classic/standard/floor pivot points` with parameterized inputs and direct state progression.
 
-The indicator calculates a central pivot point (PP) based on the previous period's high, low, and close, then derives three resistance levels (R1, R2, R3) above the pivot and three support levels (S1, S2, S3) below it. These seven key levels provide traders with predetermined price targets and reversal zones, making them invaluable for day trading, swing trading, and position management.
+## Design decision
 
-The universal adoption of classic pivot points across trading platforms and markets has created a self-fulfilling prophecy effect - because so many traders watch and react to these levels, they often become significant turning points in price action.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-* **Pivot Point (PP):** The central reference level calculated as the average of previous period's high, low, and close
-* **Support Levels (S1-S3):** Price levels below PP where buying pressure is expected to emerge
-* **Resistance Levels (R1-R3):** Price levels above PP where selling pressure is expected to emerge
-* **Timeframe Flexibility:** Can be calculated on daily, weekly, or monthly periods for different trading styles
-* **Self-Fulfilling Nature:** Widely watched levels become significant due to collective trader behavior
+### Functions
 
-## Common Settings and Parameters
+- `Calculates classic/standard/floor pivot points`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Timeframe | Daily | Period for pivot calculation | Use Weekly for swing trading, Monthly for position trading |
-| Show PP | True | Display pivot point | Central reference level, always useful |
-| Show R1-R3 | True | Display resistance levels | Hide if focusing only on support |
-| Show S1-S3 | True | Display support levels | Hide if focusing only on resistance |
-| PP Color | Yellow | Pivot point line color | Visual preference |
-| Resistance Color | Red | Resistance lines color | Visual preference |
-| Support Color | Green | Support lines color | Visual preference |
+### Parameters
 
-**Pro Tip:** Daily pivots work best for intraday and day trading (5m to 1H charts). Weekly pivots are ideal for swing trading (4H to Daily charts). Monthly pivots suit position trading (Daily to Weekly charts). The key is matching the pivot timeframe to your trading timeframe - typically use pivots from one timeframe higher than your trading chart.
+| Parameter | Purpose |
+|---|---|
+| `tf` | Timeframe for pivot calculation ("D", "W", "M") |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Classic pivot points calculate a central pivot level from the previous period's price action, then derive support and resistance levels using simple arithmetic based on the price range.
+- Tuple [pp, r1, r2, r3, s1, s2, s3] with pivot levels
 
-**Technical formula:**
+## Input configuration
 
-```
-Step 1: Calculate Pivot Point (PP)
-PP = (High + Low + Close) / 3
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_timeframe` | `input.timeframe` | default: `"D"`, label: "D" |
+| `i_show_pp` | `input.bool` | default: `true`, label: "Show Pivot Point" |
+| `i_show_r1` | `input.bool` | default: `true`, label: "Show R1" |
+| `i_show_r2` | `input.bool` | default: `true`, label: "Show R2" |
+| `i_show_r3` | `input.bool` | default: `true`, label: "Show R3" |
+| `i_show_s1` | `input.bool` | default: `true`, label: "Show S1" |
+| `i_show_s2` | `input.bool` | default: `true`, label: "Show S2" |
+| `i_show_s3` | `input.bool` | default: `true`, label: "Show S3" |
+| `i_color_pp` | `input.color` | default: `color.yellow`, label: "PP Color" |
+| `i_color_r` | `input.color` | default: `color.red`, label: "Resistance Color" |
+| `i_color_s` | `input.color` | default: `color.green`, label: "Support Color" |
 
-Step 2: Calculate First Level Support and Resistance
-R1 = 2 × PP - Low
-S1 = 2 × PP - High
+## Runtime profile
 
-Step 3: Calculate Second Level Support and Resistance
-R2 = PP + (High - Low)
-S2 = PP - (High - Low)
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-Step 4: Calculate Third Level Support and Resistance
-R3 = High + 2 × (PP - Low)
-S3 = Low - 2 × (High - PP)
-```
+## Trade-offs
 
-> 🔍 **Technical Note:** The formula uses the previous period's data (high[1], low[1], close[1]) to calculate levels that remain static throughout the current period. This forward-looking approach using `lookahead=barmerge.lookahead_on` ensures the levels are known at the start of the period and don't repaint. The arithmetic progression ensures each level is equidistant within its respective range.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-Classic pivot points provide multiple analytical perspectives for traders:
-
-* **Directional Bias:**
-  - Price opens above PP: Bullish bias for the session
-  - Price opens below PP: Bearish bias for the session
-  - PP acts as the neutral equilibrium level
-
-* **Support and Resistance:**
-  - S1, S2, S3: Expected support zones where buyers may emerge
-  - R1, R2, R3: Expected resistance zones where sellers may emerge
-  - Breaks through levels signal strength in that direction
-  - Bounces from levels confirm their validity
-
-* **Price Targets:**
-  - From PP: Target R1 in uptrend, S1 in downtrend
-  - From R1: Target R2, from S1: Target S2
-  - R3/S3 typically represent extreme moves requiring strong momentum
-
-* **Range Trading:**
-  - Between S1 and R1: Normal trading range
-  - Between S2 and R2: Extended range
-  - Beyond R3 or S3: Breakout/breakdown scenario
-
-* **Breakout Confirmation:**
-  - Clean break above R1 with retest: Bullish continuation to R2
-  - Clean break below S1 with retest: Bearish continuation to S2
-  - Failed breaks suggest range-bound conditions
-
-## Limitations and Considerations
-
-* **Static Levels:** Pivot points remain fixed for the entire period and don't adapt to intraday volatility
-* **Market Gaps:** Large overnight gaps can make pivot levels less relevant at the open
-* **Trending Markets:** Strong trends may ignore pivot levels and move through them quickly
-* **Range-Bound Bias:** Most effective in ranging or consolidating markets
-* **Timeframe Dependency:** Must match pivot calculation period to trading timeframe appropriately
-* **No Volume Information:** Purely price-based, doesn't account for volume or momentum
-* **Self-Fulfilling Prophecy:** Effectiveness depends on how many traders are watching the same levels
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Floor Traders' Standard Practice (Pre-1990s)
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Person, J. L. (2004). Candlestick and Pivot Point Trading Triggers. Wiley Trading.
+- Source code: `indicators/reversals/pivot.pine`
+- Documentation file: `indicators/reversals/pivot.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/pivot.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/pivot.md

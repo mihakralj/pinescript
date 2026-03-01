@@ -1,64 +1,60 @@
-# MASE: Mean Absolute Scaled Error
+# MASE - Mase
 
-[Pine Script Implementation of MASE](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mase.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Mean Absolute Scaled Error (MASE) is an advanced error metric that provides a scale-independent measure of forecast accuracy. Introduced by Rob Hyndman and Anne Koehler in 2006, MASE addresses limitations in traditional error metrics by scaling errors relative to a naive forecast benchmark. This creates a unitless measure that allows direct comparison across different time series and market conditions. For financial analysts and traders, MASE offers a robust way to evaluate prediction models regardless of price scale or volatility, providing clear insight into whether a forecasting method outperforms a simple naive approach.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MASE addresses this by implementing `Calculates Mean Absolute Scaled Error between two sources using SMA for averaging` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Relative performance:** Measures prediction accuracy relative to a naive benchmark rather than in absolute terms
-* **Scale independence:** Creates a unitless metric that allows fair comparison across different instruments and timeframes
-* **Market application:** Particularly valuable for comparing forecast models across different securities where price scales and volatilities vary significantly
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of MASE is its normalization approach - by scaling the absolute error relative to the error of a naive forecast (typically a random walk), it creates a natural benchmark where values below 1.0 indicate the model outperforms the naive approach. This gives MASE a built-in interpretability that many other error metrics lack.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the window for error averaging | Increase for more stable benchmark comparison, decrease for more responsive evaluation |
-| Source 1 | close | First signal (actual values) | Typically the target series you're trying to predict |
-| Source 2 | sma(close,20) | Second signal (predictions) | The output of your forecasting model or indicator |
+- `Calculates Mean Absolute Scaled Error between two sources using SMA for averaging`
 
-**Pro Tip:** When evaluating trading models, pay special attention to how MASE behaves during market regime changes - a model that maintains MASE < 1 across different volatility conditions demonstrates robust predictive power.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source1` | First series to compare |
+| `source2` | Second series to compare |
+| `period` | Lookback period for error averaging |
 
-**Simplified explanation:**
-MASE compares your model's average error to the error you'd get from a very simple forecasting approach (just guessing that tomorrow's value will be the same as today's). If your model produces smaller errors than this simple approach, MASE will be less than 1.0.
+### Returns
 
-**Technical formula:**
-MASE = MAE(forecast) / MAE(naive)
+- MASE value averaged over the specified period using SMA
 
-Where:
-- MAE(forecast) = Average of |Actual - Predicted|
-- MAE(naive) = Average of |Actual - Previous Actual|
+## Input configuration
 
-Implemented as: MASE₍ₙ₎ = SMA(|Y₁₍ₙ₎ - Y₂₍ₙ₎|, p) / SMA(|Y₁₍ₙ₎ - Y₁₍ₙ₋₁₎|, p)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source" |
+| `i_period` | `input.int` | default: `100`, label: "Period" |
 
-> 🔍 **Technical Note:** The naive forecast used in MASE is essentially a random walk model. For financial time series that often exhibit near-random walk behavior, this creates a particularly challenging benchmark that many sophisticated models struggle to beat consistently.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-MASE can be applied in various financial contexts:
+## Trade-offs
 
-* **Model evaluation:** Compare the relative accuracy of different forecasting models
-* **Strategy validation:** Determine if a trading strategy's signals outperform naive approaches
-* **Cross-market analysis:** Compare prediction accuracy across different instruments regardless of price scale
-* **Market regime detection:** Identify periods where predictability increases or decreases
-* **Parameter optimization:** Tune model parameters to minimize MASE rather than absolute errors
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Benchmark dependency:** Performance assessment is relative to the naive forecast benchmark
-* **Calculation complexity:** More involved computation than simple error metrics
-* **Interpretation nuance:** Values around 1.0 require careful interpretation
-* **Historical data requirement:** Needs prior period data to calculate the benchmark error
-* **Complementary metrics:** Best used alongside absolute error measures for comprehensive evaluation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Hyndman, R.J. and Koehler, A.B. "Another look at measures of forecast accuracy," International Journal of Forecasting, 2006
-* Hyndman, R.J. "Why every statistician should know about cross-validation," Hyndsight blog, 2010
+- Source code: `indicators/errors/mase.pine`
+- Documentation file: `indicators/errors/mase.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/mase.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/mase.md

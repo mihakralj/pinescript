@@ -1,69 +1,61 @@
-# QUANTILE: Quantile
+# QUANTILE - Quantile
 
-[Pine Script Implementation of QUANTILE](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/quantile.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Quantile indicator calculates the value below which a specific fraction of observations in a dataset fall. Quantiles divide the probability distribution of a variable into continuous intervals with equal probabilities. For example, the 0.25 quantile (or first quartile) is the value below which 25% of the data points are found. The 0.5 quantile is the median.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. QUANTILE addresses this by implementing `Calculates the quantile of a series over a lookback period using linear interpolation.` with parameterized inputs and direct state progression.
 
-This implementation calculates the specified quantile over a rolling lookback period using linear interpolation.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-*   **Rank-Based Value:** Identifies a value based on its rank or position within a sorted dataset, corresponding to a specific fraction of the data.
-*   **Data Distribution Insight:** Helps understand the distribution of data within the lookback window. For instance, the 0.25, 0.5, and 0.75 quantiles (quartiles) describe the spread and central tendency.
-*   **Rolling Calculation:** The quantile is calculated over a moving window of a fixed length.
-*   **Linear Interpolation:** If the exact quantile rank falls between two data points, this method estimates the value by linearly interpolating between them.
-*   **NA Handling:** `na` values in the `source` series within the lookback `period` are filtered out before the quantile calculation.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter       | Default | Function                                                                 | When to Adjust                                                                                                                               |
-| :-------------- | :------ | :----------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| Source          | Close   | The data series to calculate the quantile from.                        | Change to High, Low, Open, HL2, HLC3, another indicator's output, etc., for different analyses.                                              |
-| Period          | 14      | The number of bars in the lookback window.                               | Shorter periods make the quantile more sensitive to recent data; longer periods provide a more stable, longer-term quantile value.        |
-| Quantile Level  | 0.25     | The quantile to calculate (a value between 0.0 and 1.0). E.g., 0.5 for median, 0.25 for the first quartile, 0.75 for the third quartile. | Adjust to observe different parts of the data distribution. For example, 0.1 and 0.9 quantiles can define a range capturing 80% of the data. |
+- `Calculates the quantile of a series over a lookback period using linear interpolation.`
 
-**Pro Tip:** Plotting multiple quantiles (e.g., 0.1, 0.5, 0.9) can create dynamic channels or bands around the price, similar to Bollinger Bands but based on rank rather than standard deviation.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | {series float} The source series to calculate the quantile from. |
+| `len` | {simple int} The lookback period. Must be greater than 0. |
+| `q_level` | {simple float} The quantile level to calculate (between 0.0 and 1.0). |
 
-**Simplified explanation:**
-1.  Collect all valid (non-`na`) numbers from the lookback period.
-2.  Sort these numbers from smallest to largest.
-3.  Determine the rank (position) that corresponds to the desired quantile level.
-4.  If the rank points to an exact data point, that's the quantile value. If it falls between two data points, estimate the value using linear interpolation.
+### Returns
 
-**Technical formula:**
-The calculation involves these primary steps:
-1.  **Data Collection:** Gather all non-`na` values from the `source` series within the `period`.
-2.  **Sorting:** Sort the collected values in ascending order. Let the sorted array be `X` and its size be `N_valid`.
-3.  **Rank Calculation:** Determine the 0-indexed rank `k` for the desired `quantile_level` (Q, between 0.0 and 1.0):
-    `k = Q * (N_valid - 1)`
-4.  **Value Retrieval/Interpolation:**
-    *   If `Q = 0.0`, Quantile = `X[0]` (minimum).
-    *   If `Q = 1.0`, Quantile = `X[N_valid - 1]` (maximum).
-    *   If `k` is an integer, Quantile = `X[k]`.
-    *   If `k` is not an integer, let `k_floor = floor(k)` and `k_ceil = ceil(k)`. The quantile is found by linear interpolation:
-        `Quantile = X[k_floor] + (k - k_floor) * (X[k_ceil] - X[k_floor])`
+- {series float} The calculated quantile value, or na if insufficient data.
 
-> 🔍 **Technical Note on Linear Interpolation:** This method is equivalent to the R type 7 quantile estimation method and is commonly used in statistical software (e.g., Python's `numpy.percentile` with 'linear' interpolation). It ensures that the 0th quantile is the minimum and the 1st quantile (or 100th percentile) is the maximum of the dataset.
+## Input configuration
 
-## Interpretation Details
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_length` | `input.int` | default: `14`, label: "Period" |
+| `i_quantile_level` | `input.float` | default: `0.25`, label: "Quantile Level (0.0-1.0)" |
 
-*   **Dynamic Support/Resistance:** Lower quantiles (e.g., 0.1, 0.25) can act as dynamic support levels, while upper quantiles (e.g., 0.75, 0.9) can act as dynamic resistance levels.
-*   **Volatility Assessment:** The spread between different quantiles (e.g., 0.9 - 0.1, or Interquartile Range: 0.75 - 0.25) can be a measure of data dispersion or volatility over the lookback period.
-*   **Outlier Identification:** Values falling outside extreme quantiles (e.g., below 0.05 or above 0.95) might be considered outliers for the given period.
-*   **Median (0.5 Quantile):** Provides a robust measure of central tendency, less affected by outliers than the mean.
+## Runtime profile
 
-## Limitations and Considerations
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-*   **Computational Cost:** Sorting an array of `N` elements typically takes O(N log N) time. This is done on every bar for the lookback window, so it can be more computationally intensive than simple averages for very long periods.
-*   **Data Requirements:** Meaningful quantile calculation requires a sufficient number of data points. With very short periods, quantiles can be volatile or less representative.
-*   **Choice of Interpolation Method:** While linear interpolation is common, other methods exist. The choice can slightly affect the result, especially for small datasets. This implementation uses the linear interpolation method described.
-*   **Edge Quantiles (0.0 and 1.0):** The 0.0 quantile corresponds to the minimum value in the window, and the 1.0 quantile corresponds to the maximum value.
+## Trade-offs
+
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
+
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-*   Hyndman, R. J., & Fan, Y. (1996). Sample Quantiles in Statistical Packages. *The American Statistician*, *50*(4), 361–365.
-*   Wikipedia contributors. (2023). Quantile. In *Wikipedia, The Free Encyclopedia*.
+- Source code: `indicators/statistics/quantile.pine`
+- Documentation file: `indicators/statistics/quantile.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/quantile.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/quantile.md

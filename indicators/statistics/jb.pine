@@ -1,6 +1,6 @@
 // The MIT License (MIT)
 // © mihakralj
-//@version=5
+//@version=6
 indicator("Jarque-Bera Test (JB)", "JB", overlay=false, precision=4)
 
 // Helper function to get a window of series data into an array
@@ -23,7 +23,6 @@ _central_moment(float[] arr, int moment_order, float mean_val) =>
         sum_pow_diff / n
 
 //@function Calculates the Jarque-Bera statistic.
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/jb.md
 //@param source series float The input series.
 //@param length simple int The lookback period (sample size). Min 10.
 //@returns series float The Jarque-Bera statistic. Higher values suggest deviation from normality.

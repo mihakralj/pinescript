@@ -1,112 +1,51 @@
-# SQRT: Square Root Transformation
+# SQRT - Sqrt
 
-[Pine Script Implementation of SQRT](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/sqrt.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Square Root Transformation (SQRT) indicator applies a mathematical square root function to input data series, providing a non-linear transformation that compresses the scale of larger values while preserving the relative ordering of data points. This transformation is particularly valuable in financial data analysis for normalizing skewed distributions, reducing the impact of outliers, and creating more stable statistical relationships.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. SQRT addresses this by implementing `Applies a square root transformation (y = √x) to the input series.` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-*   **Non-Linear Compression** — Reduces the relative magnitude of larger values compared to smaller ones
-*   **Skewness Reduction** — Transforms right-skewed distributions toward normal distributions
-*   **Order Preservation** — Maintains the relative ranking of data points after transformation
-*   **Scale Normalization** — Creates more uniform variance across different value ranges
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Market Applications:
-*   **Data Preprocessing** — Prepares price and volume data for statistical analysis
-*   **Volatility Stabilization** — Reduces heteroscedasticity in time series analysis
-*   **Outlier Management** — Diminishes the impact of extreme values on calculations
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|----------------|
-| Source | Close | Input series for transformation | Use price, volume, or other non-negative data |
-| Domain | x ≥ 0 | Mathematical constraint | Cannot process negative values |
-| Output Range | [0, ∞) | Transformed value range | Results always non-negative |
+- `Applies a square root transformation (y = √x) to the input series.`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Technical Formula:**
+| Parameter | Purpose |
+|---|---|
+| `source` | series float The input series to transform. Must contain non-negative values. |
 
-For input value $x \geq 0$:
-$$\text{SQRT}(x) = \sqrt{x}$$
+### Returns
 
-**Properties of Square Root Transformation:**
-- **Domain**: $x \in [0, \infty)$
-- **Range**: $y \in [0, \infty)$
-- **Monotonicity**: Strictly increasing function
-- **Concavity**: Concave function (decreasing marginal rate)
+- series float The square root transformed series. Returns na if source < 0.
 
-**Transformation Effects:**
-$$\frac{d}{dx}\sqrt{x} = \frac{1}{2\sqrt{x}}$$
+## Runtime profile
 
-The derivative shows that the rate of change decreases as $x$ increases, creating the compression effect for larger values.
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-**Variance Stabilization:**
-For data with variance proportional to the mean (Poisson-like), the square root transformation provides:
-$$\text{Var}(\sqrt{X}) \approx \frac{1}{4}$$
+## Trade-offs
 
-> 🔍 **Technical Note:** The square root transformation is particularly effective for count data and measurements where variance increases with the mean, making it valuable for volume analysis and event-based indicators.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-*   **Value Transformation:**
-    - Small values (0-1): Transformation increases values (√0.25 = 0.5)
-    - Value of 1: Unchanged (√1 = 1)
-    - Large values (>1): Transformation compresses values (√100 = 10)
-
-*   **Distribution Effects:**
-    - Right-skewed data → More symmetric distribution
-    - Outliers have reduced relative impact
-    - Variance becomes more stable across value ranges
-
-*   **Scale Interpretation:**
-    - Original linear scale replaced with square root scale
-    - Percentage changes become non-linear in transformed space
-    - Relative differences compressed for larger values
-
-## Applications
-
-*   **Statistical Analysis:**
-    - Normalize skewed price or volume distributions
-    - Prepare data for regression analysis requiring normality
-    - Stabilize variance in time series modeling
-
-*   **Technical Indicators:**
-    - Transform volume data for more stable oscillators
-    - Create square root-scaled moving averages
-    - Develop volatility indicators with reduced outlier impact
-
-*   **Risk Management:**
-    - Transform portfolio values for symmetric risk measures
-    - Create more stable correlation matrices
-    - Develop robust performance metrics
-
-## Limitations and Considerations
-
-*   **Domain Restrictions:**
-    - Cannot process negative values (returns `na`)
-    - Zero values remain unchanged
-    - Requires non-negative input data
-
-*   **Interpretation Challenges:**
-    - Non-linear scale requires careful interpretation
-    - Percentage changes not directly comparable
-    - Back-transformation needed for original scale analysis
-
-*   **Statistical Implications:**
-    - Changes the distribution characteristics
-    - Alters correlation structures between variables
-    - May not be appropriate for all data types
-
-Complementary Transformations:
-* Logarithmic transformation (for multiplicative processes)
-* Box-Cox transformation (parametric power transformations)
-* Z-score normalization (for standardization)
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Box, G.E.P. and Cox, D.R. "An Analysis of Transformations." *Journal of the Royal Statistical Society*, Series B, 26(2), 1964.
-2. Tukey, J.W. "Exploratory Data Analysis." Addison-Wesley, 1977.
+- Source code: `indicators/numerics/sqrt.pine`
+- Documentation file: `indicators/numerics/sqrt.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/sqrt.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/sqrt.md

@@ -1,70 +1,52 @@
-# AOBV: Archer On-Balance Volume
+# AOBV - Aobv
 
-[Pine Script Implementation of AOBV](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/aobv.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Archer On-Balance Volume (AOBV) is an enhanced variation of the classic On-Balance Volume (OBV) indicator, providing a smoother representation of volume flow with improved signal generation capabilities. It combines the volume-price relationship principles of OBV with exponential moving average (EMA) smoothing to reduce noise while preserving responsiveness to significant volume events.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. AOBV addresses this by implementing `Computes AOBV Fast and Slow from OBV using custom EMA calculations without helper functions.` with parameterized inputs and direct state progression.
 
-AOBV calculates both Fast (4-period) and Slow (14-period) lines, allowing traders to identify potential entry and exit points through crossovers, similar to a moving average crossover system. This dual-line approach helps filter out false signals while highlighting significant shifts in buying or selling pressure that may precede price movements.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Volume Flow Analysis:** Measures cumulative buying and selling pressure by adding or subtracting volume based on price movement direction
-* **Smoothing Mechanism:** Applies EMA calculations to the raw OBV values to reduce noise while maintaining sensitivity to significant volume events
-* **Dual Timeframe Approach:** Provides both Fast and Slow AOBV lines for crossover signals and trend confirmation
-* **Bias Correction:** Implements specialized warmup handling for more accurate EMA values from the beginning of the calculation
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | Close | Price point used for direction determination | Rarely needs adjustment; close price typically provides the most relevant direction information |
-| Volume | Volume | Trading volume used in calculations | Consider adjusting when analyzing markets with unusual volume characteristics |
+- `Computes AOBV Fast and Slow from OBV using custom EMA calculations without helper functions.`
 
-**Pro Tip:** Pay attention to divergences between the Fast and Slow AOBV lines during trend transitions - when they begin to narrow after a significant separation, it often indicates diminishing momentum and a potential trend change.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | (series float) Price source. |
+| `vol` | (series float) Volume data. |
 
-**Simplified explanation:**
-AOBV first creates a standard OBV by adding volume when price closes higher than the previous close and subtracting volume when price closes lower. It then applies two separate EMAs (4-period and 14-period) to this OBV value, with special bias correction during the warmup period for more accurate early values.
+### Returns
 
-**Technical formula:**
-1. Calculate raw OBV:
-   - If Close > Previous Close: OBV = Previous OBV + Volume
-   - If Close < Previous Close: OBV = Previous OBV - Volume
-   - If Close = Previous Close: OBV = Previous OBV
+- ([float, float]) Tuple with AOBV Fast and AOBV Slow values.
 
-2. Calculate AOBV Fast and Slow using bias-corrected EMAs:
-   - During warmup: EMA_corrected = EMA / (1 - (1-α)^n)
-   - After warmup: EMA = EMA_previous + α × (OBV - EMA_previous)
-   
-   Where:
-   - α is 2/(period+1)
-   - Period is 4 for Fast and 14 for Slow
+## Runtime profile
 
-> 🔍 **Technical Note:** The Pine Script implementation uses specialized arrays to track EMA values and correction factors, handling NA values gracefully by preserving the last valid price. It also implements a proper warmup bias correction to minimize the initialization effect common to exponential moving averages.
+- Declared optimization: Beta precomputation for EMA warmup compensation
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-AOBV provides several analytical perspectives:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Trend Confirmation:** When both AOBV lines are rising, it confirms bullish pressure; when both are falling, it confirms bearish pressure
-* **Crossovers:** When Fast AOBV crosses above Slow AOBV, it suggests increasing buying momentum; crosses below suggest increasing selling momentum
-* **Divergences:** When price makes a new high/low but AOBV fails to confirm, it suggests potential weakness in the current trend
-* **Volume Confirmation:** Strong price moves should be accompanied by corresponding AOBV movement in the same direction
-* **Zero Line Analysis:** Extended periods above/below the zero line (if normalized) indicate sustained buying/selling pressure
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Market Conditions:** Less effective in low-volume environments where price movements may not reflect significant buying or selling pressure
-* **Lag Component:** While reduced compared to simpler moving averages, the smoothing process still introduces some lag
-* **False Signals:** Volume spikes from news events can create temporary distortions unrelated to genuine trend changes
-* **NA Handling:** The implementation preserves previous values when encountering missing data, which maintains continuity but may not reflect actual market conditions
-* **Parameter Sensitivity:** The default periods (4 and 14) may need adjustment in different market conditions or timeframes
-* **Complementary Analysis:** Works best when combined with price action analysis and other technical indicators
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Archer, T. (n.d.). Technical Analysis Using Multiple Timeframes. Marketplace Books.
-* Dormeier, B. (2011). Investing with Volume Analysis. FT Press.
+- Source code: `indicators/volume/aobv.pine`
+- Documentation file: `indicators/volume/aobv.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/aobv.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/aobv.md

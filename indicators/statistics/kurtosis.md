@@ -1,67 +1,58 @@
-# Kurtosis: Distribution Shape Measure
+# KURTOSIS - Kurtosis
 
-[Pine Script Implementation of Kurtosis](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/kurtosis.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Kurtosis is a statistical measure that quantifies the shape or "tailedness" of a probability distribution relative to a normal distribution. In financial markets, kurtosis helps traders assess the frequency and magnitude of outlier events in price movement. A high kurtosis indicates a distribution with heavier tails and a sharper peak, suggesting more frequent extreme price movements than would be expected in a normal distribution.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. KURTOSIS addresses this by implementing `Calculates the excess kurtosis of a series over a lookback period.` with parameterized inputs and direct state progression.
 
-This indicator helps traders understand the nature of volatility in an asset, distinguishing between markets with steady, predictable movements versus those prone to sudden, extreme price jumps. By measuring the fourth moment of a distribution, kurtosis provides insights into risk characteristics that aren't captured by simpler measures like standard deviation.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Tail Risk Assessment:** Measures the likelihood of outlier events or "black swans" in price data
-* **Distribution Shape Analysis:** Quantifies whether price movements follow normal patterns or exhibit more extreme behavior
-* **Risk Profiling:** Helps identify assets with hidden risks that may not be apparent from traditional volatility measures
-* **Statistical Anomaly Detection:** Highlights periods when market behavior deviates significantly from historical patterns
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-| :-------- | :------ | :------- | :------------ |
-| Period | 14 | Controls the lookback window for calculation | Shorter periods (8-10) capture recent distribution changes, longer periods (30+) reveal persistent statistical properties |
-| Source | Close | Data point used for calculation | Change to returns (close/close[1]-1) for more traditional financial kurtosis analysis |
+- `Calculates the excess kurtosis of a series over a lookback period.`
 
-**Pro Tip:** Monitor changes in kurtosis rather than absolute values - a sudden increase may signal a fundamental change in market dynamics and increased tail risk.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series. |
+| `len` | Lookback period. Must be greater than 1. |
 
-**Simplified explanation:**
-Kurtosis measures how much of a distribution's variance comes from infrequent extreme deviations, as opposed to frequent moderate deviations. It quantifies the "peakedness" of a distribution and the weight of its tails relative to a normal distribution.
+### Returns
 
-**Technical formula:**
-Excess Kurtosis = [n × Σ(x-μ)⁴/(σ⁴)] - 3
+- The excess kurtosis value.
 
-Where:
+## Input configuration
 
-* n is the number of data points (period)
-* x represents the source values
-* μ is the mean of the source values
-* σ is the standard deviation
-* The subtraction of 3 makes this excess kurtosis (0 for normal distribution)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The Pine Script implementation efficiently calculates kurtosis by tracking the first four moments of the distribution using dynamic arrays. The algorithm uses a rolling window approach, adding new values and removing old ones in O(1) time, making it computationally efficient even for large lookback periods.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-Kurtosis provides unique insights into market behavior:
+## Trade-offs
 
-* **Positive Values (Leptokurtic):** Indicate a distribution with heavy tails - more frequent outliers than expected in normal markets
-* **Near Zero (Mesokurtic):** Suggests price movements approximate a normal distribution
-* **Negative Values (Platykurtic):** Reveal a distribution with light tails - fewer extreme moves than expected
-* **Trend Analysis:** Rising kurtosis during a trend suggests increasing risk of sharp reversals
-* **Market Regime Detection:** Significant changes in kurtosis often precede shifts in volatility regimes
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Sample Size Requirements:** Requires sufficient data (minimum 4 bars, preferably more) to produce statistically meaningful results
-* **Interpretation Complexity:** Less intuitive than simpler indicators like standard deviation or average true range
-* **Delayed Signals:** Major changes in kurtosis often appear only after significant market events have occurred
-* **Sensitivity to Outliers:** A single extreme value can dramatically impact kurtosis readings
-* **Mathematical Limitations:** As a fourth-order moment, it amplifies measurement errors and noise
-* **Context Dependency:** Should be interpreted alongside other measures like skewness and standard deviation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Mandelbrot, B. (1963). The Variation of Certain Speculative Prices. The Journal of Business, 36(4), 394-419.
-* Cont, R. (2001). Empirical Properties of Asset Returns: Stylized Facts and Statistical Issues. Quantitative Finance, 1, 223-236.
+- Source code: `indicators/statistics/kurtosis.pine`
+- Documentation file: `indicators/statistics/kurtosis.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/kurtosis.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/kurtosis.md

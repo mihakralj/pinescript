@@ -1,63 +1,60 @@
-# MPE: Mean Percentage Error
+# MPE - Mpe
 
-[Pine Script Implementation of MPE](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mpe.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Mean Percentage Error (MPE) is a directional error metric that measures the average percentage difference between predicted and actual values, preserving the sign of each error. Unlike MAPE which focuses on error magnitude, MPE specifically measures systematic bias in forecasts by allowing positive and negative errors to offset each other. This makes it particularly valuable for detecting whether prediction models or trading indicators consistently over-predict or under-predict. By producing a signed percentage value, MPE helps traders identify and correct systematic bias in their forecasting approaches, even when other error metrics might suggest acceptable overall performance.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MPE addresses this by implementing `Calculates Mean Percentage Error between two sources using SMA for averaging` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Directional bias detection:** Reveals systematic tendencies to over-predict or under-predict by preserving error direction
-* **Scale-independent measurement:** Expresses bias in percentage terms, allowing comparison across different price scales
-* **Market application:** Particularly useful for identifying and correcting systematic bias in trading systems and forecasting models
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core principle of MPE is its preservation of error direction while expressing errors in percentage terms. By allowing positive and negative percentage errors to cancel each other out, MPE creates a measure of systematic bias rather than overall accuracy. A value near zero might indicate either high accuracy or balanced errors, but significant non-zero values reveal a consistent directional bias that requires correction.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the averaging period | Increase for more stable bias assessment, decrease for detecting shifting bias patterns |
-| Source 1 | close | Actual value signal | Typically the target value you're trying to predict |
-| Source 2 | sma(close,20) | Predicted value signal | The output of your forecasting model or indicator |
+- `Calculates Mean Percentage Error between two sources using SMA for averaging`
 
-**Pro Tip:** When MPE consistently shows the same sign (positive or negative) across different market conditions, this indicates a systemic bias in your model that should be addressed - positive MPE indicates consistent under-prediction, while negative MPE indicates over-prediction.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source1` | First series to compare (actual) |
+| `source2` | Second series to compare (predicted) |
+| `period` | Lookback period for error averaging |
 
-**Simplified explanation:**
-MPE calculates the percentage difference between predicted and actual values, keeping the positive and negative signs intact, then averages these percentages. If predictions are consistently too high, MPE will be negative; if they're consistently too low, MPE will be positive.
+### Returns
 
-**Technical formula:**
-MPE = (100/p) * Σ(Y₁ - Y₂)/Y₁
+- MPE value averaged over the specified period using SMA
 
-Where:
-- Y₁ is the actual value
-- Y₂ is the predicted value
-- p is the number of periods
+## Input configuration
 
-> 🔍 **Technical Note:** While MPE of zero might seem ideal, it can mask large offsetting errors. Always examine MPE alongside magnitude-based metrics like MAPE to get a complete picture of forecast performance.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source" |
+| `i_period` | `input.int` | default: `100`, label: "Period" |
 
-## Interpretation Details
+## Runtime profile
 
-MPE can be applied in various financial contexts:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Bias identification:** Detect systematic tendencies to over-predict or under-predict
-* **Model calibration:** Adjust forecasting models to correct for consistent bias
-* **Indicator optimization:** Fine-tune technical indicators to reduce directional bias
-* **Trend-specific analysis:** Determine if prediction bias changes during up vs. down trends
-* **Strategy evaluation:** Assess whether trading systems have directional bias that could be exploited
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Error cancellation:** Positive and negative errors can offset each other, potentially masking large errors
-* **Zero handling:** Undefined when actual values are zero, requiring special handling
-* **Small value sensitivity:** Extremely sensitive when actual values approach zero
-* **Infinite errors:** Can produce extremely large or infinite values with small denominators
-* **Complementary metrics:** Should always be used alongside magnitude-based error measures like MAPE
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Swanson, D.A., Tayman, J., and Bryan, T.M. "MAPE-R: A rescaled measure of accuracy for cross-sectional subnational population forecasts," Journal of Population Research, 2011
-* Armstrong, J.S. and Collopy, F. "Error Measures for Generalizing About Forecasting Methods," International Journal of Forecasting, 1992
+- Source code: `indicators/errors/mpe.pine`
+- Documentation file: `indicators/errors/mpe.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/mpe.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/mpe.md

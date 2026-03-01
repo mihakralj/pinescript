@@ -4,7 +4,6 @@
 indicator("Price Momentum Oscillator (PMO)", "PMO", overlay=false)
 
 //@function Calculates Price Momentum Oscillator using double-smoothed ROC
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/pmo.md
 //@param src Source series to calculate PMO for
 //@param roc_len Lookback period for ROC calculation
 //@param smooth1_len First smoothing period

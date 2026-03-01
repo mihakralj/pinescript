@@ -1,65 +1,61 @@
-# DC: Donchian Channels
+# DCHANNEL - Dchannel
 
-[Pine Script Implementation of DCHANNEL](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/dchannel.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Donchian Channels are a versatile technical analysis tool developed by Richard Donchian in the mid-20th century. This indicator creates a price channel consisting of three lines: an upper band tracking the highest high over a specified period, a lower band tracking the lowest low, and a middle band representing the average of these extremes. Donchian Channels effectively visualize price volatility and potential support/resistance levels by highlighting the range within which prices have fluctuated over the lookback period.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. DCHANNEL addresses this by implementing `Calculates the Donchian Channel (DC) efficiently using monotonic deques` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Range identification:** Donchian Channels excel at defining dynamic support and resistance levels based on actual price extremes rather than statistical measures
-* **Market application:** Particularly effective for breakout trading strategies, trend identification, and volatility assessment across various market conditions
-* **Timeframe suitability:** **Multiple timeframes** work well, with shorter periods (10-20) for short-term trading signals and longer periods (20-55) for identifying significant support/resistance zones
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Donchian Channels differ from other volatility-based channels (like Bollinger Bands) by using actual price extremes rather than statistical deviations, making them especially useful for trend-following strategies and breakout systems.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 20 | Controls the lookback window for calculation | Decrease for more sensitivity to recent price action, increase for more stable channels |
-| High Source | High | Data point used for upper band calculation | Change to different price data only for specific, specialized strategies |
-| Low Source | Low | Data point used for lower band calculation | Change to different price data only for specific, specialized strategies |
+- `Calculates the Donchian Channel (DC) efficiently using monotonic deques`
 
-**Pro Tip:** The "Donchian Channel Breakout" strategy, popularized by the Turtle Traders, traditionally uses a 20-day breakout for entry signals and a 10-day breakout in the opposite direction for exits. This asymmetric application often yields better results than using the same period for both.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `hi` | Source series for the highest high calculation (usually high) |
+| `lo` | Source series for the lowest low calculation (usually low) |
+| `p` | Lookback period (p > 0) |
 
-**Simplified explanation:**
-Donchian Channels track the highest high and lowest low over a specified period. For each bar, the indicator identifies the highest high and lowest low over the lookback period, then calculates a middle line as the average of these two extremes.
+### Returns
 
-**Technical formula:**
-Upper Band = Highest High of last n periods
-Lower Band = Lowest Low of last n periods
-Middle Band = (Upper Band + Lower Band) / 2
+- Tuple containing [basis, upper_band, lower_band]
 
-Where:
-- n is the specified lookback period
-- Highest High is the maximum high price observed during the period
-- Lowest Low is the minimum low price observed during the period
+## Input configuration
 
-> 🔍 **Technical Note:** The implementation uses monotonic deques with circular buffers for efficient calculation, maintaining O(1) time complexity for each new bar rather than repeatedly scanning the entire lookback period.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `20`, label: "Period" |
+| `i_high` | `input.source` | default: `high`, label: "High Source" |
+| `i_low` | `input.source` | default: `low`, label: "Low Source" |
 
-## Interpretation Details
+## Runtime profile
 
-Donchian Channels provide multiple trading signals and insights:
+- Declared optimization: Uses monotonic deque for O(1) amortized complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-- **Breakout trading:** Price breaking above the upper band signals potential bullish momentum, while breaking below the lower band indicates potential bearish momentum
-- **Range identification:** The width of the channel represents market volatility—wider channels indicate higher volatility
-- **Trend strength:** In strong trends, price tends to "walk" along either the upper or lower band
-- **Mean reversion:** The middle band often acts as a magnet for price, especially after extended moves to the outer bands
+## Trade-offs
 
-Traders may also use channel width (difference between upper and lower bands) as a standalone volatility measure to adjust position sizing or identify potential market regime changes.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Market conditions:** Less effective during sideways, choppy markets where repeated false breakouts may occur
-* **Lag factor:** By definition, the indicator is backward-looking and may not adapt quickly to sudden market changes
-* **False signals:** Brief price spikes can trigger false breakout signals, especially with shorter lookback periods
-* **Complementary tools:** Best combined with volume analysis, momentum indicators, or other confirmation tools to filter potential false signals
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-- Schwager, J. D. (1989). Market Wizards: Interviews with Top Traders. New York: Harper & Row.
-- Faith, C. (2007). The Original Turtle Trading Rules. Original Turtles.
+- Source code: `indicators/channels/dchannel.pine`
+- Documentation file: `indicators/channels/dchannel.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/dchannel.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/dchannel.md

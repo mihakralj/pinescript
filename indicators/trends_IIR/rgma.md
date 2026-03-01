@@ -1,76 +1,61 @@
-# RGMA: Recursive Gaussian Moving Average
+# RGMA - Rgma
 
-[Pine Script Implementation of RGMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/rgma.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Recursive Gaussian Moving Average (RGMA) is an advanced technical indicator designed to provide enhanced smoothing with Gaussian-like characteristics while maintaining computational efficiency. While a true Gaussian filter would be symmetric and technically an FIR (Finite Impulse Response) filter, RGMA cleverly approximates these characteristics using recursive IIR (Infinite Impulse Response) techniques.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. RGMA addresses this by implementing `Calculates RGMA using cascaded recursive filters to approximate Gaussian smoothing` with parameterized inputs and direct state progression.
 
-Unlike standard moving averages, RGMA applies an exponential moving average (EMA) multiple times in sequence, with each pass refining the smoothing effect. This multi-pass approach creates a response curve that approximates a Gaussian distribution, providing superior noise filtering while preserving important trend information. The unique recursive implementation makes it particularly valuable for traders seeking cleaner, smoother trend identification with reasonable computational demands.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Multi-pass smoothing:** Applies EMA filtering multiple times in sequence, with each pass further refining the smoothing effect
-* **Gaussian approximation:** Achieves a bell-shaped response curve similar to a Gaussian filter through cascade filtering
-* **Period normalization:** Automatically adjusts the effective period for each pass to maintain consistent overall smoothing
-* **Recursive implementation:** Uses each pass's output as the input for the next pass, creating a cascaded filtering effect
+## API surface
 
-RGMA achieves its enhanced smoothing through the central limit theorem principle - as multiple simple filters are cascaded, their combined response tends toward a Gaussian distribution. This creates a moving average with excellent noise rejection while maintaining sensitivity to meaningful price changes.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates RGMA using cascaded recursive filters to approximate Gaussian smoothing`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Base smoothing period | Increase for longer-term trends, decrease for shorter-term signals |
-| Passes | 3 | Number of recursive EMA applications | Increase for smoother output with more lag, decrease for faster response |
-| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
+### Parameters
 
-**Pro Tip:** Many professional traders find that using 2-4 passes provides the optimal balance between smoothness and responsiveness. The sweet spot is often 3 passes with a period about 15-20% shorter than what you'd use for a regular EMA.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate RGMA from |
+| `period` | Effective smoothing period |
+| `passes` | Number of recursive passes (higher = more Gaussian-like) |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-RGMA works by running price through a chain of EMAs, where each EMA takes input from the previous one. This creates a smoother result than a single EMA could provide. The period of each EMA is adjusted to ensure consistent smoothing regardless of how many passes are used.
+- RGMA value with gaussian-like smoothing properties using recursive calculation
 
-**Technical formula:**
-The RGMA calculation process follows these steps:
+## Input configuration
 
-1. Adjusted Period Calculation:
-   adjusted_period = period / sqrt(passes)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_passes` | `input.int` | default: `3`, label: "Passes" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-2. Smoothing Factor (Alpha) Calculation:
-   alpha = 2.0 / (adjusted_period + 1.0)
+## Runtime profile
 
-3. Recursive EMA Calculation:
-   - First Pass: filter[0] = alpha × (source - filter[0]) + filter[0]
-   - Subsequent Passes: filter[i] = alpha × (filter[i-1] - filter[i]) + filter[i]
+- Declared optimization: Uses cascaded exponential filters for O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-The final RGMA value is the output of the last pass: filter[passes-1]
+## Trade-offs
 
-> 🔍 **Technical Note:** The adjustment of the period by the square root of the number of passes is crucial for maintaining consistent overall smoothing regardless of how many passes are used. Without this adjustment, increasing passes would lead to excessive smoothing. The cascade of EMAs creates a response curve that approaches a Gaussian distribution due to the central limit theorem, providing excellent frequency domain characteristics.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Interpretation Details
+## Verification checklist
 
-RGMA provides several important insights for traders:
-
-- When price crosses above RGMA, it often signals the beginning of an uptrend
-- When price crosses below RGMA, it often signals the beginning of a downtrend
-- The slope of RGMA provides insight into trend strength and momentum
-- RGMA creates smoother, more reliable support and resistance levels than standard EMAs
-- Multiple RGMA lines with different periods create channel-like structures that help identify trend changes
-
-RGMA is particularly valuable for detecting genuine trends in noisy market conditions. Its superior noise filtering capabilities help eliminate false signals while still capturing meaningful price movements. Traders often use RGMA as a dynamic support/resistance reference that filters out minor price fluctuations.
-
-## Limitations and Considerations
-
-* **Market conditions:** Less effective during highly choppy markets where excessive smoothing may mask important short-term signals
-* **Lag factor:** Introduces more lag than a single EMA, especially with higher numbers of passes
-* **Computational complexity:** Requires more calculations than simple moving averages due to multiple passes
-* **Parameter sensitivity:** Requires careful selection of both period and passes to achieve optimal results
-* **Complementary tools:** Works best when combined with momentum oscillators or volume indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Ehlers, J. (2001). *Rocket Science for Traders*. John Wiley & Sons.
-2. Savitzky, A. & Golay, M.J.E. (1964). "Smoothing and Differentiation of Data by Simplified Least Squares Procedures." *Analytical Chemistry*, 36(8), 1627-1639.
-3. Kaufman, P. (2013). *Trading Systems and Methods*, 5th Edition. Wiley Trading.
+- Source code: `indicators/trends_IIR/rgma.pine`
+- Documentation file: `indicators/trends_IIR/rgma.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/rgma.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/rgma.md

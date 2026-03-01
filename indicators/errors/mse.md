@@ -1,62 +1,60 @@
-# MSE: Mean Squared Error
+# MSE - Mse
 
-[Pine Script Implementation of MSE](https://github.com/mihakralj/pinescript/blob/main/indicators/errors/mse.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Mean Squared Error (MSE) is a fundamental statistical measure that quantifies the average squared difference between predicted and actual values. As one of the most widely used error metrics in statistics and machine learning, MSE provides a robust measure of prediction accuracy that emphasizes larger errors. First formally established in statistical theory in the early 20th century, MSE has become a cornerstone of error measurement across multiple disciplines. In financial analysis, MSE offers traders a powerful tool for evaluating prediction models, comparing indicators, and optimizing trading systems, with its squared term making it particularly sensitive to occasional large prediction errors that might have significant financial implications.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MSE addresses this by implementing `Calculates Mean Squared Error between two sources using SMA for averaging` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Quadratic error weighting:** Penalizes larger errors more heavily than smaller ones due to the squaring operation
-* **Outlier sensitivity:** Responds strongly to occasional large errors, making it useful when large deviations are particularly concerning
-* **Market application:** Especially valuable for evaluating prediction models where large errors may have disproportionate financial consequences
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The distinguishing characteristic of MSE is its quadratic nature - by squaring errors before averaging, it disproportionately penalizes large deviations compared to small ones. This aligns well with many financial applications where the cost of errors often increases non-linearly with their magnitude, such as in risk management, option pricing, or volatility prediction.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the averaging period | Increase for more stable error measurement, decrease for more responsive feedback |
-| Source 1 | close | First signal for comparison | Typically the actual or target value |
-| Source 2 | sma(close,20) | Second signal for comparison | Typically the predicted or modeled value |
+- `Calculates Mean Squared Error between two sources using SMA for averaging`
 
-**Pro Tip:** When optimizing trading models, compare MSE alongside MAE - a much larger MSE relative to MAE indicates your model is making occasional large errors that could significantly impact trading performance.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source1` | First series to compare |
+| `source2` | Second series to compare |
+| `period` | Lookback period for error averaging |
 
-**Simplified explanation:**
-MSE squares the difference between each pair of values, then averages these squared differences. This squaring step ensures all values are positive and gives much more weight to large errors than to small ones.
+### Returns
 
-**Technical formula:**
-MSE = (1/p) * Σ(Y₁ - Y₂)²
+- MSE value averaged over the specified period using SMA
 
-Where:
-- Y₁, Y₂ are the values being compared
-- p is the number of periods
+## Input configuration
 
-> 🔍 **Technical Note:** MSE has attractive mathematical properties for optimization, including convexity and differentiability. These make it particularly suitable as a loss function in machine learning models where gradient-based optimization is used.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source" |
+| `i_period` | `input.int` | default: `100`, label: "Period" |
 
-## Interpretation Details
+## Runtime profile
 
-MSE can be applied in various financial contexts:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Model evaluation:** Compare the accuracy of different predictive models
-* **Indicator tuning:** Optimize parameters by minimizing prediction error
-* **Signal comparison:** Measure how closely two indicators track each other
-* **System optimization:** Minimize the squared difference between actual and ideal entries/exits
-* **Volatility analysis:** Higher MSE in certain market regimes can indicate increased prediction difficulty
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Unit interpretation:** Results are in squared units, making them less directly interpretable than metrics like MAE or RMSE
-* **Scale dependency:** Values depend on the scale of the data, making comparisons across different instruments challenging
-* **Outlier sensitivity:** Can be disproportionately influenced by a few large errors
-* **Directional blindness:** Does not distinguish between positive and negative errors
-* **Complementary metrics:** Best used alongside other error measures like MAE or MAPE for comprehensive evaluation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Chai, T. and Draxler, R.R. "Root mean square error (RMSE) or mean absolute error (MAE)?", Geoscientific Model Development, 2014
-* Lehmann, E.L. and Casella, G. "Theory of Point Estimation," Springer, 1998
+- Source code: `indicators/errors/mse.pine`
+- Documentation file: `indicators/errors/mse.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/mse.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/errors/mse.md

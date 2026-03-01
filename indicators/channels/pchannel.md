@@ -1,64 +1,57 @@
-# PCHANNEL: Price Channel
+# PCHANNEL - Pchannel
 
-[Pine Script Implementation of PCHANNEL](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/pchannel.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Price Channel is a simple volatility-based indicator that plots the highest high and the lowest low over a user-defined lookback period. It is very similar in concept and application to Donchian Channels. The channel visually represents the trading range of an asset over the specified period.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PCHANNEL addresses this by implementing `Calculates Price Channel` with parameterized inputs and direct state progression.
 
-A middle line, typically the average of the upper and lower channel lines, can also be plotted to serve as a mean reference.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-*   **Highest High:** The upper band represents the highest price reached during the lookback period.
-*   **Lowest Low:** The lower band represents the lowest price reached during thelookback period.
-*   **Trading Range:** The channel effectively shows the price extremes for the chosen period.
-*   **Breakout Indication:** Prices moving above the upper channel or below the lower channel can signal potential breakouts and the start of new trends.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function                                                                 | When to Adjust                                                                                                                               |
-| :-------- | :------ | :----------------------------------------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| Length    | 20      | Lookback period for determining the highest high and lowest low.         | Shorter lengths make the channel more reactive to recent price action; longer lengths create a wider, smoother channel representing longer-term ranges. |
+- `Calculates Price Channel`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Simplified explanation:**
-1.  For each bar, look back over the specified `Length`.
-2.  Identify the absolute highest `high` price during that period. This forms the Upper Channel line.
-3.  Identify the absolute lowest `low` price during that period. This forms the Lower Channel line.
-4.  (Optional) The Middle Channel line is the average of the Upper and Lower Channel lines: `(Upper Channel + Lower Channel) / 2`.
+| Parameter | Purpose |
+|---|---|
+| `length_param` | Lookback period for determining the highest high and lowest low |
 
-**Technical formula:**
-1.  **Upper Channel:**
-    `UpperChannel = Highest(High, Length)`
+### Returns
 
-2.  **Lower Channel:**
-    `LowerChannel = Lowest(Low, Length)`
+- tuple [upperChannel, middleChannel, lowerChannel]
 
-3.  **Middle Channel (optional):**
-    `MiddleChannel = (UpperChannel + LowerChannel) / 2`
+## Input configuration
 
-## Interpretation Details
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `20`, label: "Length" |
 
-*   **Support and Resistance:** The upper band can act as resistance, and the lower band as support.
-*   **Breakouts:**
-    *   A close above the Upper Channel suggests bullish strength and a potential upside breakout.
-    *   A close below the Lower Channel suggests bearish pressure and a potential downside breakout.
-*   **Trend Identification:**
-    *   In an uptrend, prices may consistently touch or "ride" the Upper Channel.
-    *   In a downtrend, prices may consistently touch or "ride" the Lower Channel.
-*   **Volatility:** The width of the channel can give an indication of volatility. Wider channels suggest higher volatility over the lookback period.
-*   **"Turtle Trading" Strategy:** Price Channels (like Donchian Channels) were famously used in the "Turtle Trading" system, where breakouts from the channel were used as entry signals.
+## Runtime profile
 
-## Limitations and Considerations
+- Declared optimization: Uses monotonic deque for O(1) amortized complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-*   **Lag:** Like all indicators based on lookback periods, there's an inherent lag. The channel reflects past price action.
-*   **Whipsaws:** In choppy, non-trending markets, breakouts can be false, leading to whipsaws.
-*   **Parameter Choice:** The `Length` parameter is crucial. A length too short may generate many false signals, while one too long may miss timely entries.
-*   **Not a Standalone System:** Best used in conjunction with other indicators (e.g., volume, trend indicators) or price action analysis for confirmation.
+## Trade-offs
+
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
+
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-*   Donchian, R. D. (Various). (Conceptual basis for channel breakouts).
-*   Faith, C. (2007). *Way of the Turtle*. McGraw-Hill. (Describes trading systems using similar channels).
+- Source code: `indicators/channels/pchannel.pine`
+- Documentation file: `indicators/channels/pchannel.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/pchannel.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/pchannel.md

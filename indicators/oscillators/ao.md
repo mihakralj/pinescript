@@ -1,66 +1,59 @@
-# AO: Awesome Oscillator
+# AO - Ao
 
-[Pine Script Implementation of AO](https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/ao.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Awesome Oscillator (AO) is a momentum indicator developed by Bill Williams that measures market momentum by comparing a fast moving average to a slow moving average of median prices. Unlike traditional momentum indicators that often use closing prices, AO uses the median price to better capture the "true" market momentum throughout the trading period. The indicator helps traders identify the dominant market force (bulls or bears) and potential momentum shifts before they become apparent in price action.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. AO addresses this by implementing `Calculates Bill Williams' Awesome Oscillator` with parameterized inputs and direct state progression.
 
-The implementation provided uses efficient circular buffers for moving average calculations, ensuring optimal performance while properly handling data gaps. This approach maintains O(1) computational complexity regardless of the lookback period, making it particularly suitable for real-time analysis while preserving accuracy in momentum measurements.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Momentum measurement:** Compares fast and slow moving averages of median prices to gauge market force
-* **Zero-line significance:** Crossovers indicate potential trend changes or continuation points
-* **Color-based signals:** Green bars indicate increasing momentum, red bars indicate decreasing momentum
-* **Median price focus:** Uses (High + Low)/2 instead of closing prices for broader market perspective
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Fast Length | 5 | Period for fast MA calculation | Rarely needs adjustment as it's part of Williams' original formula |
-| Slow Length | 34 | Period for slow MA calculation | Rarely needs adjustment as it's part of Williams' original formula |
+- `Calculates Bill Williams' Awesome Oscillator`
 
-**Pro Tip:** Look for "saucer" patterns - three consecutive bars of the same color forming a gentle curve - as they often precede significant price moves. These patterns are particularly powerful when they occur near the zero line.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `fastLength` | Period for fast MA calculation |
+| `slowLength` | Period for slow MA calculation |
 
-**Simplified explanation:**
-AO calculates two simple moving averages of the median price using different periods, then subtracts the slower MA from the faster MA. The result shows whether short-term momentum is stronger or weaker than longer-term momentum.
+### Returns
 
-**Technical formula:**
-AO = SMA(MP, Fast Length) - SMA(MP, Slow Length)
+- AO value measuring market momentum
 
-Where:
-- MP (Median Price) = (High + Low) / 2
-- SMA = Simple Moving Average
-- Fast Length = 5 periods (default)
-- Slow Length = 34 periods (default)
+## Input configuration
 
-> 🔍 **Technical Note:** The implementation uses circular buffers to efficiently maintain running sums for both moving averages, ensuring O(1) computational complexity per bar. The algorithm properly handles NA values and maintains accurate calculations without storing the entire price history.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_fastLength` | `input.int` | default: `5`, label: "Fast Length" |
+| `i_slowLength` | `input.int` | default: `34`, label: "Slow Length" |
 
-## Interpretation Details
+## Runtime profile
 
-AO provides several analytical perspectives:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Zero-line crossovers:** Positive values indicate bullish momentum, negative values indicate bearish momentum
-* **Twin peaks:** Two peaks above zero (second peak lower) suggests potential bearish reversal
-* **Twin valleys:** Two troughs below zero (second trough higher) suggests potential bullish reversal
-* **Saucer patterns:** Three consecutive bars of same color forming a curve signal potential continuation
-* **Momentum divergence:** AO diverging from price can signal potential reversals
-* **Color changes:** Bar color changes indicate short-term momentum shifts
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Lagging component:** Contains inherent lag due to moving average calculations
-* **False signals:** Can generate noise in choppy or ranging markets
-* **Parameter dependency:** While default parameters are standard, their effectiveness varies across timeframes
-* **Complementary tool:** Should be used alongside price action and other indicators
-* **Timeframe sensitivity:** More reliable on higher timeframes where noise is reduced
-* **Signal confirmation:** Best used with other Williams' indicators like Alligator or Fractals
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Williams, B. (1995). New Trading Dimensions. Wiley Trading.
-* Williams, B. (1999). Trading Chaos (2nd ed.). Wiley Trading.
+- Source code: `indicators/oscillators/ao.pine`
+- Documentation file: `indicators/oscillators/ao.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/ao.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/ao.md

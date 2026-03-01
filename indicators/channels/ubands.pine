@@ -1,11 +1,9 @@
 // The MIT License (MIT)
 // © mihakralj
-// Ultimate Bands logic based on work by John F. Ehlers (c) 2024
 //@version=6
 indicator("Ehlers Ultimate Bands (UBANDS)", "UBANDS", overlay=true)
 
 //@function Calculates Ultimate Bands
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/ubands.md
 //@param src Source series for the bands
 //@param length Lookback period for the Ehlers Ultrasmooth Filter and RMS
 //@param mult RMS multiplier for band width

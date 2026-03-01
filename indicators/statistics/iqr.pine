@@ -1,10 +1,9 @@
 // The MIT License (MIT)
 // © mihakralj
-//@version=5
+//@version=6
 indicator("Interquartile Range (IQR)", "IQR", overlay=false, precision=4)
 
 //@function Function to calculate percentile using linear interpolation
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/iqr.md
 //@param src Source series for calculation
 //@param len Lookback period for data collection
 //@param p Percentile value (0-100)

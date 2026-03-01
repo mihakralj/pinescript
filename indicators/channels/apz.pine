@@ -4,7 +4,6 @@
 indicator("Adaptive Price Zone", "APZ", overlay=true)
 
 //@function Calculates Adaptive Price Zone using double-smoothed EMA
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/apz.md
 //@param source Series to calculate middle line from
 //@param period Lookback period (sqrt applied internally for smoothing)
 //@param bandPct Band width multiplier

@@ -1,75 +1,52 @@
-# OC2: Open-Close Midpoint
+# OC2 - Oc2
 
-[Pine Script Implementation of OC2](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/oc2.pine)
 
-## Naming Convention
+## Architectural problem
 
-**OC2** is known as **Midpoint** or **Open-Close Midpoint** in technical analysis. This measure focuses on the opening and closing prices:
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. OC2 addresses this by implementing `Calculates the midpoint between open and close prices` with parameterized inputs and direct state progression.
 
-- **OC2**: Programming/library notation (Open-Close average of 2)
-- **Midpoint**: Common name emphasizing the middle point between open and close
-- **Open-Close Average**: Descriptive name showing the calculation
-- **Settlement Midpoint**: Alternative emphasizing start and end points
+## Design decision
 
-## Overview and Purpose
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The OC2 indicator calculates the midpoint between the opening and closing prices for each bar. This price transformation provides a balanced view of the bar's directional movement by averaging where the period started and where it finished. Unlike HL2 which focuses on the trading range extremes, OC2 emphasizes the actual directional progress made during each period, filtering out intrabar volatility while maintaining sensitivity to the net price change.
+## API surface
 
-This measure is particularly useful for analyzing price momentum and directional bias without the noise of intrabar price fluctuations. By averaging the open and close, OC2 creates a smoothed price series that represents the bar's directional thrust while reducing the impact of opening or closing spikes.
+### Functions
 
-## Core Concepts
+- `Calculates the midpoint between open and close prices`
 
-* **Directional midpoint:** Represents the average of where price started and ended, focusing on net movement
-* **Volatility filtering:** Removes intrabar range extremes, smoothing price action
-* **Momentum representation:** Emphasizes the directional component of price movement
-* **Opening-closing balance:** Provides equal weight to session start and finish prices
+### Parameters
 
-## Common Settings and Parameters
+| Parameter | Purpose |
+|---|---|
+| `o` | Open price series |
+| `c` | Close price series |
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Open | open | Opening price data | Typically not adjusted, uses standard open price |
-| Close | close | Closing price data | Typically not adjusted, uses standard close price |
+### Returns
 
-**Pro Tip:** OC2 is effective for reducing noise in choppy markets where intrabar wicks are large but net movement is minimal. Use OC2 as a source for trend-following indicators when you want to focus on directional progress rather than range extremes.
+- float The midpoint value (open + close) * 0.5
 
-## Calculation and Mathematical Foundation
+## Runtime profile
 
-**Simplified explanation:**
-OC2 calculates the arithmetic mean of the opening and closing prices, representing the midpoint of the bar's directional movement.
+- Declared optimization: Uses multiplication instead of division for performance
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-**Technical formula:**
+## Trade-offs
 
-```
-OC2 = (Open + Close) / 2
-```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Where:
-- Open is the price at the start of the period
-- Close is the price at the end of the period
+## Verification checklist
 
-> 🔍 **Technical Note:** This calculation has O(1) complexity with minimal computational overhead. The formula requires no historical data and can be computed in real-time as each bar develops.
-
-## Interpretation Details
-
-OC2 provides several analytical perspectives:
-
-* **Directional focus:** Emphasizes net price movement while filtering intrabar extremes
-* **Momentum smoothing:** Creates a naturally smoothed representation of price momentum
-* **Gap analysis:** Clearly shows gaps between periods through discontinuities in the OC2 line
-* **Trend clarity:** Removes range noise to reveal underlying directional trends
-* **Session balance:** Shows the average price between session open and close
-
-## Limitations and Considerations
-
-* **Ignores intrabar action:** Does not capture the full range of price movement within each bar
-* **Time-weighted bias:** Assumes equal importance of open and close regardless of when most trading occurred
-* **Volume independence:** Does not account for volume distribution during the session
-* **Gap sensitivity:** Can show abrupt changes when gaps occur between bars
-* **No range information:** Loses information about intrabar volatility and trading range
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Kaufman, P. J. (2013). Trading Systems and Methods. John Wiley & Sons.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Elder, A. (1993). Trading for a Living. John Wiley & Sons.
+- Source code: `indicators/numerics/oc2.pine`
+- Documentation file: `indicators/numerics/oc2.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/oc2.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/oc2.md

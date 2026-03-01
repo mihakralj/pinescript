@@ -1,113 +1,60 @@
-# Zero Lag Double Exponential Moving Average (ZLDEMA)
+# ZLDEMA - Zldema
 
-The Zero-Lag Double Exponential Moving Average implements a hybrid dual-stage predictive architecture delivering 93% lag reduction and 95% noise suppression through synchronized dual-ZLEMA processing with optimized 1.5/0.5 coefficient distribution. ZLDEMA's sophisticated error-compensated algorithm provides 98% trend detection accuracy and 0.2 bar average detection latency, while achieving 96% noise reduction in volatile conditions through mathematically optimized stage synthesis and precise numerical stability control, executing complete filter passes in under 0.7 microseconds on standard hardware. Developed as a hybrid of ZLEMA and DEMA concepts, ZLDEMA has gained recognition among technical traders seeking advanced lag reduction with balanced noise filtering. Its adoption has grown particularly in algorithmic trading systems where both speed and accuracy are critical. The indicator's innovative approach to coefficient optimization has established new standards in moving average performance.
 
-[Pine Script Implementation of ZLDEMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/zldema.pine)
+## Architectural problem
 
-## Core Concepts
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ZLDEMA addresses this by implementing `Calculates ZLDEMA using zero-lag price and double exponential smoothing with compensator` with parameterized inputs and direct state progression.
 
-ZLDEMA combines zero-lag technology with double exponential smoothing:
+## Design decision
 
-- Dual-stage architecture for optimal lag reduction
-- Optimized 1.5/0.5 coefficient distribution to prevent overshooting
-- Synchronized ZLEMA processing for consistent response
-- Error compensation for accuracy from the first bar
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Mathematical Foundation
+## API surface
 
-ZLDEMA is calculated by applying the ZLEMA technique twice and combining the results using the DEMA formula:
+### Functions
 
-ZLDEMA = 1.5 × ZLEMA₁(source) - 0.5 × ZLEMA₂(ZLEMA₁(source))
+- `Calculates ZLDEMA using zero-lag price and double exponential smoothing with compensator`
 
-Where:
+### Parameters
 
-- ZLEMA₁ is the first zero-lag exponential moving average
-- ZLEMA₂ is the second zero-lag exponential moving average applied to ZLEMA₁
-- The 1.5/0.5 weighting reduces overshooting compared to traditional DEMA's 2/1 ratio
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate ZLDEMA from |
+| `period` | Smoothing period |
+| `alpha` | Optional smoothing factor (overrides period if provided) |
 
-### Detailed Breakdown
+### Returns
 
-1. **Dynamic Lag Calculation:**
-   lag = min(floor(1/α - 0.5), floor(bar_index/2))
+- ZLDEMA value with zero-lag effect applied
 
-2. **First ZLEMA Stage:**
-   - Zero-lag signal: P_zero_lag = 2P_t - P_(t-lag)
-   - First ZLEMA: ZLEMA_1 = α(P_zero_lag - ZLEMA_1) + ZLEMA_1
+## Input configuration
 
-3. **Second ZLEMA Stage:**
-   - Applied to first ZLEMA output
-   - Uses same α and lag values for consistency
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-4. **Final ZLDEMA Calculation:**
-   ZLDEMA = 1.5 × ZLEMA_1 - 0.5 × ZLEMA_2
+## Runtime profile
 
-   This modified weighting (1.5/0.5 instead of traditional DEMA's 2/1) provides a more balanced approach:
-   - Reduces the overshooting tendency inherent in combining two sensitive indicators
-   - Maintains responsiveness while improving stability
-   - Better suited for volatile market conditions
+- Declared optimization: Uses lag compensation buffer and exponential warmup compensator on both EMA stages for O(1) complexity
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-### Smoothing Factor
+## Trade-offs
 
-Like ZLEMA and DEMA, ZLDEMA uses a smoothing factor α where:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-- Valid range: 0 < α < 1
-- Can be derived from period N as α = 2/(N+1)
-- Same α is used for both ZLEMA calculations
+## Verification checklist
 
-## Error Compensation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
-The implementation includes sophisticated error tracking and compensation:
+## References
 
-1. **Per-Stage Error Tracking:**
-   - Each ZLEMA stage tracks its own error term:
-   e_t = (1-α)e_(t-1)
-
-2. **Compensation Application:**
-   - Both stages apply compensation individually:
-   ZLEMA_compensated = e_t > ε ? ZLEMA_t/(1-e_t) : ZLEMA_t
-
-3. **Numerical Stability:**
-   - Uses small epsilon (1e-10) to prevent division by zero
-   - Ensures stable output even with extreme α values
-
-## Advantages and Disadvantages
-
-### Advantages
-
-- **Minimal Lag:** Combines two lag reduction techniques for enhanced responsiveness
-- **Better Noise Filtering:** Double-pass nature provides superior noise reduction
-- **Dynamic Adaptation:** Automatically adjusts to available historical data
-- **Smooth Output:** Maintains smoother output than single ZLEMA
-- **Error-Compensated:** Each stage includes numerical stability safeguards
-
-### Disadvantages
-
-- **Computational Complexity:** More complex than standard moving averages
-- **Parameter Sensitivity:** Highly sensitive to α changes due to double application
-- **Potential Double Overshooting:** Both stages can contribute to overshooting
-- **Initialization Period:** May require more bars for full optimization
-- **Resource Intensive:** Higher computational requirements than simpler alternatives
-
-## Usage Recommendations
-
-### Optimal Applications
-
-- **Fast-Moving Markets**: ZLDEMA excels in rapidly changing market conditions
-- **Breakout Trading**: Provides early signals for breakouts with good reliability
-- **Day Trading**: Ideal balance of responsiveness and stability for intraday trading
-- **Algorithmic Systems**: Excellent for systems requiring minimal detection latency with noise filtering
-
-### Parameter Selection
-
-- **Short Periods (5-12)**: Highly responsive, suitable for day trading and short-term strategies
-- **Medium Periods (13-25)**: Balance between responsiveness and stability for swing trading
-- **Long Periods (25-40)**: Identifies significant trends with reduced lag compared to traditional MAs
-
-### Complementary Indicators
-
-ZLDEMA performs best when combined with:
-
-- **Momentum Oscillators**: RSI or CCI to confirm price momentum
-- **Volume Analysis**: Volume confirmation for breakout validation
-- **Volatility Indicators**: ATR or Bollinger Bands to assess market conditions
-- **Support/Resistance Levels**: Key price levels for entry/exit confirmation
+- Source code: `indicators/trends_IIR/zldema.pine`
+- Documentation file: `indicators/trends_IIR/zldema.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/zldema.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/zldema.md

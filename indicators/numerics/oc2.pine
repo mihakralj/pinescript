@@ -4,7 +4,6 @@
 indicator("Open-Close Midpoint (OC2)", "OC2", overlay=true)
 
 //@function Calculates the midpoint between open and close prices
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/oc2.md
 //@param o Open price series
 //@param c Close price series
 //@returns float The midpoint value (open + close) * 0.5

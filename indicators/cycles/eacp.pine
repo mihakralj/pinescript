@@ -1,9 +1,9 @@
-// The MIT License (MIT)1
+// The MIT License (MIT)
 // © mihakralj
 //@version=6
 indicator("EACP: Ehlers Autocorrelation Periodogram","EACP",overlay=false)
+
 //@function Autocorrelation periodogram dominant cycle estimator
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/eacp.md
 //@param source Price input series
 //@param minPeriod Minimum period to evaluate
 //@param maxPeriod Maximum period to evaluate

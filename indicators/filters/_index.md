@@ -1,23 +1,46 @@
-# Signal Filters
+# _INDEX -  Index
 
-| Indicator | Name | Key Characteristics |
-|-----------|------|---------------------|
-| [BESSEL](/indicators/filters/bessel.md) | Bessel Filter | Preserves signal shape with maximally flat group delay and minimal waveform distortion |
-| [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter | Edge-preserving non-linear filter that maintains significant price transitions |
-| [BPF](/indicators/filters/bpf.md) | Ehlers Bandpass Filter | Isolates specific frequency ranges to detect cycles and rhythmic patterns |
-| [BUTTER](/indicators/filters/butter.md) | Butterworth Filter | Maximally flat magnitude response in passband with good roll-off characteristics |
-| [CHEBY1](/indicators/filters/cheby1.md) | Chebyshev Type I Filter | Steeper roll-off than Butterworth with controlled passband ripple |
-| [CHEBY2](/indicators/filters/cheby2.md) | Chebyshev Type II Filter | Maximally flat passband with ripples in stopband for efficient noise reduction |
-| [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic (Cauer) Filter | Steepest possible roll-off with controlled ripples in both bands |
-| [GAUSS](/indicators/filters/gauss.md)  | Gaussian Filter | Provides smooth, edge-preserving low-pass filtering with bell-shaped weights |
-| [HANN](/indicators/filters/hann.md) | Hann FIR Filter | Smooth tapering FIR filter using Hann window to reduce spectral leakage |
-| [HPF](/indicators/filters/hpf.md) | Ehlers Highpass Filter | Removes trends while preserving shorter-term movements for mean reversion strategies |
-| [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter | Decomposes price into trend and cyclical components |
-| [KF](/indicators/filters/kf.md) | Kalman Filter | Optimal recursive estimator that adapts to changing market dynamics |
-| [LOESS](/indicators/filters/loess.md) | LOESS/LOWESS Smoothing | Locally weighted regression that adapts to non-linear patterns |
-| [MEDIAN](/indicators/filters/median.md) | Median Filter | Non-linear filter that removes spikes and outliers while preserving edges |
-| [NOTCH](/indicators/filters/notch.md) | Notch Filter | Removes specific frequency components while leaving others intact |
-| [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter | Polynomial regression-based filter that preserves higher moments |
-| [SSF](/indicators/filters/ssf.md) | Ehlers Super Smooth Filter | Exceptional noise reduction with minimal lag using optimized pole placement |
-| [USF](/indicators/filters/usf.md) | Ehlers Ultrasmooth Filter | Maximum noise suppression for major trend identification in volatile markets |
-| [WIENER](/indicators/filters/wiener.md) | Wiener Filter | Optimizes signal-to-noise ratio based on statistical characteristics |
+This section documents indicators in architectural terms: problem, streaming design, trade-offs, and verification steps.
+
+| Indicator | Name |
+|---|---|
+| [AGC](/indicators/filters/agc.md) | Ehlers Automatic Gain Control |
+| [ALAGUERRE](/indicators/filters/alaguerre.md) | Ehlers Adaptive Laguerre Filter |
+| [BAXTERKING](/indicators/filters/baxterking.md) | Baxter-King Band-Pass Filter |
+| [BESSEL](/indicators/filters/bessel.md) | Bessel 2nd Order Filter |
+| [BILATERAL](/indicators/filters/bilateral.md) | Bilateral Filter |
+| [BPF](/indicators/filters/bpf.md) | Bandpass Filter |
+| [BUTTER](/indicators/filters/butter.md) | Butterworth 2nd Order Filter |
+| [BUTTER2](/indicators/filters/butter2.md) | Ehlers 2-Pole Butterworth Filter |
+| [BUTTER3](/indicators/filters/butter3.md) | Ehlers 3-Pole Butterworth Filter |
+| [CFITZ](/indicators/filters/cfitz.md) | Christiano-Fitzgerald Band-Pass Filter |
+| [CHEBY1](/indicators/filters/cheby1.md) | Chebyshev Type I Filter |
+| [CHEBY2](/indicators/filters/cheby2.md) | Chebyshev Type II Filter |
+| [EDCF](/indicators/filters/edcf.md) | EDCF: Ehlers Distance Coefficient Filter |
+| [ELLIPTIC](/indicators/filters/elliptic.md) | Elliptic 2nd Order Filter |
+| [GAUSS](/indicators/filters/gauss.md) | Gaussian Filter |
+| [HANN](/indicators/filters/hann.md) | Hann FIR Filter |
+| [HP](/indicators/filters/hp.md) | Hodrick-Prescott Filter |
+| [HPF](/indicators/filters/hpf.md) | Highpass Filter (2-Pole) |
+| [KALMAN](/indicators/filters/kalman.md) | Kalman Filter |
+| [KF](/indicators/filters/kf.md) | Kalman Filter |
+| [LAGUERRE](/indicators/filters/laguerre.md) | Ehlers Laguerre Filter |
+| [LMS](/indicators/filters/lms.md) | Least Mean Squares Adaptive Filter |
+| [LOESS](/indicators/filters/loess.md) | LOESS Filter |
+| [MODF](/indicators/filters/modf.md) | Modular Filter |
+| [NOTCH](/indicators/filters/notch.md) | Notch Filter |
+| [NW](/indicators/filters/nw.md) | NW - Nadaraya-Watson Kernel Regression |
+| [ONEEURO](/indicators/filters/oneeuro.md) | One Euro Filter |
+| [RLS](/indicators/filters/rls.md) | Recursive Least Squares Adaptive Filter |
+| [RMED](/indicators/filters/rmed.md) | Ehlers Recursive Median Filter |
+| [ROOFING](/indicators/filters/roofing.md) | Ehlers Roofing Filter |
+| [SAK](/indicators/filters/sak.md) | Sak |
+| [SGF](/indicators/filters/sgf.md) | Savitzky-Golay Filter |
+| [SPBF](/indicators/filters/spbf.md) | Ehlers Super Passband Filter |
+| [SSF](/indicators/filters/ssf.md) | Supersmooth Filter |
+| [SSF2](/indicators/filters/ssf2.md) | Ehlers 2-Pole Super Smoother Filter |
+| [SSF3](/indicators/filters/ssf3.md) | Ehlers 3-Pole Super Smoother Filter |
+| [USF](/indicators/filters/usf.md) | Ultrasmooth Filter |
+| [VOSS](/indicators/filters/voss.md) | Ehlers Voss Predictive Filter |
+| [WAVELET](/indicators/filters/wavelet.md) | Wavelet Denoising Filter |
+| [WIENER](/indicators/filters/wiener.md) | Wiener Filter |

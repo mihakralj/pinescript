@@ -1,70 +1,61 @@
-# MAMA: MESA Adaptive Moving Average
+# MAMA - Mama
 
-[Pine Script Implementation of MAMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/mama.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The MESA Adaptive Moving Average (MAMA) is an advanced technical indicator that automatically adjusts its responsiveness based on market cycles. Developed by John Ehlers and introduced in 2001 in his book "MESA and Trading Market Cycles," MAMA applies sophisticated signal processing techniques from electrical engineering to market analysis.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MAMA addresses this by implementing `Calculates MAMA and FAMA using Ehlers' MESA adaptive algorithm` with parameterized inputs and direct state progression.
 
-Unlike other adaptive moving averages that typically adjust based on volatility or momentum, MAMA uses the Hilbert Transform to identify the dominant cycle period and phase of the market. This unique approach allows the indicator to adapt more intelligently to changing market conditions. MAMA consists of two lines - the primary MAMA line and a Following Adaptive Moving Average (FAMA) that serves as a confirmation signal and helps identify trend direction.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Cycle-based adaptation:** Uses Hilbert Transform techniques to detect dominant market cycles and adjust responsiveness accordingly
-* **Phase measurement:** Calculates instantaneous phase angles to determine optimal adaptation speed rather than relying on simple volatility measures
-* **Dual-line system:** Provides both a primary signal (MAMA) and a confirmation line (FAMA) for improved trend identification
-* **Self-optimizing smoothing:** Automatically adjusts alpha (smoothing factor) based on detected market cycle characteristics
+## API surface
 
-MAMA achieves its adaptive nature through sophisticated digital signal processing techniques that identify the market's dominant cycle length and phase. By measuring the rate of phase change, the indicator can determine precisely how fast it should adapt to price changes - becoming more responsive during trending markets with clear cycles and more stable during choppy, unclear conditions.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates MAMA and FAMA using Ehlers' MESA adaptive algorithm`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Fast Limit | 0.5 | Maximum adaptation rate | Lower for less sensitivity in volatile markets, increase for faster response |
-| Slow Limit | 0.05 | Minimum adaptation rate | Raise for more stability in ranging markets, lower for more reactivity |
-| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced price representation |
+### Parameters
 
-**Pro Tip:** Many professional traders find that slight adjustments to the Fast Limit (0.4-0.5) while keeping the Slow Limit steady (0.05) creates an optimal balance between responsiveness and stability across most market conditions.
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate MAMA from |
+| `fastLimit` | Maximum rate of adaptation (0.5 typical) |
+| `slowLimit` | Minimum rate of adaptation (0.05 typical) |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-MAMA works by identifying the market's current dominant cycle and how quickly that cycle is changing. It then uses this information to adjust how fast the moving average responds to price changes. The faster the market's cycle is changing, the more responsive MAMA becomes; the more stable the cycle, the smoother MAMA becomes.
+- [mama, fama] array containing MAMA and FAMA values
 
-**Technical formula:**
-1. Apply initial smoothing and Hilbert Transform to generate in-phase (I) and quadrature (Q) components
-2. Calculate instantaneous phase: Phase = arctan(Q/I)
-3. Measure delta phase (phase change rate): DeltaPhase = Previous Phase - Current Phase
-4. Calculate adaptive alpha: Alpha = FastLimit / (DeltaPhase/0.5 + 1), constrained between SlowLimit and FastLimit
-5. Apply to price: MAMA = Alpha × Price + (1-Alpha) × Previous MAMA
-6. Calculate following average: FAMA = 0.5 × Alpha × MAMA + (1-0.5×Alpha) × Previous FAMA
+## Input configuration
 
-> 🔍 **Technical Note:** The Hilbert Transform implementation in MAMA uses specialized digital signal processing techniques to create a 90-degree phase-shifted version of the price series. This allows for precise measurement of instantaneous phase angles and cycle periods. The phase calculation is critical - when markets have a clear cycle, phase changes remain consistent, resulting in moderate adaptation; when cycles break down or change rapidly, phase shifts dramatically, causing MAMA to adjust its responsiveness accordingly.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_fastLimit` | `input.float` | default: `0.5`, label: "Fast Limit" |
+| `i_slowLimit` | `input.float` | default: `0.05`, label: "Slow Limit" |
 
-## Interpretation Details
+## Runtime profile
 
-MAMA provides several key insights for traders:
+- Declared optimization: Uses Hilbert Transform phase detection for O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-- When MAMA crosses above FAMA, it often signals the beginning of an uptrend
-- When MAMA crosses below FAMA, it often signals the beginning of a downtrend
-- The distance between MAMA and FAMA indicates trend strength - wider separation suggests stronger trends
-- The slope of both lines provides insight into trend momentum and potential continuation
-- When MAMA and FAMA flatten and move together, it suggests consolidation or trend exhaustion
-- The adaptation speed of MAMA itself offers insight into market cycle clarity
+## Trade-offs
 
-MAMA is particularly valuable for identifying trends in markets with varying cycle characteristics. Its cycle-based adaptation approach provides cleaner signals in markets that alternate between trending and cyclical behavior, making it especially useful for swing trading and position trading strategies.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Market conditions:** May struggle in markets with very erratic or rapidly changing cycles
-* **Computational complexity:** More resource-intensive than most moving averages due to Hilbert Transform calculations
-* **Parameter sensitivity:** While adaptive, the Fast/Slow Limit settings still influence overall behavior
-* **Mathematical complexity:** Requires proper implementation of digital signal processing concepts for accurate results
-* **Complementary tools:** Works best when combined with momentum indicators or volume analysis for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-1. Ehlers, J. (2001). *MESA and Trading Market Cycles*. John Wiley & Sons.
-2. Ehlers, J. (2002). "Using the MESA Adaptive Moving Average," *Technical Analysis of Stocks & Commodities*, Volume 20: June.
-3. Ehlers, J. (2013). *Cycle Analytics for Traders*. Wiley Trading.
+- Source code: `indicators/trends_IIR/mama.pine`
+- Documentation file: `indicators/trends_IIR/mama.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/mama.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_IIR/mama.md

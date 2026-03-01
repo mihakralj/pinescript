@@ -1,67 +1,61 @@
-# BBANDS: Bollinger Bands
+# BBANDS - Bbands
 
-[Pine Script Implementation of BBANDS](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/bbands.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Bollinger Bands are a technical analysis tool developed by John Bollinger in the 1980s. They consist of a middle band (typically a simple moving average) with an upper and lower band set at standard deviation levels above and below the middle band. Bollinger Bands adapt to market volatility by widening during volatile periods and contracting during less volatile periods, creating a dynamic range within which prices typically oscillate. This adaptive nature makes them useful for identifying potential overbought and oversold conditions relative to recent price action.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. BBANDS addresses this by implementing `Calculates Bollinger Bands with adjustable period and multiplier` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Volatility measurement:** Bollinger Bands expand and contract based on market volatility, providing a visual representation of dynamic market conditions
-* **Market application:** Particularly useful for identifying potential price reversals, breakouts, and "squeeze" conditions that often precede significant price movements
-* **Timeframe suitability:** **Multiple timeframes** are effective, with shorter periods (10-20) for short-term trading and longer periods (20-50) for position trading
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Bollinger Bands combine two powerful technical concepts—moving averages and volatility—creating a comprehensive tool that helps traders identify not just trend direction but also potential extremes relative to recent price behavior.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 20 | Controls the lookback window for both the middle band (SMA) and standard deviation calculation | Decrease for faster response in active markets, increase for smoother signals in choppy conditions |
-| Source | Close | Data point used for calculation | Change to HL2 or HLC3 for more balanced readings in volatile markets |
-| Multiplier | 2.0 | Determines the distance of the upper and lower bands from the middle band | Increase to 2.5-3.0 to reduce false signals, decrease to 1.5-1.8 for earlier signals |
+- `Calculates Bollinger Bands with adjustable period and multiplier`
 
-**Pro Tip:** The "Bollinger Band Squeeze" occurs when volatility reaches a low point and the bands narrow significantly. This compression often precedes major price moves, making it a powerful setup for breakout traders when combined with increasing volume.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate Bollinger Bands from |
+| `period` | Lookback period for calculations |
+| `multiplier` | Standard deviation multiplier for band width |
 
-**Simplified explanation:**
-Bollinger Bands consist of three lines: a middle band (typically a 20-period simple moving average), an upper band (middle band plus two standard deviations), and a lower band (middle band minus two standard deviations). As price volatility increases, the bands widen; as volatility decreases, they contract.
+### Returns
 
-**Technical formula:**
-Middle Band = SMA(source, period)
-Upper Band = Middle Band + (multiplier × StdDev(source, period))
-Lower Band = Middle Band - (multiplier × StdDev(source, period))
+- tuple with [middle, upper, lower] band values
 
-Where:
-- SMA is the Simple Moving Average
-- StdDev is the Standard Deviation
-- source is typically the closing price
-- period is the lookback window (usually 20)
-- multiplier is typically 2
+## Input configuration
 
-> 🔍 **Technical Note:** The implementation uses a single-pass algorithm with a circular buffer for efficiency, avoiding the need to recalculate the entire sum for each new bar. This approach significantly improves performance for longer lookback periods.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `20`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_multiplier` | `input.float` | default: `2.0`, label: "StdDev Multiplier" |
 
-## Interpretation Details
+## Runtime profile
 
-Bollinger Bands provide multiple trading signals and insights:
+- Declared optimization: Uses circular buffer with running sums, O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-- **Bollinger Bounce:** Prices tend to return to the middle band, creating potential mean-reversion trades when price touches the outer bands in ranging markets
-- **Bollinger Squeeze:** When bands narrow significantly (low volatility), it often precedes a sharp price movement and potential breakout opportunity
-- **Walking the Band:** During strong trends, price may "walk" along an outer band, indicating trend continuation rather than reversal
-- **Double Bottoms/Tops:** More reliable when the second bottom/top occurs outside the band but the indicator shows decreasing momentum
+## Trade-offs
 
-Traders should pay attention to where price closes relative to the bands rather than just touches, as closes beyond the bands are often more significant signals.
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Market conditions:** Less effective in directionless, choppy markets with frequent small reversals
-* **Lag factor:** The SMA middle band introduces some lag, potentially delaying signals in fast-moving markets
-* **False signals:** Outer band touches don't always indicate reversals, especially in strongly trending markets
-* **Complementary tools:** Best combined with non-correlated indicators like volume, momentum oscillators (RSI, Stochastic), or candlestick patterns for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-- Bollinger, J. (2002). Bollinger on Bollinger Bands. McGraw-Hill Education.
-- Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/channels/bbands.pine`
+- Documentation file: `indicators/channels/bbands.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/bbands.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/bbands.md

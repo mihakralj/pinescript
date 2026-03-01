@@ -1,0 +1,11 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("WCLPRICE: Weighted Close Price", overlay=true)
+
+wclprice(float h, float l, float c) =>
+    (h + l + 2.0 * c) * 0.25
+
+result = wclprice(high, low, close)
+
+plot(result, "WclPrice", color.new(color.red, 0), 2)

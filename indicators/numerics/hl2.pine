@@ -4,7 +4,6 @@
 indicator("Midprice (HL2)", "HL2", overlay=true)
 
 //@function Calculates the midprice as the average of high and low prices
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/hl2.md
 //@param h High price series
 //@param l Low price series
 //@returns float The midprice value (high + low) * 0.5

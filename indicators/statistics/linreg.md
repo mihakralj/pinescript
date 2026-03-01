@@ -1,76 +1,59 @@
-# LinReg: Linear Regression Curve & Slope
+# LINREG - Linreg
 
-[Pine Script Implementation of LinReg & Slope](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/linreg.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Linear Regression analysis fits a straight line through a series of data points (like price) over a specified period using the least squares method. The `linreg()` function calculates both the value of this best-fit line at the current bar (the regression value) and the slope of the line.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. LINREG addresses this by implementing `Calculates linear regression and slope over the specified period` with parameterized inputs and direct state progression.
 
-1. **Regression Value:** Acts as a smoothed trendline that follows the data.
-2. **Slope:** Quantifies the rate of change (direction and steepness) of the trend over the lookback period.
+## Design decision
 
-The function returns these as a tuple `[value, slope]`, providing insights into the current trend's direction, strength, and expected value based on recent linear movement.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-* **Trend Following (Value):** The regression value provides a dynamic trendline that adapts to recent price action.
-* **Trend Direction & Strength (Slope):** The sign of the slope indicates trend direction (positive for uptrend, negative for downtrend), while its magnitude indicates the strength or steepness.
-* **Rate of Change (Slope):** Slope directly measures the average rate of change per bar over the lookback period.
-* **Least Squares Method:** The function relies on finding the line that minimizes the sum of the squared differences between the actual data points and the line itself.
-* **Time-Weighted:** The calculation inherently considers the time progression within the lookback window.
-* **Tuple Return:** The function returns both the calculated regression value and the slope in a single tuple `[value, slope]`.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates linear regression and slope over the specified period`
 
-| Parameter | Default | Function                                     | When to Adjust                                                                 |
-| :-------- | :------ | :------------------------------------------- | :----------------------------------------------------------------------------- |
-| Period    | 14      | Controls the lookback window for calculation | Decrease for faster response to recent changes, increase for smoother readings |
-| Source    | Close   | Data point used for calculation              | Change to High/Low, HL2, HLC3, etc., depending on the desired analysis focus   |
+### Parameters
 
-**Pro Tip:** Crossovers between the source price and the regression value can signal potential entry or exit points. A steepening slope can confirm strengthening momentum. Access the tuple elements like `[lrVal, lrSlope] = linreg(source, length)`.
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate linear regression from |
+| `len` | Lookback period for the calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Linear regression finds the straight line (`y = mx + c`) that best represents the source data (`y`) over time (`x`) for the specified period. The `linreg()` function calculates both the `y` value on this line for the most recent `x` (the regression value) and the `m` (slope) of the line.
+- Tuple containing [intercept, slope]
 
-**Technical formula:**
-The line is defined by: `y = intercept + slope * x`
+## Input configuration
 
-Where:
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `14`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-* `y` is the source series (e.g., price)
-* `x` is the time index series (0, 1, 2, ..., Period-1)
-* `slope = Cov(x, y) / Var(x)`
-* `intercept = Mean(y) - slope * Mean(x)`
+## Runtime profile
 
-The regression value is calculated by plugging the x-value corresponding to the current bar (which is `Period - 1` relative to the start of the window) into the line equation.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The Pine Script implementation calculates slope and intercept using rolling sums for efficiency, allowing calculations from the first available bars.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Regression Value:**
+## Verification checklist
 
-   * Acts as a dynamic support/resistance level.
-   * Its direction indicates the overall trend based on the linear fit.
-   * Price crossing above/below the regression value can signal shifts in momentum.
-
-* **Slope Value:**
-
-    * **Positive Slope:** Indicates an upward trend over the lookback period. A larger positive value means a steeper uptrend.
-    * **Negative Slope:** Indicates a downward trend. A larger negative value (further from zero) means a steeper downtrend.
-    * **Slope near Zero:** Suggests a sideways market or consolidation phase.
-    * **Changes in Slope:** Observing the slope's value over time reveals changes in trend momentum.
-
-## Limitations and Considerations
-
-* **Lag:** As a lookback-based indicator, `linreg` has inherent lag, especially with longer periods.
-* **Linearity Assumption:** Linear regression assumes a linear trend. It may lag or provide misleading signals during sharp, non-linear market moves (e.g., parabolic rallies or crashes).
-* **Outlier Sensitivity:** Extreme price points (outliers) within the lookback period can significantly influence the calculated line and slope.
-* **Scale Dependent (Slope):** The absolute value of the slope depends on the scale of the source data. Comparing slope values across different assets requires normalization or careful consideration.
-* **Whipsaws:** In choppy or sideways markets, price may frequently cross the regression value, and the slope may oscillate around zero, potentially generating false signals.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Wikipedia contributors. (2023). Simple linear regression. In Wikipedia, The Free Encyclopedia. Retrieved from [https://en.wikipedia.org/wiki/Simple_linear_regression](https://en.wikipedia.org/wiki/Simple_linear_regression)
+- Source code: `indicators/statistics/linreg.pine`
+- Documentation file: `indicators/statistics/linreg.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/linreg.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/linreg.md

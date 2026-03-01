@@ -4,7 +4,6 @@
 indicator("Jurik Moving Average (JMA)", "JMA", overlay=true)
 
 //@function Calculates JMA using adaptive techniques to adjust to market volatility
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/trends_IIR/jma.md
 //@param source Series to calculate JMA from
 //@param period Number of bars used in the calculation
 //@param phase Phase shift (-100 to 100). Negative values reduce lag but may cause overshoot

@@ -1,0 +1,64 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Time Series Forecast", "TSF", overlay=true)
+
+//@function Time Series Forecast - linear regression extrapolated N periods forward
+//@param source Price data to analyze
+//@param period Number of bars for linear regression calculation
+//@param forecast Number of periods to forecast ahead (default 1)
+//@returns Forecasted value N periods ahead
+//@optimized O(1) complexity using incremental sumXY maintenance
+tsf(series float source, simple int period, simple int forecast = 1) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    if period > 5000
+        runtime.error("Period exceeds maximum of 5000")
+    if forecast <= 0
+        runtime.error("Forecast must be greater than 0")
+    
+    var int count = 0
+    var int head = 0
+    var float sumY = 0.0
+    var float sumXY = 0.0
+    var array<float> buffer = array.new_float(period, na)
+    
+    if na(source)
+        na
+    else
+        float oldest = array.get(buffer, head)
+        if not na(oldest)
+            sumY -= oldest
+            sumXY -= sumY
+            sumXY += (period - 1) * source
+        else
+            sumXY += count * source
+            count += 1
+        
+        sumY += source
+        array.set(buffer, head, source)
+        head := (head + 1) % period
+        
+        if count < period
+            na
+        else
+            float sumX = period * (period - 1) / 2
+            float sumX2 = period * (period - 1) * (2 * period - 1) / 6
+            float denomX = period * sumX2 - sumX * sumX
+            
+            float slope = (period * sumXY - sumX * sumY) / denomX
+            float intercept = (sumY - slope * sumX) / period
+            float result = intercept + slope * (period - 1 + forecast - 1)
+            
+            result
+
+// ---------- Main loop ----------
+
+i_period = input.int(14, "Period", minval=1, maxval=5000)
+i_forecast = input.int(1, "Forecast Periods", minval=1, maxval=100)
+i_source = input.source(close, "Source")
+
+result = tsf(i_source, i_period, i_forecast)
+
+plot(result, "TSF", color=color.yellow, linewidth=2)
+plot(i_source, "Source", color=color.gray, linewidth=1)

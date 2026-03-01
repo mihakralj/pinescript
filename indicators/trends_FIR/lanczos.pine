@@ -1,0 +1,65 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Lanczos (Sinc) Window Moving Average (LANCZOS)", "LANCZOS", overlay=true)
+
+//@function Calculates LANCZOS using sinc window weighting
+//@param source Series to calculate LANCZOS from
+//@param period Lookback period - FIR window size
+//@returns LANCZOS value, calculates from first bar using available data
+//@reference Lanczos, C. (1956). "Applied Analysis." Prentice-Hall.
+lanczos(series float source, simple int period) =>
+    if period < 2
+        runtime.error("Period must be at least 2")
+
+    float price = nz(source)
+
+    // --- Circular buffer for rolling window ---
+    var array<float> buffer = array.new_float(period, na)
+    var int head = 0
+    array.set(buffer, head, price)
+    head := (head + 1) % period
+
+    // --- Precompute Lanczos (sinc) window weights once ---
+    // w(k) = sinc(2k/(N-1) - 1), sinc(x) = sin(pi*x)/(pi*x), sinc(0) = 1
+    var array<float> weights = array.new_float(0)
+    if barstate.isfirst
+        float nm1 = (period - 1) * 1.0
+        float wsum = 0.0
+        for k = 0 to period - 1
+            float x = nm1 > 0 ? (2.0 * k / nm1) - 1.0 : 0.0
+            float pix = math.pi * x
+            // Ternary guarantees lazy evaluation — avoids 0/0 when pix≈0
+            float w = math.abs(pix) < 1e-8 ? 1.0 : math.sin(pix) / pix
+            array.push(weights, w)
+            wsum += w
+        // Normalize weights to sum = 1
+        if wsum > 1e-15
+            for j = 0 to period - 1
+                array.set(weights, j, array.get(weights, j) / wsum)
+
+    int count = math.min(bar_index + 1, period)
+    if count < period
+        price
+    else
+        // --- Apply Lanczos window convolution via circular buffer ---
+        // Buffer: head points to next-write = oldest entry
+        // Weight[0] = oldest bar, Weight[period-1] = newest
+        float result = 0.0
+        for j = 0 to period - 1
+            int idx = (head + j) % period
+            float val = nz(array.get(buffer, idx))
+            result += val * array.get(weights, j)
+        result
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(14, "Period", minval=2)
+i_source = input.source(close, "Source")
+
+// Calculation
+lanczos_value = lanczos(i_source, i_period)
+
+// Plot
+plot(lanczos_value, "LANCZOS", color=color.yellow, linewidth=2)

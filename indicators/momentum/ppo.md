@@ -1,117 +1,63 @@
-# PPO: Percentage Price Oscillator
+# PPO - Ppo
 
-[Pine Script Implementation of PPO](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/ppo.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Percentage Price Oscillator (PPO) is a momentum indicator that measures the percentage difference between two exponential moving averages. Similar to the MACD, but expressed in percentage terms, making it more suitable for comparing assets with different price levels. The PPO helps identify trend direction, momentum, and potential reversal points.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PPO addresses this by implementing `Calculates Percentage Price Oscillator using compensated EMAs` with parameterized inputs and direct state progression.
 
-This implementation calculates the percentage difference between fast and slow EMAs, along with a signal line and histogram for additional confirmation signals.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Percentage-Based:** Shows relative price changes as percentages
-* **Trend Following:** Identifies trend direction and strength
-* **Momentum Measurement:** Indicates acceleration/deceleration
-* **Signal Line:** Provides trade timing signals
-* **Histogram:** Shows momentum shifts visually
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Fast Length | 12 | Fast EMA period | Lower for faster signals |
-| Slow Length | 26 | Slow EMA period | Higher for longer-term trends |
-| Signal Length | 9 | Signal line smoothing | Affects crossover timing |
+- `Calculates Percentage Price Oscillator using compensated EMAs`
 
-**Pro Tip:** Common combinations:
-- Short-term: Fast(8), Slow(17), Signal(9)
-- Default: Fast(12), Slow(26), Signal(9)
-- Long-term: Fast(19), Slow(39), Signal(9)
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series to calculate PPO for |
+| `fast_len` | Fast EMA period |
+| `slow_len` | Slow EMA period |
+| `signal_len` | Signal line period |
 
-**Simplified explanation:**
-PPO expresses the difference between two EMAs as a percentage of the slower EMA.
+### Returns
 
-**Technical formula:**
-1. Calculate Fast and Slow EMAs:
-   ```
-   Fast_EMA = EMA(price, fast_length)
-   Slow_EMA = EMA(price, slow_length)
-   ```
+- Tuple containing PPO line and signal line values
 
-2. Calculate PPO Line:
-   ```
-   PPO = 100 * (Fast_EMA - Slow_EMA) / Slow_EMA
-   ```
+## Input configuration
 
-3. Calculate Signal Line:
-   ```
-   Signal = EMA(PPO, signal_length)
-   ```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_fast_len` | `input.int` | default: `12`, label: "Fast Length" |
+| `i_slow_len` | `input.int` | default: `26`, label: "Slow Length" |
+| `i_signal_len` | `input.int` | default: `9`, label: "Signal Length" |
 
-4. Calculate Histogram:
-   ```
-   Histogram = PPO - Signal
-   ```
+## Runtime profile
 
-> 🔍 **Technical Note:** The percentage calculation makes PPO values comparable across different securities, unlike MACD which uses absolute price differences.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-PPO provides multiple analytical perspectives:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Trend Direction:**
-  - Positive PPO: Bullish trend
-  - Negative PPO: Bearish trend
-  - Zero line crossovers: Major trend changes
+## Verification checklist
 
-* **Signal Line Crossovers:**
-  - PPO crosses above Signal: Bullish signal
-  - PPO crosses below Signal: Bearish signal
-  - More reliable near extremes
-
-* **Histogram Analysis:**
-  - Growing: Increasing momentum
-  - Shrinking: Decreasing momentum
-  - Zero crossings: Potential trend changes
-
-* **Divergence Patterns:**
-  - Bullish: Price lower lows, PPO higher lows
-  - Bearish: Price higher highs, PPO lower highs
-  - Most effective at extremes
-
-## Advantages
-
-1. **Comparison Benefits:**
-   - Percentage-based calculation
-   - Cross-asset comparison
-   - Historical comparison
-   - Portfolio analysis
-
-2. **Trading Applications:**
-   - Trend identification
-   - Momentum confirmation
-   - Reversal signals
-   - Divergence trading
-
-3. **Technical Benefits:**
-   - Multiple signal types
-   - Visual momentum display
-   - Clear entry/exit points
-   - Trend strength measurement
-
-## Limitations and Considerations
-
-* **Lag Component:** Moving average based calculations introduce delay
-* **False Signals:** Can occur in ranging markets
-* **Whipsaws:** Common around zero line in choppy conditions
-* **Confirmation:** Best used with other indicators
-* **Timeframe Dependent:** Different settings needed for different timeframes
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Appel, G. (2005). Technical Analysis: Power Tools for Active Investors. Financial Times Prentice Hall.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
+- Source code: `indicators/momentum/ppo.pine`
+- Documentation file: `indicators/momentum/ppo.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/ppo.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/ppo.md

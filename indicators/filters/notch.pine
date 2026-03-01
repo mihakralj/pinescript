@@ -4,7 +4,6 @@
 indicator("Notch Filter (NOTCH)", "NOTCH", overlay=true)
 
 //@function Applies a second-order IIR notch filter to remove a specific frequency component
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/notch.md
 //@param src Input series
 //@param period The period of the cycle to remove (center frequency of the notch)
 //@param bandwidth The relative bandwidth of the notch (e.g., 0.1 for 10%)

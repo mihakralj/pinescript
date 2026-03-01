@@ -4,7 +4,6 @@
 indicator("Relative Strength Xtra (RSX)", "RSX", overlay=false)
 
 //@function Calculates RSX (Relative Strength Xtra) using integrated JMA smoothing
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/rsx.md
 //@param src Source series to calculate RSX for
 //@param len Lookback period for RSX calculation
 //@returns RSX value measuring momentum with reduced noise
@@ -89,4 +88,3 @@ rsx_value = rsx(i_source, i_length)
 
 // Plot
 plot(rsx_value, "RSX", color=color.yellow, linewidth=2)
-

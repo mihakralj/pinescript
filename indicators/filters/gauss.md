@@ -1,70 +1,59 @@
-# GAUSS: Gaussian Filter
+# GAUSS - Gauss
 
-[Pine Script Implementation of GAUSS](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/gauss.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Gaussian Filter implements smoothing based on the normal (Gaussian) distribution, providing a natural and mathematically sound approach to noise reduction in financial time series. Named after Carl Friedrich Gauss, this filter applies weights that follow the bell-shaped normal distribution curve, creating a smooth and continuous filtering effect. This implementation provides a true O(n) convolution that captures the full ±3σ range of the Gaussian distribution, ensuring accurate and comprehensive smoothing of price data.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. GAUSS addresses this by implementing `Calculates Gaussian Filter using true convolution` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Normal distribution weights:** Uses the bell curve shape to naturally weight price contributions, providing smooth and continuous filtering
-* **Automatic kernel sizing:** Adapts kernel size based on sigma to capture 99.7% (±3σ) of the distribution's weight
-* **True convolution:** Implements exact Gaussian filtering through direct convolution rather than approximations
-* **Market application:** Particularly effective for trend identification and noise reduction while preserving important market structures
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of this implementation is its combination of true Gaussian convolution with efficient computation, providing traders with mathematically rigorous smoothing while maintaining practical applicability to real-time market analysis.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Sigma | 2.0 | Controls the width of the Gaussian distribution | Increase for stronger smoothing, decrease for more responsiveness |
-| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+- `Calculates Gaussian Filter using true convolution`
 
-**Pro Tip:** A sigma value of 2.0 provides a good balance between smoothing and responsiveness. Values above 3.0 may introduce excessive lag, while values below 1.0 may not provide sufficient noise reduction.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Series to calculate Gaussian filter from |
+| `sigma` | Standard deviation of the Gaussian kernel |
 
-**Simplified explanation:**
-The filter creates a bell-shaped window of weights centered on each price point. The width of this window is determined by sigma, with larger values creating wider windows and thus stronger smoothing. Each filtered value is a weighted average of nearby prices, with weights following the normal distribution curve.
+### Returns
 
-**Technical formula:**
-The Gaussian kernel weights are calculated as:
+- Gaussian filter value
 
-w(x) = e^(-x²/2σ²)
+## Input configuration
 
-Where:
-- x is the distance from the center point
-- σ (sigma) is the standard deviation parameter
-- Kernel size K = 2⌈3σ⌉ + 1
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_sigma` | `input.float` | default: `1.0`, label: "Sigma" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-The filtered output is computed through convolution:
+## Runtime profile
 
-y[n] = Σ(w_k × x[n-k]) / Σw_k
+- Declared optimization: Uses Gaussian kernel convolution with O(n) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The kernel size is automatically set to ±3σ to capture 99.7% of the Gaussian distribution's weight, providing optimal balance between accuracy and computational efficiency.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-The Gaussian filter can be used in various trading strategies:
+## Verification checklist
 
-* **Trend identification:** Reveals underlying price direction with natural, smooth transitions
-* **Support/resistance levels:** Creates smooth, naturally weighted dynamic levels
-* **Multiple timeframe analysis:** Different sigma values can identify trends of varying durations
-* **Pattern recognition:** Smooth output helps identify chart patterns with reduced noise
-* **Divergence analysis:** Clean price data improves reliability of divergence signals
-
-## Limitations and Considerations
-
-* **Computational complexity:** O(n) complexity with kernel size proportional to sigma
-* **Edge effects:** First few bars may show initialization effects
-* **Lag characteristics:** Higher sigma values introduce more lag
-* **Memory usage:** Requires storing kernel weights and price history
-* **Complementary tools:** Best paired with momentum indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Gaussian Filter - Wikipedia: https://en.wikipedia.org/wiki/Gaussian_filter
-* Digital Image Processing - Gaussian Smoothing: https://homepages.inf.ed.ac.uk/rbf/HIPR2/gsmooth.htm
-* Smith, S.W. "The Scientist and Engineer's Guide to Digital Signal Processing," Chapter 24
+- Source code: `indicators/filters/gauss.pine`
+- Documentation file: `indicators/filters/gauss.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/gauss.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/gauss.md

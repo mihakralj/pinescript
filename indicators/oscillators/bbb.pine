@@ -4,7 +4,6 @@
 indicator("Bollinger %B", "BBB", overlay=false)
 
 //@function Calculates Bollinger Bands components for %B calculation
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/bbb.md
 //@param source Series to calculate from
 //@param period Lookback period for SMA and standard deviation
 //@param multiplier Standard deviation multiplier for band width

@@ -1,82 +1,61 @@
-# KF: Kalman Filter
+# KF - Kf
 
-[Pine Script Implementation of KF](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/kf.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Kalman Filter is a recursive optimal estimator that efficiently processes noisy data to produce accurate estimates of unknown variables. In financial markets, it serves as an adaptive filter that continuously updates its estimates based on new measurements, weighing them against its internal model predictions. Unlike conventional moving averages that apply fixed weights, the Kalman Filter dynamically adjusts its responsiveness through its "Kalman gain," which determines how much weight to give new measurements versus the model's predictions.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. KF addresses this by implementing `Applies a Kalman Filter to the input series` with parameterized inputs and direct state progression.
 
-The implementation provided offers a simplified yet powerful version of the Kalman Filter that balances computational efficiency with real-time adaptability. By modeling price movement as a process with inherent noise and measurement uncertainty, it can extract underlying signals from market data more effectively than traditional filters. This approach is particularly valuable for tracking price trends in volatile markets, where distinguishing genuine price movements from random fluctuations is challenging.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **State estimation:** Maintains and continuously updates an internal model of the system's state (price value)
-* **Prediction-correction cycle:** Alternates between predicting the next state and correcting that prediction using new measurements
-* **Adaptive Kalman gain:** Automatically adjusts the filter's responsiveness based on the relative uncertainty in predictions versus measurements
-* **Uncertainty management:** Explicitly accounts for both process noise (market volatility) and measurement noise (price reporting inaccuracies)
+## API surface
 
-The Kalman Filter stands apart from other technical indicators through its foundation in statistical estimation theory. Rather than simply averaging past values with predetermined weights, it intelligently adapts to changing market conditions by continuously evaluating its own uncertainty estimates. This probabilistic approach allows it to respond quickly to significant price changes while filtering out random noise.
+### Functions
 
-## Common Settings and Parameters
+- `Applies a Kalman Filter to the input series`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Process Noise (Q) | 0.01 | Controls how much the filter expects the market to change between observations | Increase during volatile periods for faster response; decrease in stable markets for smoother output |
-| Measurement Noise (R) | 0.1 | Represents expected noise level in the price data | Increase when price data contains spikes or artifacts; decrease when price data is reliable |
-| Source | Close | Price data used for filtering | Modify to filter different aspects of price action |
+### Parameters
 
-**Pro Tip:** The ratio between Q and R is more important than their absolute values. A Q/R ratio of approximately 0.1 provides a good balance for most markets. During trending periods, increase this ratio slightly to make the filter more responsive to new price movements.
+| Parameter | Purpose |
+|---|---|
+| `src` | Input series (measurement) |
+| `q` | Process noise covariance |
+| `r` | Measurement noise covariance |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-The Kalman Filter proceeds in two steps: predict and update. In the prediction step, it projects its current estimate forward in time. In the update step, it incorporates a new measurement to refine this prediction, with the Kalman gain determining how much to trust the measurement versus the prediction.
+- Filtered series
 
-**Technical formula:**
+## Input configuration
 
-1. Prediction step:
-   - x̂ₙ⁻ = x̂ₙ₋₁ (predicted state equals previous state)
-   - Pₙ⁻ = Pₙ₋₁ + Q (predicted error covariance increases by process noise)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_q` | `input.float` | default: `0.01`, label: "Process Noise (Q)" |
+| `i_r` | `input.float` | default: `0.1`, label: "Measurement Noise (R)" |
 
-2. Update step:
-   - Kₙ = Pₙ⁻/(Pₙ⁻ + R) (calculate Kalman gain)
-   - x̂ₙ = x̂ₙ⁻ + Kₙ(zₙ - x̂ₙ⁻) (update state estimate)
-   - Pₙ = (1 - Kₙ)Pₙ⁻ (update error covariance)
+## Runtime profile
 
-Where:
-- x̂ₙ is the filtered value at time n
-- Pₙ is the estimation error covariance
-- zₙ is the measurement (observed price)
-- Q is the process noise covariance
-- R is the measurement noise covariance
-- Kₙ is the Kalman gain
+- Declared optimization: Uses Kalman filter with O(1) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The implementation uses a simplified one-dimensional Kalman Filter with a constant velocity model. This provides good performance for most financial time series while remaining computationally efficient. The filter initializes with the first valid measurement to provide immediate useful output without requiring a warm-up period.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-The Kalman Filter provides several analytical perspectives:
+## Verification checklist
 
-* **Trend detection:** The filtered output reveals the underlying trend by removing random fluctuations
-* **Change point identification:** Significant deviations between the filter's predictions and new measurements can signal trend changes
-* **Dynamic support/resistance:** The filter can function as adaptive support in uptrends and resistance in downtrends
-* **Noise quantification:** The gap between raw price and filtered output offers insight into market noise levels
-* **Momentum assessment:** The rate of change in the filter's output indicates trend strength
-* **Divergence analysis:** When price makes new extremes but the filtered line doesn't confirm, it may signal potential reversals
-
-## Limitations and Considerations
-
-* **Parameter sensitivity:** Results can vary significantly based on noise parameter settings
-* **Model assumptions:** Assumes a particular underlying model (constant velocity) which may not match all market conditions
-* **Lag component:** Inherently introduces some lag, though typically less than comparable smoothing indicators
-* **Single-dimension limitation:** The implementation tracks only price level, not higher-order derivatives like velocity or acceleration
-* **Regime adaptability:** May need parameter adjustments when market regime changes (e.g., from trending to ranging)
-* **Initialization bias:** First few values may be less reliable until the filter stabilizes
-* **Computational complexity:** More resource-intensive than simple moving averages, though the optimized implementation minimizes this concern
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Kalman, R. E. (1960). A New Approach to Linear Filtering and Prediction Problems. Journal of Basic Engineering, 82(1), 35-45.
-* Welch, G., & Bishop, G. (2006). An Introduction to the Kalman Filter. University of North Carolina at Chapel Hill.
-* Chan, E. P. (2013). Algorithmic Trading: Winning Strategies and Their Rationale. John Wiley & Sons.
-* Javaheri, A. (2015). Inside Volatility Filtering: Secrets of the Skew. John Wiley & Sons.
+- Source code: `indicators/filters/kf.pine`
+- Documentation file: `indicators/filters/kf.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/kf.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/kf.md

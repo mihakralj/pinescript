@@ -1,79 +1,54 @@
-# OHLC4: OHLC Average
+# OHLC4 - Ohlc4
 
-[Pine Script Implementation of OHLC4](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/ohlc4.pine)
 
-## Naming Convention
+## Architectural problem
 
-**OHLC4** is commonly referred to as **Average Price** in technical analysis. This comprehensive measure includes all four standard price components:
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. OHLC4 addresses this by implementing `Calculates the average of open, high, low, and close prices` with parameterized inputs and direct state progression.
 
-- **OHLC4**: Programming/library notation (Open-High-Low-Close average of 4)
-- **Average Price**: Most common name in technical analysis
-- **Four-Price Average**: Descriptive name emphasizing all components
-- **Complete Price Average**: Alternative terminology
+## Design decision
 
-## Overview and Purpose
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The OHLC4 indicator calculates the arithmetic average of all four standard price points: open, high, low, and close. This comprehensive price transformation provides the most complete single-value representation of a bar's price action by incorporating the session start, both range extremes, and the final settlement price. OHLC4 offers the most balanced view of price behavior among common price transformations, giving equal weight to all major price components.
+## API surface
 
-This measure is particularly valuable when you want a thoroughly averaged price that considers every key aspect of the bar's price action. By including all four OHLC prices, this transformation creates a highly smoothed price series that reduces the impact of any single price component while maintaining sensitivity to overall price behavior.
+### Functions
 
-## Core Concepts
+- `Calculates the average of open, high, low, and close prices`
 
-* **Complete representation:** Incorporates all four standard price points for comprehensive averaging
-* **Maximum balance:** Gives equal weight to opening, range extremes, and closing prices
-* **Smoothest transformation:** Creates the most averaged price series among standard transformations
-* **Full bar context:** Captures where period started, traded, and finished
+### Parameters
 
-## Common Settings and Parameters
+| Parameter | Purpose |
+|---|---|
+| `o` | Open price series |
+| `h` | High price series |
+| `l` | Low price series |
+| `c` | Close price series |
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Open | open | Opening price data | Typically not adjusted, uses standard open price |
-| High | high | High price data | Typically not adjusted, uses standard high price |
-| Low | low | Low price data | Typically not adjusted, uses standard low price |
-| Close | close | Closing price data | Typically not adjusted, uses standard close price |
+### Returns
 
-**Pro Tip:** OHLC4 provides the most smoothed price series among standard transformations, making it ideal for noise reduction in very volatile markets. Use OHLC4 when you want maximum averaging effect while maintaining representation of all price components.
+- float The average value (open + high + low + close) * 0.25
 
-## Calculation and Mathematical Foundation
+## Runtime profile
 
-**Simplified explanation:**
-OHLC4 calculates the arithmetic mean of all four standard price points, providing the most complete averaged price representation.
+- Declared optimization: Uses multiplication instead of division for performance
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-**Technical formula:**
+## Trade-offs
 
-```
-OHLC4 = (Open + High + Low + Close) / 4
-```
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Where:
-- Open is the price at the start of the period
-- High is the highest price reached during the period
-- Low is the lowest price reached during the period
-- Close is the closing price at the end of the period
+## Verification checklist
 
-> 🔍 **Technical Note:** This calculation maintains O(1) complexity with three additions and one division per bar. The formula is deterministic and computationally efficient, suitable for real-time applications.
-
-## Interpretation Details
-
-OHLC4 provides several analytical perspectives:
-
-* **Comprehensive averaging:** Most complete single-value price representation available
-* **Maximum smoothing:** Creates smoothest price series among standard transformations
-* **Balanced weighting:** Treats all four price components with equal importance
-* **Noise reduction:** Most effective at filtering out price spikes and extremes
-* **Full bar representation:** Captures opening, range, and closing information simultaneously
-
-## Limitations and Considerations
-
-* **Over-smoothing:** May lag price action due to averaging all four components
-* **Equal weighting assumption:** Treats all prices equally regardless of time spent at each level
-* **Volume independence:** Does not account for volume distribution across price levels
-* **Extreme inclusion:** Still captures high and low extremes that may represent brief spikes
-* **Responsiveness trade-off:** Maximum averaging reduces sensitivity to rapid price changes
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Kaufman, P. J. (2013). Trading Systems and Methods. John Wiley & Sons.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Achelis, S. B. (2000). Technical Analysis from A to Z. McGraw-Hill.
+- Source code: `indicators/numerics/ohlc4.pine`
+- Documentation file: `indicators/numerics/ohlc4.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/ohlc4.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/ohlc4.md

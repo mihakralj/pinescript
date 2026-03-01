@@ -4,7 +4,6 @@
 indicator("Velocity (VEL)", "VEL", overlay=false)
 
 //@function Calculates zero-lag velocity using JMA smoothing
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/vel.md
 //@param src Source series to calculate velocity for
 //@param period Lookback period for velocity calculation
 //@returns Smoothed velocity value measuring rate of price change

@@ -4,7 +4,6 @@
 indicator("Center of Gravity (CG)", "CG", overlay=false)
 
 //@function Calculates Ehlers' Center of Gravity indicator
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/cg.md
 //@param src Series to calculate Center of Gravity from
 //@param length Period for the Center of Gravity calculation
 //@returns Center of Gravity value identifying cycle turning points

@@ -4,7 +4,6 @@
 indicator("Hann FIR Filter (HANN)", "HANN", overlay=true)
 
 //@function Calculates a Finite Impulse Response (FIR) filter using Hann window coefficients
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/filters/hann.md
 //@param src Series to calculate the Hann FIR filter from
 //@param len The lookback period (length) of the Hann window
 //@returns Hann FIR filter value

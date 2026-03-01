@@ -1,39 +1,53 @@
-# Oscillators
+# _INDEX -  Index
 
-| Code | Name | Key Characteristics |
-| ------------ | --------------------------------------- | --------------------------------------------------------------------------------------- |
-| [AC](/indicators/oscillators/ac.md) | Acceleration Oscillator | Measures acceleration/deceleration of the current market driving force (Awesome Oscillator) |
-| [AO](/indicators/oscillators/ao.md) | Awesome Oscillator | Measures market momentum by comparing recent momentum to overall momentum |
-| [BBB](/indicators/oscillators/bbb.md) | Bollinger %B | Normalized position within Bollinger Bands; (Price - Lower BB) / (Upper BB - Lower BB) |
-| [BBS](/indicators/oscillators/bbs.md) | Bollinger Band Squeeze | Identifies low volatility periods when Bollinger Bands contract inside Keltner Channels |
-| BBI | Bulls Bears Index | Measures the relative strength of bulls and bears based on price action |
-| [BOP](/indicators/oscillators/bop.md) | Balance of Power | Measures the strength of buyers vs. sellers by relating price change to the trading range |
-| BRAR | BRAR | Combines AR (sentiment) and BR (momentum) indicators to gauge market mood |
-| [CCI](/indicators/oscillators/cci.md) | Commodity Channel Index | Measures price deviation from its statistical mean, identifies cyclical turns |
-| [CFO](/indicators/oscillators/cfo.md) | Chande Forecast Oscillator | Measures the percentage difference between the closing price and its N-period linear regression forecast |
-| COPPOCK | Coppock Curve | Long-term momentum oscillator used primarily for identifying major market bottoms |
-| CRSI | Connors RSI | Composite indicator combining RSI, Up/Down Streak Length, and Rate-of-Change |
-| CTI | Correlation Trend Indicator | Measures the correlation between price and time to determine trend strength |
-| DOSC | Derivative Oscillator | Measures the difference between a double-smoothed RSI and its signal line |
-| [DPO](/indicators/oscillators/dpo.md) | Detrended Price Oscillator | Removes trend from price by comparing to a displaced SMA, highlighting cyclical patterns |
-| ER | Efficiency Ratio | Measures price efficiency by comparing net price movement to total price movement (KAMA component) |
-| ERI | Elder Ray Index | Measures buying (Bull Power) and selling (Bear Power) pressure relative to an EMA |
-| [FISHER](/indicators/oscillators/fisher.md) | Fisher Transform | Converts price data into a Gaussian normal distribution to identify price reversals |
-| FOSC | Forecast Oscillator | Plots the percentage difference between a forecast price (e.g., linear regression) and the actual price |
-| [INERTIA](/indicators/oscillators/inertia.md) | Inertia | Measures trend strength based on the distance of the current price from a linear regression line |
-| [KDJ](/indicators/oscillators/kdj.md) | KDJ Indicator | Enhanced Stochastic with K, D, and J lines; J = 3K - 2D provides leading momentum signals |
-| KRI | Kairi Relative Index | Measures the deviation of the current price from its simple moving average |
-| KST | KST Oscillator | Smoothed, weighted Rate-of-Change oscillator combining multiple timeframes |
-| [PGO](/indicators/oscillators/pgo.md) | Pretty Good Oscillator | Measures distance of current close from its N-period SMA, normalized by ATR |
-| PSL | Psychological Line | Measures percentage of days closing up over a specified period, gauges sentiment |
-| QQE | Quantitative Qualitative Estimation | Smoothing technique applied to RSI, providing trade signals via signal line crossovers |
-| RVGI | Relative Vigor Index | (Often synonymous with RVI) Compares closing price to trading range |
-| [SMI](/indicators/oscillators/smi.md) | Stochastic Momentum Index | Measures distance of current close relative to the midpoint of the high/low range |
-| SQUEEZE | Squeeze | Identifies periods of low volatility (Bollinger Bands inside Keltner Channels) for potential breakouts |
-| [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator | Compares close to price range over time, identifies overbought/oversold conditions |
-| [STOCHF](/indicators/oscillators/stochf.md) | Stochastic Fast | Non-smoothed version of the Stochastic Oscillator (%K and %D) |
-| [STOCHRSI](/indicators/oscillators/stochrsi.md) | Stochastic RSI | Applies the Stochastic formula to RSI values, providing more sensitive signals |
-| TD_SEQ | TD Sequential | Identifies potential price exhaustion points and reversals based on price bar counting |
-| [TRIX](/indicators/oscillators/trix.md) | Triple Exponential Average | Measures percentage rate of change of a triple exponentially smoothed moving average |
-| [ULTOSC](/indicators/oscillators/ultosc.md) | Ultimate Oscillator | Weighted average of three Stochastic oscillators using different time periods |
-| [WILLR](/indicators/oscillators/willr.md) | Williams %R | Measures overbought/oversold levels, inverse of the Fast Stochastic Oscillator |
+This section documents indicators in architectural terms: problem, streaming design, trade-offs, and verification steps.
+
+| Indicator | Name |
+|---|---|
+| [AC](/indicators/oscillators/ac.md) | Accelerator Oscillator |
+| [AO](/indicators/oscillators/ao.md) | Awesome Oscillator |
+| [APO](/indicators/oscillators/apo.md) | Absolute Price Oscillator |
+| [BBB](/indicators/oscillators/bbb.md) | Bollinger %B |
+| [BBI](/indicators/oscillators/bbi.md) | Bulls Bears Index |
+| [BBS](/indicators/oscillators/bbs.md) | Bollinger Band Squeeze |
+| [BRAR](/indicators/oscillators/brar.md) | Bull-Bear Power Ratio |
+| [CFO](/indicators/oscillators/cfo.md) | Chande Forecast Oscillator |
+| [COPPOCK](/indicators/oscillators/coppock.md) | Coppock Curve |
+| [CRSI](/indicators/oscillators/crsi.md) | Connors RSI |
+| [CTI](/indicators/oscillators/cti.md) | Correlation Trend Indicator |
+| [DECO](/indicators/oscillators/deco.md) | Ehlers Decycler Oscillator |
+| [DEM](/indicators/oscillators/dem.md) | DeMarker Oscillator |
+| [DOSC](/indicators/oscillators/dosc.md) | Derivative Oscillator |
+| [DPO](/indicators/oscillators/dpo.md) | Detrended Price Oscillator |
+| [DYMOI](/indicators/oscillators/dymoi.md) | Dynamic Momentum Index |
+| [ER](/indicators/oscillators/er.md) | Efficiency Ratio |
+| [ERI](/indicators/oscillators/eri.md) | Elder Ray Index |
+| [FI](/indicators/oscillators/fi.md) | Force Index |
+| [FISHER](/indicators/oscillators/fisher.md) | Fisher Transform |
+| [FISHER04](/indicators/oscillators/fisher04.md) | Fisher04 |
+| [GATOR](/indicators/oscillators/gator.md) | Williams Gator Oscillator |
+| [IMI](/indicators/oscillators/imi.md) | Intraday Momentum Index |
+| [INERTIA](/indicators/oscillators/inertia.md) | Inertia |
+| [KDJ](/indicators/oscillators/kdj.md) | KDJ |
+| [KRI](/indicators/oscillators/kri.md) | Kairi Relative Index |
+| [KST](/indicators/oscillators/kst.md) | KST Oscillator |
+| [LRSI](/indicators/oscillators/lrsi.md) | Lrsi |
+| [MARKETFI](/indicators/oscillators/marketfi.md) | Marketfi |
+| [MSTOCH](/indicators/oscillators/mstoch.md) | Ehlers MESA Stochastic |
+| [PGO](/indicators/oscillators/pgo.md) | Pretty Good Oscillator |
+| [PSL](/indicators/oscillators/psl.md) | Psychological Line |
+| [QQE](/indicators/oscillators/qqe.md) | Quantitative Qualitative Estimation |
+| [REFLEX](/indicators/oscillators/reflex.md) | Ehlers Reflex Indicator |
+| [REVERSEEMA](/indicators/oscillators/reverseema.md) | Ehlers Reverse EMA |
+| [RVGI](/indicators/oscillators/rvgi.md) | Relative Vigor Index |
+| [SMI](/indicators/oscillators/smi.md) | Stochastic Momentum Index |
+| [SQUEEZE](/indicators/oscillators/squeeze.md) | Squeeze Momentum |
+| [STC](/indicators/oscillators/stc.md) | Schaff Trend Cycle |
+| [STOCH](/indicators/oscillators/stoch.md) | Stochastic Oscillator (STOCH) |
+| [STOCHF](/indicators/oscillators/stochf.md) | Stochastic Fast |
+| [STOCHRSI](/indicators/oscillators/stochrsi.md) | Stochastic RSI (STOCHRSI) |
+| [TD_SEQ](/indicators/oscillators/td_seq.md) | TD Sequential |
+| [TRENDFLEX](/indicators/oscillators/trendflex.md) | Ehlers Trendflex Indicator |
+| [TRIX](/indicators/oscillators/trix.md) | TRIX |
+| [ULTOSC](/indicators/oscillators/ultosc.md) | Ultimate Oscillator |
+| [WILLR](/indicators/oscillators/willr.md) | Williams %R |

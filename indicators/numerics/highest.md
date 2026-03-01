@@ -1,62 +1,58 @@
-# Highest: Highest Value
+# HIGHEST - Highest
 
-[Pine Script Implementation of Highest](https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/highest.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Highest Value indicator identifies the maximum price (or other data point) reached within a specified lookback period. This fundamental statistical measure serves as an essential building block for many technical analysis tools and trading strategies. By tracking the highest values over time, traders can identify significant price levels, resistance zones, and potential breakout points.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HIGHEST addresses this by implementing `Highest value over a specified period using a monotonic deque.` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Price extremes identification:** Highest Value efficiently tracks price peaks, helping identify potential resistance levels and breakout points
-* **Market application:** Particularly useful for setting stop-loss levels, recognizing chart patterns, and defining trailing stops based on previous price action
-* **Timeframe suitability:** **All timeframes** are effective, with shorter periods (5-20) for identifying immediate resistance levels and longer periods (20-200) for significant historical resistance
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Highest Value forms the foundation for numerous technical indicators and trading systems, including Donchian Channels, Price Envelopes, and various trend-following strategies.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Controls the lookback window for calculation | Decrease for more responsive readings in active markets, increase for identifying significant historical levels |
-| Source | Close | Data point used for calculation | Switch to High for true price extremes, or use other price data based on specific strategy requirements |
+- `Highest value over a specified period using a monotonic deque.`
 
-**Pro Tip:** Using multiple Highest Value periods simultaneously (e.g., 20, 50, and 200) can help identify a hierarchy of resistance levels, with longer-period highs typically representing stronger resistance zones.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | {series float} Source series. |
+| `len` | {int} Lookback length. `len` > 0. |
 
-**Simplified explanation:**
-The Highest Value indicator scans a specified number of previous bars and identifies the maximum value within that range. As each new bar forms, the indicator updates by dropping the oldest bar from its calculation and adding the newest one, continuously tracking the highest value within the moving window.
+### Returns
 
-**Technical formula:**
-Highest(Source, Length) = Maximum value of Source over the past Length bars
+- {series float} Highest value of `src` for `len` bars back. Returns the highest value seen so far during initial bars.
 
-Where:
+## Input configuration
 
-* Source is the price or data series being analyzed (typically Close or High)
-* Length is the number of bars in the lookback period
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The implementation uses a monotonic deque algorithm with a circular buffer for efficiency. This approach maintains O(1) time complexity for each new bar, avoiding the need to scan all values in the lookback period repeatedly.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-Highest Value provides valuable insights for various trading applications:
+## Trade-offs
 
-* **Resistance levels:** The highest value over a significant period often acts as a psychological resistance level
-* **Breakout trading:** When price breaks above the highest value of recent periods, it often signals bullish momentum
-* **Trailing stops:** Using the highest value of the last N bars (offset by some value) can serve as a trailing stop-loss mechanism
-* **Volatility assessment:** Comparing current price to recent highest values helps gauge potential upside room
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-The indicator is most effective when used alongside other technical tools that provide context about market conditions and trend direction.
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Market conditions:** Less predictive during highly volatile or gapping markets where price leaps beyond historical levels
-* **Lag factor:** By definition, the indicator looks backward and doesn't predict future price levels
-* **False breakouts:** Price briefly exceeding the highest value doesn't always result in sustained momentum
-* **Complementary tools:** Best used in conjunction with volume analysis, trend indicators, or support/resistance confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Wilder, J. W. (1978). New Concepts in Technical Trading Systems. Trend Research.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
+- Source code: `indicators/numerics/highest.pine`
+- Documentation file: `indicators/numerics/highest.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/highest.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/numerics/highest.md

@@ -4,7 +4,6 @@
 indicator("Bollinger Bands (BBANDS)", "BBANDS", overlay=true)
 
 //@function Calculates Bollinger Bands with adjustable period and multiplier
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/bbands.md
 //@param source Series to calculate Bollinger Bands from
 //@param period Lookback period for calculations
 //@param multiplier Standard deviation multiplier for band width

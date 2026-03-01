@@ -4,7 +4,6 @@
 indicator("Relative Strength Index (RSI)", "RSI", overlay=false)
 
 //@function Calculates Relative Strength Index using Wilder's smoothing
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/rsi.md
 //@param src Source series to calculate RSI for
 //@param len Lookback period for RSI calculation
 //@returns RSI value measuring momentum and overbought/oversold conditions

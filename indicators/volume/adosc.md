@@ -1,59 +1,59 @@
-# ADOSC: Chaikin Accumulation/Distribution Oscillator
+# ADOSC - Adosc
 
-[Pine Script Implementation of ADOSC](https://github.com/mihakralj/pinescript/blob/main/indicators/volume/adosc.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Chaikin Accumulation/Distribution Oscillator (ADOSC) is a momentum indicator that measures the buying and selling pressure in a security by analyzing the relationship between price and volume. Developed by Marc Chaikin in the 1970s, this oscillator builds upon the Accumulation/Distribution Line (ADL) by applying a momentum formula to detect changes in the flow of money into or out of a security. By comparing the difference between two exponential moving averages (EMAs) of the ADL, ADOSC helps identify potential turning points in price action.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ADOSC addresses this by implementing `Calculates the Chaikin Accumulation/Distribution Oscillator (ADOSC), a momentum indicator derived from the ADL` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Volume flow momentum:** ADOSC measures the momentum of the volume flow by comparing fast and slow EMAs of the ADL, highlighting acceleration and deceleration in buying/selling pressure
-* **Market application:** Particularly effective for identifying divergences between price and volume flow, signaling potential reversals before they appear in price action
-* **Timeframe suitability:** Functions across all timeframes, but most valuable on daily charts for spotting significant shifts in institutional money flow
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The ADOSC's core principle builds on the foundation that volume precedes price movement. When institutional investors begin accumulating or distributing positions, the indicator helps detect these activities before they fully manifest in price changes. The oscillator fluctuates above and below a zero line, with positive values indicating accumulation (buying pressure) and negative values indicating distribution (selling pressure).
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Short Period | 3 | Controls the sensitivity of the fast EMA | Lower for more responsive signals in volatile markets, higher for fewer false signals |
-| Long Period | 10 | Controls the sensitivity of the slow EMA | Adjust based on trading timeframe - higher values for longer-term analysis |
+- `Calculates the Chaikin Accumulation/Distribution Oscillator (ADOSC), a momentum indicator derived from the ADL`
 
-**Pro Tip:** The 3-10 day setting combination tends to be effective for most traders, but try widening the gap between short and long periods (e.g., 3-16) to generate fewer but potentially more significant signals.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `shortPeriod` | (simple int) Length of the short-term EMA applied to the ADL |
+| `longPeriod` | (simple int) Length of the long-term EMA applied to the ADL |
 
-**Simplified explanation:**
-ADOSC first calculates the Accumulation/Distribution Line, which measures money flow by considering where prices close within their range and weighting by volume. It then calculates the difference between a fast EMA and a slow EMA of this line to determine momentum.
+### Returns
 
-**Technical formula:**
+- (float) The ADOSC value for the current bar (difference between short and long EMAs of ADL)
 
-1. Money Flow Multiplier = ((Close - Low) - (High - Close)) / (High - Low)
-2. Money Flow Volume = Money Flow Multiplier × Volume
-3. ADL = Previous ADL + Current Money Flow Volume
-4. ADOSC = EMA(ADL, Short Period) - EMA(ADL, Long Period)
+## Input configuration
 
-> 🔍 **Technical Note:** Unlike simple moving averages, the EMAs used in ADOSC give more weight to recent data, making the oscillator more responsive to changes in buying/selling pressure.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `shortPeriod` | `input.int` | default: `3`, label: "Short Period" |
+| `longPeriod` | `input.int` | default: `10`, label: "Long Period" |
 
-## Interpretation Details
+## Runtime profile
 
-The ADOSC generates several types of actionable signals:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Zero line crossovers:** When ADOSC crosses above zero, it indicates a shift toward accumulation (potential buy signal); crossing below zero indicates distribution (potential sell signal)
-* **Divergences:** When price makes a new high but ADOSC fails to confirm with a new high, it signals potential weakness (bearish divergence); conversely, when price makes a new low but ADOSC makes a higher low, it indicates potential strength (bullish divergence)
-* **Trend confirmation:** Strong readings in the direction of the price trend help confirm the trend's strength
-* **Overbought/oversold conditions:** Extreme readings on the oscillator may indicate potential reversal points
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Market conditions:** Less reliable in thinly traded securities where volume may be inconsistent
-* **Lag factor:** As a derivative of ADL which itself is cumulative, ADOSC can sometimes be slow to signal major shifts
-* **False signals:** Like many oscillators, ADOSC can generate false signals during strong trends or when volume patterns are irregular
-* **Complementary tools:** Most effective when used in conjunction with price analysis, trend indicators, and other volume indicators for confirmation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* [Investopedia - Chaikin Oscillator](https://www.investopedia.com/terms/c/chaikinoscillator.asp)
-* [StockCharts - Chaikin Oscillator](https://school.stockcharts.com/doku.php?id=technical_indicators:chaikin_oscillator)
+- Source code: `indicators/volume/adosc.pine`
+- Documentation file: `indicators/volume/adosc.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/adosc.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/volume/adosc.md

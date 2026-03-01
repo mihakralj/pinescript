@@ -1,22 +1,40 @@
-# Finite Impulse Response (FIR) Trends and Predictors
+# _INDEX -  Index
 
-| Indicator | Name | Description |
-| ------------ | ---------------------------------------- | ---------------------------------------- |
-| [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux MA | Applies Gaussian distribution weights to price data with configurable offset and sigma parameters to reduce lag while maintaining noise filtering. |
-| [BLMA](/indicators/trends_FIR/blma.md) | Blackman Window MA | Implements Blackman window function for superior frequency response with minimized side-lobes in spectral domain. |
-| [CONV](/indicators/trends_FIR/conv.md) | Convolution MA with any kernel | Provides generalized convolution framework supporting arbitrary kernel functions for customizable filtering characteristics. |
-| [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted MA | Uses Bessel function weighting to achieve maximally flat group delay with minimal phase distortion. |
-| [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted MA | Applies squared weighting factors to emphasize recent price action while maintaining smooth transitions. |
-| [EPMA](/indicators/trends_FIR/epma.md) | Endpoint MA | Shifts weighting toward most recent data points to minimize lag at trend endpoints. |
-| [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted MA | Distributes weights according to normal distribution for balanced noise reduction and trend preservation. |
-| [HAMMA](/indicators/trends_FIR/hamma.md) | Hamming Window MA | Employs Hamming window function to optimize main-lobe width and side-lobe attenuation for improved spectral characteristics. |
-| [HANMA](/indicators/trends_FIR/hanma.md) | Hanning Window MA | Applies raised cosine weighting (Hanning window) for smooth frequency response with zero weight at window edges. |
-| [HMA](/indicators/trends_FIR/hma.md) | Hull MA | Combines weighted averages at different periods with momentum-enhanced processing to reduce lag by 83% while maintaining 94% noise suppression. |
-| [HWMA](/indicators/trends_FIR/hwma.md) | Holt Weighted MA | Integrates exponential weighting with trend-component analysis for improved prediction of time series data. |
-| [LSMA](/indicators/trends_FIR/lsma.md) | Least Squares MA | Minimizes the sum of squared differences between actual prices and the calculated trend line |
-| [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted MA | Utilizes Pascal's triangle coefficients for weight distribution, offering balanced statistical properties. |
-| [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay MA | Performs polynomial regression within sliding windows to preserve higher moments of the distribution while smoothing. |
-| [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted MA | Distributes weights according to sine function for gradual influence transition and improved harmonic response. |
-| [SMA](/indicators/trends_FIR/sma.md) | Simple MA | Implements foundational uniformly-weighted average with optimized recursive calculation, achieving 85% noise reduction with deterministic -13dB/octave frequency roll-off. |
-| [TRIMA](/indicators/trends_FIR/trima.md) | Triangular MA | Applies triangular weighting scheme for enhanced smoothing with twice the noise reduction of simple moving averages. |
-| [WMA](/indicators/trends_FIR/wma.md) | Weighted MA | Assigns linearly decreasing weights to older data points to reduce lag while maintaining effective noise filtering. |
+This section documents indicators in architectural terms: problem, streaming design, trade-offs, and verification steps.
+
+| Indicator | Name |
+|---|---|
+| [ALMA](/indicators/trends_FIR/alma.md) | Arnaud Legoux Moving Average |
+| [BLMA](/indicators/trends_FIR/blma.md) | Blackman Moving Average |
+| [BWMA](/indicators/trends_FIR/bwma.md) | Bessel-Weighted Moving Average |
+| [CONV](/indicators/trends_FIR/conv.md) | Convolution Moving Average |
+| [CRMA](/indicators/trends_FIR/crma.md) | Cubic Regression Moving Average |
+| [DWMA](/indicators/trends_FIR/dwma.md) | Double Weighted Moving Average |
+| [EPMA](/indicators/trends_FIR/epma.md) | Endpoint Moving Average |
+| [FWMA](/indicators/trends_FIR/fwma.md) | Fibonacci Weighted Moving Average |
+| [GWMA](/indicators/trends_FIR/gwma.md) | Gaussian-Weighted Moving Average |
+| [HAMMA](/indicators/trends_FIR/hamma.md) | Hamming Moving Average |
+| [HANMA](/indicators/trends_FIR/hanma.md) | Hanning Moving Average |
+| [HEND](/indicators/trends_FIR/hend.md) | Henderson Moving Average |
+| [HMA](/indicators/trends_FIR/hma.md) | Hull Moving Average |
+| [ILRS](/indicators/trends_FIR/ilrs.md) | Integral of Linear Regression Slope |
+| [KAISER](/indicators/trends_FIR/kaiser.md) | Kaiser Window Moving Average |
+| [LANCZOS](/indicators/trends_FIR/lanczos.md) | Lanczos (Sinc) Window Moving Average |
+| [LSMA](/indicators/trends_FIR/lsma.md) | Least Squares Moving Average |
+| [NLMA](/indicators/trends_FIR/nlma.md) | Non-Lag Moving Average |
+| [NYQMA](/indicators/trends_FIR/nyqma.md) | Nyquist Moving Average |
+| [PARZEN](/indicators/trends_FIR/parzen.md) | Parzen Window Moving Average |
+| [PMA](/indicators/trends_FIR/pma.md) | Ehlers Predictive Moving Average |
+| [PWMA](/indicators/trends_FIR/pwma.md) | Pascal Weighted Moving Average |
+| [QRMA](/indicators/trends_FIR/qrma.md) | Quadratic Regression Moving Average |
+| [RAIN](/indicators/trends_FIR/rain.md) | Rainbow Moving Average |
+| [RWMA](/indicators/trends_FIR/rwma.md) | Rwma |
+| [SGMA](/indicators/trends_FIR/sgma.md) | Savitzky-Golay Moving Average |
+| [SINEMA](/indicators/trends_FIR/sinema.md) | Sine-weighted Moving Average |
+| [SMA](/indicators/trends_FIR/sma.md) | Simple Moving Average |
+| [SP15](/indicators/trends_FIR/sp15.md) | Sp15 |
+| [SWMA](/indicators/trends_FIR/swma.md) | Swma |
+| [TRIMA](/indicators/trends_FIR/trima.md) | Triangular Moving Average |
+| [TSF](/indicators/trends_FIR/tsf.md) | Time Series Forecast |
+| [TUKEY_W](/indicators/trends_FIR/tukey_w.md) | Tukey W |
+| [WMA](/indicators/trends_FIR/wma.md) | Weighted Moving Average |

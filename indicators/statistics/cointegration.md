@@ -1,81 +1,61 @@
-# COINTEGRATION: Engle-Granger Cointegration Test
+# COINTEGRATION - Cointegration
 
-[Pine Script Implementation of COINTEGRATION](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/cointegration.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Cointegration is a statistical property of time series that measures the degree to which two or more series share a common stochastic trend. Unlike correlation, which captures short-term co-movement, cointegration identifies pairs of securities that maintain a long-term equilibrium relationship despite both being non-stationary. This property forms the foundation of pairs trading, relative value strategies, and statistical arbitrage in financial markets by helping identify pairs that are expected to revert to their historical relationship after temporary deviations.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. COINTEGRATION addresses this by implementing `Calculates the cointegration of two series using the Engle-Granger method.` with parameterized inputs and direct state progression.
 
-The implementation provided uses the Engle-Granger methodology, which tests for cointegration by examining the residuals from a linear regression between the two series. It calculates the Augmented Dickey-Fuller (ADF) test statistic to evaluate whether these residuals are stationary, which would indicate cointegration. More negative ADF values suggest stronger evidence of cointegration, indicating a more reliable mean-reverting relationship that traders can potentially exploit.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Long-term equilibrium:** Identifies pairs of securities that maintain a stable relationship over time, despite individual price movements
-* **Mean reversion potential:** Provides statistical evidence for whether price divergences are likely to correct back toward a historical relationship
-* **Stationarity testing:** Applies rigorous statistical tests to distinguish genuine cointegration from spurious correlations
-* **Regression-based approach:** Uses linear regression to establish the relationship and tests residuals for stationarity
+## API surface
 
-Cointegration analysis offers a more robust foundation for pairs trading than simple correlation analysis, as it specifically targets the characteristic that makes such strategies profitable—the tendency of related securities to maintain a long-term equilibrium relationship. By identifying pairs that are truly cointegrated, traders can establish positions with greater confidence that divergences represent temporary market inefficiencies rather than fundamental changes in the relationship.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates the cointegration of two series using the Engle-Granger method.`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 20 | Lookback period for regression and ADF test | Longer periods (40-100) for more stable long-term relationships, shorter (10-20) for more responsive signals |
-| Source A | High | First time series for cointegration analysis | Typically the security you want to trade |
-| Source B | Low | Second time series for cointegration analysis | Typically the hedge or paired security |
+### Parameters
 
-**Pro Tip:** Try testing cointegration using logarithmic prices rather than raw prices for certain asset classes like stocks. Log transformation can help stabilize variance and better capture percentage-based relationships, which are often more economically meaningful than absolute price differences.
+| Parameter | Purpose |
+|---|---|
+| `series_a` | series float The first series. |
+| `series_b` | series float The second series. |
+| `period` | int The lookback period for the regression and ADF test. |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-The Engle-Granger method first estimates the equilibrium relationship between two series using linear regression. It then tests whether the residuals (deviations from this relationship) are stationary using the Augmented Dickey-Fuller test. If the residuals are stationary, the series are considered cointegrated.
+- float The Augmented Dickey-Fuller test statistic for the residuals. A more negative value suggests stronger evidence of cointegration.
 
-**Technical formula:**
+## Input configuration
 
-1. Run a regression: Series_A = α + β × Series_B + residuals
-2. Calculate the ADF test statistic on the residuals:
-   - Estimate regression: Δresiduals(t) = γ × residuals(t-1) + error
-   - ADF statistic = γ / SE(γ)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source 1" |
+| `i_source2_ticker` | `input.symbol` | default: `"SPY"`, label: "SPY" |
+| `i_period` | `input.int` | default: `20`, label: "Period" |
 
-Where:
-- Δresiduals(t) represents the first difference of residuals
-- γ is the coefficient on the lagged residual term
-- SE(γ) is the standard error of γ
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation uses an optimized single-pass algorithm that handles calculations efficiently while maintaining robustness to dirty data. The ADF test formulated here focuses on the lagged level term without additional lagged difference terms, providing a computationally efficient approximation suitable for real-time trading applications.
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-The cointegration test provides several analytical insights:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **ADF statistic interpretations:**
-  * Values below -3.0: Strong evidence of cointegration (highly significant)
-  * Values between -3.0 and -1.95: Moderate evidence of cointegration
-  * Values above -1.95: Weak or no evidence of cointegration (not significant)
+## Verification checklist
 
-* **Trading applications:**
-  * Entry signals: When cointegrated pairs diverge significantly, enter positions expecting mean reversion
-  * Position sizing: More negative ADF values may justify larger position sizes due to higher statistical confidence
-  * Stop loss placement: Less cointegrated pairs may require tighter stops due to higher uncertainty in mean reversion
-  * Strategy selection: Strongly cointegrated pairs (ADF < -3.5) are candidates for pure statistical arbitrage, while moderately cointegrated pairs may require additional confirmation signals
-
-* **Time-varying analysis:** Track the ADF statistic over time to identify periods when the cointegration relationship strengthens or weakens
-
-## Limitations and Considerations
-
-* **Not all mean-reverting pairs are cointegrated:** Some pairs may exhibit mean-reverting behavior due to factors other than cointegration
-* **Regime changes:** Cointegration relationships can break down during market regime shifts or fundamental changes in the securities' relationship
-* **Sample size requirements:** Reliable cointegration testing typically requires substantial data history (100+ observations)
-* **Lookback period sensitivity:** Results can vary significantly based on the testing period chosen
-* **Multiple testing bias:** Testing many pairs increases the chance of finding spurious cointegration relationships by random chance
-* **Non-linear relationships:** The Engle-Granger method only tests for linear cointegration and may miss more complex relationships
-* **Critical values vary:** Formal hypothesis testing requires comparing the ADF statistic to appropriate critical values based on sample size
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Engle, R. F., & Granger, C. W. J. (1987). Co-integration and error correction: Representation, estimation, and testing. Econometrica, 55(2), 251-276.
-* Chan, E. P. (2013). Algorithmic Trading: Winning Strategies and Their Rationale. John Wiley & Sons.
-* Alexander, C. (2001). Market Models: A Guide to Financial Data Analysis. John Wiley & Sons.
-* Vidyamurthy, G. (2004). Pairs Trading: Quantitative Methods and Analysis. John Wiley & Sons.
+- Source code: `indicators/statistics/cointegration.pine`
+- Documentation file: `indicators/statistics/cointegration.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/cointegration.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/cointegration.md

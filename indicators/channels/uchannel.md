@@ -1,101 +1,67 @@
-# UCHANNEL: Ultimate Channel
+# UCHANNEL - Uchannel
 
-[Pine Script Implementation of UCHANNEL](https://github.com/mihakralj/pinescript/blob/main/indicators/channels/uchannel.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Ultimate Channel, developed by John F. Ehlers, is a channel indicator designed to offer minimal lag. It draws inspiration from Keltner Channels, which typically use an Exponential Moving Average (EMA) for the centerline and Average True Range (ATR) to establish channel width. Both the EMA and the ATR's own averaging introduce lag. The Ultimate Channel aims to mitigate this by replacing these averaging processes with Ehlers' Ultrasmooth Filter.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. UCHANNEL addresses this by implementing `Calculates Ultimate Channel` with parameterized inputs and direct state progression.
 
-The channel is constructed by:
-1.  Calculating a "Smoothed True Range" (STR). The "True Range" for this indicator is specifically defined by Ehlers as `TrueHigh - TrueLow`.
-    *   `TrueHigh (TH)`: The Close of the previous bar if it is higher than the High of the current bar; otherwise, it is the High of the current bar. (`TH = Max(High, Close[1])`)
-    *   `TrueLow (TL)`: The Close of the previous bar if it is lower than the Low of the current bar; otherwise, it is the Low of the current bar. (`TL = Min(Low, Close[1])`)
-    This `TH - TL` range is then smoothed using the Ultrasmooth Filter with a dedicated length (`STRLength`).
-2.  Calculating a centerline by applying the Ultrasmooth Filter to the source price (typically `close`) with its own length (`Length`).
-3.  Plotting the upper and lower channel bands by adding/subtracting a multiple (`NumSTRs`) of the Smoothed True Range (STR) from the centerline.
+## Design decision
 
-The primary purpose is to provide traders with dynamic support and resistance levels that are highly reactive to price action, aiming for nearly zero lag due to the comprehensive use of the Ultrasmooth Filter.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-*   **Dual Ultrasmooth Filtering:** Both the centerline and the range component (STR) are smoothed using the Ehlers Ultrasmooth Filter, contributing to the indicator's responsiveness and reduced lag.
-*   **Ehlers' True Range Definition:** Utilizes a specific definition of True Range (`Max(High, Close[1]) - Min(Low, Close[1])`) as the basis for volatility measurement, which is then smoothed to create STR, rather than using a traditional ATR calculation.
-*   **Volatility-Adaptive Width:** The channel width is directly proportional to the Smoothed True Range (STR), causing it to expand in volatile markets and contract in calmer ones.
-*   **Minimal Lag:** A key design goal, aiming to provide more timely signals compared to traditional channel indicators like Keltner Channels.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Ultimate Channel`
 
-| Parameter    | Default | Function                                                                              | When to Adjust                                                                                                                               |
-| :----------- | :------ | :------------------------------------------------------------------------------------ | :------------------------------------------------------------------------------------------------------------------------------------------- |
-| Source       | close   | The price series for the centerline calculation (e.g., `Close`).                      | Typically `close`, but can be adjusted.                                                                                                      |
-| High Source  | high    | The high price series for True High calculation.                                      | Standard `high`.                                                                                                                             |
-| Low Source   | low     | The low price series for True Low calculation.                                        | Standard `low`.                                                                                                                              |
-| STR Length   | 20      | Lookback period for smoothing the `TH - TL` range to get STR.                         | Shorter lengths make STR more reactive; longer lengths make STR smoother.                                                                    |
-| Length       | 20      | Lookback period for smoothing the `Source` (e.g., `Close`) to get the centerline.     | Shorter lengths make the centerline more responsive; longer lengths provide smoother channel limits but will moderately increase indicator lag. |
-| STR Multiplier| 1.0     | Multiplier for the Smoothed True Range (STR) to determine channel width.              | Smaller values create tighter channels; larger values create wider channels.                                                                 |
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | Source series for the centerline (typically close) |
+| `high_src` | Source series for high prices |
+| `low_src` | Source series for low prices |
+| `strLength` | Lookback period for smoothing the True Range |
+| `length` | Lookback period for smoothing the centerline |
+| `numSTRs` | Multiplier for the Smoothed True Range to define channel width |
 
-**Simplified explanation:**
-1.  Determine the True High (TH) for each bar: `TH = Max(Current High, Previous Close)`.
-2.  Determine the True Low (TL) for each bar: `TL = Min(Current Low, Previous Close)`.
-3.  Calculate the bar's specific range: `Range = TH - TL`.
-4.  Smooth this `Range` series using the Ehlers Ultrasmooth Filter with `STRLength` to get the Smoothed True Range (STR).
-5.  Smooth the `Source` price (e.g., `Close`) using the Ehlers Ultrasmooth Filter with `Length` to get the `Centerline`.
-6.  The Upper Channel is `Centerline + (NumSTRs × STR)`.
-7.  The Lower Channel is `Centerline - (NumSTRs × STR)`.
+### Returns
 
-**Technical formula (based on Ehlers' description):**
-1.  **True High (TH):**
-    `TH[i] = Max(High[i], Close[i-1])`
-    *(Note: The Pine Script implementation uses `src_centerline[i-1]` which is typically `Close[i-1]`)*
+- tuple [upperChannel, middleChannel, lowerChannel]
 
-2.  **True Low (TL):**
-    `TL[i] = Min(Low[i], Close[i-1])`
+## Input configuration
 
-3.  **Range Series (RS):**
-    `RS[i] = TH[i] - TL[i]`
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source for Centerline" |
+| `i_high` | `input.source` | default: `high`, label: "Source for High" |
+| `i_low` | `input.source` | default: `low`, label: "Source for Low" |
+| `i_strLength` | `input.int` | default: `20`, label: "STR Length" |
+| `i_length` | `input.int` | default: `20`, label: "Centerline Length" |
+| `i_numSTRs` | `input.float` | default: `1.0`, label: "STR Multiplier" |
 
-4.  **Smoothed True Range (STR):**
-    `STR = UltrasmoothFilter(RS, STRLength)`
+## Runtime profile
 
-5.  **Centerline:**
-    `Centerline = UltrasmoothFilter(Close, Length)` (or specified `Source`)
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-6.  **Upper Channel:**
-    `UpperChannel = Centerline + (NumSTRs × STR)`
+## Trade-offs
 
-7.  **Lower Channel:**
-    `LowerChannel = Centerline - (NumSTRs × STR)`
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-> 🔍 **Technical Note:** The Ehlers Ultrasmooth Filter is the core engine, applied independently to two different series: the calculated `TH-TL` range and the input `Source` price. The responsiveness of the channel comes from this dual application of a low-lag filter, aiming to mitigate lag found in traditional ATR and EMA calculations of Keltner Channels.
+## Verification checklist
 
-## Interpretation Details
-
-*   **Reduced Lag:** The primary characteristic, offering quicker signals than traditional Keltner Channels. The channel aims for "nearly zero lag."
-*   **Dynamic Support/Resistance:** The Upper Channel can act as resistance, and the Lower Channel as support.
-*   **Volatility Indication:** The width of the channel (determined by STR) reflects market volatility. Wider channels mean higher volatility.
-*   **Trend Following:** Trades can be initiated based on breakouts from the channel or by following the direction of the centerline.
-*   **Smoothing Channel Limits:** The channel limits can be made smoother by increasing the input `Length` parameter (for the centerline). Doing this will moderately increase the indicator lag.
-*   **Comparison to Ultimate Bands:** Ehlers notes that the Ultimate Channel indicator does not differ from the Ultimate Band indicator in any major fashion.
-
-## Use and Application
-
-The Ultimate Channel can be used similarly to Keltner Channels for interpreting price action, with the key advantage of reduced lag.
-
-**Example Trading Strategy (from John F. Ehlers, applicable to both Ultimate Channel and Bands):**
-*   Hold a position in the direction of the Ultimate Smoother (the centerline).
-*   Exit that position when the price "pops" outside the channel in the opposite direction of the trade.
-*   This is described as a trend-following strategy with an automatic following stop.
-
-## Limitations and Considerations
-
-*   **Lag (Minimized but Present):** While designed for minimal lag, some inherent delay from the smoothing process will still exist, especially if `Length` is increased for smoother bands.
-*   **Parameter Sensitivity:** Performance can be sensitive to the `STRLength`, `Length`, and `NumSTRs` parameters. These may need tuning for different instruments or timeframes.
-*   **Whipsaws:** In choppy or sideways markets, the high responsiveness might lead to more frequent false signals or whipsaws.
-*   **Not a Standalone System:** It's generally advisable to use the Ultimate Channel in conjunction with other indicators or analytical techniques for confirmation.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-*   Ehlers, J. F. (2024, April). The Ultimate Smoother. *Stocks & Commodities Magazine*. (This article is referenced in the context of the Ultimate Channel's components).
-*   Ehlers, J. F. (General). *Various publications on advanced filtering and cycle analysis.* (e.g., "Rocket Science for Traders", "Cycle Analytics for Traders").
+- Source code: `indicators/channels/uchannel.pine`
+- Documentation file: `indicators/channels/uchannel.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/uchannel.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/channels/uchannel.md

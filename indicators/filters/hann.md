@@ -1,66 +1,59 @@
-# HANN: Hann FIR Filter
+# HANN - Hann
 
-[Pine Script Implementation of HANN](https://github.com/mihakralj/pinescript/blob/main/indicators/filters/hann.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Hann FIR Filter implements smoothing using a Hann window, a common windowing function used in digital signal processing to reduce spectral leakage. It applies weights derived from a raised cosine function, providing a smooth tapering at the window's edges. This helps in reducing discontinuities when analyzing finite segments of data, making it effective for noise reduction and trend identification in financial time series. This implementation provides an O(n) convolution.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. HANN addresses this by implementing `Calculates a Finite Impulse Response (FIR) filter using Hann window coefficients` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Hann window weights:** Uses weights from the formula `0.5 * (1 - cos(2πk/(N-1)))` for smooth tapering.
-* **FIR (Finite Impulse Response):** The filter's output depends only on a finite number of past and/or current input samples.
-* **Adjustable length:** The `len` parameter controls the window size, affecting the smoothness and responsiveness.
-* **Market application:** Useful for general-purpose smoothing, noise reduction, and as a component in more complex indicators.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Common Settings and Parameters
+## API surface
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length (`len`) | 10 | Controls the size of the Hann window and thus the FIR filter. | Increase for stronger smoothing (more lag), decrease for more responsiveness (less smoothing). |
-| Source | close | Price data used for calculation. | Consider using hlc3 for a more balanced price representation, or other series as needed. |
+### Functions
 
-**Pro Tip:** A length of 10-20 often provides a good balance. Experiment to find what best suits the asset and timeframe.
+- `Calculates a Finite Impulse Response (FIR) filter using Hann window coefficients`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Simplified explanation:**
-The filter creates a window of weights that are applied to the recent price data. These weights are highest in the middle of the window and taper off to zero at the ends, following the shape of a Hann window. Each filtered value is a weighted average of prices within this window.
+| Parameter | Purpose |
+|---|---|
+| `src` | Series to calculate the Hann FIR filter from |
+| `len` | The lookback period (length) of the Hann window |
 
-**Technical formula:**
-The Hann window coefficients are calculated as:
+### Returns
 
-w(k) = 0.5 * (1 - cos(2πk / (N - 1)))
+- Hann FIR filter value
 
-Where:
-- k is the index from 0 to N-1
-- N is the length (`len`) of the window
+## Input configuration
 
-The filtered output y\[n] is computed through convolution:
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_len` | `input.int` | default: `10`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-y\[n] = Σ (w_k * x\[n-k]) / Σ w_k
-(where the sum is over k from 0 to N-1, and x is the input series `src`)
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation adapts for initial bars by using `p = math.min(bar_index + 1, len)`, ensuring output from the first bar. The weights are normalized by `currentWeightSum` which accounts for `na` values in the source.
+- Declared optimization: Uses FIR convolution with Hann window, O(n) complexity per bar
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-The Hann FIR filter can be used similarly to other moving averages or smoothing filters:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Trend identification:** Smoothed output can help clarify the underlying price direction.
-* **Noise reduction:** Reduces short-term fluctuations to reveal more significant price movements.
-* **Baseline for oscillators:** Can be used as a smoothed input for other indicators.
-* **Component in strategies:** Its general-purpose nature makes it a candidate for various trading systems.
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Lag:** Like all causal FIR filters, it introduces lag, which increases with the `len` parameter.
-* **Fixed window shape:** The Hann window has a predefined shape; other windowing functions (e.g., Hamming, Gaussian) might be preferable for specific types of signal characteristics.
-* **Edge effects:** While adaptive for initial bars, the filter's characteristics are most stable once `bar_index + 1 >= len`.
-* **Computational cost:** O(n) complexity, where n is the `len`.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Hann function - Wikipedia: https://en.wikipedia.org/wiki/Hann_function
-* Window function - Wikipedia: https://en.wikipedia.org/wiki/Window_function
-* Smith, S.W. "The Scientist and Engineer's Guide to Digital Signal Processing," Chapter 9 (Windowing).
+- Source code: `indicators/filters/hann.pine`
+- Documentation file: `indicators/filters/hann.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/hann.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/filters/hann.md

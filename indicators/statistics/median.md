@@ -1,58 +1,59 @@
-# MEDIAN: Median Value
+# MEDIAN - Median
 
-[Pine Script Implementation of MEDIAN](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/median.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Median is a measure of central tendency that represents the middle value of a dataset when it is sorted. Unlike the mean (average), the median is not skewed by extremely large or small values (outliers) in the dataset. In trading, a rolling median can provide a more robust measure of the typical price or indicator level over a lookback period compared to a simple moving average.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. MEDIAN addresses this by implementing `Calculates the median of a series over a lookback period.` with parameterized inputs and direct state progression.
 
-This implementation calculates the median of all valid (non-`na`) data points within the specified lookback period.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-*   **Central Tendency:** Identifies the middle value of the data, providing a robust measure of the center.
-*   **Outlier Resistance:** Less affected by extreme values or outliers compared to the mean.
-*   **Rolling Calculation:** The median is calculated over a moving window of a fixed length.
-*   **NA Handling:** `na` values within the lookback period are excluded before sorting and finding the median.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function                                         | When to Adjust                                                                              |
-| :-------- | :------ | :----------------------------------------------- | :------------------------------------------------------------------------------------------ |
-| Source    | Close   | The data series to calculate the median from.    | Change to High, Low, Open, HL2, HLC3, another indicator's output, etc., for different analyses. |
-| Period    | 14      | The number of bars in the lookback window.       | Shorter periods make the median more responsive; longer periods provide a more stable level.   |
+- `Calculates the median of a series over a lookback period.`
 
-**Pro Tip:** Use the median in conjunction with the mean. If the median and mean are significantly different, it suggests the presence of outliers or a skewed distribution in the data over the lookback period.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | series float Input data series. |
+| `len` | simple int Lookback period (must be > 0). |
 
-**Simplified explanation:**
-To find the median:
-1.  Collect all valid (non-`na`) numbers from the lookback period.
-2.  Sort these numbers from smallest to largest.
-3.  If there's an odd number of values, the median is the middle value.
-4.  If there's an even number of values, the median is the average of the two middle values.
+### Returns
 
-**Technical formula:**
-For a sorted dataset x₁, x₂, ..., xₙ:
-*   If `n` is odd, Median = x₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍(n+1)/2₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎
-*   If `n` is even, Median = (x₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍n/2₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎ + x₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍₍n/2 + 1₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎₎) / 2
+- series float The median of the series over the period, or na if insufficient valid data.
 
-> 🔍 **Technical Note:** The Pine Script implementation collects all non-`na` values from the source series over the lookback period into a dynamic array. This array is then sorted on each bar using `array.sort()`, and the median is determined from the sorted array. For very long lookback periods, the sorting step might have performance implications compared to indicators using O(1) rolling sum techniques.
+## Input configuration
 
-## Interpretation Details
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_length` | `input.int` | default: `14`, label: "Period" |
 
-*   **Robust Trend Line:** The median can act as a trend line that is less affected by brief, sharp price spikes compared to a simple moving average.
-*   **Support and Resistance:** Like other moving averages, a rolling median can indicate potential areas of support or resistance.
-*   **Skew Detection:** Comparing the median to the mean can give an informal idea of data skewness. If Mean > Median, the data might be skewed to the right (positive skew). If Mean < Median, it might be skewed to the left (negative skew).
+## Runtime profile
 
-## Limitations and Considerations
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-*   **Computational Cost:** Calculating the median by sorting an array on each bar can be computationally more expensive than simple moving averages, especially for long lookback periods. This might lead to slower script execution.
-*   **Lag:** As it uses past data, the median will lag current price action.
-*   **Responsiveness:** While robust to outliers, it might not be as smooth as some types of moving averages.
+## Trade-offs
+
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
+
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-*   Wikipedia contributors. (2023). Median. In *Wikipedia, The Free Encyclopedia*.
-*   Tukey, J. W. (1977). *Exploratory Data Analysis*. Addison-Wesley.
+- Source code: `indicators/statistics/median.pine`
+- Documentation file: `indicators/statistics/median.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/median.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/median.md

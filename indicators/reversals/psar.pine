@@ -4,7 +4,6 @@
 indicator("Parabolic SAR", "PSAR", overlay=true)
 
 //@function Calculates Parabolic Stop And Reverse (SAR)
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/reversals/psar.md
 //@param af_start Initial acceleration factor (Wilder's original: 0.02)
 //@param af_increment Acceleration factor increment per new extreme (Wilder's original: 0.02)
 //@param af_max Maximum acceleration factor (Wilder's original: 0.20)
@@ -75,4 +74,3 @@ psar_below = psar < close ? psar : na
 // Plot
 plot(psar_above, "PSAR Above", color=color.red,   style=plot.style_linebr, linewidth=2)
 plot(psar_below, "PSAR Below", color=color.green, style=plot.style_linebr, linewidth=2)
-

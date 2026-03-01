@@ -4,7 +4,6 @@
 indicator("Keltner Channel (KCHANNEL)", "KCHANNEL", overlay=true)
 
 //@function Calculates Keltner Channel using EMA and ATR
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/kchannel.md
 //@param source Series to calculate middle line from
 //@param length Lookback period for calculations
 //@param mult ATR multiplier for band width

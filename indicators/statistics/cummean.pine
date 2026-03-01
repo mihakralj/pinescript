@@ -4,7 +4,6 @@
 indicator("Cumulative Mean (CUMMEAN)", "CUMMEAN", overlay=false, precision=8)
 
 //@function Calculates the cumulative arithmetic mean (average) of a series from the start of the data.
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/cummean.md
 //@param src series float Input data series.
 //@returns series float The cumulative mean of the series, or na if all data so far is na.
 cummean(series float src) =>

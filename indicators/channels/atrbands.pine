@@ -4,7 +4,6 @@
 indicator("ATR Bands (ATRBANDS)", "ATRBANDS", overlay=true)
 
 //@function Calculates ATR Bands using ATR for width
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/atrbands.md
 //@param source Source series for the center line
 //@param length Period for ATR and MA calculations
 //@param multiplier ATR multiplier for band width

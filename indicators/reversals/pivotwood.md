@@ -1,108 +1,67 @@
-# PIVOTWOOD: Woodie's Pivot Points
+# PIVOTWOOD - Pivotwood
 
-[Pine Script Implementation of PIVOTWOOD](https://github.com/mihakralj/pinescript/blob/main/indicators/reversals/pivotwood.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Woodie's Pivot Points are a variation of traditional pivot points developed by trader Ken Woodie, designed to place greater emphasis on the closing price by giving it double weight in the pivot point calculation. This modification reflects the belief that closing prices are the most important data points in price action, representing the final consensus of value for a given period.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. PIVOTWOOD addresses this by implementing `Calculates Woodie's pivot points with weighted closing price` with parameterized inputs and direct state progression.
 
-Introduced in the early 2000s through Woodie's CCI (Commodity Channel Index) trading room, this method has gained popularity among active intraday traders who value the closing price as the most significant price level. The weighted formula produces a pivot point that is more responsive to closing price action, making it particularly effective for traders who focus on price acceptance levels and closing strength.
+## Design decision
 
-Woodie's method maintains the same R1-R3 and S1-S3 structure as classic pivots but shifts these levels based on the adjusted pivot point, creating support and resistance zones that are more aligned with where price actually closed rather than the simple average of the day's range.
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Core Concepts
+## API surface
 
-* **Weighted Close:** Closing price receives 2x weight in pivot calculation versus high and low
-* **Price Acceptance:** Emphasizes where price actually settled, not just the range
-* **Closing Strength:** Reflects the importance of final price consensus
-* **Intraday Focus:** Particularly effective for day trading and scalping
-* **Dynamic Levels:** Pivots shift more with closing price changes than classic method
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Woodie's pivot points with weighted closing price`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Timeframe | Daily | Period for pivot calculation | Use Weekly for swing trading, Monthly for position trading |
-| Show PP | True | Display pivot point | Central weighted reference level |
-| Show R1 | True | Display first resistance | First target above pivot |
-| Show R2 | True | Display second resistance | Extended target |
-| Show R3 | True | Display third resistance | Extreme resistance |
-| Show S1 | True | Display first support | First support below pivot |
-| Show S2 | True | Display second support | Extended support |
-| Show S3 | True | Display third support | Extreme support |
+### Parameters
 
-**Pro Tip:** Woodie's pivots work exceptionally well for intraday trading because they emphasize closing prices, which represent true price acceptance. When today's close is strong (near the high), tomorrow's pivot point will be higher than classic pivots, signaling underlying bullish sentiment. Conversely, weak closes (near the low) produce lower pivot points, indicating bearish undertones. Combine with CCI (Woodie's preferred indicator) for enhanced signal confirmation.
+| Parameter | Purpose |
+|---|---|
+| `tf` | Timeframe for pivot calculation ("D", "W", "M") |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Woodie's pivot points weight the closing price twice as heavily as the high and low, producing a pivot point that is more responsive to where price actually closed rather than the midpoint of the range.
+- Tuple [pp, r1, r2, r3, s1, s2, s3] with pivot levels
 
-**Technical formula:**
+## Input configuration
 
-```
-Step 1: Calculate Pivot Point (PP) with Weighted Close
-PP = (High + Low + 2 × Close) / 4
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_timeframe` | `input.timeframe` | default: `"D"`, label: "D" |
+| `i_show_pp` | `input.bool` | default: `true`, label: "Show Pivot Point" |
+| `i_show_r1` | `input.bool` | default: `true`, label: "Show R1" |
+| `i_show_r2` | `input.bool` | default: `true`, label: "Show R2" |
+| `i_show_r3` | `input.bool` | default: `true`, label: "Show R3" |
+| `i_show_s1` | `input.bool` | default: `true`, label: "Show S1" |
+| `i_show_s2` | `input.bool` | default: `true`, label: "Show S2" |
+| `i_show_s3` | `input.bool` | default: `true`, label: "Show S3" |
+| `i_color_pp` | `input.color` | default: `color.yellow`, label: "PP Color" |
+| `i_color_r` | `input.color` | default: `color.red`, label: "Resistance Color" |
+| `i_color_s` | `input.color` | default: `color.green`, label: "Support Color" |
 
-Step 2: Calculate Resistance Levels
-R1 = 2 × PP - Low
-R2 = PP + (High - Low)
-R3 = High + 2 × (PP - Low)
+## Runtime profile
 
-Step 3: Calculate Support Levels
-S1 = 2 × PP - High
-S2 = PP - (High - Low)
-S3 = Low - 2 × (High - PP)
-```
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The key difference from classic pivots is in Step 1, where Close is weighted 2:1 versus High and Low. This shifts the pivot point in the direction of the close. If Close is near High, PP moves higher; if Close is near Low, PP moves lower. This creates a bias that reflects the previous period's directional strength, making Woodie's pivots more "dynamic" than classic pivots while maintaining the same resistance and support calculation structure.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-Woodie's pivots provide enhanced directional bias based on closing strength:
+## Verification checklist
 
-* **Pivot Point Bias:**
-  - Close near High → PP above classic pivot → Bullish bias built-in
-  - Close near Low → PP below classic pivot → Bearish bias built-in
-  - Close at midpoint → PP similar to classic pivot → Neutral
-
-* **Directional Trading:**
-  - Price above PP: Trade long, target R1, R2, R3
-  - Price below PP: Trade short, target S1, S2, S3
-  - PP acts as dynamic sentiment gauge
-
-* **R1/S1 Significance:**
-  - Most commonly tested levels in Woodie's method
-  - Often act as profit targets for intraday moves
-  - Breaks of R1/S1 signal strong momentum
-
-* **R2/S2 as Trend Confirmation:**
-  - Reaching R2: Strong uptrend, momentum continuation likely
-  - Reaching S2: Strong downtrend, momentum continuation likely
-  - Failure to reach R2/S2: Potential reversal signal
-
-* **R3/S3 Extreme Levels:**
-  - Rare to reach in normal conditions
-  - Indicate exceptional volatility or strong trending
-  - Often coincide with previous period's high/low
-
-* **Comparison with Classic Pivots:**
-  - When Woodie's PP > Classic PP: Bullish undertone (strong close)
-  - When Woodie's PP < Classic PP: Bearish undertone (weak close)
-  - Divergence between methods provides sentiment insight
-
-## Limitations and Considerations
-
-* **Closing Price Dependency:** Extremely sensitive to where price closes relative to range
-* **Gap Behavior:** Large overnight gaps can produce misleading initial pivots
-* **Trend Bias:** Introduces directional bias that may not always be warranted
-* **Whipsaw Risk:** Can give false signals during choppy, range-bound markets
-* **Less Universal:** Not as widely recognized as classic pivots; less "self-fulfilling"
-* **Intraday Focused:** Best for day trading; less effective for longer timeframes
-* **Requires Context:** Should be used with other indicators (especially CCI per Woodie's methodology)
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Woodie, K. (2000s). Woodie's CCI Trading Room methodology.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Trading methodology documented through Woodie's CCI forums and educational materials.
+- Source code: `indicators/reversals/pivotwood.pine`
+- Documentation file: `indicators/reversals/pivotwood.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/pivotwood.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/reversals/pivotwood.md

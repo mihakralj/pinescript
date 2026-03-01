@@ -1,11 +1,9 @@
-
 // The MIT License (MIT)
 // © mihakralj
 //@version=6
 indicator("Acceleration, Slope of Slope (JOLT)", "JOLT", overlay=false, precision=8)
 
 //@function Calculates jolt (slope of slope of slope)
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/numerics/jolt.md
 //@param src Source series to calculate slope from
 //@param len Lookback period for calculation
 //@returns jolt

@@ -1,67 +1,59 @@
-# TRIMA: Triangular Moving Average
+# TRIMA - Trima
 
-[Pine Script Implementation of TRIMA](https://github.com/mihakralj/pinescript/blob/main/indicators/trends_FIR/trima.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Triangular Moving Average (TRIMA) is a technical indicator that applies a triangular weighting scheme to price data, providing enhanced smoothing compared to simpler moving averages. Originating in the early 1970s as technical analysts sought more effective noise filtering methods, the TRIMA was first popularized through the work of market technician Arthur Merrill. Its formal mathematical properties were established in the 1980s, and the indicator gained widespread adoption in the 1990s as computerized charting became standard. TRIMA effectively filters out market noise while maintaining important trends through its unique center-weighted calculation method.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. TRIMA addresses this by implementing `Calculates TRIMA using triangular weighted smoothing with compensator` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Double-smoothing process:** TRIMA can be viewed as applying a simple moving average twice, creating more effective noise filtering
-* **Triangular weighting:** Uses a symmetrical weight distribution that emphasizes central data points and reduces emphasis toward both ends
-* **Market application:** Particularly effective for identifying the underlying trend in noisy market conditions where standard moving averages generate too many false signals
-* **Timeframe flexibility:** Works across multiple timeframes, with longer periods providing cleaner trend signals in higher timeframes
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-The core innovation of TRIMA is its unique triangular weighting scheme, which can be viewed either as a specialized weight distribution or as a twice-applied simple moving average with adjusted period. This creates more effective noise filtering without the excessive lag penalty typically associated with longer-period averages. The symmetrical nature of the weight distribution ensures zero phase distortion, preserving the timing of important market turning points.
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 14 | Controls the lookback period | Increase for smoother signals in volatile markets, decrease for responsiveness |
-| Source | close | Price data used for calculation | Consider using hlc3 for a more balanced price representation |
+- `Calculates TRIMA using triangular weighted smoothing with compensator`
 
-**Pro Tip:** For a good balance between smoothing and responsiveness, try using a TRIMA with period N instead of an SMA with period 2N - you'll get similar smoothing characteristics but with less lag.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `source` | Series to calculate TRIMA from |
+| `period` | Lookback period - FIR window size |
 
-**Simplified explanation:**
-TRIMA calculates a weighted average of prices where the weights form a triangle shape. The middle prices get the most weight, and weights gradually decrease toward both the recent and older ends. This creates a smooth filter that effectively removes random price fluctuations while preserving the underlying trend.
+### Returns
 
-**Technical formula:**
-TRIMA = Σ(Price[i] × Weight[i]) / Σ(Weight[i])
+- TRIMA value, calculates from first bar using available data
 
-Where the triangular weights form a symmetric pattern:
-- Weight[i] = min(i, n-1-i) + 1
-- Example for n=5: weights = [1,2,3,2,1]
-- Example for n=4: weights = [1,2,2,1]
+## Input configuration
 
-Alternatively, TRIMA can be calculated as:
-TRIMA(source, p) = SMA(SMA(source, (p+1)/2), (p+1)/2)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `10`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-> 🔍 **Technical Note:** The double application of SMA explains why TRIMA provides better smoothing than a single SMA or WMA. This approach effectively applies smoothing twice with optimal period adjustment, creating a -18dB/octave roll-off in the frequency domain compared to -6dB/octave for a simple moving average.
+## Runtime profile
 
-## Interpretation Details
+- Declared optimization: Uses triangular weighting with O(n) complexity per bar due to lookback loop
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `period`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-TRIMA can be used in various trading strategies:
+## Trade-offs
 
-* **Trend identification:** The direction of TRIMA indicates the prevailing trend
-* **Signal generation:** Crossovers between price and TRIMA generate trade signals with fewer false alarms than SMA
-* **Support/resistance levels:** TRIMA can act as dynamic support during uptrends and resistance during downtrends
-* **Trend strength assessment:** Distance between price and TRIMA can indicate trend strength
-* **Multiple timeframe analysis:** Using TRIMAs with different periods can confirm trends across different timeframes
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-## Limitations and Considerations
+## Verification checklist
 
-* **Market conditions:** Like all moving averages, less effective in choppy, sideways markets
-* **Lag factor:** More lag than WMA or EMA due to center-weighted emphasis
-* **Limited adaptability:** Fixed weighting scheme cannot adapt to changing market volatility
-* **Response time:** Takes longer to reflect sudden price changes than directionally-weighted averages
-* **Complementary tools:** Best used with momentum oscillators or volume indicators for confirmation
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, John F. "Cycle Analytics for Traders." Wiley, 2013
-* Kaufman, Perry J. "Trading Systems and Methods." Wiley, 2013
-* Colby, Robert W. "The Encyclopedia of Technical Market Indicators." McGraw-Hill, 2002
+- Source code: `indicators/trends_FIR/trima.pine`
+- Documentation file: `indicators/trends_FIR/trima.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_FIR/trima.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/trends_FIR/trima.md

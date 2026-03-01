@@ -1,92 +1,59 @@
-# CG: Center of Gravity
+# CG - Cg
 
-[Pine Script Implementation of CG](https://github.com/mihakralj/pinescript/blob/main/indicators/cycles/cg.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Center of Gravity (CG) indicator, developed by John Ehlers, is a cycle analysis tool that uses the physics concept of center of gravity to identify cycle turning points in financial markets. By calculating the balance point of price data over a specified period, the indicator creates an oscillator that can help traders anticipate potential reversal points in market cycles.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. CG addresses this by implementing `Calculates Ehlers' Center of Gravity indicator` with parameterized inputs and direct state progression.
 
-Unlike traditional moving averages that simply smooth price data, the Center of Gravity indicator treats price data as masses distributed over time and calculates where the "balance point" would be. This approach provides insights into the distribution of price momentum within the lookback period.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Physics-based approach:** Uses the center of gravity concept from physics where each price point represents a mass and the indicator finds the balance point
-* **Oscillating indicator:** Provides an oscillator that fluctuates around zero based on price distribution
-* **Cycle identification:** Particularly effective at identifying shifts in the dominant cycle within the lookback period
-* **Zero-line analysis:** Oscillates around zero with crossovers indicating potential cycle phase changes
+## API surface
 
-The core innovation of this indicator is its ability to measure where the "weight" of price data is concentrated within the lookback period, providing insights into market momentum distribution.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Ehlers' Center of Gravity indicator`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 10 | Controls the lookback period for the Center of Gravity calculation | Increase for longer cycles and smoother signals, decrease for shorter cycles and more responsive signals |
-| Source | close | Price data used for calculation | Use close for trend-following, hlc3 for balanced representation, or hl2 for range-based analysis |
+### Parameters
 
-**Pro Tip:** The optimal length setting often correlates with the dominant cycle length in the market. Start with shorter periods (8-14) for active markets and longer periods (20-30) for smoother, longer-term cycle identification.
+| Parameter | Purpose |
+|---|---|
+| `src` | Series to calculate Center of Gravity from |
+| `length` | Period for the Center of Gravity calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-The Center of Gravity calculates where the "balance point" would be if each price in the lookback period was treated as a mass at its time position. The result is then normalized to oscillate around zero by subtracting the theoretical center point.
+- Center of Gravity value identifying cycle turning points
 
-**Technical formula:**
-The Center of Gravity is calculated as:
+## Input configuration
 
-CG = [Σ(i × Price[i-1]) / Σ(Price[i-1])] - (Length + 1) / 2
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `10`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-Where:
-- i ranges from 1 to Length (representing position weights)
-- Price[i-1] is the price at position i-1 bars ago (current bar when i=1)
-- The subtraction of (Length + 1) / 2 centers the oscillator around zero
-- This represents the "balance point" where price data would be in equilibrium
+## Runtime profile
 
-The calculation process:
-```
-numerator = Σ(i × Price[i-1]) for i = 1 to Length
-denominator = Σ(Price[i-1]) for i = 1 to Length
-raw_cg = numerator / denominator
-CG = raw_cg - (Length + 1) / 2
-```
+- Declared optimization: for performance and dirty data
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-> 🔍 **Technical Note:** The algorithm calculates the weighted average position of prices, then subtracts the theoretical center point to create an oscillator. When prices are distributed evenly, CG equals zero. When recent prices dominate, CG becomes positive; when older prices dominate, CG becomes negative.
+## Trade-offs
 
-## Interpretation Details
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-The Center of Gravity indicator provides several analytical perspectives:
+## Verification checklist
 
-* **Zero-line crossovers:**
-  - Crossing above zero: Suggests recent prices have more weight (potential upward momentum)
-  - Crossing below zero: Suggests older prices have more weight (potential downward momentum)
-  - Multiple crossovers may indicate choppy, non-trending conditions
-
-* **Extreme readings:**
-  - High positive values: Recent prices significantly outweigh older prices
-  - High negative values: Older prices significantly outweigh recent prices
-  - The magnitude indicates the strength of the price distribution bias
-
-* **Divergence analysis:**
-  - Bullish divergence: Price makes lower lows while CG makes higher lows
-  - Bearish divergence: Price makes higher highs while CG makes lower highs
-  - These divergences can indicate potential shifts in price momentum
-
-* **Mean reversion characteristics:**
-  - CG tends to oscillate around zero over time
-  - Extreme readings often precede moves back toward the center line
-  - Can be used to identify potential reversal points
-
-## Limitations and Considerations
-
-* **Market conditions:** Most effective in cyclical markets; may provide less clear signals during strong trending periods
-* **Whipsaw potential:** Can generate false signals during low-volatility, range-bound conditions
-* **Parameter sensitivity:** Length setting significantly affects responsiveness and noise levels
-* **Interpretation complexity:** Requires understanding of the balance point concept for proper interpretation
-* **Complementary tools:** Best used with trend identification tools and volume confirmation for optimal results
-
-The Center of Gravity works best when combined with other cycle analysis tools and should be part of a broader trading system that includes trend and momentum confirmation.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Ehlers, J. F. (2002). *Rocket Science for Traders: Digital Signal Processing Applications*. John Wiley & Sons.
-* Ehlers, J. F. (2013). *Cycle Analytics for Traders: Advanced Technical Trading Concepts*. John Wiley & Sons.
+- Source code: `indicators/cycles/cg.pine`
+- Documentation file: `indicators/cycles/cg.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/cg.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/cycles/cg.md

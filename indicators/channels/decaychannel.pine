@@ -4,7 +4,6 @@
 indicator("Decay Min-Max Channel (DECAYCHANNEL)", "DECAYCHANNEL", overlay=true)
 
 //@function Calculates the Decaying Min-Max Channel with decay towards midpoint
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/decaychannel.md
 //@param period Lookback period (period > 0)
 //@param hi Source series for the highest high calculation (usually high)
 //@param lo Source series for the lowest low calculation (usually low)

@@ -1,79 +1,59 @@
-# Inertia: Linear Regression Deviation Oscillator
+# INERTIA - Inertia
 
-[Pine Script Implementation of Inertia](https://github.com/mihakralj/pinescript/blob/main/indicators/oscillators/inertia.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Inertia oscillator is a momentum oscillator that measures trend strength by calculating the distance between the current price and its linear regression line over a specified period. Developed as a tool to quantify how far price has deviated from its statistical trend, Inertia provides insights into momentum acceleration, deceleration, and potential reversal points.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. INERTIA addresses this by implementing `Calculates Inertia oscillator measuring trend strength based on distance from linear regression` with parameterized inputs and direct state progression.
 
-Unlike traditional oscillators that compare current price to historical extremes or averages, Inertia uses linear regression to establish a mathematical trend line and measures price deviation from this trend. This approach offers a more statistically rigorous method of assessing momentum, as it considers the overall directional bias of price movement rather than just relative positioning within a range.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Linear regression baseline:** Uses least squares regression to establish the underlying trend direction over the specified period, providing a mathematically optimal trend line
-* **Deviation measurement:** Calculates the distance between current price and the regression line, with positive values indicating price above trend and negative values indicating price below trend
-* **Trend strength quantification:** Larger absolute values suggest stronger momentum in the current direction, while values near zero indicate price moving in line with the statistical trend
-* **Zero-centered oscillation:** The zero line represents perfect alignment with the regression trend, making directional bias immediately apparent
+## API surface
 
-Inertia's mathematical foundation in linear regression theory makes it particularly effective for identifying when price momentum is strengthening or weakening relative to the established statistical trend, providing early signals of potential trend changes.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Inertia oscillator measuring trend strength based on distance from linear regression`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 20 | Period for linear regression calculation | Lower (10-15) for more sensitive signals in active markets, higher (30-50) for smoother trends in ranging markets |
-| Source | Close | Data point used for regression analysis | Change to HL2 or HLC3 for more balanced price representation |
+### Parameters
 
-**Pro Tip:** Inertia works exceptionally well for divergence analysis - when price makes new highs but Inertia fails to reach new highs, it often indicates momentum exhaustion and potential trend reversal, as the price is moving further from its statistical trend line.
+| Parameter | Purpose |
+|---|---|
+| `source` | Source series to calculate Inertia for |
+| `length` | Period for linear regression calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Inertia calculates a linear regression line through the recent price data, then measures how far the current price sits from this statistically-derived trend line. The regression line represents the "expected" price based on the recent trend, making deviations meaningful indicators of momentum strength.
+- Inertia value measuring trend strength
 
-**Technical formula:**
-```
-Linear Regression Line: y = mx + b
-Where:
-m (slope) = (n×Σ(xy) - Σ(x)×Σ(y)) / (n×Σ(x²) - (Σ(x))²)
-b (intercept) = (Σ(y) - m×Σ(x)) / n
+## Input configuration
 
-Regression Value = slope × (length - 1) + intercept
-Inertia = Current Price - Regression Value
-```
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `20`, label: "Length" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-Where:
-* n is the length period
-* x represents the time index (0 to length-1)
-* y represents the price values over the period
-* Current Price is the most recent price value
-* Regression Value is the expected price based on the trend line
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation uses the method of least squares to calculate the optimal linear regression line through the price data. The algorithm computes the necessary summations (Σx, Σy, Σxy, Σx²) over the specified period to derive the slope and intercept coefficients. This mathematical approach ensures the regression line minimizes the sum of squared deviations from all data points, providing the most statistically accurate representation of the underlying trend.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-Inertia offers several powerful approaches to momentum and trend analysis:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Zero-line analysis:** Values above zero indicate price is above the regression trend line (bullish momentum), while values below zero indicate price is below the trend line (bearish momentum)
-* **Momentum strength:** Larger absolute values suggest stronger momentum, as price is deviating more significantly from the established statistical trend
-* **Trend acceleration:** Increasing absolute values indicate accelerating momentum in the current direction
-* **Momentum deceleration:** Decreasing absolute values toward zero suggest momentum is slowing and price is returning to the regression trend
-* **Reversal signals:** Crossovers of the zero line can indicate changes in momentum direction relative to the underlying trend
-* **Divergence patterns:** When price makes new extremes but Inertia fails to confirm with corresponding extremes, it suggests the trend may be losing statistical validity
+## Verification checklist
 
-The statistical foundation makes Inertia particularly reliable for identifying when price movements are becoming extended relative to the mathematical trend, often preceding corrections or reversals.
-
-## Limitations and Considerations
-
-* **Regression period dependency:** The choice of length period significantly affects the regression line calculation and thus the oscillator's behavior
-* **Trending vs. ranging markets:** Most effective in trending markets where linear regression provides meaningful trend representation; less reliable in choppy, sideways conditions
-* **Mathematical assumptions:** Assumes price follows a linear trend pattern, which may not hold during periods of acceleration, deceleration, or complex market structures
-* **Lag characteristics:** Linear regression inherently includes some lag as it considers historical data to establish the trend line
-* **Extreme value sensitivity:** Outlier price movements within the regression period can skew the trend line calculation
-* **Complementary analysis:** Most effective when combined with trend indicators or volume studies to confirm the direction and strength of the underlying trend
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Hamilton, J. D. (1994). *Time Series Analysis*. Princeton University Press.
-* Murphy, J. J. (1999). *Technical Analysis of the Financial Markets*. New York Institute of Finance.
+- Source code: `indicators/oscillators/inertia.pine`
+- Documentation file: `indicators/oscillators/inertia.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/inertia.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/oscillators/inertia.md

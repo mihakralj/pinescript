@@ -1,0 +1,67 @@
+// The MIT License (MIT)
+// © mihakralj
+//@version=6
+indicator("Bull-Bear Power Ratio (BRAR)", "BRAR", overlay=false)
+
+//@function Calculates BRAR (BR and AR) sentiment oscillator
+//@param period Rolling window length for summation (default 26)
+//@returns tuple [br, ar] where BR measures buying pressure vs previous close,
+//         AR measures selling pressure vs today's open. Both scaled x100.
+//@optimized Uses 4 circular buffers for O(1) per-bar complexity
+brar(simple int period) =>
+    if period <= 0
+        runtime.error("Period must be greater than 0")
+    if period > 5000
+        runtime.error("Period exceeds maximum of 5000")
+
+    float prevClose = nz(close[1], open)
+
+    float brNum = math.max(0.0, high - prevClose)
+    float brDen = math.max(0.0, prevClose - low)
+    float arNum = math.max(0.0, high - open)
+    float arDen = math.max(0.0, open - low)
+
+    var array<float> brNumBuf = array.new_float(period, 0.0)
+    var array<float> brDenBuf = array.new_float(period, 0.0)
+    var array<float> arNumBuf = array.new_float(period, 0.0)
+    var array<float> arDenBuf = array.new_float(period, 0.0)
+    var int idx = 0
+    var float brNumSum = 0.0
+    var float brDenSum = 0.0
+    var float arNumSum = 0.0
+    var float arDenSum = 0.0
+
+    brNumSum -= array.get(brNumBuf, idx)
+    brDenSum -= array.get(brDenBuf, idx)
+    arNumSum -= array.get(arNumBuf, idx)
+    arDenSum -= array.get(arDenBuf, idx)
+
+    array.set(brNumBuf, idx, brNum)
+    array.set(brDenBuf, idx, brDen)
+    array.set(arNumBuf, idx, arNum)
+    array.set(arDenBuf, idx, arDen)
+
+    brNumSum += brNum
+    brDenSum += brDen
+    arNumSum += arNum
+    arDenSum += arDen
+
+    idx := (idx + 1) % period
+
+    float br = brDenSum != 0.0 ? brNumSum / brDenSum * 100.0 : 100.0
+    float ar = arDenSum != 0.0 ? arNumSum / arDenSum * 100.0 : 100.0
+
+    [br, ar]
+
+// ---------- Main loop ----------
+
+// Inputs
+i_period = input.int(26, "Period", minval=1, maxval=5000, tooltip="Rolling window for summation (traditional: 26)")
+
+// Calculation
+[br_value, ar_value] = brar(i_period)
+
+// Plot
+plot(br_value, "BR", color.new(color.aqua, 0), 2)
+plot(ar_value, "AR", color.new(color.yellow, 0), 2)
+hline(100, "Equilibrium", color=color.gray, linestyle=hline.style_dotted)

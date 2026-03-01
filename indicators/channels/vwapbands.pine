@@ -4,7 +4,6 @@
 indicator("VWAP Bands (VWAPBANDS)", "VWAPBANDS", overlay=true)
 
 //@function Calculates VWAP Bands with standard deviation bands
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/vwapbands.md
 //@param src Source price series (typically hlc3)
 //@param vol Volume series
 //@param reset_condition Condition to reset VWAP calculation

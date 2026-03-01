@@ -1,98 +1,59 @@
-# ROCP: Rate of Change Percentage
+# ROCP - Rocp
 
-[Pine Script Implementation of ROCP](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/rocp.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Rate of Change Percentage (ROCP) indicator measures the percentage change in price between the current price and the price N periods ago. This momentum oscillator helps identify the magnitude of price changes in percentage terms, making it comparable across different price scales.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. ROCP addresses this by implementing `Calculates percentage Rate of Change between current price and N periods ago` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Percentage Change:** Measures relative price difference over time
-* **Momentum:** Indicates strength and speed of price movements
-* **Oscillator:** Fluctuates above and below zero
-* **Scale Independence:** Comparable across different price ranges
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-## Common Settings and Parameters
+## API surface
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Source | close | Price data to analyze | Use high/low for range analysis |
-| Length | 9 | Lookback period | Shorter for faster signals |
+### Functions
 
-**Pro Tip:** Common lookback periods:
-- 12 periods for short-term analysis
-- 25 periods for medium-term trends
-- 50+ periods for long-term momentum
+- `Calculates percentage Rate of Change between current price and N periods ago`
 
-## Calculation and Mathematical Foundation
+### Parameters
 
-**Simplified explanation:**
-ROCP calculates the percentage difference between current price and historical price.
+| Parameter | Purpose |
+|---|---|
+| `source` | Source price series |
+| `length` | Lookback period |
 
-**Technical formula:**
-```
-ROCP = 100 * (Price(t) - Price(t-n)) / Price(t-n)
-```
+### Returns
 
-> 🔍 **Technical Note:** The percentage calculation provides a normalized view that's comparable across different price scales.
+- Percentage price change value
 
-## Interpretation Details
+## Input configuration
 
-ROCP provides multiple analytical perspectives:
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source` | `input.source` | default: `close`, label: "Source" |
+| `i_length` | `input.int` | default: `9`, label: "Length" |
 
-* **Trend Direction:**
-  - Positive: Price increasing
-  - Negative: Price decreasing
-  - Zero line: No change
+## Runtime profile
 
-* **Momentum Strength:**
-  - Higher values: Stronger momentum
-  - Lower values: Weaker momentum
-  - Divergence: Potential trend reversal
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Signal Types:**
-  - Zero line crossovers
-  - Divergence patterns
-  - Extreme readings
-  - Trend confirmation
+## Trade-offs
 
-## Advantages
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-1. **Analytical Benefits:**
-   - Scale-independent measurement
-   - Easy to interpret
-   - Cross-asset comparison
-   - Trend confirmation
+## Verification checklist
 
-2. **Trading Applications:**
-   - Trend identification
-   - Entry/exit timing
-   - Divergence trading
-   - Cross-market analysis
-
-3. **Technical Benefits:**
-   - Simple calculation
-   - Flexible parameters
-   - Multiple timeframes
-   - Clear signals
-
-## Limitations and Considerations
-
-* **Lagging Indicator:** Signals occur after price moves
-* **Base Effect:** Large changes from low base values
-* **Timeframe Dependent:** Different periods show different patterns
-* **Market Context:** Works best in trending markets
-
-## Related Indicators
-
-* **ROC:** Absolute version of ROCP
-* **ROCR:** Ratio version of ROCP
-* **Momentum:** Similar concept but different scaling
-* **Velocity:** Rate of change with additional smoothing
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Achelis, S. B. (2001). Technical Analysis from A to Z. McGraw Hill.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
+- Source code: `indicators/momentum/rocp.pine`
+- Documentation file: `indicators/momentum/rocp.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rocp.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/rocp.md

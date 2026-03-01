@@ -1,67 +1,57 @@
-# CCI: Commodity Channel Index
+# CCI - Cci
 
-[Pine Script Implementation of CCI](https://github.com/mihakralj/pinescript/blob/main/indicators/momentum/cci.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Commodity Channel Index (CCI) is a versatile momentum oscillator developed by Donald Lambert in 1980. Originally designed for commodity trading, CCI measures an instrument's variation from its statistical mean. By comparing the current price to an average price, CCI helps identify cyclical turns, overbought/oversold conditions, and trend strength. The indicator oscillates above and below a zero line, with readings above +100 or below -100 traditionally signaling extreme conditions.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. CCI addresses this by implementing `Calculates Commodity Channel Index using circular buffer for efficiency` with parameterized inputs and direct state progression.
 
-The implementation provided uses circular buffers for simple moving average calculations, ensuring optimal performance while properly handling data gaps. This approach maintains O(1) computational complexity regardless of the lookback period, making it particularly suitable for real-time analysis of high-frequency data while preserving accuracy in mean deviation calculations.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Mean price deviation:** Measures how far price has moved from its statistical average
-* **Cyclical identification:** Helps identify overbought and oversold conditions in cyclic markets
-* **Trend strength measurement:** Indicates trending conditions through sustained readings in one direction
-* **Statistical foundation:** Based on the assumption that prices are normally distributed around their mean
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Length | 20 | Lookback period for calculations | Lower for more signals but increased noise, higher for smoother readings |
+- `Calculates Commodity Channel Index using circular buffer for efficiency`
 
-**Pro Tip:** While the default 20-period setting works well for daily charts, consider using 14 periods for more active markets or 30 periods for less volatile instruments. The traditional +100/-100 thresholds can be adjusted to +/-75 for more frequent signals or +/-150 for extreme conditions only.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `length` | Lookback period for calculations |
 
-**Simplified explanation:**
-CCI measures how far price has moved from its average in terms of mean deviation. It first calculates a typical price (TP), then compares how far that TP is from its moving average, scaled by a factor of 0.015 to normalize the indicator.
+### Returns
 
-**Technical formula:**
-CCI = (TP - SMA(TP)) / (0.015 × MD)
+- CCI value measuring price deviation from its moving average
 
-Where:
-- TP (Typical Price) = (High + Low + Close) / 3
-- SMA = Simple Moving Average
-- MD = Mean Deviation of TP from its SMA
-- 0.015 = Constant to normalize the indicator
+## Input configuration
 
-> 🔍 **Technical Note:** The implementation uses circular buffers to efficiently maintain running sums for the SMA calculation, ensuring O(1) computational complexity per bar. The algorithm properly handles NA values and maintains accurate mean deviation calculations without recalculating entire sums each bar.
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_length` | `input.int` | default: `20`, label: "Length" |
 
-## Interpretation Details
+## Runtime profile
 
-CCI provides multiple analytical perspectives:
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `length`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-* **Overbought/Oversold:** Readings above +100 suggest overbought conditions, below -100 suggest oversold
-* **Trend strength:** Sustained readings above/below zero indicate trend direction and strength
-* **Divergence signals:** CCI diverging from price can signal potential reversals
-* **Zero-line crossovers:** Can indicate trend changes when combined with other signals
-* **Extreme readings:** Values beyond ±200 often precede significant reversals
-* **Trend confirmation:** Direction of CCI movement confirms price trend direction
+## Trade-offs
 
-## Limitations and Considerations
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Scaling sensitivity:** The fixed 0.015 constant may not be optimal for all markets
-* **False signals:** Can generate numerous signals in choppy markets
-* **Lag component:** Moving average calculations introduce some lag in signals
-* **Normalization issues:** May not be perfectly normalized for all market conditions
-* **Timeframe dependency:** Different timeframes require different interpretation approaches
-* **Complementary analysis:** Should be used alongside trend and volume indicators for confirmation
+## Verification checklist
+
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Lambert, D. R. (1980). Commodity Channel Index: Tool for Trading Cyclic Trends. Commodities Magazine.
-* Jobman, D. R. (1995). The Handbook of Technical Analysis. McGraw-Hill.
-* Murphy, J. J. (1999). Technical Analysis of the Financial Markets. New York Institute of Finance.
-* Kaufman, P. J. (2013). Trading Systems and Methods (5th ed.). Wiley Trading.
+- Source code: `indicators/momentum/cci.pine`
+- Documentation file: `indicators/momentum/cci.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/cci.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/momentum/cci.md

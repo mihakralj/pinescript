@@ -1,62 +1,59 @@
-# Var: Variance
+# VARIANCE - Variance
 
-[Pine Script Implementation of Var](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/variance.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-Variance is a fundamental statistical measure that quantifies the dispersion or spread of a data set from its mean (average). In trading and technical analysis, Variance serves as a volatility indicator that measures the average squared deviation of each price point from the mean price over a specified period. Higher variance values indicate greater market volatility (wider price dispersion), while lower values suggest lower volatility (prices clustering closer to the mean).
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. VARIANCE addresses this by implementing `variance` with parameterized inputs and direct state progression.
 
-## Core Concepts
+## Design decision
 
-* **Volatility measurement:** Variance provides a raw measure of market volatility by calculating the squared average distance of prices from their mean
-* **Market application:** Useful for identifying periods of extreme price movement versus consolidation, helping traders assess potential breakouts or reversals
-* **Timeframe suitability:** **Medium to longer timeframes** typically provide more statistically meaningful readings, though Variance can be applied across various timeframes based on strategy requirements
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-Variance forms the mathematical foundation for other important statistical measures in trading, most notably Standard Deviation (which is simply the square root of Variance).
+## API surface
 
-## Common Settings and Parameters
+### Functions
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Controls the lookback window for calculation | Decrease for more sensitivity to recent price changes, increase for more stable readings over time |
-| Source | Close | Data point used for calculation | Change to High/Low for volatility extremes, or HL2/HLC3 for more balanced measurements |
+- `variance`
 
-**Pro Tip:** When comparing different markets or instruments, Variance can help identify which ones are experiencing higher volatility, potentially offering better trading opportunities or requiring adjusted position sizing.
+### Parameters
 
-## Calculation and Mathematical Foundation
+| Parameter | Purpose |
+|---|---|
+| `src` | {series float} Source series. |
+| `len` | {int} Lookback length. `len` > 0. |
 
-**Simplified explanation:**
-Variance measures how spread out price values are from their average by taking the squared differences. It first calculates the average (mean) price over a specified period. Then it determines how far each price is from that average, squares these differences, and finally averages these squared differences.
+### Returns
 
-**Technical formula:**
-The formula for Variance is:
+- {series float} Variance of `src` for `len` bars back. Returns 0 if not enough data.
 
-Variance = Σ(x - μ)² / n
+## Input configuration
 
-Where:
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_period` | `input.int` | default: `14`, label: "Period" |
+| `i_source` | `input.source` | default: `close`, label: "Source" |
 
-* x is each individual price
-* μ is the mean price over the period
-* n is the number of prices in the period
-* Σ represents the sum
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation uses a single-pass algorithm with a circular buffer for efficiency, avoiding the need to recalculate the entire sum for each new bar. This optimization is particularly important for variance calculation with longer lookback periods.
+- Declared optimization: not explicitly annotated in source comments.
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-Variance provides valuable insights into market behavior that traders can use to:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* Assess current market volatility compared to historical levels
-* Identify potential turning points when variance spikes significantly
-* Recognize consolidation phases when variance decreases over time
-* Adjust position sizing according to market volatility (smaller positions during high variance periods)
-* Set more informed stop-loss levels based on the current market's statistical behavior
+## Verification checklist
 
-Unlike Standard Deviation, Variance uses squared values, which means it gives more weight to outliers and extreme price movements. This can make it particularly useful for detecting exceptional market conditions.
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
-## Limitations and Considerations
+## References
 
-* **Market conditions:** Less reliable during rapidly changing market regimes or during transitions between trending and ranging conditions
-* **Lag factor:** As a lookback-based indicator, Variance has inherent lag that increases with longer period settings
-* **Scale sensitivity:** Unlike Standard Deviation, Variance is not expressed in the same units as the original data, making direct interpretations less intuitive
-* **Complementary tools:** Best used alongside trend indicators, price action analysis, or other volatility measures like ATR for a complete market assessment
+- Source code: `indicators/statistics/variance.pine`
+- Documentation file: `indicators/statistics/variance.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/variance.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/variance.md

@@ -1,11 +1,9 @@
 // The MIT License (MIT)
 // © mihakralj
-// Ultimate Channel logic based on work by John F. Ehlers (c) 2024
 //@version=6
 indicator("Ultimate Channel (UCHANNEL)", "UCHANNEL", overlay=true)
 
 //@function Calculates Ultimate Channel
-//@doc https://github.com/mihakralj/pinescript/blob/main/indicators/channels/uchannel.md
 //@param src Source series for the centerline (typically close)
 //@param high_src Source series for high prices
 //@param low_src Source series for low prices

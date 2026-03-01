@@ -1,73 +1,61 @@
-# CORRELATION: Pearson's Correlation Coefficient
+# CORRELATION - Correlation
 
-[Pine Script Implementation of CORRELATION](https://github.com/mihakralj/pinescript/blob/main/indicators/statistics/correlation.pine)
 
-## Overview and Purpose
+## Architectural problem
 
-The Pearson's Correlation Coefficient is a statistical measure that quantifies the linear relationship between two variables. In financial markets, correlation analysis helps traders understand how different securities, price components, or indicators move in relation to each other. The coefficient ranges from -1 to +1, with +1 indicating a perfect positive correlation (variables move in lockstep), -1 indicating a perfect negative correlation (variables move in opposite directions), and 0 indicating no linear relationship.
+Real-time chart analysis needs deterministic updates per bar and explicit handling of warm-up periods. CORRELATION addresses this by implementing `Calculates Pearson correlation coefficient using single pass with circular buffer` with parameterized inputs and direct state progression.
 
-The implementation provided uses an efficient single-pass algorithm with circular buffers that maintains O(1) computational complexity regardless of the lookback period. This optimized approach makes it suitable for real-time trading applications where performance is critical, even with large datasets or when analyzing multiple correlation pairs simultaneously.
+## Design decision
 
-## Core Concepts
+This implementation favors streaming execution over batch recomputation. The trade-off is more attention to state initialization, but latency stays predictable when charts scale.
 
-* **Relationship strength:** Measures how strongly two data series are related, with values closer to +/-1 indicating stronger relationships
-* **Directionality:** Indicates whether variables move in the same direction (positive correlation) or opposite directions (negative correlation)
-* **Linear dependency:** Focuses specifically on linear relationships between variables, serving as the foundation for more complex statistical analyses
-* **Normalized measurement:** Unlike covariance, correlation is normalized to the range [-1, +1], making it easier to interpret and compare relationships across different data pairs
+## API surface
 
-Correlation analysis forms the basis for many trading strategies, including pairs trading, portfolio diversification, and market regime identification. By understanding which assets move together or in opposition, traders can construct more robust portfolios and identify potential trading opportunities arising from temporary deviations in established relationships.
+### Functions
 
-## Common Settings and Parameters
+- `Calculates Pearson correlation coefficient using single pass with circular buffer`
 
-| Parameter | Default | Function | When to Adjust |
-|-----------|---------|----------|---------------|
-| Period | 14 | Lookback period for calculation | Shorter for more sensitivity to recent changes, longer for more stable long-term relationship assessment |
-| Source 1 | High | First data series to analyze | Adjust based on which relationship you want to examine |
-| Source 2 | Low | Second data series to analyze | Adjust based on which relationship you want to examine |
+### Parameters
 
-**Pro Tip:** Try analyzing correlation between an asset and its sector index over multiple timeframes. When correlation breaks down on shorter timeframes but remains intact on longer timeframes, it often signals a temporary deviation that may present mean-reversion opportunities.
+| Parameter | Purpose |
+|---|---|
+| `src1` | series float First series to analyze |
+| `src2` | series float Second series to analyze |
+| `len` | simple int Lookback period for calculation |
 
-## Calculation and Mathematical Foundation
+### Returns
 
-**Simplified explanation:**
-Correlation measures how much two variables change together relative to how much they change individually. It calculates the covariance between the variables and then normalizes this value by dividing by the product of their standard deviations.
+- float Pearson correlation coefficient between -1 and 1
 
-**Technical formula:**
+## Input configuration
 
-Correlation(X, Y) = Covariance(X, Y) / (σₓ × σᵧ)
+| Input variable | Type | Configuration |
+|---|---|---|
+| `i_source1` | `input.source` | default: `close`, label: "Source 1" |
+| `i_source2_ticker` | `input.symbol` | default: `"SPY"`, label: "SPY" |
+| `i_period` | `input.int` | default: `20`, label: "Period" |
 
-Where:
-- Covariance(X, Y) is the covariance between X and Y
-- σₓ is the standard deviation of X
-- σᵧ is the standard deviation of Y
+## Runtime profile
 
-> 🔍 **Technical Note:** The implementation uses a computationally efficient combined calculation of covariance and variances in a single pass through the data. It maintains circular buffers to efficiently track values within the lookback window, handling NA values gracefully and preventing memory leaks regardless of how long the script runs.
+- Declared optimization: for performance using combined covariance and variance calculation
+- Streaming model: single-pass update on each new bar.
+- Warm-up behavior: outputs can be unstable until enough samples satisfy `lookback parameter`.
+- Memory model: state is kept in Pine series context rather than external buffers.
 
-## Interpretation Details
+## Trade-offs
 
-Correlation provides several analytical insights:
+Streaming logic keeps incremental cost stable, but initialization and edge-case handling become first-class concerns. That is a deliberate choice: predictable execution beats opaque recalculation spikes in live charts.
 
-* **Strong positive correlation (0.7 to 1.0):** Assets tend to move in the same direction with similar magnitudes; useful for confirming trends or identifying potential substitutes
-* **Moderate positive correlation (0.3 to 0.7):** Assets generally move in the same direction but with less consistency
-* **Weak or no correlation (-0.3 to 0.3):** Little to no reliable relationship between assets; useful for diversification
-* **Moderate negative correlation (-0.7 to -0.3):** Assets tend to move in opposite directions with some consistency
-* **Strong negative correlation (-1.0 to -0.7):** Assets consistently move in opposite directions; valuable for hedging strategies
-* **Correlation changes:** Shifts in established correlation patterns often signal changing market regimes or potential trading opportunities
-* **Rolling correlation analysis:** Evaluating how correlation evolves over time provides insight into the stability of relationships
+## Verification checklist
 
-## Limitations and Considerations
-
-* **Linear relationship focus:** Only measures linear relationships, missing more complex nonlinear dependencies
-* **Outlier sensitivity:** Can be disproportionately influenced by extreme values
-* **Causation disclaimer:** Correlation does not imply causation; two variables may move together without directly influencing each other
-* **Time-varying nature:** Correlations between assets are not static and can change significantly during different market conditions
-* **Timeframe dependency:** Correlations often vary across different timeframes (e.g., daily vs. monthly)
-* **Sample size requirements:** Requires a sufficient number of data points to produce statistically reliable results
-* **Mean reversion assumptions:** Strategies based on correlation often assume relationships will revert to historical norms, which isn't always true
+1. Open the script in TradingView and confirm it compiles under Pine Script v6.
+2. Validate warm-up behavior on sparse data and short histories.
+3. Compare output against a trusted reference implementation for the same parameters.
+4. Confirm parameter bounds reject invalid values without silent fallback.
 
 ## References
 
-* Pearson, K. (1895). Notes on regression and inheritance in the case of two parents. Proceedings of the Royal Society of London, 58, 240-242.
-* Markowitz, H. (1952). Portfolio Selection. The Journal of Finance, 7(1), 77-91.
-* Vidyamurthy, G. (2004). Pairs Trading: Quantitative Methods and Analysis. John Wiley & Sons.
-* Lo, A. W. (2001). Risk Management for Hedge Funds: Introduction and Overview. Financial Analysts Journal, 57(6), 16-33.
+- Source code: `indicators/statistics/correlation.pine`
+- Documentation file: `indicators/statistics/correlation.md`
+- GitHub source view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/correlation.pine
+- GitHub documentation view: https://github.com/mihakralj/QuanTAlib/blob/main/indicators/statistics/correlation.md
